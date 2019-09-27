@@ -1,0 +1,15 @@
+.form-control {
+  border: none;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 22px;
+  border-radius: 0%;
+  -webkit-transition: border-color 0.5s ease-out;
+  transition: border-color 0.5s ease-out;
+}
+
+.form-control:focus {
+  border-bottom: 2px solid #2c7eea;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+/*# sourceMappingURL=style.css.map */
