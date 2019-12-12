@@ -1,13 +1,15 @@
 import { ActionsUnion, createAction } from "./action-helpers";
-import { Dispatch } from "redux";
-import { ActionTypes } from "./action-types";
-import ILightEvent from "../models/event-light-model";
+import { ActionTypes } from "../contexts/action-types";
+import { ILightEvent } from "../models/index";
 
 export const EventActions = {
   startLoadEvents: () =>
     createAction(ActionTypes.LOAD_EVENTS + ActionTypes.START),
   finishLoadEvents: (events: ILightEvent[]) =>
-    createAction(ActionTypes.LOAD_EVENTS + ActionTypes.SUCCESS, events),
+    createAction<ILightEvent[]>(
+      ActionTypes.LOAD_EVENTS + ActionTypes.SUCCESS,
+      events
+    ),
   updateEvent: (eventId: number, title: string) =>
     createAction(ActionTypes.UPDATE_EVENT, {
       eventId: eventId,
@@ -18,32 +20,42 @@ export const EventActions = {
 };
 
 //поставить правильный апи
-const callApi: string = `https://localhost:44320/api/events/${new Date().getMonth() +
+const callApi = `https://localhost:44320/api/events/${new Date().getMonth() +
   1}`;
 
-export const Thunks = {
+export const Thunks: EventThunks = {
   loadEvents: () => {
-    return (dispatch: Dispatch) => {
+    return dispatch => {
+      console.log("in load events");
       dispatch(EventActions.startLoadEvents());
       fetch(callApi)
-        .then(res => res.json())
+        .then(res => {
+          console.log(res);
+          return res.json();
+        })
         .then(response => dispatch(EventActions.finishLoadEvents(response)));
     };
   },
 
   updateEvent: (eventId: number, title: string) => {
-    return (dispatch: Dispatch) => {
+    return dispatch => {
       dispatch(EventActions.updateEvent(eventId, title));
     };
   },
 
   addEvent: (title: string, date: Date) => {
-    return (dispatch: Dispatch) => {
+    return dispatch => {
       dispatch(EventActions.addEvent(title, date));
     };
   }
 };
 
-export type Actions = ActionsUnion<typeof EventActions>;
+export default interface EventThunks {
+  loadEvents: (dispatch) => void;
+  updateEvent: (eventId: number, title: string) => (dispatch) => void;
+  addEvent: (title: string, date: Date) => (dispatch) => void;
+}
 
-export type Thunks = ActionsUnion<typeof Thunks>;
+export type EventsActions = ActionsUnion<typeof EventActions>;
+
+//export type EventThunks = ActionsUnion<typeof Thunks>;

@@ -1,18 +1,18 @@
-import { Action } from "redux";
+// import { Action } from "redux";
 
-export default interface IAction<T> extends Action<string> {
-  type: string;
-  payload?: T;
-  error?: boolean;
-  meta?: any;
-}
+// export default interface IAction<T> extends Action<string> {
+//   type: string;
+//   payload?: T;
+//   error?: boolean;
+//   meta?: any;
+// }
 
-export function createAction<T>(
-  type: string,
-  payload?: T,
-  error?: boolean,
-  meta?: any
-): IAction<T>;
+// export function createAction<T>(
+//   type: string,
+//   payload?: T,
+//   error?: boolean,
+//   meta?: any
+// ): IAction<T>;
 
 export function createAction<T>(
   type: string,

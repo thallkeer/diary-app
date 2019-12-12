@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ImportanceList from "./ImportanceList";
+import { ImportanceList } from "./ImportanceList";
 
 class FirstPage extends Component {
   render() {

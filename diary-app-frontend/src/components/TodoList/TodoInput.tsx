@@ -1,15 +1,23 @@
-import React, { FunctionComponent } from "react";
-import ConnectedCheckCircle from "./CheckCircle";
-import ITodoItem from "../../models/todo-model";
-import ListItemInput from "../ListItemInput";
+import React, { FC, useContext } from "react";
+import { CheckCircle } from "./CheckCircle";
+import { ListItemInput } from "../ListItemInput";
+import { TodoListContext } from "../../contexts";
 
-const TodoInput: FunctionComponent<ITodoItem> = (todo: ITodoItem) => {
+interface ITodoInputProps {
+  updateItem: (id: number, text: string) => void;
+}
+
+export const TodoInput: FC<ITodoInputProps> = ({ updateItem }) => {
+  const { todo, toggleTodo } = useContext(TodoListContext);
+
   return (
-    <div style={{ marginTop: "10px" }}>
-      <ConnectedCheckCircle id={todo.id} done={todo.done} />
-      <ListItemInput itemId={todo.id} itemText={todo.text} />
-    </div>
+    <>
+      <CheckCircle id={todo.id} done={todo.done} toggleTodo={toggleTodo} />
+      <ListItemInput
+        itemId={todo.id}
+        itemText={todo.text}
+        updateItem={updateItem}
+      />
+    </>
   );
 };
-
-export default TodoInput;

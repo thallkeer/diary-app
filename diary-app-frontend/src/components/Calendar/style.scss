@@ -32,6 +32,12 @@ tr {
   text-align: center;
 }
 
+.empty-slot {
+  border: 1px solid black;
+  width: 100px;
+  height: 135px;
+}
+
 .week-day {
   font-size: 24px;
   font-family: "RadioVolna";
@@ -79,6 +85,20 @@ tr {
   line-height: 28px;
   border-radius: 2%;
   color: black;
+}
+
+.day-span {
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 35px;
+  height: 30px;
+  font-family: RadioVolna;
+  font-size: 24px;
+  text-align: center;
+  padding-top: 5px;
 }
 
 .month-popup {

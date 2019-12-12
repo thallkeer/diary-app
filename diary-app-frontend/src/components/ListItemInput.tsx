@@ -1,73 +1,50 @@
-import React, { Component } from "react";
-import { DispatchThunk } from "../reducers";
-import { Thunks as todoThunks } from "../actions/todo-actions";
-import { connect } from "react-redux";
+import React, { FC, useState } from "react";
+import { ITodoItem } from "../models/index";
 
 interface IProps {
   itemId: number;
   itemText: string;
-  updateItem: (itemId: number, itemText: string) => void;
   readonly?: boolean;
+  updateItem: (itemId: number, itemText: string) => void;
 }
 
-interface IState {
-  text: string;
-}
+export const ListItemInput: FC<IProps> = ({
+  itemId,
+  itemText,
+  readonly,
+  updateItem
+}) => {
+  const [state, setState] = useState<IProps | null>({
+    itemId,
+    itemText,
+    readonly: readonly || false,
+    updateItem
+  });
 
-class ListItemInput extends Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      text: props.itemText
-    };
-  }
-
-  public static defaultProps = {
-    readonly: false
-  };
-
-  public handleTextChange = ev => {
-    this.setState({
-      text: ev.target.value
+  const handleTextChange = ev => {
+    setState({
+      ...state,
+      itemText: ev.target.value
     });
   };
 
-  public handleBlur = () => {
-    const { itemText, itemId, updateItem } = this.props;
-    if (itemText !== this.state.text && updateItem)
-      updateItem(itemId, this.state.text);
+  const handleBlur = () => {
+    if (itemText !== state.itemText) updateItem(state.itemId, state.itemText);
   };
 
-  render() {
-    return (
-      <input
-        type="text"
-        value={this.state.text}
-        readOnly={this.props.readonly}
-        onChange={this.handleTextChange}
-        onBlur={this.handleBlur}
-        style={{
-          cursor: "pointer",
-          outline: "none",
-          border: "none",
-          fontSize: "18px",
-          fontFamily: "AmaticSC-Regular",
-          fontWeight: "bold",
-          paddingLeft: "5px",
-          borderBottom: "1px solid black",
-          width: "100%"
-        }}
-      />
-    );
-  }
-}
+  const handleKeyPress = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") handleBlur();
+  };
 
-const mapDispatchToProps = (dispatch: DispatchThunk) => ({
-  updateItem: (itemId: number, itemText: string) =>
-    dispatch(todoThunks.updateTodo(itemId, itemText))
-});
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(ListItemInput);
+  return (
+    <input
+      type="text"
+      value={state.itemText}
+      readOnly={state.readonly}
+      onChange={handleTextChange}
+      onBlur={handleBlur}
+      onKeyPress={handleKeyPress}
+      className="list-item-input"
+    />
+  );
+};

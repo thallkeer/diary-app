@@ -1,6 +1,6 @@
 import { ActionsUnion, createAction } from "./action-helpers";
 import { Dispatch } from "redux";
-import { ActionTypes } from "./action-types";
+import { ActionTypes } from "../contexts/action-types";
 
 export const TodoActions = {
   startLoadTodos: () =>

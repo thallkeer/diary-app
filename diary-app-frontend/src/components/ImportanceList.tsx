@@ -1,96 +1,58 @@
-import React, { Component } from "react";
-import ListItemInput from "./ListItemInput";
-import ILightEvent from "../models/event-light-model";
-import { connect } from "react-redux";
-import {
-  getEvents,
-  getEventsLoading,
-  getEventsLoaded
-} from "../selectors/events";
-import { IAppState, DispatchThunk } from "../reducers";
-import { Thunks as eventThunks } from "../actions/events-actions";
+import React, { FC, useContext, useReducer, useEffect } from "react";
+import { ListItemInput } from "./ListItemInput";
+import { AppContext } from "../contexts/app-state";
+import { eventsReducer } from "../contexts/events";
+import { EventActions } from "../actions/events-actions";
 
 interface IProps {
   header: string;
-  events?: ILightEvent[];
-  loading: boolean;
-  loaded: boolean;
-  loadEvents: () => void;
 }
 
-interface IState {}
+export const ImportanceList: FC<IProps> = ({ header }) => {
+  const context = useContext(AppContext);
+  const { events, loading, thunks, loadEvents } = context;
 
-class ImportanceList extends Component<IProps, IState> {
-  public static defaultProps: Partial<IProps> = {
-    header: "",
-    events: []
+  useEffect(() => {
+    loadEvents(context);
+  }, []);
+
+  const updateEvent = (itemId: number, itemText: string) => {
+    console.log(itemId);
+    // const updatedEvents = events.map(ev =>
+    //   ev.eventID == itemId ? { ...ev, subject: itemText } : ev
+    // );
+
+    thunks.updateEvent(itemId, itemText);
   };
 
-  componentDidMount() {
-    const { loadEvents, loading, loaded } = this.props;
-    if (!loaded && !loading) loadEvents();
-  }
-
-  public getListItems = () => {
-    const { events } = this.props;
-    return events.map(event => (
-      <li key={event.eventID}>
-        <ListItemInput
-          itemId={event.eventID}
-          itemText={
-            event.date.toLocaleString("ru", {
-              day: "numeric",
-              month: "numeric"
-            }) +
-            " " +
-            event.subject
-          }
-          readonly={true}
-        />
-      </li>
-    ));
-  };
-
-  render() {
-    const { header, loading } = this.props;
-
-    return (
-      <div>
-        <h1 className="todo-list-header">{header}</h1>
-        {loading ? (
-          <div>
-            <h2>Loading...</h2>
-          </div>
-        ) : (
-          <ul
-            style={{
-              listStyleType: "none",
-              padding: "0",
-              margin: "0",
-              textAlign: "left"
-            }}
-          >
-            {this.getListItems()}
-          </ul>
-        )}
-      </div>
-    );
-  }
-}
-
-const mapStateToProps = (state: IAppState) => ({
-  events: getEvents(state),
-  loading: getEventsLoading(state),
-  loaded: getEventsLoaded(state)
-});
-
-const mapDispatchToProps = (dispatch: DispatchThunk) => ({
-  loadEvents: () => dispatch(eventThunks.loadEvents())
-});
-
-export default connect<any, any, any>(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  { pure: false }
-)(ImportanceList);
+  return (
+    <div>
+      <h1 className="todo-list-header">{header}</h1>
+      {loading ? (
+        <div>
+          <h2>Loading...</h2>
+        </div>
+      ) : (
+        <ul className="todo-list-list">
+          {events.map(event => (
+            <li key={event.eventID}>
+              <ListItemInput
+                itemId={event.eventID}
+                itemText={
+                  event.date.toLocaleString("ru", {
+                    day: "numeric",
+                    month: "numeric"
+                  }) +
+                  " " +
+                  event.subject
+                }
+                readonly={true}
+                updateItem={updateEvent}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};

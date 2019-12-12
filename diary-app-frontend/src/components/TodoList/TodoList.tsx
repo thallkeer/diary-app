@@ -1,74 +1,73 @@
-import React, { Component } from "react";
-import ITodoItem from "../../models/todo-model";
-import { connect } from "react-redux";
-import {
-  getTodos,
-  getTodosLoading,
-  getTodosLoaded
-} from "../../selectors/todos";
-import { IAppState, DispatchThunk } from "../../reducers";
-import { Thunks as todoThunks } from "../../actions/todo-actions";
-import TodoInput from "./TodoInput";
+import React, { useState, useEffect } from "react";
+import { TodoInput } from "./TodoInput";
+import { getTodos } from "../../services/todoService";
 import "./style.css";
+import { TodoListContext } from "../../contexts";
+import { getEmptyTodo } from "../../utils";
+import { ITodoItem } from "../../models/index";
 
 interface IProps {
   header: string;
-  todos?: ITodoItem[];
-  loading: boolean;
-  loaded: boolean;
-  loadTodos: () => void;
 }
 
-interface IState {}
+export const TodoList: React.FC<IProps> = ({ header }) => {
+  const [todos, setTodos] = useState<ITodoItem[] | null>([]);
+  const [loading, setLoading] = useState(false);
 
-class TodoList extends Component<IProps, IState> {
-  componentDidMount() {
-    const { loadTodos, loading, loaded } = this.props;
-    if (!loaded && !loading) loadTodos();
-  }
+  useEffect(() => {
+    setLoading(true);
+    getTodos().then(res => {
+      setTodos([...res, getEmptyTodo()]);
+      setLoading(false);
+    });
+  }, []);
 
-  render() {
-    const { todos, header, loading } = this.props;
-
-    return (
-      <div style={{ marginTop: "52px" }}>
-        <h1 className="todo-list-header">{header}</h1>
-        {loading ? (
-          <div>
-            <h2>Loading...</h2>
-          </div>
-        ) : (
-          <ul
-            style={{
-              listStyleType: "none",
-              padding: "0",
-              margin: "0",
-              textAlign: "left"
-            }}
-          >
-            {todos.map(todo => (
-              <li key={todo.id}>{TodoInput(todo)}</li>
-            ))}
-          </ul>
-        )}
-      </div>
+  const toggleTodo = (todoId: number) => {
+    setTodos(
+      todos.map(todo =>
+        todo.id === todoId ? { ...todo, done: !todo.done } : todo
+      )
     );
-  }
-}
+  };
 
-const mapStateToProps = (state: IAppState) => ({
-  todos: getTodos(state),
-  loading: getTodosLoading(state),
-  loaded: getTodosLoaded(state)
-});
+  const updateTodo = (todoId: number, todoText: string) => {
+    const newTodos = [
+      ...todos.map(t => (t.id === todoId ? { ...t, text: todoText } : t)),
+      getEmptyTodo()
+    ];
 
-const mapDispatchToProps = (dispatch: DispatchThunk) => ({
-  loadTodos: () => dispatch(todoThunks.loadTodos())
-});
+    setTodos(newTodos);
+  };
 
-export default connect<any, any, any>(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  { pure: false }
-)(TodoList);
+  return (
+    <div style={{ marginTop: "52px" }}>
+      <h1 className="todo-list-header">{header}</h1>
+      {loading ? (
+        <div>
+          <h2>Loading...</h2>
+        </div>
+      ) : (
+        <ul className="todo-list-list">
+          {todos.map(todo => (
+            <li
+              key={todo.id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                padding: ".5rem 1rem",
+                marginBottom: ".5rem"
+              }}
+            >
+              <TodoListContext.Provider
+                value={{ todo: todo, toggleTodo: toggleTodo }}
+              >
+                <TodoInput updateItem={updateTodo} />
+              </TodoListContext.Provider>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};

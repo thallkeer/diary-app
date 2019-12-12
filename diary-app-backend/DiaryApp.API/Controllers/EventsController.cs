@@ -17,7 +17,7 @@ namespace DiaryApp.API.Controllers
 
         public EventsController(ApplicationContext context)
         {
-            this.context = context;
+            this.context = context;           
             if (!context.Events.Any())
             {
                 context.AddRange(new List<EventModel>
@@ -25,20 +25,20 @@ namespace DiaryApp.API.Controllers
                     new EventModel
                     {
                         Subject = "Покормить котика",
-                        Start = new DateTime(2019,9,5),
+                        Start = new DateTime(2019,12,5),
                         Description = "Необходимо покормить котика"
                          
                     },
                      new EventModel
                     {
                         Subject = "Сходить в сервисный центр",
-                        Start = new DateTime(2019,9,11),
+                        Start = new DateTime(2019,12,11),
                         Description = ""
                     },
                       new EventModel
                     {
                         Subject = "В рестик тусить",
-                        Start = new DateTime(2019,9,20),
+                        Start = new DateTime(2019,12,20),
                         Description = ""
                       }
                 });
@@ -57,7 +57,8 @@ namespace DiaryApp.API.Controllers
                 model.Add(new EventViewModelLight
                 {
                     EventID = eventModel.ID,
-                    Date = eventModel.Start.ToString("yyyy-MM-ddTHH:mm:ss"),
+                    //Date = eventModel.Start.ToString("yyyy-MM-ddTHH:mm:ss"),
+                    Date = eventModel.Start.ToString("yyyy-MM-dd"),
                     Subject = eventModel.Subject,
                     FullDay = false
                 });

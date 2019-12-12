@@ -1,22 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, CSSProperties, useContext } from "react";
 import moment, { Moment } from "moment";
 import "./style.css";
-import {
-  getEvents,
-  getEventsLoading,
-  getEventsLoaded,
-  getEventsByDay
-} from "../../selectors/events";
-import AddEventForm from "../Dialogs/AddEventForm";
-import { IAppState } from "../../reducers";
-import { connect } from "react-redux";
-import IEventsByDay from "../../models/events-byday";
+import { getEventsByDay } from "../../selectors/events";
+import { AddEventForm } from "../Dialogs/AddEventForm";
+import { IEventsByDay } from "../../models";
+import { AppContext } from "../../contexts/app-state";
 
-interface IProps {
-  eventsByDay: IEventsByDay[];
-}
-
-interface IState {
+interface ICalendarState {
   momentContext: Moment;
   today: Moment;
   showMonthPopup: boolean;
@@ -26,8 +16,8 @@ interface IState {
   clickedDay?: number;
 }
 
-class Calendar extends Component<IProps, IState> {
-  state: Readonly<IState> = {
+class Calendar extends Component<{}, ICalendarState> {
+  state: Readonly<ICalendarState> = {
     today: moment(),
     momentContext: moment(),
     showMonthPopup: false,
@@ -35,6 +25,12 @@ class Calendar extends Component<IProps, IState> {
     showYearNav: false,
     showAddEventForm: false
   };
+
+  static contextType = AppContext;
+
+  get events(): IEventsByDay[] {
+    return getEventsByDay(this.context);
+  }
 
   get weekdays(): string[] {
     return moment.weekdays();
@@ -171,15 +167,7 @@ class Calendar extends Component<IProps, IState> {
 
     for (let i = 0; i < firstDayOfMonth - 1; i++) {
       blanks.push(
-        <td
-          style={{
-            border: "1px solid black",
-            width: "100px",
-            height: "135px"
-          }}
-          key={i * 80}
-          className="emptySlot"
-        >
+        <td key={i * 80} className="empty-slot">
           {""}
         </td>
       );
@@ -192,7 +180,7 @@ class Calendar extends Component<IProps, IState> {
     for (let d = 1; d <= this.daysInMonth; d++) {
       let className = d === this.currentDay ? "day current-day" : "day";
 
-      var curEvent = this.props.eventsByDay.find(ev => ev.day === d);
+      var curEvent = this.events.find(ev => ev.day === d);
       let curEventClass = curEvent ? "day-with-event" : "no-events-day";
       daysInMonth.push(
         <td
@@ -202,23 +190,7 @@ class Calendar extends Component<IProps, IState> {
             this.onDayClick(e, d);
           }}
         >
-          <span
-            style={{
-              borderRight: "1px solid black",
-              borderBottom: "1px solid black",
-              position: "absolute",
-              top: "0",
-              left: "0",
-              width: "35px",
-              height: "30px",
-              fontFamily: "RadioVolna",
-              fontSize: "24px",
-              textAlign: "center",
-              paddingTop: "5px"
-            }}
-          >
-            {d}
-          </span>
+          <span className="day-span">{d}</span>
           <div className={curEventClass}>
             {curEvent ? curEvent.event.subject : ""}
           </div>
@@ -261,6 +233,10 @@ class Calendar extends Component<IProps, IState> {
     this.setState({ showAddEventForm: false, clickedDay: null });
   };
 
+  toggle = () => {
+    this.setState({ showAddEventForm: !this.state.showAddEventForm });
+  };
+
   getMonthName = () => {
     var date: Date = new Date();
     var stringMonth: string = date.toLocaleString("ru", { month: "long" });
@@ -268,17 +244,17 @@ class Calendar extends Component<IProps, IState> {
   };
 
   render() {
+    const wrapStyle: CSSProperties = {
+      position: "absolute",
+      top: "0",
+      right: "0",
+      bottom: "0",
+      left: "0",
+      border: "0px"
+    };
+
     return (
-      <div
-        style={{
-          position: "absolute",
-          top: "0",
-          right: "0",
-          bottom: "0",
-          left: "0",
-          border: "0px"
-        }}
-      >
+      <div style={wrapStyle}>
         <h1 className="text-center calendar-header">{this.getMonthName()}</h1>
         <div className="calendar-container">
           <table className="calendar">
@@ -288,21 +264,17 @@ class Calendar extends Component<IProps, IState> {
             </tbody>
           </table>
         </div>
-        {this.state.clickedDay && (
+        {this.state.showAddEventForm && (
           <AddEventForm
             day={this.state.clickedDay}
             show={this.state.showAddEventForm}
-            onHide={this.hideModal}
+            handleClose={this.toggle}
           />
         )}
       </div>
     );
   }
 }
-
-const mapStateToProps = (state: IAppState) => ({
-  eventsByDay: getEventsByDay(state)
-});
 
 {
   /* <thead>
@@ -328,4 +300,4 @@ const mapStateToProps = (state: IAppState) => ({
             </thead> */
 }
 
-export default connect<any, any, any>(mapStateToProps)(Calendar);
+export default Calendar;
