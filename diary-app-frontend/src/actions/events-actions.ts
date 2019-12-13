@@ -23,16 +23,12 @@ export const EventActions = {
 const callApi = `https://localhost:44320/api/events/${new Date().getMonth() +
   1}`;
 
-export const Thunks: EventThunks = {
+export const Thunks = {
   loadEvents: () => {
     return dispatch => {
-      console.log("in load events");
       dispatch(EventActions.startLoadEvents());
       fetch(callApi)
-        .then(res => {
-          console.log(res);
-          return res.json();
-        })
+        .then(res => res.json())
         .then(response => dispatch(EventActions.finishLoadEvents(response)));
     };
   },
@@ -50,12 +46,5 @@ export const Thunks: EventThunks = {
   }
 };
 
-export default interface EventThunks {
-  loadEvents: (dispatch) => void;
-  updateEvent: (eventId: number, title: string) => (dispatch) => void;
-  addEvent: (title: string, date: Date) => (dispatch) => void;
-}
-
 export type EventsActions = ActionsUnion<typeof EventActions>;
-
-//export type EventThunks = ActionsUnion<typeof Thunks>;
+export type EventThunks = typeof Thunks;

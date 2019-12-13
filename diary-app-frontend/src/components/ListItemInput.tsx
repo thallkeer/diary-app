@@ -1,11 +1,10 @@
 import React, { FC, useState } from "react";
-import { ITodoItem } from "../models/index";
 
 interface IProps {
   itemId: number;
   itemText: string;
   readonly?: boolean;
-  updateItem: (itemId: number, itemText: string) => void;
+  updateItem?: (itemId: number, itemText: string) => void;
 }
 
 export const ListItemInput: FC<IProps> = ({
@@ -14,12 +13,14 @@ export const ListItemInput: FC<IProps> = ({
   readonly,
   updateItem
 }) => {
-  const [state, setState] = useState<IProps | null>({
+  const initialState: IProps = {
     itemId,
     itemText,
     readonly: readonly || false,
     updateItem
-  });
+  };
+
+  const [state, setState] = useState<IProps | null>(initialState);
 
   const handleTextChange = ev => {
     setState({
@@ -29,7 +30,10 @@ export const ListItemInput: FC<IProps> = ({
   };
 
   const handleBlur = () => {
-    if (itemText !== state.itemText) updateItem(state.itemId, state.itemText);
+    if (state.itemText.length !== 0 && itemText !== state.itemText) {
+      updateItem(state.itemId, state.itemText);
+      setState(initialState);
+    }
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {

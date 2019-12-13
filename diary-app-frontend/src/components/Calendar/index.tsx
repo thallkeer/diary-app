@@ -1,10 +1,10 @@
-import React, { Component, CSSProperties, useContext } from "react";
+import React, { Component, CSSProperties } from "react";
 import moment, { Moment } from "moment";
 import "./style.css";
 import { getEventsByDay } from "../../selectors/events";
 import { AddEventForm } from "../Dialogs/AddEventForm";
 import { IEventsByDay } from "../../models";
-import { AppContext } from "../../contexts/app-state";
+import { AppContext } from "../../contexts/index";
 
 interface ICalendarState {
   momentContext: Moment;
@@ -92,21 +92,24 @@ class Calendar extends Component<{}, ICalendarState> {
     });
   };
 
-  onSelectChange = (e, data) => {
-    this.setMonth(data);
+  onSelectChange = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    month: string
+  ) => {
+    this.setMonth(month);
   };
 
-  SelectList = props => {
-    let popup = props.data.map(data => {
+  SelectList = ({ months }) => {
+    let popup = months.map(month => {
       return (
-        <div key={data}>
+        <div key={month}>
           <a
             href="#"
             onClick={e => {
-              this.onSelectChange(e, data);
+              this.onSelectChange(e, month);
             }}
           >
-            {data}
+            {month}
           </a>
         </div>
       );
@@ -130,7 +133,7 @@ class Calendar extends Component<{}, ICalendarState> {
         }}
       >
         {this.month}
-        {this.state.showMonthPopup && <this.SelectList data={this.months} />}
+        {this.state.showMonthPopup && <this.SelectList months={this.months} />}
       </span>
     );
   };
@@ -160,7 +163,7 @@ class Calendar extends Component<{}, ICalendarState> {
     });
   };
 
-  getEmptySlots = () => {
+  getEmptySlots = (): any[] => {
     let blanks = [];
     let firstDayOfMonth: number = this.firstDayOfMonth;
     if (firstDayOfMonth === 0) firstDayOfMonth = 7;
@@ -175,32 +178,39 @@ class Calendar extends Component<{}, ICalendarState> {
     return blanks;
   };
 
-  getDaysInMonth = () => {
+  getDaysInMonth = (): any[] => {
     let daysInMonth = [];
     for (let d = 1; d <= this.daysInMonth; d++) {
       let className = d === this.currentDay ? "day current-day" : "day";
 
-      var curEvent = this.events.find(ev => ev.day === d);
-      let curEventClass = curEvent ? "day-with-event" : "no-events-day";
+      var curEvents = this.events.filter(ev => ev.day === d);
+      let curEventClass =
+        curEvents.length !== 0 ? "day-with-event" : "no-events-day";
       daysInMonth.push(
         <td
           key={d}
           className={className}
-          onClick={(e: React.MouseEvent<HTMLElement>) => {
+          onClick={e => {
             this.onDayClick(e, d);
           }}
         >
-          <span className="day-span">{d}</span>
-          <div className={curEventClass}>
-            {curEvent ? curEvent.event.subject : ""}
-          </div>
+          <div className="day-span">{d}</div>
+          {curEvents.map(eventByDay => (
+            <div
+              key={eventByDay.event.eventID}
+              className={curEventClass}
+              style={{ marginTop: "5px" }}
+            >
+              {eventByDay.event.subject}
+            </div>
+          ))}
         </td>
       );
     }
     return daysInMonth;
   };
 
-  getCalendarRows = () => {
+  getCalendarRows = (): any[] => {
     var totalSlots = [...this.getEmptySlots(), ...this.getDaysInMonth()];
     let rows = [];
     let cells = [];
@@ -237,7 +247,7 @@ class Calendar extends Component<{}, ICalendarState> {
     this.setState({ showAddEventForm: !this.state.showAddEventForm });
   };
 
-  getMonthName = () => {
+  getMonthName = (): string => {
     var date: Date = new Date();
     var stringMonth: string = date.toLocaleString("ru", { month: "long" });
     return stringMonth[0].toUpperCase() + stringMonth.slice(1);

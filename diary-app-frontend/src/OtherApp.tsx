@@ -1,36 +1,85 @@
-import * as React from "react";
+import React from "react";
 import { TodoList } from "./components/TodoList/TodoList";
-import Calendar from "./components/Calendar";
 import { Container, Row, Col } from "react-bootstrap";
+import { ImportanceList } from "./components/ImportanceList";
 
-class OtherApp extends React.Component {
-  render() {
-    return (
-      <Container style={{ border: "1px solid red" }}>
-        <Row>
-          <Col style={{ border: "1px solid red" }} md={{ span: 2, offset: 2 }}>
-            Покупки
-          </Col>
-          <Col style={{ border: "1px solid red" }} md={{ span: 4, offset: 8 }}>
-            Идеи этого месяца
-          </Col>
-        </Row>
-        <Row>
-          <Col md="3" className="text-center text-uppercase">
-            <TodoList header={"Для дома"} />
-          </Col>
-        </Row>
-        {/* <Row>
-          <Col md="3" className="text-center">
-            <ImportanceList header={"Важные события"} />
-          </Col>
-          <Col md="9">
-            <Calendar />
-          </Col>
-        </Row> */}
-      </Container>
-    );
-  }
-}
-
-export default OtherApp;
+export const OtherApp: React.FC = () => {
+  return (
+    <Container
+      className="second-page-container text-center"
+      style={{ border: "1px solid red" }}
+    >
+      <Row>
+        <Col>
+          <h1>Покупки</h1>
+        </Col>
+        <Col>
+          <h1>Идеи этого месяца</h1>
+        </Col>
+      </Row>
+      <Row>
+        <Col
+          md={3}
+          className="text-center text-uppercase"
+          style={{ border: "1px solid red" }}
+        >
+          <TodoList header="Для дома" />
+        </Col>
+        <Col
+          md={3}
+          className="text-center text-uppercase todo-list-header"
+          style={{ border: "1px solid red" }}
+        >
+          <TodoList header="Одежда" />
+        </Col>
+        <Col md={6} style={{ border: "1px solid red" }}>
+          <ImportanceList header="" />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={3} className="text-center text-uppercase">
+          <TodoList header={"Красота и Здоровье"} />
+        </Col>
+        <Col md={3} className="text-center text-uppercase">
+          <TodoList header={"Другое"} />
+        </Col>
+        <Col md={6}>
+          <h1 className="text-center">Цели на этот месяц</h1>
+          <Row>
+            <Col>
+              <span
+                style={{
+                  fontFamily: "AmaticSC-Regular",
+                  borderBottom: "1px solid black",
+                  fontSize: "24px",
+                  fontWeight: "bold"
+                }}
+              >
+                Делать зарядку по утрам
+              </span>
+            </Col>
+            <Col>
+              <div>Здесь будет календарик</div>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+      <Row>
+        <Col md={6}>
+          <h1 className="text-center">В этом месяце я хочу</h1>
+        </Col>
+      </Row>
+      <Row>
+        <Col md={2}>
+          <ImportanceList header="Прочитать" />
+        </Col>
+        <Col md={2}>
+          <ImportanceList header="Посмотеть" />
+        </Col>
+        <Col md={2}>
+          <ImportanceList header="Посетить" />
+        </Col>
+      </Row>
+    </Container>
+  );
+};

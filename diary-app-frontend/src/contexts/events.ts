@@ -1,30 +1,31 @@
 import { ActionTypes } from "./action-types";
 import { ILightEvent } from "../models";
 import { EventsActions } from "../actions/events-actions";
-import { IAppContext } from "./app-state";
+import moment from "moment";
+import { ApplicationContext } from ".";
 
 export const eventsReducer = (
-  state: IAppContext,
+  state: ApplicationContext,
   action: EventsActions
-): IAppContext => {
+): ApplicationContext => {
   switch (action.type) {
     case ActionTypes.LOAD_EVENTS + ActionTypes.START:
-      console.log("reducer", action);
-
       return { ...state, loading: true };
+
     case ActionTypes.LOAD_EVENTS + ActionTypes.SUCCESS:
-      // if (events) {
-      //   events.forEach(event => {
-      //     event.date = moment(event.date).toDate();
-      //   });
-      // }
-      console.log("reducer", action);
+      const events = action.payload as ILightEvent[];
+      if (events) {
+        events.forEach(event => {
+          event.date = moment(event.date).toDate();
+        });
+      }
 
       return {
         ...state,
-        events: action.payload as ILightEvent[],
+        events,
         loading: false
       };
+
     case ActionTypes.ADD_EVENT:
       return {
         ...state,

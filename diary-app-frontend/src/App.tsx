@@ -7,25 +7,6 @@ import { Container, Row, Col } from "react-bootstrap";
 import { AppState } from "./contexts/app-state";
 
 export const App: FC = () => {
-  // const [events, setEvents] = useState<ILightEvent[] | null>([]);
-  // const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   getEvents().then(res => {
-  //     setEvents(res);
-  //   });
-  //   setLoading(false);
-  // }, []);
-
-  // const updateEvents = (updatedEvents: ILightEvent[]) => {
-  //   setEvents(updatedEvents);
-  // };
-
-  // const addEvent = (newEvent: ILightEvent) => {
-  //   setEvents([...events, newEvent]);
-  // };
-
   return (
     <AppState>
       <Container>

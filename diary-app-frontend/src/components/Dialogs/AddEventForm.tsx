@@ -11,7 +11,6 @@ import {
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
-import { ILightEvent } from "../../models/index";
 import "./style.css";
 
 interface IFormProps {

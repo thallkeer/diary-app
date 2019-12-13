@@ -1,42 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useReducer } from "react";
 import { TodoInput } from "./TodoInput";
-import { getTodos } from "../../services/todoService";
 import "./style.css";
-import { TodoListContext } from "../../contexts";
-import { getEmptyTodo } from "../../utils";
-import { ITodoItem } from "../../models/index";
+import { todosReducer } from "../../contexts/todos";
+import { Thunks as todoThunks } from "../../actions/todo-actions";
 
 interface IProps {
   header: string;
 }
 
 export const TodoList: React.FC<IProps> = ({ header }) => {
-  const [todos, setTodos] = useState<ITodoItem[] | null>([]);
-  const [loading, setLoading] = useState(false);
+  const [{ loading, todos, thunks }, _dispatch] = useReducer(todosReducer, {
+    todos: [],
+    loading: false,
+    thunks: todoThunks
+  });
+
+  const dispatch = action => action(_dispatch);
 
   useEffect(() => {
-    setLoading(true);
-    getTodos().then(res => {
-      setTodos([...res, getEmptyTodo()]);
-      setLoading(false);
-    });
+    dispatch(thunks.loadTodos());
   }, []);
 
   const toggleTodo = (todoId: number) => {
-    setTodos(
-      todos.map(todo =>
-        todo.id === todoId ? { ...todo, done: !todo.done } : todo
-      )
-    );
+    dispatch(thunks.toggleTodo(todoId));
   };
 
   const updateTodo = (todoId: number, todoText: string) => {
-    const newTodos = [
-      ...todos.map(t => (t.id === todoId ? { ...t, text: todoText } : t)),
-      getEmptyTodo()
-    ];
-
-    setTodos(newTodos);
+    console.log(todoId, todoText);
+    dispatch(thunks.addOrUpdateTodo(todoId, todoText));
   };
 
   return (
@@ -47,23 +38,14 @@ export const TodoList: React.FC<IProps> = ({ header }) => {
           <h2>Loading...</h2>
         </div>
       ) : (
-        <ul className="todo-list-list">
+        <ul className="todos">
           {todos.map(todo => (
-            <li
-              key={todo.id}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                padding: ".5rem 1rem",
-                marginBottom: ".5rem"
-              }}
-            >
-              <TodoListContext.Provider
-                value={{ todo: todo, toggleTodo: toggleTodo }}
-              >
-                <TodoInput updateItem={updateTodo} />
-              </TodoListContext.Provider>
+            <li key={todo.id}>
+              <TodoInput
+                updateItem={updateTodo}
+                todo={todo}
+                toggleTodo={toggleTodo}
+              />
             </li>
           ))}
         </ul>

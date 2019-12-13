@@ -1,7 +1,7 @@
 import { createSelector } from "reselect";
 import { IEventsByDay } from "../models/index";
-import { IAppContext } from "../contexts/app-state";
-const getEventsState = (state: IAppContext) => state;
+import { ApplicationContext } from "../contexts";
+const getEventsState = (state: ApplicationContext) => state;
 
 export const getEvents = createSelector([getEventsState], s => s.events);
 

@@ -1,39 +1,29 @@
+/*@typescript-eslint/no-unused-vars*/
 import React, { FC, useContext, useReducer, useEffect } from "react";
 import { ListItemInput } from "./ListItemInput";
-import { AppContext } from "../contexts/app-state";
-import { eventsReducer } from "../contexts/events";
-import { EventActions } from "../actions/events-actions";
+import { AppContext } from "../contexts";
+import "./TodoList/style.css";
 
 interface IProps {
   header: string;
 }
 
 export const ImportanceList: FC<IProps> = ({ header }) => {
-  const context = useContext(AppContext);
-  const { events, loading, thunks, loadEvents } = context;
+  const { events, loading, thunks, dispatch } = useContext(AppContext);
 
   useEffect(() => {
-    loadEvents(context);
+    dispatch && dispatch(thunks.loadEvents());
   }, []);
 
-  const updateEvent = (itemId: number, itemText: string) => {
-    console.log(itemId);
-    // const updatedEvents = events.map(ev =>
-    //   ev.eventID == itemId ? { ...ev, subject: itemText } : ev
-    // );
-
-    thunks.updateEvent(itemId, itemText);
-  };
-
   return (
-    <div>
+    <div style={{ marginTop: "40px" }}>
       <h1 className="todo-list-header">{header}</h1>
       {loading ? (
         <div>
           <h2>Loading...</h2>
         </div>
       ) : (
-        <ul className="todo-list-list">
+        <ul className="todos">
           {events.map(event => (
             <li key={event.eventID}>
               <ListItemInput
@@ -47,7 +37,6 @@ export const ImportanceList: FC<IProps> = ({ header }) => {
                   event.subject
                 }
                 readonly={true}
-                updateItem={updateEvent}
               />
             </li>
           ))}

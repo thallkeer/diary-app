@@ -52,7 +52,7 @@ namespace DiaryApp.API.Controllers
         {
             var events = context.Events.Where(ev => ev.Start.Month == month);
             List<EventViewModelLight> model = new List<EventViewModelLight>();
-            foreach (EventModel eventModel in events)
+            foreach (EventModel eventModel in events.OrderBy(e => e.Start))
             {
                 model.Add(new EventViewModelLight
                 {

@@ -21,3 +21,8 @@ code {
   font-family: "AmaticSC-Regular";
   src: url("./fonts/AmaticSC-Regular.ttf");
 }
+
+.second-page-container h1 {
+  font-size: 36px;
+  font-family: "RadioVolna";
+}
