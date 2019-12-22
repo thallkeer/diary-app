@@ -9,7 +9,7 @@ import { AppState } from "./contexts/app-state";
 export const App: FC = () => {
   return (
     <AppState>
-      <Container>
+      <Container fluid style={{ marginTop: "20px" }}>
         <Row>
           <Col md="3" className="text-center">
             <TodoList header={"Важные дела"} />

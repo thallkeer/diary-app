@@ -1,3 +1,11 @@
+export interface IEventList {
+  id: number;
+  pageId: number;
+  month: number;
+  title: string;
+  items: ILightEvent[];
+}
+
 export interface ILightEvent {
   eventID: number;
   date: Date;

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { ITodoItem, ILightEvent } from "../models/index";
+import { ITodoItem, IEventList, ILightEvent } from "../models/index";
 import { TodoThunks, Thunks as todoThunks } from "../actions/todo-actions";
 import { EventThunks, Thunks as eventThunks } from "../actions/events-actions";
 
@@ -18,13 +18,15 @@ export const TodoContext = createContext<TodoState>({
 
 export type ApplicationContext = {
   loading: boolean;
-  events: ILightEvent[];
+  eventList: IEventList;
   dispatch?: (action) => void;
   thunks: EventThunks;
 };
 
-export const AppContext = createContext<ApplicationContext>({
-  events: [],
+export const appInitialState: ApplicationContext = {
+  eventList: { id: 0, items: [], month: 0, pageId: 0, title: "" },
   loading: false,
   thunks: eventThunks
-});
+};
+
+export const AppContext = createContext<ApplicationContext>(appInitialState);

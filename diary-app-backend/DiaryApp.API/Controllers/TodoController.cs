@@ -53,6 +53,5 @@ namespace DiaryApp.API.Controllers
 
             return thingsTodo;
         }
-       
     }
 }

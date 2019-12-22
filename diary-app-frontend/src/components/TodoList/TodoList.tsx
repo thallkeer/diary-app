@@ -26,8 +26,13 @@ export const TodoList: React.FC<IProps> = ({ header }) => {
   };
 
   const updateTodo = (todoId: number, todoText: string) => {
-    console.log(todoId, todoText);
-    dispatch(thunks.addOrUpdateTodo(todoId, todoText));
+    dispatch(
+      thunks.addOrUpdateTodo({
+        id: todoId,
+        text: todoText,
+        done: todos.find(t => t.id === todoId).done
+      })
+    );
   };
 
   return (

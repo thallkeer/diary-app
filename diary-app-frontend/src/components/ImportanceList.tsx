@@ -1,22 +1,31 @@
 /*@typescript-eslint/no-unused-vars*/
-import React, { FC, useContext, useReducer, useEffect } from "react";
+import React, { FC, useContext, useEffect } from "react";
+import { FaTrash } from "react-icons/fa";
 import { ListItemInput } from "./ListItemInput";
 import { AppContext } from "../contexts";
 import "./TodoList/style.css";
+import { getEvents } from "../selectors/events";
 
 interface IProps {
   header: string;
+  style?: React.CSSProperties;
 }
 
-export const ImportanceList: FC<IProps> = ({ header }) => {
-  const { events, loading, thunks, dispatch } = useContext(AppContext);
+export const ImportanceList: FC<IProps> = ({ header, style }) => {
+  const { eventList, loading, thunks, dispatch } = useContext(AppContext);
+
+  style = style || { marginTop: "40px" };
 
   useEffect(() => {
-    dispatch && dispatch(thunks.loadEvents());
+    dispatch && dispatch(thunks.loadEvents(header));
   }, []);
 
+  const onDelete = (eventID: number) => {
+    dispatch(thunks.deleteEvent(eventID));
+  };
+
   return (
-    <div style={{ marginTop: "40px" }}>
+    <div style={style}>
       <h1 className="todo-list-header">{header}</h1>
       {loading ? (
         <div>
@@ -24,8 +33,8 @@ export const ImportanceList: FC<IProps> = ({ header }) => {
         </div>
       ) : (
         <ul className="todos">
-          {events.map(event => (
-            <li key={event.eventID}>
+          {eventList.items.map(event => (
+            <li key={event.eventID} className="event">
               <ListItemInput
                 itemId={event.eventID}
                 itemText={
@@ -38,6 +47,12 @@ export const ImportanceList: FC<IProps> = ({ header }) => {
                 }
                 readonly={true}
               />
+              <span
+                className="delete-event-btn"
+                onClick={() => onDelete(event.eventID)}
+              >
+                <FaTrash />
+              </span>
             </li>
           ))}
         </ul>

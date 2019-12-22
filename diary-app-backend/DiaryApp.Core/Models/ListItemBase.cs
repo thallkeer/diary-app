@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core.Models
 {
     public abstract class ListItemBase
     {
+        [ScaffoldColumn(false)]
         public int ID { get; set; }
-        public string Subject { get; set; }
+        public string Subject { get; set; } = string.Empty;
         [Required]
-        public int OwnerListID { get; set; }
-        public virtual IListModel Owner { get; set; }
+        public int EventListID { get; set; }
+        public virtual EventList Owner { get; set; }
     }
 }

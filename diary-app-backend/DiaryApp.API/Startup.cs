@@ -28,9 +28,11 @@ namespace DiaryApp.API
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+           
+
             services.AddDbContext<ApplicationContext>(options =>
-            options.UseSqlServer(
-                Configuration.GetConnectionString("DefaultConnection")));
+                options.UseLazyLoadingProxies()
+                       .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             //services.AddCors(options =>
@@ -54,7 +56,7 @@ namespace DiaryApp.API
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader());
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             //app.UseCors("AllowAllOrigins");
             app.UseHttpsRedirection();
             app.UseMvc();

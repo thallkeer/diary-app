@@ -1,6 +1,7 @@
 import { ActionsUnion, createAction } from "./action-helpers";
 import { ActionTypes } from "../contexts/action-types";
 import { ITodoItem } from "../models";
+import axios from "axios";
 
 export const TodoActions = {
   startLoadTodos: () =>
@@ -8,11 +9,7 @@ export const TodoActions = {
   finishLoadTodos: (todos: ITodoItem[]) =>
     createAction(ActionTypes.LOAD_TODOS + ActionTypes.SUCCESS, todos),
   toggleTodo: (todoId: number) => createAction(ActionTypes.TOGGLE_TODO, todoId),
-  updateTodo: (todoId: number, subject: string) =>
-    createAction<{ todoId: number; text: string }>(ActionTypes.UPDATE_TODO, {
-      todoId: todoId,
-      text: subject
-    })
+  updateTodo: (todo: ITodoItem) => createAction(ActionTypes.UPDATE_TODO, todo)
 };
 
 const callApi: string = "https://localhost:44320/api/todo";
@@ -21,8 +18,9 @@ export const Thunks = {
   loadTodos: () => {
     return dispatch => {
       dispatch(TodoActions.startLoadTodos());
-      fetch(callApi)
-        .then(res => res.json())
+      axios
+        .get(callApi)
+        .then(res => res.data)
         .then(response => dispatch(TodoActions.finishLoadTodos(response)));
     };
   },
@@ -33,9 +31,9 @@ export const Thunks = {
     };
   },
 
-  addOrUpdateTodo: (todoId: number, subject: string) => {
+  addOrUpdateTodo: (todo: ITodoItem) => {
     return dispatch => {
-      dispatch(TodoActions.updateTodo(todoId, subject));
+      dispatch(TodoActions.updateTodo(todo));
     };
   }
 };

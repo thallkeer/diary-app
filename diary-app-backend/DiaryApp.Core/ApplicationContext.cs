@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using DiaryApp.Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DiaryApp.Core
 {
@@ -11,6 +11,7 @@ namespace DiaryApp.Core
             Database.EnsureCreated();
         }
 
-        public DbSet<EventModel> Events { get; set; }
+        public DbSet<EventList> Events { get; set; }
+        public DbSet<TodoList> Todos { get; set; }
     }
 }

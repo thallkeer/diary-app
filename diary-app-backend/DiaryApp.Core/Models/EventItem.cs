@@ -1,18 +1,16 @@
-﻿using System;
+﻿using DiaryApp.Core.Models;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DiaryApp.API.Models
+namespace DiaryApp.Core
 {
-    public class EventViewModel : EventViewModelLight
+    public class EventItem : ListItemBase
     {
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public string Description { get; set; }
         public string Color { get; set; }
         public string Url { get; set; }
-        public override bool FullDay
-        {
-            get { return fullDay; }
-            set { fullDay = value; }
-        }
+        public bool FullDay { get; set; }
     }
 }

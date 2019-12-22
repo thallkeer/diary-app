@@ -1,19 +1,17 @@
-import React, { useReducer, createContext } from "react";
+import React, { useReducer } from "react";
 import { eventsReducer } from "./events";
 import { Thunks as eventThunks } from "../actions/events-actions";
-import { AppContext } from ".";
+import { AppContext, appInitialState } from ".";
 
 export const AppState = ({ children }) => {
-  const [state, _dispatch] = useReducer(eventsReducer, {
-    events: [],
-    loading: false,
-    thunks: eventThunks
-  });
+  const [state, _dispatch] = useReducer(eventsReducer, appInitialState);
 
   const dispatch = action => action(_dispatch);
 
   return (
-    <AppContext.Provider value={{ ...state, dispatch: dispatch }}>
+    <AppContext.Provider
+      value={{ ...state, dispatch: dispatch, thunks: eventThunks }}
+    >
       {children}
     </AppContext.Provider>
   );

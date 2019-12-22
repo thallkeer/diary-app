@@ -12,11 +12,13 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import "./style.css";
+import { ILightEvent } from "../../models";
 
 interface IFormProps {
   show: boolean;
   handleClose: () => void;
   day: number;
+  event?: ILightEvent;
   addEvent?: (subject: string, date: Date) => void;
 }
 
@@ -46,7 +48,6 @@ export const AddEventForm: React.FC<IFormProps> = ({
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.persist();
     const { name, value } = e.target as HTMLInputElement;
-    console.log(name, value);
 
     setFormState({
       ...formState,
@@ -60,7 +61,9 @@ export const AddEventForm: React.FC<IFormProps> = ({
     e.preventDefault();
     const submitSuccess: boolean = await submitForm();
     setFormState({ ...formState, submitSuccess });
-    if (submitSuccess) handleClose();
+    if (submitSuccess) {
+      handleClose();
+    }
   };
 
   const getDisplayDate = (): string => {
@@ -146,21 +149,21 @@ export const AddEventForm: React.FC<IFormProps> = ({
           </Button>
         </Modal.Footer>
       </Form>
-      {/* {this.state.submitSuccess && (
-            <div className="alert alert-info" role="alert">
-              The form was successfully submitted!
-            </div>
-          )}
-          {this.state.submitSuccess === false && (
-            <div className="alert alert-danger" role="alert">
-              Sorry, an unexpected error has occurred
-            </div>
-          )}
-          {this.state.submitSuccess === false && (
-            <div className="alert alert-danger" role="alert">
-              Sorry, the form is invalid. Please review, adjust and try again
-            </div>
-          )} */}
+      {formState.submitSuccess && (
+        <div className="alert alert-info" role="alert">
+          The form was successfully submitted!
+        </div>
+      )}
+      {formState.submitSuccess === false && (
+        <div className="alert alert-danger" role="alert">
+          Sorry, an unexpected error has occurred
+        </div>
+      )}
+      {formState.submitSuccess === false && (
+        <div className="alert alert-danger" role="alert">
+          Sorry, the form is invalid. Please review, adjust and try again
+        </div>
+      )}
     </Modal>
   );
 };

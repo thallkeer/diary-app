@@ -38,3 +38,21 @@
   border: 1px solid black;
   position: absolute;
 }
+
+.event {
+  &:hover {
+    span {
+      visibility: visible;
+    }
+    cursor: pointer;
+  }
+}
+
+.delete-event-btn {
+  visibility: hidden;
+  position: absolute;
+  left: 90%;
+  // border-radius: 50% !important;
+  color: lightblue !important;
+  font-size: 14px;
+}
