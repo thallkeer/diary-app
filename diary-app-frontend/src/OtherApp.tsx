@@ -1,14 +1,16 @@
 import React from "react";
-import { TodoList } from "./components/TodoList/TodoList";
+import { TodoList } from "./components/Lists/TodoList";
 import { Container, Row, Col } from "react-bootstrap";
-import { ImportanceList } from "./components/ImportanceList";
+import { ImportanceList } from "./components/Lists/ImportanceList";
+import Calendar from "./components/Calendar/Calendar";
+import HabitsTracker from "./components/HabitsTracker";
 
 export const OtherApp: React.FC = () => {
   return (
     <Container
       fluid
       className="second-page-container text-center"
-      style={{ border: "1px solid red" }}
+      style={{ marginTop: "20px" }}
     >
       <Row>
         <Col md={6}>
@@ -22,7 +24,22 @@ export const OtherApp: React.FC = () => {
               <TodoList header="Одежда" />
             </Col>
           </Row>
-          <h1>В этом месяце я хочу</h1>
+          <Row>
+            <Col md={5}>
+              <TodoList header="Красота и здоровье" />
+            </Col>
+            <Col md={2}>{""}</Col>
+            <Col md={5}>
+              <TodoList header="Другое" />
+            </Col>
+          </Row>
+          <h1
+            style={{
+              marginTop: "40px"
+            }}
+          >
+            В этом месяце я хочу
+          </h1>
           <Row>
             <Col md={4}>
               <ImportanceList header="Прочитать" />
@@ -39,7 +56,7 @@ export const OtherApp: React.FC = () => {
           <h1>Идеи этого месяца</h1>
           <Row>
             <Col md={12}>
-              <ImportanceList style={{ marginTop: "52px" }} header="TEST" />
+              <ImportanceList style={{ marginTop: "52px" }} header="Идеи" />
             </Col>
           </Row>
           <h1>Цели на этот месяц</h1>
@@ -57,7 +74,7 @@ export const OtherApp: React.FC = () => {
               </span>
             </Col>
             <Col md={8}>
-              <div>Тут будет календарик</div>
+              <HabitsTracker />
             </Col>
           </Row>
         </Col>

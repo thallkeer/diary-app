@@ -28,18 +28,11 @@ namespace DiaryApp.API
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-           
-
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseLazyLoadingProxies()
                        .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("AllowAllOrigins",
-            //        builder => builder.AllowAnyOrigin()
-            //                          .AllowAnyMethod());
             //});
             services.AddCors();
         }
@@ -57,9 +50,10 @@ namespace DiaryApp.API
                 app.UseHsts();
             }
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-            //app.UseCors("AllowAllOrigins");
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            SampleData.Initialize(app.ApplicationServices);
         }
     }
 }

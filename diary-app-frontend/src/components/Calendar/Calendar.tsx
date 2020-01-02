@@ -1,10 +1,11 @@
 import React, { Component, CSSProperties } from "react";
 import moment, { Moment } from "moment";
 import "./style.css";
-import { getEventsByDay } from "../../selectors/events";
+import { getEventsByDay } from "../../selectors";
 import { AddEventForm } from "../Dialogs/AddEventForm";
-import { IEventsByDay } from "../../models";
-import { AppContext } from "../../contexts/index";
+import { IEventsByDay, ILightEvent } from "../../models";
+import { Store, AppState } from "../../context/index";
+import { Thunks as eventThunks } from "../../actions/events-actions";
 
 interface ICalendarState {
   momentContext: Moment;
@@ -26,10 +27,14 @@ class Calendar extends Component<{}, ICalendarState> {
     showAddEventForm: false
   };
 
-  static contextType = AppContext;
+  static contextType = Store;
+
+  get appContext(): AppState {
+    return this.context as AppState;
+  }
 
   get events(): IEventsByDay[] {
-    return getEventsByDay(this.context);
+    return getEventsByDay(this.appContext.events);
   }
 
   get weekdays(): string[] {
@@ -72,6 +77,10 @@ class Calendar extends Component<{}, ICalendarState> {
       .get("day");
     return firstDay;
   }
+
+  addEvent = (newEvent: ILightEvent) => {
+    this.appContext.events.dispatch(eventThunks.addEvent(newEvent));
+  };
 
   setMonth = (month: string) => {
     let monthNumber = this.months.indexOf(month);
@@ -179,7 +188,7 @@ class Calendar extends Component<{}, ICalendarState> {
           <div className="day-span">{d}</div>
           {curEvents.map(eventByDay => (
             <div
-              key={eventByDay.event.eventID}
+              key={eventByDay.event.id}
               className={curEventClass}
               style={{ marginTop: "5px" }}
               onClick={e => this.onDayClick(e, d)}
@@ -262,6 +271,10 @@ class Calendar extends Component<{}, ICalendarState> {
             day={this.state.clickedDay}
             show={this.state.showAddEventForm}
             handleClose={this.toggle}
+            eventInfo={{
+              ownerID: (this.context as AppState).events.list.id,
+              addEvent: this.addEvent
+            }}
           />
         )}
       </div>

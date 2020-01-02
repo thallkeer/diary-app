@@ -1,5 +1,3 @@
-using System;
-
 namespace DiaryApp.API.Models
 {
     public class ErrorViewModel

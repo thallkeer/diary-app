@@ -14,12 +14,17 @@ import { faClock } from "@fortawesome/free-regular-svg-icons";
 import "./style.css";
 import { ILightEvent } from "../../models";
 
+export type EventInfo = {
+  event?: ILightEvent;
+  addEvent: (newEvent: ILightEvent, month: number, day: number) => void;
+  ownerID: number;
+};
+
 interface IFormProps {
   show: boolean;
   handleClose: () => void;
   day: number;
-  event?: ILightEvent;
-  addEvent?: (subject: string, date: Date) => void;
+  eventInfo: EventInfo;
 }
 
 interface IFormState {
@@ -32,7 +37,7 @@ export const AddEventForm: React.FC<IFormProps> = ({
   show,
   handleClose,
   day,
-  addEvent
+  eventInfo
 }) => {
   const getDateByDay = (day: number) => {
     const date: Date = new Date();
@@ -76,28 +81,19 @@ export const AddEventForm: React.FC<IFormProps> = ({
 
   const submitForm = async (): Promise<boolean> => {
     try {
-      const event = {
-        eventID: 0,
+      const event: ILightEvent = {
+        id: 0,
         subject: formState.text,
-        date: formState.date
+        date: formState.date,
+        ownerID: eventInfo.ownerID
       };
 
       const month: number = event.date.getMonth() + 1; //from 0 to 11
       const day: number = event.date.getDate();
 
-      const response = await fetch(
-        `https://localhost:44320/api/events/${month}/day/${day}`,
-        {
-          method: "post",
-          headers: new Headers({
-            "Content-Type": "application/json",
-            Accept: "application/json"
-          }),
-          body: JSON.stringify(event)
-        }
-      );
-      console.log(response);
-      return response.ok;
+      eventInfo.addEvent(event, month, day);
+      console.log("woho");
+      return true;
     } catch (ex) {
       console.log(ex);
       return false;

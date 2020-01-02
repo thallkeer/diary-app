@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
-using Microsoft.AspNetCore.Http;
+using DiaryApp.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DiaryApp.API.Controllers
@@ -19,39 +18,52 @@ namespace DiaryApp.API.Controllers
             this.context = context;
         }
 
-        [HttpGet]
-        public ActionResult<List<TodoItemModel>> Get()
+        [HttpGet("{month:int}/title/{title}")]
+        public ActionResult<TodoList> Get(int month, string title = "")
         {
-            var thingsTodo = new List<TodoItemModel>
+            TodoList todoList = context.TodoLists.FirstOrDefault(ev => ev.Month == month && ev.Title == title);
+            TodoList model = new TodoList
+            {
+                ID = todoList.ID,
+                Month = todoList.Month,
+                Title = todoList.Title,
+                Items = new List<TodoItem>()
+            };
+            foreach (TodoItem todoModel in todoList.Items)
+            {
+                model.Items.Add(new TodoItem
                 {
-                    new TodoItemModel
-                    {
-                        ID = 1,
-                        Text = "Написать 2 главу курсовой",
-                        Done = true
-                    },
-                    new TodoItemModel
-                    {
-                        ID = 2,
-                        Text = "Купить пальто",
-                        Done = false
-                    },
-                    new TodoItemModel
-                    {
-                        ID = 3,
-                        Text = "Забронировать отель",
-                        Done = false
-                    },
-                    new TodoItemModel
-                    {
-                        ID = 4,
-                        Text = "Покормить котика",
-                        Done = true
-                    }
-                };
-           
+                    ID = todoModel.ID,
+                    Subject = todoModel.Subject,
+                    Done = todoModel.Done,
+                    OwnerID = todoList.ID
+                });
+            }
+            return model;
+        }
 
-            return thingsTodo;
+        [HttpPost]
+        public async Task<IActionResult> AddTodo([FromBody]TodoModel todoData)
+        {
+            var todoList = await context.TodoLists.FindAsync(todoData.OwnerID);
+
+            var newTodo = new TodoItem
+            {
+                Subject = todoData.Subject,
+                Done = todoData.Done,
+                OwnerID = todoData.OwnerID
+            };
+
+            todoList.Items.Add(newTodo);
+
+            int saved = await context.SaveChangesAsync();
+
+            if (saved != 0)
+            {
+                todoData.ID = newTodo.ID;
+                return Ok(todoData);
+            }
+            return BadRequest();
         }
     }
 }

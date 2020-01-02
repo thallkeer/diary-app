@@ -1,17 +1,9 @@
-export interface IEventList {
+export interface IList<T extends ITodoItem | ILightEvent> {
   id: number;
   pageId: number;
   month: number;
   title: string;
-  items: ILightEvent[];
-}
-
-export interface ILightEvent {
-  eventID: number;
-  date: Date;
-  fullDay?: boolean;
-  subject: string;
-  description?: string;
+  items: T[];
 }
 
 export interface IEventsByDay {
@@ -21,9 +13,16 @@ export interface IEventsByDay {
 
 export interface IListItem {
   id: number;
-  text: string;
+  subject: string;
+  ownerID?: number;
 }
 
 export interface ITodoItem extends IListItem {
   done: boolean;
+}
+
+export interface ILightEvent extends IListItem {
+  date: Date;
+  fullDay?: boolean;
+  description?: string;
 }

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { CheckCircle } from "./CheckCircle";
-import { ListItemInput } from "../ListItemInput";
+import { ListItemInput } from "./ListItemInput";
 import { ITodoItem } from "../../models";
 
 interface ITodoInputProps {
@@ -16,12 +16,13 @@ export const TodoInput: FC<ITodoInputProps> = ({
 }) => {
   return (
     <>
-      {todo.id !== 0 && (
+      <CheckCircle id={todo.id} done={todo.done} toggleTodo={toggleTodo} />
+      {/* {todo.id !== 0 && (
         <CheckCircle id={todo.id} done={todo.done} toggleTodo={toggleTodo} />
-      )}
+      )} */}
       <ListItemInput
         itemId={todo.id}
-        itemText={todo.text}
+        itemText={todo.subject}
         updateItem={updateItem}
       />
     </>

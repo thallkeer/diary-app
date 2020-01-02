@@ -1,5 +1,5 @@
 import { ActionsUnion, createAction } from "./action-helpers";
-import { ActionTypes } from "../contexts/action-types";
+import { ActionTypes } from "../context/action-types";
 import { ITodoItem } from "../models";
 import axios from "axios";
 
@@ -12,14 +12,14 @@ export const TodoActions = {
   updateTodo: (todo: ITodoItem) => createAction(ActionTypes.UPDATE_TODO, todo)
 };
 
-const callApi: string = "https://localhost:44320/api/todo";
+const callApi: string = "https://localhost:44320/api/todo/";
 
 export const Thunks = {
-  loadTodos: () => {
+  loadTodos: (title: string) => {
     return dispatch => {
       dispatch(TodoActions.startLoadTodos());
       axios
-        .get(callApi)
+        .get(callApi + `${new Date().getMonth() + 1}/title/${title}`)
         .then(res => res.data)
         .then(response => dispatch(TodoActions.finishLoadTodos(response)));
     };
