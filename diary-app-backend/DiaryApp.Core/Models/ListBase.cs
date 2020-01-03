@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core.Models
+namespace DiaryApp.Core
 {
     public abstract class ListBase<T>
     {
@@ -16,6 +16,11 @@ namespace DiaryApp.Core.Models
         public int PageID { get; set; }        
         public virtual PageBase Page { get; set; }
         public virtual List<T> Items { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Title} {Year} {Month}";
+        }
     }
 
     public class EventList : ListBase<EventItem>

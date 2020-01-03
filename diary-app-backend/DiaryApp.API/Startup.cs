@@ -1,4 +1,6 @@
-﻿using DiaryApp.Core;
+﻿using AutoMapper;
+using DiaryApp.Core;
+using DiaryApp.Data.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -32,13 +34,19 @@ namespace DiaryApp.API
                 options.UseLazyLoadingProxies()
                        .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<ITodoService, TodoService>();
+            services.AddScoped<IMainPageService, MainPageService>();
+            services.AddTransient<SampleData>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             //});
             services.AddCors();
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, SampleData sampleData)
         {
             if (env.IsDevelopment())
             {
@@ -53,7 +61,7 @@ namespace DiaryApp.API
             app.UseHttpsRedirection();
             app.UseMvc();
 
-            SampleData.Initialize(app.ApplicationServices);
+            await sampleData.Initialize();
         }
     }
 }

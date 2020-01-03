@@ -1,4 +1,4 @@
-﻿namespace DiaryApp.Core.Models
+﻿namespace DiaryApp.Core
 {
     public class TodoItem : ListItemBase<TodoList>
     {

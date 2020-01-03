@@ -1,9 +1,8 @@
-﻿using DiaryApp.Core.Models;
-using System;
+﻿using System;
 
 namespace DiaryApp.API.Models
 {
-    public class EventModel : ListItemBase<EventListModel>
+    public class EventModel : ListItemModel
     {
         public DateTime Date { get; set; }
     }

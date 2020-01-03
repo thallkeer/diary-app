@@ -1,24 +1,19 @@
-﻿using DiaryApp.Core.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DiaryApp.Core
 {
     public class SampleData
     {
-        public static async void Initialize(IServiceProvider serviceProvider)
+        private readonly ApplicationContext context;
+
+        public SampleData(ApplicationContext context)
         {
-            using (var context = serviceProvider.GetRequiredService<ApplicationContext>())
-            {
-                await InitializeInternal(context);
-            }
+            this.context = context;
         }
-        private static async Task InitializeInternal(ApplicationContext context)
+
+        public async Task Initialize()
         {
             return;
 

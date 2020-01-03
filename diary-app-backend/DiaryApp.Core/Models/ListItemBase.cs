@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core.Models
+namespace DiaryApp.Core
 {
     public abstract class ListItemBase<TOwner>
     {
@@ -10,5 +10,10 @@ namespace DiaryApp.Core.Models
         [Required]
         public int OwnerID { get; set; }
         public virtual TOwner Owner { get; set; }
+
+        public override string ToString()
+        {
+            return Subject;
+        }
     }
 }

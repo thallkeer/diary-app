@@ -1,8 +1,6 @@
-﻿using DiaryApp.Core.Models;
-
-namespace DiaryApp.API.Models
+﻿namespace DiaryApp.API.Models
 {
-    public class TodoListModel : ListBase<TodoModel>
+    public class TodoListModel : ListModel<TodoModel>
     {
     }
 }

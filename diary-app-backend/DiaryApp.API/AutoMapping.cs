@@ -1,0 +1,20 @@
+﻿using AutoMapper;
+using DiaryApp.API.Models;
+using DiaryApp.Core;
+
+namespace DiaryApp.API
+{
+    public class AutoMapping : Profile
+    {
+        public AutoMapping()
+        {
+            CreateMap<TodoItem, TodoModel>();
+            CreateMap<EventItem, EventModel>();
+            CreateMap<EventList, EventListModel>();
+            CreateMap<TodoList, TodoListModel>();
+            CreateMap<MainPage, MainPageModel>();
+            CreateMap<MonthPage, MonthPageModel>();
+            CreateMap<HabitsTracker, HabitsTrackerModel>();
+        }
+    }
+}

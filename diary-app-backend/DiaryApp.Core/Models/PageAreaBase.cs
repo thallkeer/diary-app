@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core.Models
+namespace DiaryApp.Core
 {
     public abstract class PageAreaBase
     {

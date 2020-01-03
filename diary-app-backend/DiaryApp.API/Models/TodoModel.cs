@@ -1,8 +1,6 @@
-﻿using DiaryApp.Core.Models;
-
-namespace DiaryApp.API.Models
+﻿namespace DiaryApp.API.Models
 {
-    public class TodoModel : ListItemBase<TodoListModel>
+    public class TodoModel : ListItemModel
     {
         public bool Done { get; set; }
     }

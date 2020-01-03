@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace DiaryApp.Core.Models
+namespace DiaryApp.Core
 {
     public class AppUser : IdentityUser
     {

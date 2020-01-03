@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
-using DiaryApp.Core.Models;
+using DiaryApp.Data.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DiaryApp.API.Controllers
@@ -12,58 +11,36 @@ namespace DiaryApp.API.Controllers
     [ApiController]
     public class TodoController : ControllerBase
     {
-        private readonly ApplicationContext context;
+        private readonly ITodoService todoService;
+        private readonly IMapper mapper;
 
-        public TodoController(ApplicationContext context) {
-            this.context = context;
-        }
-
-        [HttpGet("{month:int}/title/{title}")]
-        public ActionResult<TodoList> Get(int month, string title = "")
+        public TodoController(ApplicationContext context, IMapper mapper)
         {
-            TodoList todoList = context.TodoLists.FirstOrDefault(ev => ev.Month == month && ev.Title == title);
-            TodoList model = new TodoList
-            {
-                ID = todoList.ID,
-                Month = todoList.Month,
-                Title = todoList.Title,
-                Items = new List<TodoItem>()
-            };
-            foreach (TodoItem todoModel in todoList.Items)
-            {
-                model.Items.Add(new TodoItem
-                {
-                    ID = todoModel.ID,
-                    Subject = todoModel.Subject,
-                    Done = todoModel.Done,
-                    OwnerID = todoList.ID
-                });
-            }
-            return model;
+            this.todoService = new TodoService(context);
+            this.mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTodo([FromBody]TodoModel todoData)
+        public async Task<IActionResult> AddTodo([FromBody] TodoModel todo)
         {
-            var todoList = await context.TodoLists.FindAsync(todoData.OwnerID);
+            var newTodo = mapper.Map<TodoItem>(todo);
+            await todoService.AddItem(newTodo, todo.OwnerID);
+            todo.ID = newTodo.ID;
+            return Ok(todo);
+        }
 
-            var newTodo = new TodoItem
-            {
-                Subject = todoData.Subject,
-                Done = todoData.Done,
-                OwnerID = todoData.OwnerID
-            };
+        [HttpPut]
+        public async Task<IActionResult> UpdateTodo([FromBody] TodoModel todoModel)
+        {
+            var todo = mapper.Map<TodoItem>(todoModel);
+            await todoService.UpdateItem(todo);
+            return Ok();
+        }
 
-            todoList.Items.Add(newTodo);
-
-            int saved = await context.SaveChangesAsync();
-
-            if (saved != 0)
-            {
-                todoData.ID = newTodo.ID;
-                return Ok(todoData);
-            }
-            return BadRequest();
+        [HttpDelete("{todoID}")]
+        public async Task DeleteTodo(int todoID)
+        {
+            await todoService.DeleteItem(todoID);
         }
     }
 }

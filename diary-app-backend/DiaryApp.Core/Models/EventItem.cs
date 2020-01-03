@@ -1,5 +1,4 @@
-﻿using DiaryApp.Core.Models;
-using System;
+﻿using System;
 
 namespace DiaryApp.Core
 {
