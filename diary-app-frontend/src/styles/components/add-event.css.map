@@ -2,8 +2,8 @@
     "version": 3,
     "mappings": "AAAA,AAAA,aAAa,CAAC;EACZ,MAAM,EAAE,IAAI;EACZ,aAAa,EAAE,iBAAiB;EAChC,SAAS,EAAE,IAAI;EACf,aAAa,EAAE,EAAE;EACjB,UAAU,EAAE,0BAA0B;CAMvC;;AAXD,AAOE,aAPW,AAOV,MAAM,CAAC;EACN,aAAa,EAAE,iBAAiB;EAChC,UAAU,EAAE,IAAI;CACjB",
     "sources": [
-        "style.scss"
+        "add-event.scss"
     ],
     "names": [],
-    "file": "style.css"
+    "file": "add-event.css"
 }

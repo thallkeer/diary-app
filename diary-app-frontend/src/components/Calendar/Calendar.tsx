@@ -1,6 +1,5 @@
 import React, { Component, CSSProperties } from "react";
 import moment, { Moment } from "moment";
-import "./style.css";
 import { getEventsByDay } from "../../selectors";
 import { AddEventForm } from "../Dialogs/AddEventForm";
 import { IEventsByDay, IEvent } from "../../models";

@@ -3,18 +3,18 @@ import { /* BrowserRouter as*/ Router, Route, Switch } from "react-router-dom";
 //import Header from "../components/Header";
 import Container from "react-bootstrap/Container";
 import history from "../history";
-import { OtherApp } from "../../OtherApp";
+import { MonthPage } from "../MonthPage/MonthPage";
 import NotFound from "../NotFound";
-import { App } from "../../App";
+import { MainPage } from "../MainPage/MainPage";
 
 export default function AppRouter() {
   return (
     <Container fluid>
       <Router history={history}>
         <Switch>
-          <Route path="/" exact={true} component={App} />
-          <Route path="/month" exact={true} component={App} />
-          <Route path="/other" exact={true} component={OtherApp} />
+          <Route path="/" exact={true} component={MainPage} />
+          <Route path="/main" exact={true} component={MainPage} />
+          <Route path="/month" exact={true} component={MonthPage} />
           <Route component={NotFound} />
         </Switch>
       </Router>

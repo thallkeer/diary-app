@@ -26,3 +26,23 @@ code {
   font-size: 36px;
   font-family: "RadioVolna";
 }
+
+@mixin mt($val) {
+  margin-top: $val !important;
+}
+
+.mt-40 {
+  @include mt(40px);
+}
+
+.mt-52 {
+  @include mt(52px);
+}
+
+.mt-20 {
+  @include mt(20px);
+}
+
+.mt-10 {
+  @include mt(10px);
+}

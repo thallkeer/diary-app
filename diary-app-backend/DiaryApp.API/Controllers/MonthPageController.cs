@@ -20,6 +20,88 @@ namespace DiaryApp.API.Controllers
         {
             this.monthPageService = new MonthPageService(context);
             this.mapper = mapper;
+
+            //MonthPage monthPage = context.MonthPages.Find(2);
+
+            //var beautyAndHealth = new TodoList
+            //{
+            //    Year = 2020,
+            //    Month = 1,
+            //    Title = "Красота и здоровье",
+            //    Items = new List<TodoItem>
+            //    {
+            //        new TodoItem
+            //        {
+            //            Subject = "Карандаш для губ VS"
+            //        },
+            //        new TodoItem
+            //        {
+            //            Subject = "Снуп"
+            //        }
+            //    },
+            //    Page = monthPage
+            //};
+
+            //var othersList = new TodoList
+            //{
+            //    Year = 2020,
+            //    Month = 1,
+            //    Title = "Другое",
+            //    Items = new List<TodoItem>
+            //    {
+            //        new TodoItem
+            //        {
+            //            Subject = "Картриджи"
+            //        }
+            //    },
+            //    Page = monthPage
+            //};
+
+            //context.TodoLists.AddRange(beautyAndHealth, othersList);
+
+            //context.SaveChanges();
+
+            //var purchasesArea = context.PurchasesAreas.Find(2);
+
+            //purchasesArea.PurchasesLists.Add(beautyAndHealth);
+            //purchasesArea.PurchasesLists.Add(othersList);
+
+            //context.SaveChanges();
+
+            //var desiresArea = context.DesiresAreas.Find(2);
+
+            //var toRead = new EventList
+            //{
+            //    Month = 1,
+            //    Year = 2020,
+            //    Title = "Прочитать",
+            //    Page = monthPage
+            //};
+            //var toWatch = new EventList
+            //{
+            //    Month = 1,
+            //    Year = 2020,
+            //    Title = "Посмотреть",
+            //    Page = monthPage
+            //};
+            //var toVisit = new EventList
+            //{
+            //    Month = 1,
+            //    Year = 2020,
+            //    Title = "Посетить",
+            //    Page = monthPage
+            //};
+
+            //context.EventLists.AddRange(toRead, toWatch, toVisit);
+
+            //context.SaveChanges();
+
+            //desiresArea.DesiresLists.AddRange(new EventList[]
+            //{
+            //    toRead, toWatch, toVisit
+            //});
+
+            //context.SaveChanges();
         }
 
         [HttpGet("{userId}/{year}/{month}")]

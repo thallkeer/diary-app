@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,SAAS,CAAC;EACR,MAAM,EAAE,eAAe;EACvB,UAAU,EAAE,MAAM;EAClB,WAAW,EAAE,YAAY;EACzB,WAAW,EAAE,IAAI;EACjB,IAAI,EAAE,CAAC;EACP,SAAS,EAAE,IAAI;EACf,MAAM,EAAE,OAAO;CAChB",
+    "sources": [
+        "habits-tracker.scss"
+    ],
+    "names": [],
+    "file": "habits-tracker.css"
+}

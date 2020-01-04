@@ -1,4 +1,4 @@
-import React, { CSSProperties } from "react";
+import React from "react";
 import { getRandomId } from "../../utils";
 
 const onDayClick = (e: React.MouseEvent<HTMLElement>, day: number) => {
@@ -16,33 +16,26 @@ const getDaysInMonth = () => {
     0
   ).getDate();
 
-  let dayStyle: CSSProperties = {
-    border: "1px solid black",
-    textAlign: "center",
-    fontFamily: "RadioVolna",
-    fontWeight: "bold",
-    flex: "1",
-    minWidth: "25px",
-    cursor: "pointer"
-  };
+  // let dayStyle: CSSProperties = {
+  //   border: "1px solid black",
+  //   textAlign: "center",
+  //   fontFamily: "RadioVolna",
+  //   fontWeight: "bold",
+  //   flex: "1",
+  //   minWidth: "25px",
+  //   cursor: "pointer"
+  // };
 
   for (let d = 1; d <= days; d++) {
     daysInMonth.push(
-      <div
-        className="p-2"
-        key={d}
-        style={dayStyle}
-        onClick={e => onDayClick(e, d)}
-      >
+      <div className="p-2 day-cell" key={d} onClick={e => onDayClick(e, d)}>
         {d}
       </div>
     );
   }
 
   if (days === 31)
-    daysInMonth.push(
-      <div className="p-2" key={getRandomId()} style={dayStyle}></div>
-    );
+    daysInMonth.push(<div className="p-2 day-cell" key={getRandomId()}></div>);
 
   return daysInMonth;
 };

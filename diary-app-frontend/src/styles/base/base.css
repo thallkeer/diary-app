@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Almost", "AmaticSC-Regular", sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+@font-face {
+  font-family: "RadioVolna";
+  src: url("./fonts/RadioVolna.ttf");
+}
+
+@font-face {
+  font-family: "AmaticSC-Regular";
+  src: url("./fonts/AmaticSC-Regular.ttf");
+}
+
+.second-page-container h1 {
+  font-size: 36px;
+  font-family: "RadioVolna";
+}
+
+.mt-40 {
+  margin-top: 40px !important;
+}
+
+.mt-52 {
+  margin-top: 52px !important;
+}
+
+.mt-20 {
+  margin-top: 20px !important;
+}
+
+.mt-10 {
+  margin-top: 10px !important;
+}
+/*# sourceMappingURL=base.css.map */

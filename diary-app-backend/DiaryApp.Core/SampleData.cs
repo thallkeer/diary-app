@@ -13,8 +13,8 @@ namespace DiaryApp.Core
             this.context = context;
         }
 
-        public async Task Initialize()
-        {
+        public async void Initialize()
+        {           
             return;
 
             //var user = new AppUser()
@@ -109,119 +109,119 @@ namespace DiaryApp.Core
 
             //await context.SaveChangesAsync();
 
-            var monthPage = await context.MonthPages.FindAsync(2);
+            //var monthPage = await context.MonthPages.FindAsync(2);
 
-            var forHome = new TodoList
-            {
-                Year = 2020,
-                Month = 1,
-                Title = "Для дома",
-                Items = new List<TodoItem>
-                {
-                    new TodoItem
-                    {
-                        Subject = "Зеркало",
-                        Done = true
-                    },
-                    new TodoItem
-                    {
-                        Subject = "Набор губок"
-                    }
-                },
-                Page = monthPage
-            };
+            //var forHome = new TodoList
+            //{
+            //    Year = 2020,
+            //    Month = 1,
+            //    Title = "Для дома",
+            //    Items = new List<TodoItem>
+            //    {
+            //        new TodoItem
+            //        {
+            //            Subject = "Зеркало",
+            //            Done = true
+            //        },
+            //        new TodoItem
+            //        {
+            //            Subject = "Набор губок"
+            //        }
+            //    },
+            //    Page = monthPage
+            //};
 
-            var clothesList = new TodoList
-            {
-                Year = 2020,
-                Month = 1,
-                Title = "Одежда",
-                Items = new List<TodoItem>
-                {
-                    new TodoItem
-                    {
-                        Subject = "Пальто"
-                    },
-                    new TodoItem
-                    {
-                        Subject = "Водолазка",
-                        Done = true
-                    },
-                     new TodoItem
-                    {
-                        Subject = "Джинсы"
-                    },
-                },
-                Page = monthPage
-            };
+            //var clothesList = new TodoList
+            //{
+            //    Year = 2020,
+            //    Month = 1,
+            //    Title = "Одежда",
+            //    Items = new List<TodoItem>
+            //    {
+            //        new TodoItem
+            //        {
+            //            Subject = "Пальто"
+            //        },
+            //        new TodoItem
+            //        {
+            //            Subject = "Водолазка",
+            //            Done = true
+            //        },
+            //         new TodoItem
+            //        {
+            //            Subject = "Джинсы"
+            //        },
+            //    },
+            //    Page = monthPage
+            //};
 
-            await context.TodoLists.AddRangeAsync(forHome, clothesList);
+            //await context.TodoLists.AddRangeAsync(forHome, clothesList);
 
-            await context.SaveChangesAsync();
+            //await context.SaveChangesAsync();
 
-            var purchasesArea = new PurchasesArea
-            {
-                Header = "Покупки",
-                PurchasesLists = new List<TodoList>
-                {
-                    forHome, clothesList
-                }
-            };
+            //var purchasesArea = new PurchasesArea
+            //{
+            //    Header = "Покупки",
+            //    PurchasesLists = new List<TodoList>
+            //    {
+            //        forHome, clothesList
+            //    }
+            //};
 
-            var desiresArea = new DesiresArea
-            {
-                Header = "В этом месяце я хочу"
-            };
+            //var desiresArea = new DesiresArea
+            //{
+            //    Header = "В этом месяце я хочу"
+            //};
 
-            var ideasArea = new IdeasArea
-            {
-                Header = "Идеи этого месяца",
-                IdeasList = new EventList
-                {
-                    Month = 1,
-                    Year = 2020,
-                    Title = "",
-                    Items = new List<EventItem> {
-                        new EventItem
-                    {
-                        Subject = "Маме на день рождения купить сертификат в Перчини",
-                        Date = new DateTime(2020,1,1)
-                    },
-                        new EventItem
-                    {
-                        Subject = "На выходных выбраться за город",
-                         Date = new DateTime(2020,1,1)
-                    }
-                    },
-                    Page = monthPage
-                }
-            };
+            //var ideasArea = new IdeasArea
+            //{
+            //    Header = "Идеи этого месяца",
+            //    IdeasList = new EventList
+            //    {
+            //        Month = 1,
+            //        Year = 2020,
+            //        Title = "",
+            //        Items = new List<EventItem> {
+            //            new EventItem
+            //        {
+            //            Subject = "Маме на день рождения купить сертификат в Перчини",
+            //            Date = new DateTime(2020,1,1)
+            //        },
+            //            new EventItem
+            //        {
+            //            Subject = "На выходных выбраться за город",
+            //             Date = new DateTime(2020,1,1)
+            //        }
+            //        },
+            //        Page = monthPage
+            //    }
+            //};
 
-            var goalsArea = new GoalsArea
-            {
-                Header = "Цели на этот месяц",
-                GoalsLists = new List<HabitsTracker>
-                {
-                    new HabitsTracker
-                    {
-                        GoalName = "Делать зарядку по утрам",
-                        Month = 1,
-                        Year = 2020
-                    }
-                }
-            };
+            //var goalsArea = new GoalsArea
+            //{
+            //    Header = "Цели на этот месяц",
+            //    GoalsLists = new List<HabitsTracker>
+            //    {
+            //        new HabitsTracker
+            //        {
+            //            GoalName = "Делать зарядку по утрам",
+            //            Month = 1,
+            //            Year = 2020
+            //        }
+            //    }
+            //};
 
-            //context.GoalsAreas.Add(goalsArea);
-            //context.IdeasAreas.Add(ideasArea);
-            //context.PurchasesAreas.Add(purchasesArea);
-            //context.DesiresAreas.Add(desiresArea);
+            ////context.GoalsAreas.Add(goalsArea);
+            ////context.IdeasAreas.Add(ideasArea);
+            ////context.PurchasesAreas.Add(purchasesArea);
+            ////context.DesiresAreas.Add(desiresArea);
 
-            monthPage.GoalsArea = goalsArea;
-            monthPage.IdeasArea = ideasArea;
-            monthPage.PurchasesArea = purchasesArea;
-            monthPage.DesiresArea = desiresArea;
+            //monthPage.GoalsArea = goalsArea;
+            //monthPage.IdeasArea = ideasArea;
+            //monthPage.PurchasesArea = purchasesArea;
+            //monthPage.DesiresArea = desiresArea;
 
-            await context.SaveChangesAsync();
+            //await context.SaveChangesAsync();
         }
     }
 }

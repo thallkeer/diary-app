@@ -61,7 +61,7 @@ namespace DiaryApp.API
             app.UseHttpsRedirection();
             app.UseMvc();
 
-            await sampleData.Initialize();
+            sampleData.Initialize();
         }
     }
 }

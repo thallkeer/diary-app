@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
-import "./index.css";
 import * as serviceWorker from "./serviceWorker";
+import "../src/styles/styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AppRouter from "./components/Router/AppRouter";
 

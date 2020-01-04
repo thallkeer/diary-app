@@ -1,0 +1,283 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Almost", "AmaticSC-Regular", sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+@font-face {
+  font-family: "RadioVolna";
+  src: url("./fonts/RadioVolna.ttf");
+}
+
+@font-face {
+  font-family: "AmaticSC-Regular";
+  src: url("./fonts/AmaticSC-Regular.ttf");
+}
+
+.second-page-container h1 {
+  font-size: 36px;
+  font-family: "RadioVolna";
+}
+
+.mt-40 {
+  margin-top: 40px !important;
+}
+
+.mt-52 {
+  margin-top: 52px !important;
+}
+
+.mt-20 {
+  margin-top: 20px !important;
+}
+
+.mt-10 {
+  margin-top: 10px !important;
+}
+
+.form-control {
+  border: none;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 22px;
+  border-radius: 0%;
+  -webkit-transition: border-color 0.5s ease-out;
+  transition: border-color 0.5s ease-out;
+}
+
+.form-control:focus {
+  border-bottom: 2px solid #2c7eea;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.calendar-container,
+.calendar,
+.calendar-header,
+td,
+tr {
+  padding: 0;
+  margin: 0;
+}
+
+.calendar {
+  background-color: white;
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.calendar-header {
+  font-family: "RadioVolna";
+  font-size: 40px;
+}
+
+.calendar-header td {
+  border-spacing: 0;
+  padding-left: 5px;
+}
+
+.day,
+.empty-slot,
+.week-day {
+  text-align: center;
+}
+
+.empty-slot {
+  border: 1px solid black;
+  width: 100px;
+  height: 135px;
+}
+
+.week-day {
+  font-size: 24px;
+  font-family: "RadioVolna";
+}
+
+.day-with-event {
+  background-color: #e2eeff;
+  outline: 1px solid black;
+  margin-left: 3px;
+  margin-right: 3px;
+  font-size: 18px;
+  line-height: 18px;
+  font-family: "AmaticSC-Regular";
+  font-weight: bold;
+}
+
+.no-events-day {
+  font-size: 18px;
+  line-height: 18px;
+}
+
+.day {
+  cursor: pointer;
+  font-size: 0.8em;
+  line-height: 18px;
+  border: 1px solid black;
+  width: 100px;
+  height: 135px;
+  position: relative;
+}
+
+.current-day {
+  background-color: #e2eeff;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  color: black;
+}
+
+.selected-day {
+  background-color: yellow;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 2%;
+  color: black;
+}
+
+.day-span {
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 35px;
+  height: 30px;
+  font-family: RadioVolna;
+  font-size: 24px;
+  text-align: center;
+  padding-top: 5px;
+}
+
+.month-popup {
+  position: absolute;
+  padding: 5px;
+  background: white;
+  border: 2px solid skyblue;
+}
+
+.month-popup div {
+  padding: 0.3em;
+}
+
+.nav-month {
+  position: absolute;
+  top: 0.6em;
+  font-size: 0.6em;
+  right: 3px;
+}
+
+.editor-year {
+  max-width: 3.6em;
+}
+
+.label-month,
+.label-year {
+  font-size: 0.6em;
+}
+
+.label-month {
+  cursor: pointer;
+}
+
+.todo-list-header {
+  font-size: 24px !important;
+  font-family: "RadioVolna";
+  border-bottom: 1px solid black;
+}
+
+.todos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.todos li {
+  margin-top: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  padding: 0.5rem 0rem;
+  margin-bottom: 0.5rem;
+}
+
+.list-item-input {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  font-size: 18px;
+  font-family: "AmaticSC-Regular";
+  font-weight: bold;
+  padding-left: 30px;
+  border-bottom: 1px solid black;
+  width: 100%;
+}
+
+.check-circle {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  border: 1px solid black;
+  position: absolute;
+}
+
+.event:hover {
+  cursor: pointer;
+}
+
+.event:hover span {
+  visibility: visible;
+}
+
+.delete-event-btn {
+  visibility: hidden;
+  position: absolute;
+  left: 90%;
+  color: lightblue !important;
+  font-size: 14px;
+}
+
+.no-list-header h1 {
+  border: none;
+}
+
+.month-lists-header h1 {
+  font-family: "AmaticSC-Regular" !important;
+  font-weight: bold !important;
+}
+
+.day-cell {
+  border: 1px solid black;
+  text-align: center;
+  font-family: "RadioVolna";
+  font-weight: bold;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  min-width: 25px;
+  cursor: pointer;
+}
+
+@font-face {
+  font-family: "RadioVolna";
+  src: url("./fonts/RadioVolna.ttf");
+}
+
+@font-face {
+  font-family: "AmaticSC-Regular";
+  src: url("./fonts/AmaticSC-Regular.ttf");
+}
+/*# sourceMappingURL=styles.css.map */

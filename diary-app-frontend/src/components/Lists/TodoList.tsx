@@ -1,6 +1,5 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { TodoInput } from "./TodoInput";
-import "./style.css";
 import { Thunks as todoThunks } from "../../actions/todo-actions";
 import { Store } from "../../context";
 import Loader from "../Loader";
@@ -9,14 +8,18 @@ import { ITodoList } from "../../models";
 
 interface IProps {
   todoList: ITodoList;
+  className?: string;
+  fillToNumber?: number; //number of items list should contains (if it's not contains required number of items, they will be added as empty items)
+  loading?: boolean;
 }
 
-export const TodoList: React.FC<IProps> = ({ todoList }) => {
+export const TodoList: React.FC<IProps> = ({
+  todoList,
+  fillToNumber,
+  className,
+  loading = false
+}) => {
   const { dispatch } = useContext(Store).todos;
-
-  // useEffect(() => {
-  //   dispatch && dispatch(todoThunks.loadTodos(header));
-  // }, []);
 
   const toggleTodo = (todoId: number) => {
     if (todoId !== 0) dispatch(todoThunks.toggleTodo(todoId));
@@ -33,27 +36,33 @@ export const TodoList: React.FC<IProps> = ({ todoList }) => {
     );
   };
 
-  const todos = [...todoList.items, getEmptyTodo()];
-  ///TODO:
-  const loading = false;
+  const todos = [...todoList.items];
+
+  if (fillToNumber && todos.length < fillToNumber) {
+    for (let i = todos.length; i < fillToNumber; i++) {
+      todos.push(getEmptyTodo());
+    }
+  }
 
   return (
-    <div style={{ marginTop: "52px" }}>
-      <h1 className="todo-list-header">{todoList.title}</h1>
+    <div style={{ marginTop: "52px" }} className={className}>
       {loading ? (
         <Loader />
       ) : (
-        <ul className="todos">
-          {todos.map(todo => (
-            <li key={todo.id}>
-              <TodoInput
-                updateItem={updateTodo}
-                todo={todo}
-                toggleTodo={toggleTodo}
-              />
-            </li>
-          ))}
-        </ul>
+        <>
+          <h1 className="todo-list-header">{todoList.title}</h1>
+          <ul className="todos">
+            {todos.map((todo, i) => (
+              <li key={todo.id !== 0 ? todo.id : i * 80}>
+                <TodoInput
+                  updateItem={updateTodo}
+                  todo={todo}
+                  toggleTodo={toggleTodo}
+                />
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );
