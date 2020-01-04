@@ -1,14 +1,14 @@
 import { createContext } from "react";
-import { IList, ITodoItem, ILightEvent } from "../models/index";
+import { IList, ITodoItem, IEvent } from "../models/index";
 
-export type BaseState<T extends ITodoItem | ILightEvent> = {
+export type BaseState<T extends ITodoItem | IEvent> = {
   loading: boolean;
   list: IList<T>;
   dispatch?: (action) => void;
 };
 
 export type AppState = {
-  events: BaseState<ILightEvent>;
+  events: BaseState<IEvent>;
   todos: BaseState<ITodoItem>;
 };
 

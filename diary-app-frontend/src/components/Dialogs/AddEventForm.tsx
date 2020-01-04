@@ -12,11 +12,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import "./style.css";
-import { ILightEvent } from "../../models";
+import { IEvent } from "../../models";
 
 export type EventInfo = {
-  event?: ILightEvent;
-  addEvent: (newEvent: ILightEvent, month: number, day: number) => void;
+  event?: IEvent;
+  addEvent: (newEvent: IEvent, month: number, day: number) => void;
   ownerID: number;
 };
 
@@ -81,7 +81,7 @@ export const AddEventForm: React.FC<IFormProps> = ({
 
   const submitForm = async (): Promise<boolean> => {
     try {
-      const event: ILightEvent = {
+      const event: IEvent = {
         id: 0,
         subject: formState.text,
         date: formState.date,

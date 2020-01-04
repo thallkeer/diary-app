@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
 using DiaryApp.Data.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DiaryApp.API.Controllers
@@ -30,11 +28,6 @@ namespace DiaryApp.API.Controllers
             var monthPage = await monthPageService.GetMonthPageForUser(userId, year, month);
 
             var model = mapper.Map<MonthPageModel>(monthPage);
-
-            model.DesiresLists = MapList<EventList, EventListModel>(monthPage.DesiresArea.DesiresLists);
-            model.GoalsLists = MapList<HabitsTracker, HabitsTrackerModel>(monthPage.GoalsArea.GoalsLists);
-            model.PurchasesLists = MapList<TodoList,TodoListModel>(monthPage.PurchasesArea.PurchasesLists);
-            model.IdeasList = mapper.Map<EventListModel>(monthPage.IdeasArea.IdeasList);
 
             return model;
         }

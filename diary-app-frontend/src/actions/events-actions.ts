@@ -1,20 +1,19 @@
 import { ActionsUnion, createAction } from "./action-helpers";
 import { ActionTypes } from "../context/action-types";
-import { IList, ILightEvent } from "../models/index";
+import { IEvent, IEventList } from "../models/index";
 import axios from "axios";
 
 export const EventActions = {
   startLoadEvents: () =>
     createAction(ActionTypes.LOAD_EVENTS + ActionTypes.START),
-  finishLoadEvents: (events: IList<ILightEvent>) =>
+  finishLoadEvents: (events: IEventList) =>
     createAction(ActionTypes.LOAD_EVENTS + ActionTypes.SUCCESS, events),
   updateEvent: (eventId: number, title: string) =>
     createAction(ActionTypes.UPDATE_EVENT, {
       eventId: eventId,
       eventTitle: title
     }),
-  addEvent: (newEvent: ILightEvent) =>
-    createAction(ActionTypes.ADD_EVENT, newEvent),
+  addEvent: (newEvent: IEvent) => createAction(ActionTypes.ADD_EVENT, newEvent),
   deleteEvent: (eventID: number) =>
     createAction(ActionTypes.DELETE_EVENT, eventID)
 };
@@ -39,7 +38,7 @@ export const Thunks = {
     };
   },
 
-  addEvent: (newEvent: ILightEvent) => {
+  addEvent: (newEvent: IEvent) => {
     return dispatch => {
       axios
         .post(`https://localhost:44320/api/events/`, newEvent)

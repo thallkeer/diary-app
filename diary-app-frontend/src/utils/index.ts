@@ -1,4 +1,4 @@
-import { ITodoItem, ILightEvent } from "../models/index";
+import { ITodoItem, IEvent } from "../models/index";
 
 var _getRandomInt = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -22,6 +22,6 @@ export const getEmptyTodo = () => {
 };
 
 export const getEmptyEvent = () => {
-  const event: ILightEvent = { id: 0, subject: "", date: new Date() };
+  const event: IEvent = { id: 0, subject: "", date: new Date() };
   return event;
 };

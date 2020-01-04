@@ -14,6 +14,10 @@ namespace DiaryApp.API
             CreateMap<TodoList, TodoListModel>();
             CreateMap<MainPage, MainPageModel>();
             CreateMap<MonthPage, MonthPageModel>();
+            CreateMap<PurchasesArea, PurchasesAreaModel>();
+            CreateMap<DesiresArea, DesiresAreaModel>();
+            CreateMap<IdeasArea, IdeasAreaModel>();
+            CreateMap<GoalsArea, GoalsAreaModel>();
             CreateMap<HabitsTracker, HabitsTrackerModel>();
         }
     }

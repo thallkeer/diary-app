@@ -1,8 +1,8 @@
 import { createSelector } from "reselect";
-import { IEventsByDay, ITodoItem, ILightEvent } from "../models/index";
+import { IEventsByDay, ITodoItem, IEvent } from "../models/index";
 import { BaseState } from "../context";
 
-const getEventsState = (events: BaseState<ILightEvent>) => events.list.items;
+const getEventsState = (events: BaseState<IEvent>) => events.list.items;
 
 export const getEvents = createSelector([getEventsState], s => s);
 

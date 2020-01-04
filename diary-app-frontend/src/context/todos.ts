@@ -1,5 +1,5 @@
 import { ActionTypes } from "./action-types";
-import { ITodoItem, IList } from "../models";
+import { ITodoItem, ITodoList } from "../models";
 import { TodoActions } from "../actions/todo-actions";
 import { getEmptyTodo } from "../utils";
 import { BaseState } from ".";
@@ -14,9 +14,9 @@ export const todosReducer = (
       return { ...state, loading: true };
 
     case ActionTypes.LOAD_TODOS + ActionTypes.SUCCESS:
-      const list = payload as IList<ITodoItem>;
+      const list = payload as ITodoList;
 
-      let newTodos: IList<ITodoItem> = {
+      let newTodos: ITodoList = {
         ...list,
         items: [...list.items, getEmptyTodo()]
       };

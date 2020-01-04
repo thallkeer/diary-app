@@ -5,17 +5,18 @@ import { Thunks as todoThunks } from "../../actions/todo-actions";
 import { Store } from "../../context";
 import Loader from "../Loader";
 import { getEmptyTodo } from "../../utils";
+import { ITodoList } from "../../models";
 
 interface IProps {
-  header: string;
+  todoList: ITodoList;
 }
 
-export const TodoList: React.FC<IProps> = ({ header }) => {
-  const { list, loading, dispatch } = useContext(Store).todos;
+export const TodoList: React.FC<IProps> = ({ todoList }) => {
+  const { dispatch } = useContext(Store).todos;
 
-  useEffect(() => {
-    dispatch && dispatch(todoThunks.loadTodos(header));
-  }, []);
+  // useEffect(() => {
+  //   dispatch && dispatch(todoThunks.loadTodos(header));
+  // }, []);
 
   const toggleTodo = (todoId: number) => {
     if (todoId !== 0) dispatch(todoThunks.toggleTodo(todoId));
@@ -26,17 +27,19 @@ export const TodoList: React.FC<IProps> = ({ header }) => {
       todoThunks.addOrUpdateTodo({
         id: todoId,
         subject: todoText,
-        done: list.items.find(t => t.id === todoId).done,
-        ownerID: list.id
+        done: todoList.items.find(t => t.id === todoId).done,
+        ownerID: todoList.id
       })
     );
   };
 
-  const todos = list.items.length === 0 ? [getEmptyTodo()] : list.items;
+  const todos = [...todoList.items, getEmptyTodo()];
+  ///TODO:
+  const loading = false;
 
   return (
     <div style={{ marginTop: "52px" }}>
-      <h1 className="todo-list-header">{header}</h1>
+      <h1 className="todo-list-header">{todoList.title}</h1>
       {loading ? (
         <Loader />
       ) : (

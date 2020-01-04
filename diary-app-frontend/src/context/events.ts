@@ -1,19 +1,19 @@
 import { ActionTypes } from "./action-types";
-import { ILightEvent, IList } from "../models";
+import { IEvent, IEventList } from "../models";
 import { EventsActions } from "../actions/events-actions";
 import { BaseState } from ".";
 import { getEvents } from "../selectors";
 
 export const eventsReducer = (
-  state: BaseState<ILightEvent>,
+  state: BaseState<IEvent>,
   action: EventsActions
-): BaseState<ILightEvent> => {
+): BaseState<IEvent> => {
   switch (action.type) {
     case ActionTypes.LOAD_EVENTS + ActionTypes.START:
       return { ...state, loading: true };
 
     case ActionTypes.LOAD_EVENTS + ActionTypes.SUCCESS: {
-      const eventList = action.payload as IList<ILightEvent>;
+      const eventList = action.payload as IEventList;
       const events = eventList.items ? [...eventList.items] : [];
 
       events.forEach(event => (event.date = new Date(event.date)));
@@ -30,7 +30,7 @@ export const eventsReducer = (
       };
     }
     case ActionTypes.ADD_EVENT:
-      let addedEvent = action.payload as ILightEvent;
+      let addedEvent = action.payload as IEvent;
       addedEvent.date = new Date(addedEvent.date);
 
       let newEventList = {

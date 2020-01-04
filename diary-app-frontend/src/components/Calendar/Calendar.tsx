@@ -3,7 +3,7 @@ import moment, { Moment } from "moment";
 import "./style.css";
 import { getEventsByDay } from "../../selectors";
 import { AddEventForm } from "../Dialogs/AddEventForm";
-import { IEventsByDay, ILightEvent } from "../../models";
+import { IEventsByDay, IEvent } from "../../models";
 import { Store, AppState } from "../../context/index";
 import { Thunks as eventThunks } from "../../actions/events-actions";
 
@@ -78,7 +78,7 @@ class Calendar extends Component<{}, ICalendarState> {
     return firstDay;
   }
 
-  addEvent = (newEvent: ILightEvent) => {
+  addEvent = (newEvent: IEvent) => {
     this.appContext.events.dispatch(eventThunks.addEvent(newEvent));
   };
 

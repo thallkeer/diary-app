@@ -7,35 +7,37 @@ import { Thunks as eventThunks } from "../../actions/events-actions";
 import "./style.css";
 import Loader from "../Loader";
 import { getEmptyEvent } from "../../utils";
+import { IEventList } from "../../models";
 
 interface IProps {
-  header: string;
   withDate?: boolean;
   readonly?: boolean;
   style?: React.CSSProperties;
+  eventList?: IEventList;
 }
 
 export const ImportanceList: FC<IProps> = ({
-  header,
   withDate = false,
   readonly = false,
-  style
+  style,
+  eventList
 }) => {
-  const { list, dispatch, loading } = useContext(Store).events;
-
-  useEffect(() => {
-    dispatch && dispatch(eventThunks.loadEvents(header));
-  }, []);
+  const { dispatch } = useContext(Store).events;
 
   const onDelete = (eventID: number) => {
     dispatch(eventThunks.deleteEvent(eventID));
   };
 
-  const events = list.items.length === 0 ? [getEmptyEvent()] : list.items;
+  const events = eventList.items;
+  ///TODO:
+  const loading = false;
+  // (eventList && eventList.items) ?? list.items.length === 0
+  //   ? [getEmptyEvent()]
+  //   : list.items;
 
   return (
     <div style={style || { marginTop: "40px" }}>
-      <h1 className="todo-list-header">{header}</h1>
+      <h1 className="todo-list-header">{eventList.title}</h1>
       {loading ? (
         <Loader />
       ) : (
