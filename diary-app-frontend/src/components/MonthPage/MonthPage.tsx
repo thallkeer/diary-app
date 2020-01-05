@@ -19,6 +19,8 @@ export const MonthPage: React.FC = () => {
       .then(res => setMonthPage(res.data));
   }, []);
 
+  return <Loader />;
+
   return monthPage === null ? (
     <Loader />
   ) : (

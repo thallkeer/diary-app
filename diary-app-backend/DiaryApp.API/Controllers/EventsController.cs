@@ -20,6 +20,16 @@ namespace DiaryApp.API.Controllers
             this.mapper = mapper;
         }
 
+        [HttpGet("{pageID}")]
+        public IActionResult GetByPageID(int pageID)
+        {
+            var eventList = eventService.GetByPageID(pageID);
+            if (eventList == null)
+                return NotFound();
+            var model = mapper.Map<EventListModel>(eventList);
+            return Ok(model);
+        }
+ 
         [HttpPost]
         public async Task<IActionResult> AddEvent([FromBody]EventModel eventData)
         {

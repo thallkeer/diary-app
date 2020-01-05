@@ -1,15 +1,16 @@
-import React, { FC, useState, useEffect } from "react";
-import { TodoList } from "../Lists/TodoList";
-import { ImportanceList } from "../Lists/ImportanceList";
+import React, { FC, useState, useEffect, createContext } from "react";
 import Calendar from "../Calendar/Calendar";
 import { Container, Row, Col } from "react-bootstrap";
-import { AppState } from "../../context/app-state";
-import { IMainPage } from "../../models";
+import { ImportantThings } from "./ImportantThings";
+import { ImportantEvents } from "./ImportantEvents";
+import { IMainPageState } from "../../context";
 import axios from "axios";
 import Loader from "../Loader";
 
+export const MainPageContext = createContext<IMainPageState>(null);
+
 export const MainPage: FC = () => {
-  const [mainPage, setMainPage] = useState<IMainPage>(null);
+  const [state, setState] = useState<IMainPageState>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -19,38 +20,32 @@ export const MainPage: FC = () => {
         "https://localhost:44320/api/mainpage/50e6cb71-3195-400d-aead-f0c80c460090/2020/1"
       )
       .then(res => {
-        setMainPage(res.data);
-      })
-      .finally(() => setLoading(false));
+        setState({ ...state, page: res.data });
+        setLoading(false);
+      });
   }, []);
 
+  if (loading || !state) return <Loader />;
+
+  console.log(state);
+
+  const renderCalendar = () => {
+    if (state.events && state.events)
+      return <Calendar eventsState={state.events} />;
+    return <Loader />;
+  };
+
   return (
-    <AppState>
-      <Container fluid style={{ marginTop: "20px" }}>
+    <MainPageContext.Provider value={state}>
+      <Container fluid className="mt-20">
         <Row>
           <Col md="3" className="text-center">
-            {mainPage && (
-              <>
-                <TodoList
-                  todoList={mainPage.thingsTodo}
-                  loading={loading}
-                  fillToNumber={6}
-                />
-                <ImportanceList
-                  eventList={mainPage.importantEvents}
-                  withDate
-                  readonly
-                  loading={loading}
-                  fillToNumber={6}
-                />
-              </>
-            )}
+            <ImportantThings />
+            <ImportantEvents setEventsState={setState} />
           </Col>
-          <Col md="9">
-            <Calendar />
-          </Col>
+          <Col md="9">{renderCalendar()}</Col>
         </Row>
       </Container>
-    </AppState>
+    </MainPageContext.Provider>
   );
 };

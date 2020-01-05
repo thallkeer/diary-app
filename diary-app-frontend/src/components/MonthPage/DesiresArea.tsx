@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import { ImportanceList } from "../Lists/ImportanceList";
+import { EventList } from "../Lists/EventList";
 import { IDesiresArea } from "../../models";
 
 interface IProps {
@@ -14,11 +14,7 @@ export const DesiresArea: React.FC<IProps> = ({ desiresArea }) => {
       <Row>
         {desiresArea.desiresLists.map(dl => (
           <Col md={4} key={dl.id}>
-            <ImportanceList
-              eventList={dl}
-              fillToNumber={6}
-              className="mt-10 month-lists-header"
-            />
+            <EventList fillToNumber={6} className="mt-10 month-lists-header" />
           </Col>
         ))}
       </Row>

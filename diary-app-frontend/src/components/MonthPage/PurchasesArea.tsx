@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { IPurchasesArea, ITodoList } from "../../models";
 import { Row, Col } from "react-bootstrap";
 import { TodoList } from "../Lists/TodoList";
+import { GlobalContext } from "../../context";
 
 interface IProps {
   purchasesArea: IPurchasesArea;
@@ -16,7 +17,7 @@ function getListColumn(list: ITodoList) {
   return (
     <Col md={5}>
       <TodoList
-        todoList={list}
+        todoList={null}
         fillToNumber={4}
         className="mt-20 month-lists-header"
       />
@@ -47,6 +48,9 @@ export const PurchasesArea: React.FC<IProps> = ({ purchasesArea }) => {
       );
     return rows;
   };
+
+  // const { pageID } = useContext(PageContext);
+  // const { month, user, year } = useContext(GlobalContext);
 
   return (
     <>

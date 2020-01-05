@@ -1,10 +1,10 @@
 import React, { FC } from "react";
 import { CheckCircle } from "./CheckCircle";
 import { ListItemInput } from "./ListItemInput";
-import { ITodoItem } from "../../models";
+import { ITodo } from "../../models";
 
 interface ITodoInputProps {
-  todo: ITodoItem;
+  todo: ITodo;
   toggleTodo: (todoId: number) => void;
   updateItem: (id: number, text: string) => void;
 }

@@ -1,4 +1,4 @@
-export interface IList<T extends ITodoItem | IEvent> {
+export interface IList<T extends ITodo | IEvent> {
   id: number;
   pageId: number;
   month: number;
@@ -6,7 +6,7 @@ export interface IList<T extends ITodoItem | IEvent> {
   items: T[];
 }
 
-export interface ITodoList extends IList<ITodoItem> {}
+export interface ITodoList extends IList<ITodo> {}
 
 export interface IEventList extends IList<IEvent> {}
 
@@ -21,7 +21,7 @@ export interface IListItem {
   ownerID?: number;
 }
 
-export interface ITodoItem extends IListItem {
+export interface ITodo extends IListItem {
   done: boolean;
 }
 
@@ -49,10 +49,7 @@ export interface IPage {
   user?: IUser;
 }
 
-export interface IMainPage extends IPage {
-  thingsTodo: ITodoList;
-  importantEvents: IEventList;
-}
+export interface IMainPage extends IPage {}
 
 export interface IMonthPage extends IPage {
   purchasesArea?: IPurchasesArea;

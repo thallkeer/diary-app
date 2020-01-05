@@ -21,14 +21,12 @@ export const EventActions = {
 const baseApi = "https://localhost:44320/api/events/";
 
 export const Thunks = {
-  loadEvents: (title: string) => {
+  loadEvents: (pageID: number) => {
     return dispatch => {
       dispatch(EventActions.startLoadEvents());
-      axios
-        .get(baseApi + `${new Date().getMonth() + 1}/title/${title}`)
-        .then(response =>
-          dispatch(EventActions.finishLoadEvents(response.data))
-        );
+      axios.get(baseApi + pageID).then(response => {
+        dispatch(EventActions.finishLoadEvents(response.data));
+      });
     };
   },
 
@@ -41,7 +39,7 @@ export const Thunks = {
   addEvent: (newEvent: IEvent) => {
     return dispatch => {
       axios
-        .post(`https://localhost:44320/api/events/`, newEvent)
+        .post(baseApi, newEvent)
         .then(res => dispatch(EventActions.addEvent(res.data)));
     };
   },

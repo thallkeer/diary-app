@@ -1,26 +1,38 @@
 import { createContext } from "react";
-import { IList, ITodoItem, IEvent } from "../models/index";
+import { IUser, IList, ITodo, IEvent, IMainPage } from "../models/index";
+import { EventThunks } from "../actions/events-actions";
 
-export type BaseState<T extends ITodoItem | IEvent> = {
-  loading: boolean;
+export type GlobalState = {
+  user: IUser;
+  month: number;
+  year: number;
+};
+
+export type PageState = {
+  page: IMainPage;
+};
+
+export type ListState<T extends ITodo | IEvent> = {
   list: IList<T>;
-  dispatch?: (action) => void;
+  loading: boolean;
 };
 
-export type AppState = {
-  events: BaseState<IEvent>;
-  todos: BaseState<ITodoItem>;
+export interface IMainPageState extends PageState {
+  events: EventListStore;
+  loading: boolean;
+}
+
+export type EventListStore = {
+  eventList: ListState<IEvent>;
+  dispatch: (action: EventThunks) => void;
 };
 
-export const appInitialState: AppState = {
-  events: {
-    loading: false,
-    list: { id: 0, items: [], month: 0, pageId: 0, title: "" }
-  },
-  todos: {
-    loading: false,
-    list: { id: 0, items: [], month: 0, pageId: 0, title: "" }
-  }
-};
+export const EventListContext = createContext<EventListStore>(null);
 
-export const Store = createContext<AppState>(appInitialState);
+export interface IMonthPageState extends PageState {}
+
+export const GlobalContext = createContext<GlobalState>({
+  month: 1,
+  year: 2020,
+  user: null
+});

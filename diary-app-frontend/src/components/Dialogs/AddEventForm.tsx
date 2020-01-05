@@ -91,7 +91,6 @@ export const AddEventForm: React.FC<IFormProps> = ({
       const day: number = event.date.getDate();
 
       eventInfo.addEvent(event, month, day);
-      console.log("woho");
       return true;
     } catch (ex) {
       console.log(ex);
@@ -102,7 +101,7 @@ export const AddEventForm: React.FC<IFormProps> = ({
   return (
     <Modal
       size="lg"
-      style={{ fontFamily: `'Google Sans',Roboto,Arial,sans-serif` }}
+      className="add-event-form-dialog"
       show={show}
       onHide={handleClose}
       aria-labelledby="contained-modal-title-vcenter"

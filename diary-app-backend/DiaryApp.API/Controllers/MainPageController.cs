@@ -28,7 +28,7 @@ namespace DiaryApp.API.Controllers
 
             var model = mapper.Map<MainPageModel>(mainPage);
 
-            model.ImportantEvents.Items = model.ImportantEvents.Items.OrderBy(e => e.Date).ToList();
+            //model.ImportantEvents.Items = model.ImportantEvents.Items.OrderBy(e => e.Date).ToList();
             
             return model;
         }

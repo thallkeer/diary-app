@@ -1,15 +1,15 @@
 import { ActionsUnion, createAction } from "./action-helpers";
 import { ActionTypes } from "../context/action-types";
-import { ITodoItem } from "../models";
+import { ITodo } from "../models";
 import axios from "axios";
 
 export const TodoActions = {
   startLoadTodos: () =>
     createAction(ActionTypes.LOAD_TODOS + ActionTypes.START),
-  finishLoadTodos: (todos: ITodoItem[]) =>
+  finishLoadTodos: (todos: ITodo[]) =>
     createAction(ActionTypes.LOAD_TODOS + ActionTypes.SUCCESS, todos),
   toggleTodo: (todoId: number) => createAction(ActionTypes.TOGGLE_TODO, todoId),
-  updateTodo: (todo: ITodoItem) => createAction(ActionTypes.UPDATE_TODO, todo)
+  updateTodo: (todo: ITodo) => createAction(ActionTypes.UPDATE_TODO, todo)
 };
 
 const callApi: string = "https://localhost:44320/api/todo/";
@@ -31,7 +31,7 @@ export const Thunks = {
     };
   },
 
-  addOrUpdateTodo: (todo: ITodoItem) => {
+  addOrUpdateTodo: (todo: ITodo) => {
     return dispatch => {
       dispatch(TodoActions.updateTodo(todo));
     };

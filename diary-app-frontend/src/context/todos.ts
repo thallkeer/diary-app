@@ -1,14 +1,14 @@
 import { ActionTypes } from "./action-types";
-import { ITodoItem, ITodoList } from "../models";
+import { ITodo, ITodoList } from "../models";
 import { TodoActions } from "../actions/todo-actions";
 import { getEmptyTodo } from "../utils";
-import { BaseState } from ".";
 import { getTodos } from "../selectors";
+import { ListState } from ".";
 
 export const todosReducer = (
-  state: BaseState<ITodoItem>,
+  state: ListState<ITodo>,
   { type, payload }: TodoActions
-): BaseState<ITodoItem> => {
+): ListState<ITodo> => {
   switch (type) {
     case ActionTypes.LOAD_TODOS + ActionTypes.START:
       return { ...state, loading: true };
@@ -30,7 +30,7 @@ export const todosReducer = (
     case ActionTypes.ADD_TODO: {
       const todoItems = getTodos(state);
       const newTodos = [...todoItems];
-      newTodos.splice(todoItems.length - 1, 0, payload as ITodoItem);
+      newTodos.splice(todoItems.length - 1, 0, payload as ITodo);
 
       return {
         ...state,
@@ -39,7 +39,7 @@ export const todosReducer = (
     }
 
     case ActionTypes.UPDATE_TODO:
-      const updatedTodo = payload as ITodoItem;
+      const updatedTodo = payload as ITodo;
 
       return {
         ...state,
