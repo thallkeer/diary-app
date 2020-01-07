@@ -1,10 +1,10 @@
-import React, { useContext, useReducer } from "react";
+import React, { useReducer } from "react";
 import { TodoInput } from "./TodoInput";
 import { Thunks as todoThunks } from "../../actions/todo-actions";
 import { ListState } from "../../context";
 import Loader from "../Loader";
 import { getEmptyTodo } from "../../utils";
-import { ITodoList, ITodo } from "../../models";
+import { ITodo } from "../../models";
 import { useFillToNumber } from "../../hooks/useFillToNumber";
 import { todosReducer } from "../../context/todos";
 
@@ -32,11 +32,9 @@ export const TodoList: React.FC<IProps> = ({
     if (todoId !== 0) todoThunks.toggleTodo(todoId)(dispatch);
   };
 
-  const updateTodo = (todoId: number, todoText: string) => {
+  const updateTodo = (todo: ITodo) => {
     todoThunks.addOrUpdateTodo({
-      id: todoId,
-      subject: todoText,
-      done: todos.find(t => t.id === todoId).done,
+      ...todo,
       ownerID: list.id
     })(dispatch);
   };

@@ -1,65 +1,52 @@
-import { ActionTypes } from "./action-types";
-import { ITodo, ITodoList } from "../models";
+import { ITodo } from "../models";
 import { TodoActions } from "../actions/todo-actions";
-import { getEmptyTodo } from "../utils";
 import { getTodos } from "../selectors";
 import { ListState } from ".";
 
 export const todosReducer = (
   state: ListState<ITodo>,
-  { type, payload }: TodoActions
+  action: TodoActions
 ): ListState<ITodo> => {
-  switch (type) {
-    case ActionTypes.LOAD_TODOS + ActionTypes.START:
+  switch (action.type) {
+    case "LOAD_TODOS_START":
       return { ...state, loading: true };
 
-    case ActionTypes.LOAD_TODOS + ActionTypes.SUCCESS:
-      const list = payload as ITodoList;
-
-      let newTodos: ITodoList = {
-        ...list,
-        items: [...list.items, getEmptyTodo()]
-      };
-
+    case "LOAD_TODOS":
       return {
         ...state,
-        list: newTodos,
+        list: action.payload,
         loading: false
       };
 
-    case ActionTypes.ADD_TODO: {
-      const todoItems = getTodos(state);
-      const newTodos = [...todoItems];
-      newTodos.splice(todoItems.length - 1, 0, payload as ITodo);
+    // case ActionTypes.ADD_TODO: {
+    //   const todoItems = getTodos(state);
+    //   const newTodos = [...todoItems];
+    //   newTodos.splice(todoItems.length - 1, 0, payload as ITodo);
 
-      return {
-        ...state,
-        list: { ...state.list, items: newTodos }
-      };
-    }
+    //   return {
+    //     ...state,
+    //     list: { ...state.list, items: newTodos }
+    //   };
+    // }
 
-    case ActionTypes.UPDATE_TODO:
-      const updatedTodo = payload as ITodo;
-
+    case "UPDATE_TODO":
       return {
         ...state,
         list: {
           ...state.list,
           items: state.list.items.map(todo =>
-            todo.id === updatedTodo.id ? updatedTodo : todo
+            todo.id === action.payload.id ? action.payload : todo
           )
         }
       };
 
-    case ActionTypes.TOGGLE_TODO:
-      const id = payload;
-
+    case "TOGGLE_TODO":
       return {
         ...state,
         list: {
           ...state.list,
           items: getTodos(state).map(todo =>
-            todo.id === id ? { ...todo, done: !todo.done } : todo
+            todo.id === action.payload ? { ...todo, done: !todo.done } : todo
           )
         }
       };

@@ -1,23 +1,31 @@
 import React, { FC, useState } from "react";
+import { ITodo, IEvent } from "../../models";
+
+type ListItem = ITodo | IEvent;
+
+type ReadonlyMode = {
+  readonly: boolean;
+  getItemText: (item: ListItem) => string;
+};
 
 interface IProps {
-  itemId: number;
-  itemText: string;
-  readonly?: boolean;
-  updateItem?: (itemId: number, itemText: string) => void;
+  updateItem?: (item: ListItem) => void;
+  item: ListItem;
+  readonlyMode?: ReadonlyMode;
 }
 
 export const ListItemInput: FC<IProps> = ({
-  itemId,
-  itemText,
-  readonly,
-  updateItem
+  updateItem,
+  item,
+  readonlyMode
 }) => {
   const initialState: IProps = {
-    itemId,
-    itemText,
-    readonly: readonly || false,
-    updateItem
+    updateItem,
+    item,
+    readonlyMode: readonlyMode || {
+      readonly: false,
+      getItemText: null
+    }
   };
 
   const [state, setState] = useState<IProps | null>(initialState);
@@ -25,13 +33,16 @@ export const ListItemInput: FC<IProps> = ({
   const handleTextChange = ev => {
     setState({
       ...state,
-      itemText: ev.target.value
+      item: {
+        ...item,
+        subject: ev.target.value
+      }
     });
   };
 
   const handleBlur = () => {
-    if (state.itemText.length !== 0 && itemText !== state.itemText) {
-      updateItem(state.itemId, state.itemText);
+    if (state.item.subject.length && state.item.subject !== item.subject) {
+      updateItem(state.item);
       setState(initialState);
     }
   };
@@ -40,11 +51,15 @@ export const ListItemInput: FC<IProps> = ({
     if (event.key === "Enter") handleBlur();
   };
 
+  let inputValue = state.readonlyMode.getItemText
+    ? state.readonlyMode.getItemText(item)
+    : state.item.subject;
+
   return (
     <input
       type="text"
-      value={state.itemText}
-      readOnly={state.readonly}
+      value={inputValue}
+      readOnly={state.readonlyMode.readonly}
       onChange={handleTextChange}
       onBlur={handleBlur}
       onKeyPress={handleKeyPress}

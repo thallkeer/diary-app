@@ -1,21 +1,23 @@
 import { ActionsUnion, createAction } from "./action-helpers";
-import { ActionTypes } from "../context/action-types";
 import { IEvent, IEventList } from "../models/index";
 import axios from "axios";
 
-export const EventActions = {
-  startLoadEvents: () =>
-    createAction(ActionTypes.LOAD_EVENTS + ActionTypes.START),
-  finishLoadEvents: (events: IEventList) =>
-    createAction(ActionTypes.LOAD_EVENTS + ActionTypes.SUCCESS, events),
+export const ADD_EVENT = "ADD_EVENT";
+export const UPDATE_EVENT = "UPDATE_EVENT";
+export const LOAD_EVENTS_START = "LOAD_EVENTS_START";
+export const LOAD_EVENTS = "LOAD_EVENTS";
+export const DELETE_EVENT = "DELETE_EVENT";
+
+const Actions = {
+  startLoadEvents: () => createAction(LOAD_EVENTS_START),
+  finishLoadEvents: (events: IEventList) => createAction(LOAD_EVENTS, events),
   updateEvent: (eventId: number, title: string) =>
-    createAction(ActionTypes.UPDATE_EVENT, {
+    createAction(UPDATE_EVENT, {
       eventId: eventId,
       eventTitle: title
     }),
-  addEvent: (newEvent: IEvent) => createAction(ActionTypes.ADD_EVENT, newEvent),
-  deleteEvent: (eventID: number) =>
-    createAction(ActionTypes.DELETE_EVENT, eventID)
+  addEvent: (newEvent: IEvent) => createAction(ADD_EVENT, newEvent),
+  deleteEvent: (eventID: number) => createAction(DELETE_EVENT, eventID)
 };
 
 const baseApi = "https://localhost:44320/api/events/";
@@ -23,16 +25,16 @@ const baseApi = "https://localhost:44320/api/events/";
 export const Thunks = {
   loadEvents: (pageID: number) => {
     return dispatch => {
-      dispatch(EventActions.startLoadEvents());
+      dispatch(Actions.startLoadEvents());
       axios.get(baseApi + pageID).then(response => {
-        dispatch(EventActions.finishLoadEvents(response.data));
+        dispatch(Actions.finishLoadEvents(response.data));
       });
     };
   },
 
   updateEvent: (eventId: number, title: string) => {
     return dispatch => {
-      dispatch(EventActions.updateEvent(eventId, title));
+      dispatch(Actions.updateEvent(eventId, title));
     };
   },
 
@@ -40,7 +42,7 @@ export const Thunks = {
     return dispatch => {
       axios
         .post(baseApi, newEvent)
-        .then(res => dispatch(EventActions.addEvent(res.data)));
+        .then(res => dispatch(Actions.addEvent(res.data)));
     };
   },
 
@@ -48,10 +50,10 @@ export const Thunks = {
     return dispatch => {
       axios
         .delete(baseApi + `${eventID}`)
-        .then(dispatch(EventActions.deleteEvent(eventID)));
+        .then(dispatch(Actions.deleteEvent(eventID)));
     };
   }
 };
 
-export type EventsActions = ActionsUnion<typeof EventActions>;
+export type EventActions = ActionsUnion<typeof Actions>;
 export type EventThunks = ActionsUnion<typeof Thunks>;

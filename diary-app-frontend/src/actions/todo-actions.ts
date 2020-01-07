@@ -1,15 +1,18 @@
 import { ActionsUnion, createAction } from "./action-helpers";
-import { ActionTypes } from "../context/action-types";
-import { ITodo } from "../models";
+import { ITodo, ITodoList } from "../models";
 import axios from "axios";
 
+export const ADD_TODO = "ADD_TODO";
+export const TOGGLE_TODO = "TOGGLE_TODO";
+export const UPDATE_TODO = "UPDATE_TODO";
+export const LOAD_TODOS_START = "LOAD_TODOS_START";
+export const LOAD_TODOS = "LOAD_TODOS";
+
 export const TodoActions = {
-  startLoadTodos: () =>
-    createAction(ActionTypes.LOAD_TODOS + ActionTypes.START),
-  finishLoadTodos: (todos: ITodo[]) =>
-    createAction(ActionTypes.LOAD_TODOS + ActionTypes.SUCCESS, todos),
-  toggleTodo: (todoId: number) => createAction(ActionTypes.TOGGLE_TODO, todoId),
-  updateTodo: (todo: ITodo) => createAction(ActionTypes.UPDATE_TODO, todo)
+  startLoadTodos: () => createAction(LOAD_TODOS_START),
+  finishLoadTodos: (todos: ITodoList) => createAction(LOAD_TODOS, todos),
+  toggleTodo: (todoId: number) => createAction(TOGGLE_TODO, todoId),
+  updateTodo: (todo: ITodo) => createAction(UPDATE_TODO, todo)
 };
 
 const callApi: string = "https://localhost:44320/api/todo/";

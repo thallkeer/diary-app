@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import { IEventsByDay, IEvent, ITodo } from "../models/index";
-import { ListState, EventListStore } from "../context";
+import { ListState } from "../context";
 
 const getEventsState = (state: ListState<IEvent>) => {
   if (state && state.list) return state.list.items;

@@ -17,17 +17,19 @@ export type ListState<T extends ITodo | IEvent> = {
   loading: boolean;
 };
 
-export interface IMainPageState extends PageState {
-  events: EventListStore;
+export interface IMainPageContext extends PageState {
+  events: IEventListContext;
+  setPageState: (pageState: IMainPageContext) => void;
   loading: boolean;
 }
 
-export type EventListStore = {
+export interface IEventListContext {
   eventList: ListState<IEvent>;
   dispatch: (action: EventThunks) => void;
-};
+}
 
-export const EventListContext = createContext<EventListStore>(null);
+export const EventListContext = createContext<IEventListContext>(null);
+export const MainPageContext = createContext<IMainPageContext>(null);
 
 export interface IMonthPageState extends PageState {}
 

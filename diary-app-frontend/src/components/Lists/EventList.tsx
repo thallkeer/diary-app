@@ -30,7 +30,7 @@ export const EventList: FC<IProps> = ({
   };
 
   const events = useFillToNumber(
-    getEvents(eventList),
+    [...getEvents(eventList)],
     fillToNumber,
     getEmptyEvent
   );
@@ -57,9 +57,8 @@ export const EventList: FC<IProps> = ({
         {events.map((event: IEvent, i) => (
           <li key={event.id !== 0 ? event.id : i + 80} className="event">
             <ListItemInput
-              itemId={event.id}
-              itemText={getItemText(event)}
-              readonly={readonly}
+              item={event}
+              readonlyMode={{ getItemText, readonly }}
             />
             {event.id !== 0 && (
               <span

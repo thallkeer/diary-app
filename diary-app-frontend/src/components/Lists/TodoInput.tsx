@@ -6,7 +6,7 @@ import { ITodo } from "../../models";
 interface ITodoInputProps {
   todo: ITodo;
   toggleTodo: (todoId: number) => void;
-  updateItem: (id: number, text: string) => void;
+  updateItem: (todo: ITodo) => void;
 }
 
 export const TodoInput: FC<ITodoInputProps> = ({
@@ -20,11 +20,7 @@ export const TodoInput: FC<ITodoInputProps> = ({
       {/* {todo.id !== 0 && (
         <CheckCircle id={todo.id} done={todo.done} toggleTodo={toggleTodo} />
       )} */}
-      <ListItemInput
-        itemId={todo.id}
-        itemText={todo.subject}
-        updateItem={updateItem}
-      />
+      <ListItemInput item={todo} updateItem={updateItem} />
     </>
   );
 };

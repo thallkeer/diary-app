@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import moment, { Moment } from "moment";
+//import moment, { Moment } from "moment";
 import { getEventsByDay } from "../../selectors";
 import { AddEventForm } from "../Dialogs/AddEventForm";
 import { IEvent } from "../../models";
 import { Thunks as eventThunks } from "../../actions/events-actions";
-import { EventListStore } from "../../context";
+import { IEventListContext } from "../../context";
 
 interface ICalendarState {
-  momentContext: Moment;
-  today: Moment;
+  // momentContext: Moment;
+  //today: Moment;
   showMonthPopup: boolean;
   showYearPopup: boolean;
   showYearNav: boolean;
@@ -17,13 +17,13 @@ interface ICalendarState {
 }
 
 interface ICalendarProps {
-  eventsState: EventListStore;
+  eventsState: IEventListContext;
 }
 
 export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
   const [state, setState] = useState<ICalendarState>({
-    today: moment(),
-    momentContext: moment(),
+    // today: moment(),
+    // momentContext: moment(),
     showMonthPopup: false,
     showYearPopup: false,
     showYearNav: false,
@@ -89,17 +89,16 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
   const getDays = (): any[] => {
     let daysInMonth = [];
 
+    const events = getEventsByDay(eventsState.eventList).filter(
+      e => e.event.id !== 0
+    );
+
     for (let d = 1; d <= getDaysInMonth(); d++) {
       let className = d === currentDay() ? "day current-day" : "day";
 
-      console.log(eventsState.eventList);
+      let curEvents = events.filter(ev => ev.day === d);
 
-      let curEvents = getEventsByDay(eventsState.eventList).filter(
-        ev => ev.day === d
-      );
-
-      let curEventClass =
-        curEvents.length !== 0 ? "day-with-event" : "no-events-day";
+      let curEventClass = curEvents.length ? "day-with-event" : "no-events-day";
 
       daysInMonth.push(
         <td key={d} className={className} onClick={e => onDayClick(e, d)}>
