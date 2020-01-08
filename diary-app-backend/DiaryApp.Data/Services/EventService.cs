@@ -11,10 +11,5 @@ namespace DiaryApp.Data.Services
         {
             eventItemsService = new CrudService<EventItem>(context);
         }
-
-        public EventList GetByPageID(int pageID)
-        {
-            return dbSet.FirstOrDefault(el => el.PageID == pageID);
-        }
     }
 }

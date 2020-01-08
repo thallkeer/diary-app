@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using DiaryApp.Core;
 
 namespace DiaryApp.Data.Services
@@ -26,6 +28,16 @@ namespace DiaryApp.Data.Services
         public async Task DeleteItem(int itemID)
         {
             await itemsService.Delete(itemID);
+        }
+
+        public TList GetByPageID(int pageID)
+        {
+            return dbSet.FirstOrDefault(el => el.PageID == pageID);
+        }
+
+        public List<TList> GetListsByPageID(int pageID)
+        {
+            return dbSet.Where(el => el.PageID == pageID).ToList();
         }
 
         public async Task UpdateItem(TItem item)

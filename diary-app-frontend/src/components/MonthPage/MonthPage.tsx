@@ -1,44 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { IMonthPage } from "../../models";
 import axios from "axios";
 import Loader from "../Loader";
 import { PurchasesArea } from "./PurchasesArea";
 import { DesiresArea } from "./DesiresArea";
 import { IdeasArea } from "./IdeasArea";
 import { GoalsArea } from "./GoalsArea";
+import { usePage } from "../../hooks/usePage";
+import { IMonthPageContext, MonthPageContext } from "../../context";
 
 export const MonthPage: React.FC = () => {
-  const [monthPage, setMonthPage] = useState<IMonthPage>(null);
+  const pageState = usePage<IMonthPageContext>({
+    loading: false,
+    page: null,
+    setPageState: () => {}
+  });
+  const { loading, page, setPageState } = pageState;
 
   useEffect(() => {
+    setPageState({ ...pageState, loading: true });
     axios
       .get(
         "https://localhost:44320/api/monthpage/50e6cb71-3195-400d-aead-f0c80c460090/2020/1"
       )
-      .then(res => setMonthPage(res.data));
+      .then(res =>
+        setPageState({ ...pageState, page: res.data, loading: false })
+      );
   }, []);
 
-  return <Loader />;
+  if (loading || !page) return <Loader />;
 
-  return monthPage === null ? (
-    <Loader />
-  ) : (
-    <Container
-      fluid
-      className="second-page-container text-center"
-      style={{ marginTop: "20px" }}
-    >
-      <Row>
-        <Col md={6}>
-          <PurchasesArea purchasesArea={monthPage.purchasesArea} />
-          <DesiresArea desiresArea={monthPage.desiresArea} />
-        </Col>
-        <Col md={6}>
-          <IdeasArea ideasArea={monthPage.ideasArea} />
-          <GoalsArea goalsArea={monthPage.goalsArea} />
-        </Col>
-      </Row>
-    </Container>
+  return (
+    <MonthPageContext.Provider value={pageState}>
+      <Container fluid className="mt-20 second-page-container text-center">
+        <Row>
+          <Col md={6}>
+            <PurchasesArea />
+            <DesiresArea />
+          </Col>
+          <Col md={6}>
+            <IdeasArea />
+            <GoalsArea />
+          </Col>
+        </Row>
+      </Container>
+    </MonthPageContext.Provider>
   );
 };

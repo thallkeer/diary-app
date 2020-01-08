@@ -3,9 +3,6 @@ import { IIdeasArea } from "../../models";
 import { Row, Col } from "react-bootstrap";
 import { EventList } from "../Lists/EventList";
 
-interface IProps {
-  ideasArea: IIdeasArea;
-}
 
 export const IdeasArea: React.FC<IProps> = ({ ideasArea }) => {
   return (

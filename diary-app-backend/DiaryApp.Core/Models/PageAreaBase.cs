@@ -8,5 +8,8 @@ namespace DiaryApp.Core
         public int ID { get; set; }
         [Required]
         public string Header { get; set; }
+        [Required]
+        public int PageID { get; set; }
+        public virtual PageBase Page { get; set; }
     }
 }

@@ -1,48 +1,44 @@
-import React, { useReducer } from "react";
+import React, { useContext } from "react";
 import { TodoInput } from "./TodoInput";
 import { Thunks as todoThunks } from "../../actions/todo-actions";
-import { ListState } from "../../context";
+import { TodoListContext } from "../../context";
 import Loader from "../Loader";
 import { getEmptyTodo } from "../../utils";
 import { ITodo } from "../../models";
 import { useFillToNumber } from "../../hooks/useFillToNumber";
-import { todosReducer } from "../../context/todos";
 
 interface IProps {
-  todoList: ListState<ITodo>;
   className?: string;
   fillToNumber?: number; //number of items list should contains (if it's not contains required number of items, they will be added as empty items)
-  loading?: boolean;
 }
 
-export const TodoList: React.FC<IProps> = ({
-  todoList,
-  fillToNumber = 0,
-  className
-}) => {
-  const [{ list, loading }, dispatch] = useReducer(todosReducer, todoList);
+export const TodoList: React.FC<IProps> = ({ fillToNumber = 0, className }) => {
+  const { list, dispatch, loading } = useContext(TodoListContext);
+  const { addOrUpdateTodo, toggleTodo } = todoThunks;
 
   const todos: ITodo[] = useFillToNumber(
-    list.items,
+    [...list.items],
     fillToNumber,
     getEmptyTodo
   );
 
-  const toggleTodo = (todoId: number) => {
-    if (todoId !== 0) todoThunks.toggleTodo(todoId)(dispatch);
+  const toggleTodoItem = (todoId: number) => {
+    todoId !== 0 && dispatch(toggleTodo(todoId));
   };
 
   const updateTodo = (todo: ITodo) => {
-    todoThunks.addOrUpdateTodo({
-      ...todo,
-      ownerID: list.id
-    })(dispatch);
+    dispatch(
+      addOrUpdateTodo({
+        ...todo,
+        ownerID: list.id
+      })
+    );
   };
 
   if (loading) return <Loader />;
 
   return (
-    <div /*mt-52 */ className={className}>
+    <div className={`mt-52 ${className}`}>
       <h1 className="todo-list-header">{list.title}</h1>
       <ul className="todos">
         {todos.map((todo, i) => (
@@ -50,7 +46,7 @@ export const TodoList: React.FC<IProps> = ({
             <TodoInput
               updateItem={updateTodo}
               todo={todo}
-              toggleTodo={toggleTodo}
+              toggleTodo={toggleTodoItem}
             />
           </li>
         ))}

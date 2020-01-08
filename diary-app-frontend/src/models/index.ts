@@ -31,6 +31,8 @@ export interface IEvent extends IListItem {
   description?: string;
 }
 
+export type ListItem = ITodo | IEvent;
+
 export interface IHabitsTracker {
   id: number;
   goalName: string;

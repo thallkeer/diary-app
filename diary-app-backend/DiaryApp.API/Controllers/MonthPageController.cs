@@ -114,6 +114,13 @@ namespace DiaryApp.API.Controllers
             return model;
         }
 
+        [HttpGet("/purchasesArea/{pageID}")]
+        public async Task<PurchasesAreaModel> GetPurchasesArea(int pageID)
+        {
+            var area = await monthPageService.GetPageArea<PurchasesArea>(pageID);
+            return mapper.Map<PurchasesAreaModel>(area);
+        }
+
         private List<U> MapList<T,U>(List<T> listToMap)
         {
             return listToMap.Select(l => mapper.Map<U>(l)).ToList();

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DiaryApp.Core;
+using System.Linq;
 
 namespace DiaryApp.Data.Services
 {
@@ -15,6 +16,12 @@ namespace DiaryApp.Data.Services
             var page = await dbSet.FirstOrDefaultAsync
                 (p => p.User.Id == userID && p.Year == year && p.Month == month);
             return page;
+        }
+
+        public async Task<T> GetPageArea<T>(int pageID) where T : PageAreaBase
+        {
+            return await context.Set<T>().FirstOrDefaultAsync(area => area.PageID == pageID);
+            
         }
     }
 }

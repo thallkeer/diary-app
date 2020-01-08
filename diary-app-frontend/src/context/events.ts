@@ -1,12 +1,11 @@
-import { IEvent } from "../models";
 import * as eventActions from "../actions/events-actions";
-import { ListState } from ".";
+import { IEventListContext } from ".";
 import { getEvents } from "../selectors";
 
 export const eventsReducer = (
-  state: ListState<IEvent>,
+  state: IEventListContext,
   action: eventActions.EventActions
-): ListState<IEvent> => {
+): IEventListContext => {
   switch (action.type) {
     case "LOAD_EVENTS_START":
       return { ...state, loading: true };

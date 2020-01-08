@@ -9,6 +9,7 @@ namespace DiaryApp.API
         public AutoMapping()
         {
             CreateMap<TodoItem, TodoModel>();
+            CreateMap<TodoModel, TodoItem>();
             CreateMap<EventItem, EventModel>();
             CreateMap<EventList, EventListModel>();
             CreateMap<TodoList, TodoListModel>();

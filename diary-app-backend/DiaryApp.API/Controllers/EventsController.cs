@@ -4,6 +4,7 @@ using DiaryApp.API.Models;
 using DiaryApp.Core;
 using Microsoft.AspNetCore.Mvc;
 using DiaryApp.Data.Services;
+using System.Linq;
 
 namespace DiaryApp.API.Controllers
 {
@@ -28,6 +29,14 @@ namespace DiaryApp.API.Controllers
                 return NotFound();
             var model = mapper.Map<EventListModel>(eventList);
             return Ok(model);
+        }
+
+        [HttpGet("all/{pageID}")]
+        public IActionResult GetAllByPageID(int pageID)
+        {
+            var lists = eventService.GetListsByPageID(pageID);
+            var allLists = lists.Select(l => mapper.Map<EventListModel>(l));
+            return Ok(allLists);
         }
  
         [HttpPost]

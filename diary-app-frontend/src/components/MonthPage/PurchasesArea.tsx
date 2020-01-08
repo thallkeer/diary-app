@@ -1,32 +1,35 @@
-import React, { useContext, useEffect } from "react";
-import { IPurchasesArea, ITodoList } from "../../models";
+import React, { useEffect, useContext, useState } from "react";
+import { ITodoList } from "../../models";
 import { Row, Col } from "react-bootstrap";
 import { TodoList } from "../Lists/TodoList";
-import { GlobalContext } from "../../context";
+import axios from "axios";
+import { MonthPageContext } from "../../context";
 
-interface IProps {
-  purchasesArea: IPurchasesArea;
-}
-
-interface IListPair {
+type ListPair = {
   list1: ITodoList;
   list2: ITodoList;
-}
+};
 
-function getListColumn(list: ITodoList) {
-  return (
-    <Col md={5}>
-      <TodoList
-        todoList={null}
-        fillToNumber={4}
-        className="mt-20 month-lists-header"
-      />
-    </Col>
-  );
-}
+export const PurchasesArea: React.FC = () => {
+  const { page } = useContext(MonthPageContext);
+  const [state, setState] = useState<ITodoList[]>([]);
 
-export const PurchasesArea: React.FC<IProps> = ({ purchasesArea }) => {
-  const getRow = (pair: IListPair) => {
+  useEffect(() => {
+    page &&
+      axios
+        .get(`https://localhost:44320/api/events/all/${page.id}`)
+        .then(res => res.data);
+  }, [page]);
+
+  function getListColumn(list: ITodoList) {
+    return (
+      <Col md={5}>
+        <TodoList fillToNumber={4} className="mt-20 month-lists-header" />
+      </Col>
+    );
+  }
+
+  const getRow = (pair: ListPair) => {
     return (
       <Row key={pair.list1.id}>
         {getListColumn(pair.list1)}
@@ -48,9 +51,6 @@ export const PurchasesArea: React.FC<IProps> = ({ purchasesArea }) => {
       );
     return rows;
   };
-
-  // const { pageID } = useContext(PageContext);
-  // const { month, user, year } = useContext(GlobalContext);
 
   return (
     <>

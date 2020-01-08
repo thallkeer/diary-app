@@ -1,20 +1,19 @@
 import { createSelector } from "reselect";
-import { IEventsByDay, IEvent, ITodo } from "../models/index";
-import { ListState } from "../context";
+import { IEventsByDay, IEvent } from "../models/index";
+import { IEventListContext, ITodoListContext } from "../context";
 
-const getEventsState = (state: ListState<IEvent>) => {
-  if (state && state.list) return state.list.items;
-  return [];
-};
+const getEventsState = (state: IEventListContext) =>
+  state && state.list ? state.list.items : [];
+
+const getTodosState = (state: ITodoListContext) =>
+  state && state.list ? state.list.items : [];
 
 export const getEvents = createSelector([getEventsState], s => s);
 
 export const getEventsByDay = createSelector([getEventsState], s =>
-  s.map(ev => {
+  s.map((ev: IEvent) => {
     return { day: ev.date.getDate(), event: ev } as IEventsByDay;
   })
 );
-
-const getTodosState = (state: ListState<ITodo>) => state.list.items;
 
 export const getTodos = createSelector([getTodosState], s => s);

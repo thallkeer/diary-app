@@ -9,17 +9,13 @@ namespace DiaryApp.Core
         public int ID { get; set; }       
         public string Title { get; set; }
         [Required]
-        public int Month { get; set; }
-        [Required]
-        public int Year { get; set; }
-        [Required]
         public int PageID { get; set; }        
         public virtual PageBase Page { get; set; }
         public virtual List<T> Items { get; set; }
 
         public override string ToString()
         {
-            return $"{Title} {Year} {Month}";
+            return $"{Title} {Page?.Year} {Page?.Month}";
         }
     }
 

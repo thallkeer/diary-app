@@ -3,11 +3,7 @@ import { IGoalsArea } from "../../models";
 import { Row, Col } from "react-bootstrap";
 import HabitsTracker from "../HabitsTracker";
 
-interface IProps {
-  goalsArea: IGoalsArea;
-}
-
-export const GoalsArea: React.FC<IProps> = ({ goalsArea }) => {
+export const GoalsArea: React.FC = () => {
   return (
     <>
       <h1>{goalsArea.header}</h1>

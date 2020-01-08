@@ -1,36 +1,20 @@
-import React, { FC, useState, useEffect, useCallback } from "react";
+import React, { FC, useEffect } from "react";
 import Calendar from "../Calendar/Calendar";
 import { Container, Row, Col } from "react-bootstrap";
 import { ImportantThings } from "./ImportantThings";
 import { ImportantEvents } from "./ImportantEvents";
-import {
-  IMainPageContext,
-  IEventListContext,
-  MainPageContext
-} from "../../context";
+import { MainPageContext, IMainPageContext } from "../../context";
 import axios from "axios";
 import Loader from "../Loader";
+import { usePage } from "../../hooks/usePage";
 
-export const useMainPage = (): IMainPageContext => {
-  const [pageState, _setPageState] = useState<IMainPageContext>({
+export const MainPage: FC = () => {
+  const pageState = usePage<IMainPageContext>({
     loading: false,
     events: null,
     page: null,
     setPageState: () => {}
   });
-
-  const setPageState = useCallback((pageState: IMainPageContext): void => {
-    _setPageState({ ...pageState });
-  }, []);
-
-  return {
-    ...pageState,
-    setPageState
-  };
-};
-
-export const MainPage: FC = () => {
-  const pageState = useMainPage();
   const { setPageState, page, loading, events } = pageState;
 
   useEffect(() => {

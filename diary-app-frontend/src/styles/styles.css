@@ -73,6 +73,10 @@ tr {
   border: none;
 }
 
+.add-event-form-dialog {
+  font-family: "Google Sans", "Roboto", Arial, sans-serif;
+}
+
 .calendar {
   background-color: white;
   border-spacing: 0;

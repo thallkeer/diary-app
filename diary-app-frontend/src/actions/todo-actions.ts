@@ -8,38 +8,48 @@ export const UPDATE_TODO = "UPDATE_TODO";
 export const LOAD_TODOS_START = "LOAD_TODOS_START";
 export const LOAD_TODOS = "LOAD_TODOS";
 
-export const TodoActions = {
+const Actions = {
   startLoadTodos: () => createAction(LOAD_TODOS_START),
   finishLoadTodos: (todos: ITodoList) => createAction(LOAD_TODOS, todos),
   toggleTodo: (todoId: number) => createAction(TOGGLE_TODO, todoId),
+  addTodo: (todo: ITodo) => createAction(ADD_TODO, todo),
   updateTodo: (todo: ITodo) => createAction(UPDATE_TODO, todo)
 };
 
-const callApi: string = "https://localhost:44320/api/todo/";
+const baseApi: string = "https://localhost:44320/api/todo/";
 
 export const Thunks = {
-  loadTodos: (title: string) => {
+  loadTodos: (pageID: number) => {
     return dispatch => {
-      dispatch(TodoActions.startLoadTodos());
-      axios
-        .get(callApi + `${new Date().getMonth() + 1}/title/${title}`)
-        .then(res => res.data)
-        .then(response => dispatch(TodoActions.finishLoadTodos(response)));
+      dispatch(Actions.startLoadTodos());
+      axios.get(baseApi + pageID).then(response => {
+        dispatch(Actions.finishLoadTodos(response.data));
+      });
     };
   },
 
   toggleTodo: (todoId: number) => {
     return dispatch => {
-      dispatch(TodoActions.toggleTodo(todoId));
+      dispatch(Actions.toggleTodo(todoId));
     };
   },
 
   addOrUpdateTodo: (todo: ITodo) => {
     return dispatch => {
-      dispatch(TodoActions.updateTodo(todo));
+      if (!todo) return;
+
+      if (todo.id === 0) {
+        axios
+          .post(baseApi, todo)
+          .then(res => dispatch(Actions.addTodo(res.data)));
+      } else {
+        axios
+          .put(baseApi, todo)
+          .then(res => dispatch(Actions.updateTodo(todo)));
+      }
     };
   }
 };
 
-export type TodoActions = ActionsUnion<typeof TodoActions>;
-export type TodoThunks = typeof Thunks;
+export type TodoActions = ActionsUnion<typeof Actions>;
+export type TodoThunks = ActionsUnion<typeof Thunks>;

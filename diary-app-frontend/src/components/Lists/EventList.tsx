@@ -23,19 +23,15 @@ export const EventList: FC<IProps> = ({
   className,
   fillToNumber
 }) => {
-  const { eventList, dispatch } = useContext(EventListContext);
+  const { list, loading, dispatch } = useContext(EventListContext);
 
   const onDelete = (eventID: number) => {
     dispatch(eventThunks.deleteEvent(eventID));
   };
 
-  const events = useFillToNumber(
-    [...getEvents(eventList)],
-    fillToNumber,
-    getEmptyEvent
-  );
+  const events = useFillToNumber([...list.items], fillToNumber, getEmptyEvent);
 
-  if (eventList.loading) return <Loader />;
+  if (loading) return <Loader />;
 
   const getItemText = (event: IEvent): string => {
     if (!withDate || event.id === 0) return event.subject;
@@ -52,7 +48,7 @@ export const EventList: FC<IProps> = ({
 
   return (
     <div style={{ marginTop: "40px" }} className={className}>
-      <h1 className="todo-list-header">{eventList.list.title}</h1>
+      <h1 className="todo-list-header">{list.title}</h1>
       <ul className="todos">
         {events.map((event: IEvent, i) => (
           <li key={event.id !== 0 ? event.id : i + 80} className="event">

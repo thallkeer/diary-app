@@ -3,11 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import { EventList } from "../Lists/EventList";
 import { IDesiresArea } from "../../models";
 
-interface IProps {
-  desiresArea: IDesiresArea;
-}
-
-export const DesiresArea: React.FC<IProps> = ({ desiresArea }) => {
+export const DesiresArea: React.FC = () => {
   return (
     <>
       <h1 className="mt-40">{desiresArea.header}</h1>

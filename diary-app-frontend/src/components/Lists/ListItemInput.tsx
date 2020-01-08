@@ -1,7 +1,5 @@
 import React, { FC, useState } from "react";
-import { ITodo, IEvent } from "../../models";
-
-type ListItem = ITodo | IEvent;
+import { ListItem } from "../../models";
 
 type ReadonlyMode = {
   readonly: boolean;

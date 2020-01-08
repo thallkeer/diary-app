@@ -20,6 +20,16 @@ namespace DiaryApp.API.Controllers
             this.mapper = mapper;
         }
 
+        [HttpGet("{pageID}")]
+        public IActionResult GetByPageID(int pageID)
+        {
+            var todoList = todoService.GetByPageID(pageID);
+            if (todoList == null)
+                return NotFound();
+            var model = mapper.Map<TodoListModel>(todoList);
+            return Ok(model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddTodo([FromBody] TodoModel todo)
         {

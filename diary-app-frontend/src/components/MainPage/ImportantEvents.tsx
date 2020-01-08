@@ -11,7 +11,8 @@ import Loader from "../Loader";
 export const ImportantEvents: React.FC = () => {
   const [state, _dispatch] = useReducer(eventsReducer, {
     list: null,
-    loading: false
+    loading: false,
+    dispatch: () => {}
   });
   const dispatch = (action: EventThunks) => action(_dispatch);
   const pageState = useContext(MainPageContext);
@@ -24,14 +25,14 @@ export const ImportantEvents: React.FC = () => {
 
   useEffect(() => {
     if (list) {
-      setPageState({ ...pageState, events: { eventList: state, dispatch } });
+      setPageState({ ...pageState, events: { ...state, dispatch } });
     }
   }, [list]);
 
   if (loading || !list) return <Loader />;
 
   return (
-    <EventListContext.Provider value={{ eventList: state, dispatch }}>
+    <EventListContext.Provider value={{ ...state, dispatch }}>
       <EventList withDate readonly fillToNumber={6} />
     </EventListContext.Provider>
   );

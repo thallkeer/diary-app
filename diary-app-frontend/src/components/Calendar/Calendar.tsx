@@ -89,9 +89,7 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
   const getDays = (): any[] => {
     let daysInMonth = [];
 
-    const events = getEventsByDay(eventsState.eventList).filter(
-      e => e.event.id !== 0
-    );
+    const events = getEventsByDay(eventsState).filter(e => e.event.id !== 0);
 
     for (let d = 1; d <= getDaysInMonth(); d++) {
       let className = d === currentDay() ? "day current-day" : "day";
@@ -178,7 +176,7 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
           show={state.showAddEventForm}
           handleClose={toggle}
           eventInfo={{
-            ownerID: eventsState.eventList.list.id,
+            ownerID: eventsState.list.id,
             addEvent: addEvent
           }}
         />

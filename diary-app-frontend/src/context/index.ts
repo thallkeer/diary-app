@@ -1,6 +1,16 @@
 import { createContext } from "react";
-import { IUser, IList, ITodo, IEvent, IMainPage } from "../models/index";
+import {
+  IUser,
+  IList,
+  ITodo,
+  IEvent,
+  IMainPage,
+  ListItem,
+  IPage,
+  IMonthPage
+} from "../models/index";
 import { EventThunks } from "../actions/events-actions";
+import { TodoThunks } from "../actions/todo-actions";
 
 export type GlobalState = {
   user: IUser;
@@ -8,30 +18,33 @@ export type GlobalState = {
   year: number;
 };
 
-export type PageState = {
-  page: IMainPage;
-};
-
-export type ListState<T extends ITodo | IEvent> = {
-  list: IList<T>;
+export type PageState<T extends IPage> = {
+  page: T;
   loading: boolean;
 };
 
-export interface IMainPageContext extends PageState {
+export interface IMainPageContext extends PageState<IMainPage> {
   events: IEventListContext;
   setPageState: (pageState: IMainPageContext) => void;
-  loading: boolean;
 }
 
-export interface IEventListContext {
-  eventList: ListState<IEvent>;
-  dispatch: (action: EventThunks) => void;
+export interface IMonthPageContext extends PageState<IMonthPage> {
+  setPageState: (pageState: IMonthPageContext) => void;
 }
+
+export interface IListState<TListItem extends ListItem, TAction> {
+  list: IList<TListItem>;
+  loading: boolean;
+  dispatch: (action: TAction) => void;
+}
+
+export interface IEventListContext extends IListState<IEvent, EventThunks> {}
+export interface ITodoListContext extends IListState<ITodo, TodoThunks> {}
 
 export const EventListContext = createContext<IEventListContext>(null);
+export const TodoListContext = createContext<ITodoListContext>(null);
 export const MainPageContext = createContext<IMainPageContext>(null);
-
-export interface IMonthPageState extends PageState {}
+export const MonthPageContext = createContext<IMonthPageContext>(null);
 
 export const GlobalContext = createContext<GlobalState>({
   month: 1,

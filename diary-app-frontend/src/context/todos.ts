@@ -1,12 +1,11 @@
-import { ITodo } from "../models";
 import { TodoActions } from "../actions/todo-actions";
 import { getTodos } from "../selectors";
-import { ListState } from ".";
+import { ITodoListContext } from ".";
 
 export const todosReducer = (
-  state: ListState<ITodo>,
+  state: ITodoListContext,
   action: TodoActions
-): ListState<ITodo> => {
+): ITodoListContext => {
   switch (action.type) {
     case "LOAD_TODOS_START":
       return { ...state, loading: true };
@@ -18,23 +17,22 @@ export const todosReducer = (
         loading: false
       };
 
-    // case ActionTypes.ADD_TODO: {
-    //   const todoItems = getTodos(state);
-    //   const newTodos = [...todoItems];
-    //   newTodos.splice(todoItems.length - 1, 0, payload as ITodo);
+    case "ADD_TODO": {
+      const todoItems = [...getTodos(state)];
+      todoItems.splice(todoItems.length - 1, 0, action.payload);
 
-    //   return {
-    //     ...state,
-    //     list: { ...state.list, items: newTodos }
-    //   };
-    // }
+      return {
+        ...state,
+        list: { ...state.list, items: todoItems }
+      };
+    }
 
     case "UPDATE_TODO":
       return {
         ...state,
         list: {
           ...state.list,
-          items: state.list.items.map(todo =>
+          items: getTodos(state).map(todo =>
             todo.id === action.payload.id ? action.payload : todo
           )
         }

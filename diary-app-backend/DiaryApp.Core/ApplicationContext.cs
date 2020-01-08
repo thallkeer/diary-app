@@ -28,22 +28,6 @@ namespace DiaryApp.Core
                 .Property(e => e.SelectedDays)
                 .HasConversion(converter);
 
-            modelBuilder.Entity<EventList>()
-                .HasAlternateKey(k => new
-                {
-                    k.Year,
-                    k.Month,
-                    k.Title
-                });
-
-            modelBuilder.Entity<TodoList>()
-                .HasAlternateKey(k => new
-                {
-                    k.Year,
-                    k.Month,
-                    k.Title
-                });
-
             modelBuilder.Entity<HabitsTracker>()
                 .HasAlternateKey(k => new
                 {
