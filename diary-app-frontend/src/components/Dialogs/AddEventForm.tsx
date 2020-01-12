@@ -44,8 +44,10 @@ export const AddEventForm: React.FC<IFormProps> = ({
     return date;
   };
 
+  console.log(eventInfo);
+
   const [formState, setFormState] = useState<IFormState | null>({
-    text: "",
+    text: eventInfo.event ? eventInfo.event.subject : "",
     date: getDateByDay(day)
   });
 

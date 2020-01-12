@@ -11,6 +11,7 @@ namespace DiaryApp.API
             CreateMap<TodoItem, TodoModel>();
             CreateMap<TodoModel, TodoItem>();
             CreateMap<EventItem, EventModel>();
+            CreateMap<EventModel, EventItem>();
             CreateMap<EventList, EventListModel>();
             CreateMap<TodoList, TodoListModel>();
             CreateMap<MainPage, MainPageModel>();

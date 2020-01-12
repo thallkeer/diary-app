@@ -31,13 +31,12 @@ export const eventsReducer = (
       let addedEvent = action.payload;
       addedEvent.date = new Date(addedEvent.date);
 
-      let newEventList = {
-        ...state.list,
-        items: [...state.list.items, addedEvent]
-      };
       return {
         ...state,
-        list: newEventList
+        list: {
+          ...state.list,
+          items: [...getEvents(state), addedEvent]
+        }
       };
 
     case "DELETE_EVENT":

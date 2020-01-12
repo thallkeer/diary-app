@@ -223,7 +223,6 @@ tr {
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
-  padding: 0.5rem 0rem;
   margin-bottom: 0.5rem;
 }
 
@@ -247,15 +246,15 @@ tr {
   position: absolute;
 }
 
-.event:hover {
+.list-item:hover {
   cursor: pointer;
 }
 
-.event:hover span {
+.list-item:hover span {
   visibility: visible;
 }
 
-.delete-event-btn {
+.delete-list-item-btn {
   visibility: hidden;
   position: absolute;
   left: 90%;

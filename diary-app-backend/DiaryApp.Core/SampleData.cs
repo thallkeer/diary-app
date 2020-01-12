@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,14 +7,15 @@ namespace DiaryApp.Core
 {
     public class SampleData
     {
-        private ApplicationContext context;
-
-        public SampleData(ApplicationContext context)
+        public static async void Initialize(IServiceProvider serviceProvider)
         {
-            this.context = context;
+            //using (var context = serviceProvider.GetRequiredService<ApplicationContext>())
+            //{
+            //    await Initialize(context);
+            //}
         }
 
-        public async Task Initialize()
+        public static async Task Initialize(ApplicationContext context)
         {
             //var user = new AppUser()
             //{

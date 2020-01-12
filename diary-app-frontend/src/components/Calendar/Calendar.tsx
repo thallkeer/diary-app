@@ -5,6 +5,7 @@ import { AddEventForm } from "../Dialogs/AddEventForm";
 import { IEvent } from "../../models";
 import { Thunks as eventThunks } from "../../actions/events-actions";
 import { IEventListContext } from "../../context";
+import { Link } from "react-router-dom";
 
 interface ICalendarState {
   // momentContext: Moment;
@@ -14,6 +15,7 @@ interface ICalendarState {
   showYearNav: boolean;
   showAddEventForm: boolean;
   clickedDay?: number;
+  clickedEvent?: IEvent;
 }
 
 interface ICalendarProps {
@@ -50,12 +52,21 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
   };
 
   const addEvent = (newEvent: IEvent) => {
-    eventsState.dispatch(eventThunks.addEvent(newEvent));
+    eventsState.dispatch(
+      eventThunks.addOrUpdateEvent({
+        ...newEvent,
+        ownerID: eventsState.list.id
+      })
+    );
   };
 
-  const onDayClick = (e: React.MouseEvent<HTMLElement>, day: number) => {
+  const onDayClick = (
+    e: React.MouseEvent<HTMLElement>,
+    day: number,
+    event?: IEvent
+  ) => {
     e.preventDefault();
-    showModal(day);
+    showModal(day, event);
   };
 
   const weekdaysShortRussian: string[] = [
@@ -89,12 +100,10 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
   const getDays = (): any[] => {
     let daysInMonth = [];
 
-    const events = getEventsByDay(eventsState).filter(e => e.event.id !== 0);
-
     for (let d = 1; d <= getDaysInMonth(); d++) {
       let className = d === currentDay() ? "day current-day" : "day";
 
-      let curEvents = events.filter(ev => ev.day === d);
+      let curEvents = getEventsByDay(eventsState).filter(ev => ev.day === d);
 
       let curEventClass = curEvents.length ? "day-with-event" : "no-events-day";
 
@@ -105,7 +114,7 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
             <div
               key={eventByDay.event.id}
               className={`mt-5 ${curEventClass}`}
-              onClick={e => onDayClick(e, d)}
+              onClick={e => onDayClick(e, d, eventByDay.event)}
             >
               {eventByDay.event.subject}
             </div>
@@ -141,12 +150,24 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
     });
   };
 
-  const showModal = (day: number) => {
-    setState({ ...state, showAddEventForm: true, clickedDay: day });
+  const showModal = (day: number, event?: IEvent) => {
+    console.log(day, event);
+
+    setState({
+      ...state,
+      showAddEventForm: true,
+      clickedDay: day,
+      clickedEvent: event
+    });
   };
 
   const hideModal = () => {
-    setState({ ...state, showAddEventForm: false, clickedDay: null });
+    setState({
+      ...state,
+      showAddEventForm: false,
+      clickedDay: null,
+      clickedEvent: null
+    });
   };
 
   const toggle = () => {
@@ -161,7 +182,9 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
 
   return (
     <div className="calendar-wrapper">
-      <h1 className="text-center calendar-header">{getMonthName()}</h1>
+      <h1 className="text-center calendar-header">
+        {<Link to="/month">{getMonthName()}</Link>}
+      </h1>
       <div className="calendar-container">
         <table className="calendar">
           <tbody>
@@ -177,7 +200,8 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
           handleClose={toggle}
           eventInfo={{
             ownerID: eventsState.list.id,
-            addEvent: addEvent
+            addEvent: addEvent,
+            event: state.clickedEvent
           }}
         />
       )}

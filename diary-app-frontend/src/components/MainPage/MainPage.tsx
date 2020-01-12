@@ -24,7 +24,7 @@ export const MainPage: FC = () => {
     });
     axios
       .get(
-        "https://localhost:44320/api/mainpage/50e6cb71-3195-400d-aead-f0c80c460090/2020/1"
+        "https://localhost:44320/api/mainpage/48fdadb0-0092-48a5-add6-24d6e263e588/2020/1"
       )
       .then(res => {
         setPageState({ ...pageState, page: res.data, loading: false });

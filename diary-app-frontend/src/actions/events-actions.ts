@@ -11,11 +11,7 @@ export const DELETE_EVENT = "DELETE_EVENT";
 const Actions = {
   startLoadEvents: () => createAction(LOAD_EVENTS_START),
   finishLoadEvents: (events: IEventList) => createAction(LOAD_EVENTS, events),
-  updateEvent: (eventId: number, title: string) =>
-    createAction(UPDATE_EVENT, {
-      eventId: eventId,
-      eventTitle: title
-    }),
+  updateEvent: (event: IEvent) => createAction(UPDATE_EVENT, event),
   addEvent: (newEvent: IEvent) => createAction(ADD_EVENT, newEvent),
   deleteEvent: (eventID: number) => createAction(DELETE_EVENT, eventID)
 };
@@ -32,18 +28,21 @@ export const Thunks = {
     };
   },
 
-  updateEvent: (eventId: number, title: string) => {
-    return dispatch => {
-      dispatch(Actions.updateEvent(eventId, title));
-    };
-  },
+  addOrUpdateEvent: (event: IEvent) => {
+    if (!event) return;
 
-  addEvent: (newEvent: IEvent) => {
-    return dispatch => {
-      axios
-        .post(baseApi, newEvent)
-        .then(res => dispatch(Actions.addEvent(res.data)));
-    };
+    if (event.id === 0) {
+      return dispatch => {
+        axios
+          .post(baseApi, event)
+          .then(res => dispatch(Actions.addEvent(res.data)));
+      };
+    } else
+      return dispatch => {
+        axios
+          .put(baseApi, event)
+          .then(res => dispatch(Actions.updateEvent(event)));
+      };
   },
 
   deleteEvent: (eventID: number) => {

@@ -20,88 +20,6 @@ namespace DiaryApp.API.Controllers
         {
             this.monthPageService = new MonthPageService(context);
             this.mapper = mapper;
-
-            //MonthPage monthPage = context.MonthPages.Find(2);
-
-            //var beautyAndHealth = new TodoList
-            //{
-            //    Year = 2020,
-            //    Month = 1,
-            //    Title = "Красота и здоровье",
-            //    Items = new List<TodoItem>
-            //    {
-            //        new TodoItem
-            //        {
-            //            Subject = "Карандаш для губ VS"
-            //        },
-            //        new TodoItem
-            //        {
-            //            Subject = "Снуп"
-            //        }
-            //    },
-            //    Page = monthPage
-            //};
-
-            //var othersList = new TodoList
-            //{
-            //    Year = 2020,
-            //    Month = 1,
-            //    Title = "Другое",
-            //    Items = new List<TodoItem>
-            //    {
-            //        new TodoItem
-            //        {
-            //            Subject = "Картриджи"
-            //        }
-            //    },
-            //    Page = monthPage
-            //};
-
-            //context.TodoLists.AddRange(beautyAndHealth, othersList);
-
-            //context.SaveChanges();
-
-            //var purchasesArea = context.PurchasesAreas.Find(2);
-
-            //purchasesArea.PurchasesLists.Add(beautyAndHealth);
-            //purchasesArea.PurchasesLists.Add(othersList);
-
-            //context.SaveChanges();
-
-            //var desiresArea = context.DesiresAreas.Find(2);
-
-            //var toRead = new EventList
-            //{
-            //    Month = 1,
-            //    Year = 2020,
-            //    Title = "Прочитать",
-            //    Page = monthPage
-            //};
-            //var toWatch = new EventList
-            //{
-            //    Month = 1,
-            //    Year = 2020,
-            //    Title = "Посмотреть",
-            //    Page = monthPage
-            //};
-            //var toVisit = new EventList
-            //{
-            //    Month = 1,
-            //    Year = 2020,
-            //    Title = "Посетить",
-            //    Page = monthPage
-            //};
-
-            //context.EventLists.AddRange(toRead, toWatch, toVisit);
-
-            //context.SaveChanges();
-
-            //desiresArea.DesiresLists.AddRange(new EventList[]
-            //{
-            //    toRead, toWatch, toVisit
-            //});
-
-            //context.SaveChanges();
         }
 
         [HttpGet("{userId}/{year}/{month}")]
@@ -114,16 +32,36 @@ namespace DiaryApp.API.Controllers
             return model;
         }
 
-        [HttpGet("/purchasesArea/{pageID}")]
+        [HttpGet("purchasesArea/{pageID}")]
         public async Task<PurchasesAreaModel> GetPurchasesArea(int pageID)
         {
-            var area = await monthPageService.GetPageArea<PurchasesArea>(pageID);
-            return mapper.Map<PurchasesAreaModel>(area);
+            return await GetPageArea<PurchasesArea, PurchasesAreaModel>(pageID);
         }
 
-        private List<U> MapList<T,U>(List<T> listToMap)
+        [HttpGet("desiresArea/{pageID}")]
+        public async Task<DesiresAreaModel> GetDesiresArea(int pageID)
         {
-            return listToMap.Select(l => mapper.Map<U>(l)).ToList();
+            return await GetPageArea<DesiresArea, DesiresAreaModel>(pageID);
+        }
+
+        [HttpGet("ideasArea/{pageID}")]
+        public async Task<IdeasAreaModel> GetIdeasArea(int pageID)
+        {
+            return await GetPageArea<IdeasArea, IdeasAreaModel>(pageID);
+        }
+
+        [HttpGet("goalsArea/{pageID}")]
+        public async Task<GoalsAreaModel> GetGoalsArea(int pageID)
+        {
+            return await GetPageArea<GoalsArea, GoalsAreaModel>(pageID);
+        }
+
+        private async Task<TDto> GetPageArea<TEntity,TDto>(int pageID) 
+            where TDto : PageAreaModel 
+            where TEntity : PageAreaBase
+        {
+            var area = await monthPageService.GetPageArea<TEntity>(pageID);
+            return mapper.Map<TDto>(area);
         }
     }
 }

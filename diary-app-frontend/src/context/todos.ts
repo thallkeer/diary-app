@@ -18,12 +18,12 @@ export const todosReducer = (
       };
 
     case "ADD_TODO": {
-      const todoItems = [...getTodos(state)];
-      todoItems.splice(todoItems.length - 1, 0, action.payload);
-
       return {
         ...state,
-        list: { ...state.list, items: todoItems }
+        list: {
+          ...state.list,
+          items: [...getTodos(state), action.payload]
+        }
       };
     }
 
@@ -46,6 +46,15 @@ export const todosReducer = (
           items: getTodos(state).map(todo =>
             todo.id === action.payload ? { ...todo, done: !todo.done } : todo
           )
+        }
+      };
+
+    case "DELETE_TODO":
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          items: getTodos(state).filter(todo => todo.id !== action.payload)
         }
       };
 

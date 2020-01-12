@@ -2,7 +2,6 @@ import React, { FC, useState } from "react";
 import { ListItem } from "../../models";
 
 type ReadonlyMode = {
-  readonly: boolean;
   getItemText: (item: ListItem) => string;
 };
 
@@ -20,10 +19,7 @@ export const ListItemInput: FC<IProps> = ({
   const initialState: IProps = {
     updateItem,
     item,
-    readonlyMode: readonlyMode || {
-      readonly: false,
-      getItemText: null
-    }
+    readonlyMode
   };
 
   const [state, setState] = useState<IProps | null>(initialState);
@@ -39,9 +35,12 @@ export const ListItemInput: FC<IProps> = ({
   };
 
   const handleBlur = () => {
-    if (state.item.subject.length && state.item.subject !== item.subject) {
+    if (
+      updateItem &&
+      state.item.subject.length &&
+      state.item.subject !== item.subject
+    ) {
       updateItem(state.item);
-      setState(initialState);
     }
   };
 
@@ -49,15 +48,16 @@ export const ListItemInput: FC<IProps> = ({
     if (event.key === "Enter") handleBlur();
   };
 
-  let inputValue = state.readonlyMode.getItemText
-    ? state.readonlyMode.getItemText(item)
-    : state.item.subject;
+  let inputValue =
+    state.readonlyMode && state.readonlyMode.getItemText
+      ? state.readonlyMode.getItemText(item)
+      : state.item.subject;
 
   return (
     <input
       type="text"
       value={inputValue}
-      readOnly={state.readonlyMode.readonly}
+      readOnly={state.readonlyMode ? true : false}
       onChange={handleTextChange}
       onBlur={handleBlur}
       onKeyPress={handleKeyPress}

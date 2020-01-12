@@ -1,27 +1,15 @@
-import React, { useReducer, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { EventList } from "../Lists/EventList";
-import {
-  EventThunks,
-  Thunks as eventThunks
-} from "../../actions/events-actions";
-import { eventsReducer } from "../../context/events";
-import { EventListContext, MainPageContext } from "../../context";
+import { MainPageContext } from "../../context";
 import Loader from "../Loader";
+import { useEvents } from "../../hooks/useLists";
 
 export const ImportantEvents: React.FC = () => {
-  const [state, _dispatch] = useReducer(eventsReducer, {
-    list: null,
-    loading: false,
-    dispatch: () => {}
-  });
-  const dispatch = (action: EventThunks) => action(_dispatch);
   const pageState = useContext(MainPageContext);
   const { page, setPageState } = pageState;
-  const { loading, list } = state;
+  const [state, dispatch] = useEvents(page);
 
-  useEffect(() => {
-    dispatch(eventThunks.loadEvents(page.id));
-  }, [page]);
+  const { loading, list } = state;
 
   useEffect(() => {
     if (list) {
@@ -32,8 +20,12 @@ export const ImportantEvents: React.FC = () => {
   if (loading || !list) return <Loader />;
 
   return (
-    <EventListContext.Provider value={{ ...state, dispatch }}>
-      <EventList withDate readonly fillToNumber={6} />
-    </EventListContext.Provider>
+    <EventList
+      withDate
+      readonly
+      fillToNumber={6}
+      eventList={state.list}
+      dispatch={dispatch}
+    />
   );
 };

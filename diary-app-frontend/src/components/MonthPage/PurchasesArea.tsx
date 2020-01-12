@@ -1,9 +1,11 @@
-import React, { useEffect, useContext, useState } from "react";
-import { ITodoList } from "../../models";
+import React, { useContext } from "react";
+import { ITodoList, IPurchasesArea } from "../../models";
 import { Row, Col } from "react-bootstrap";
 import { TodoList } from "../Lists/TodoList";
-import axios from "axios";
 import { MonthPageContext } from "../../context";
+import Loader from "../Loader";
+import { useTodos } from "../../hooks/useLists";
+import usePageArea from "../../hooks/usePageArea";
 
 type ListPair = {
   list1: ITodoList;
@@ -11,20 +13,18 @@ type ListPair = {
 };
 
 export const PurchasesArea: React.FC = () => {
-  const { page } = useContext(MonthPageContext);
-  const [state, setState] = useState<ITodoList[]>([]);
-
-  useEffect(() => {
-    page &&
-      axios
-        .get(`https://localhost:44320/api/events/all/${page.id}`)
-        .then(res => res.data);
-  }, [page]);
+  const [_, dispatch] = useTodos(null); //just for get a dispatch
+  const { areaState } = usePageArea<IPurchasesArea>("purchasesArea");
 
   function getListColumn(list: ITodoList) {
     return (
       <Col md={5}>
-        <TodoList fillToNumber={4} className="mt-20 month-lists-header" />
+        <TodoList
+          fillToNumber={4}
+          className="mt-20 month-lists-header"
+          dispatch={dispatch}
+          todoList={list}
+        />
       </Col>
     );
   }
@@ -52,10 +52,12 @@ export const PurchasesArea: React.FC = () => {
     return rows;
   };
 
+  if (!areaState || areaState.loading) return <Loader />;
+
   return (
     <>
-      <h1>{purchasesArea.header}</h1>
-      {renderLists(purchasesArea.purchasesLists)}
+      <h1>{areaState.area.header}</h1>
+      {renderLists(areaState.area.purchasesLists)}
     </>
   );
 };

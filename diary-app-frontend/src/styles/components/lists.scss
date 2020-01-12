@@ -14,7 +14,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 0.5rem 0rem;
+    //padding: 0.5rem 0rem;
     margin-bottom: 0.5rem;
   }
 }
@@ -39,7 +39,7 @@
   position: absolute;
 }
 
-.event {
+.list-item {
   &:hover {
     span {
       visibility: visible;
@@ -48,7 +48,7 @@
   }
 }
 
-.delete-event-btn {
+.delete-list-item-btn {
   visibility: hidden;
   position: absolute;
   left: 90%;

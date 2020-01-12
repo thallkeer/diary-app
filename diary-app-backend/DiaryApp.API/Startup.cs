@@ -37,7 +37,6 @@ namespace DiaryApp.API
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<ITodoService, TodoService>();
             services.AddScoped<IMainPageService, MainPageService>();
-            services.AddTransient<SampleData>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             //});
@@ -46,7 +45,7 @@ namespace DiaryApp.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SampleData sampleData)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -58,7 +57,7 @@ namespace DiaryApp.API
                 app.UseHsts();
             }
 
-            sampleData.Initialize();
+            SampleData.Initialize(app.ApplicationServices);
 
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseHttpsRedirection();
