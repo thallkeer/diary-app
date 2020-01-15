@@ -13,7 +13,7 @@ namespace DiaryApp.Data.Services
         public async Task<MainPage> GetMainPageForUser(string userID, int year, int month)
         {
             var mainPage = await dbSet.FirstOrDefaultAsync
-               (mp => mp.User.Id == userID && mp.Month == month && mp.Year == year);
+               (mp => mp.User.ID == userID && mp.Month == month && mp.Year == year);
             return mainPage;
         }
     }

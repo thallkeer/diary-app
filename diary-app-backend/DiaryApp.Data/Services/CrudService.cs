@@ -16,7 +16,7 @@ namespace DiaryApp.Data.Services
             this.dbSet = context.Set<TEntity>();
         }
 
-        public async Task Create(TEntity entity)
+        public virtual async Task Create(TEntity entity)
         {
             await dbSet.AddAsync(entity);
             await context.SaveChangesAsync();
@@ -42,7 +42,7 @@ namespace DiaryApp.Data.Services
             return await dbSet.FindAsync(id);
         }
 
-        public async Task Update(TEntity entity)
+        public virtual async Task Update(TEntity entity)
         {
             dbSet.Update(entity);
             await context.SaveChangesAsync();

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DiaryApp.Core;
 using Microsoft.AspNetCore.Mvc;
 using DiaryApp.API.Models;

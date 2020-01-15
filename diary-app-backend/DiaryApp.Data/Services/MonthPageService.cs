@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DiaryApp.Core;
-using System.Linq;
 
 namespace DiaryApp.Data.Services
 {
@@ -14,7 +13,7 @@ namespace DiaryApp.Data.Services
         public async Task<MonthPage> GetMonthPageForUser(string userID, int year, int month)
         {
             var page = await dbSet.FirstOrDefaultAsync
-                (p => p.User.Id == userID && p.Year == year && p.Month == month);
+                (p => p.User.ID == userID && p.Year == year && p.Month == month);
             return page;
         }
 

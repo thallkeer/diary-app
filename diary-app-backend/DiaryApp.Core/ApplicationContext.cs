@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Linq;
 
 namespace DiaryApp.Core
 {
-    public class ApplicationContext : IdentityDbContext<AppUser>
+    public class ApplicationContext : DbContext
     {
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
@@ -48,5 +47,6 @@ namespace DiaryApp.Core
         public DbSet<DesiresArea> DesiresAreas { get; set; }
         public DbSet<IdeasArea> IdeasAreas { get; set; }
         public DbSet<GoalsArea> GoalsAreas { get; set; }
+        public DbSet<AppUser> Users { get; set; }
     }
 }

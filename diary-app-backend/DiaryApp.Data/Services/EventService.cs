@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Linq;
-using DiaryApp.Core;
+﻿using DiaryApp.Core;
 
 namespace DiaryApp.Data.Services
 {

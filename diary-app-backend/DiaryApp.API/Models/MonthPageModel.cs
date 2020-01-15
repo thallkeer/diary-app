@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace DiaryApp.API.Models
+﻿namespace DiaryApp.API.Models
 {
     public class MonthPageModel
     {

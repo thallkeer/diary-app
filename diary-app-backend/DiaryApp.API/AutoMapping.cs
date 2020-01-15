@@ -21,6 +21,8 @@ namespace DiaryApp.API
             CreateMap<IdeasArea, IdeasAreaModel>();
             CreateMap<GoalsArea, GoalsAreaModel>();
             CreateMap<HabitsTracker, HabitsTrackerModel>();
+            CreateMap<AppUser, UserModel>();
+            CreateMap<UserModel, AppUser>();
         }
     }
 }
