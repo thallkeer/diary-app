@@ -41,8 +41,9 @@ export interface IHabitsTracker {
 
 export interface IUser {
   id: string;
-  userName: number;
-  password: string;
+  userName: string;
+  password?: string;
+  token?: string;
 }
 
 export interface IPage {

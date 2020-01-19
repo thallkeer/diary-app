@@ -3,10 +3,12 @@ using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
 using DiaryApp.Data.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DiaryApp.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MonthPageController : ControllerBase

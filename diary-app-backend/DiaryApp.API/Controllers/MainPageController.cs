@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using DiaryApp.API.Models;
 using AutoMapper;
 using DiaryApp.Data.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DiaryApp.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MainPageController : ControllerBase

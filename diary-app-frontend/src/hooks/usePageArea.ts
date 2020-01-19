@@ -19,7 +19,7 @@ export default function usePageArea<T extends IPageArea>(areaName: string) {
         .get(`https://localhost:44320/api/monthpage/${areaName}/${page.id}`)
         .then(res => setAreaState({ area: res.data, loading: false }));
     }
-  }, [page]);
+  }, [page, areaName]);
 
   return { areaState, page };
 }

@@ -60,6 +60,13 @@ namespace DiaryApp.API.Controllers
             });
         }
 
+        [HttpGet("all")]
+        public IActionResult GetAll()
+        {
+            var users = userService.GetAll();
+            return Ok(users);
+        }
+
         [AllowAnonymous]
         [HttpPost("register")]
         public IActionResult Register([FromBody]UserModel userDto)

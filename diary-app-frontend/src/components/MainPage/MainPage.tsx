@@ -1,35 +1,24 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import Calendar from "../Calendar/Calendar";
 import { Container, Row, Col } from "react-bootstrap";
 import { ImportantThings } from "./ImportantThings";
 import { ImportantEvents } from "./ImportantEvents";
 import { MainPageContext, IMainPageContext } from "../../context";
-import axios from "axios";
 import Loader from "../Loader";
-import { usePage } from "../../hooks/usePage";
+import { usePage, PageType } from "../../hooks/usePage";
 
 export const MainPage: FC = () => {
-  const pageState = usePage<IMainPageContext>({
-    loading: false,
-    events: null,
-    page: null,
-    setPageState: () => {}
-  });
-  const { setPageState, page, loading, events } = pageState;
+  const pageState = usePage<IMainPageContext>(
+    {
+      loading: false,
+      events: null,
+      page: null,
+      setPageState: () => {}
+    },
+    PageType.MainPage
+  );
 
-  useEffect(() => {
-    setPageState({
-      ...pageState,
-      loading: true
-    });
-    axios
-      .get(
-        "https://localhost:44320/api/mainpage/48fdadb0-0092-48a5-add6-24d6e263e588/2020/1"
-      )
-      .then(res => {
-        setPageState({ ...pageState, page: res.data, loading: false });
-      });
-  }, []);
+  const { events, loading, page } = pageState;
 
   if (loading || !page) return <Loader />;
 

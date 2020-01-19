@@ -11,10 +11,10 @@ namespace DiaryApp.API
     {
         public static async void Initialize(IServiceProvider serviceProvider)
         {
-            using (var context = serviceProvider.GetRequiredService<ApplicationContext>())
-            {
-                await Initialize(context);
-            }
+            //using (var context = serviceProvider.GetRequiredService<ApplicationContext>())
+            //{
+            //    await Initialize(context);
+            //}
         }
 
         public static async Task Initialize(ApplicationContext context)
