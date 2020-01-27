@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
@@ -16,16 +17,16 @@ namespace DiaryApp.API.Controllers
         private readonly IMonthPageService monthPageService;
         private readonly IMapper mapper;
 
-        public MonthPageController(ApplicationContext context, IMapper mapper)
+        public MonthPageController(IMonthPageService monthPageService, IMapper mapper)
         {
-            this.monthPageService = new MonthPageService(context);
+            this.monthPageService = monthPageService;
             this.mapper = mapper;
         }
 
         [HttpGet("{userId}/{year}/{month}")]
         public async Task<MonthPageModel> GetMonthPage(string userId, int year, int month)
         {
-            var monthPage = await monthPageService.GetMonthPageForUser(userId, year, month);
+            var monthPage = await monthPageService.GetPageForUser(userId, year, month);
 
             var model = mapper.Map<MonthPageModel>(monthPage);
 
@@ -35,7 +36,7 @@ namespace DiaryApp.API.Controllers
         [HttpGet("purchasesArea/{pageID}")]
         public async Task<PurchasesAreaModel> GetPurchasesArea(int pageID)
         {
-            return await GetPageArea<PurchasesArea, PurchasesAreaModel>(pageID);
+           return await GetPageArea<PurchasesArea, PurchasesAreaModel>(pageID);
         }
 
         [HttpGet("desiresArea/{pageID}")]

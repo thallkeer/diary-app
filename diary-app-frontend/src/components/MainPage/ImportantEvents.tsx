@@ -7,9 +7,9 @@ import { useEvents } from "../../hooks/useLists";
 export const ImportantEvents: React.FC = () => {
   const pageState = useContext(MainPageContext);
   const { page, setPageState } = pageState;
-  const [state, dispatch] = useEvents(page);
+  const state = useEvents(page);
 
-  const { loading, list } = state;
+  const { loading, list, dispatch } = state;
 
   useEffect(() => {
     if (list) {
@@ -18,6 +18,10 @@ export const ImportantEvents: React.FC = () => {
   }, [list]);
 
   if (loading || !list) return <Loader />;
+
+  state.list.items = state.list.items.sort(
+    (e1, e2) => e1.date.getTime() - e2.date.getTime()
+  );
 
   return (
     <EventList

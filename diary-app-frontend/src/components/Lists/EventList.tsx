@@ -5,21 +5,21 @@ import {
   Thunks as eventThunks,
   EventThunks
 } from "../../actions/events-actions";
-import { getEmptyEvent } from "../../utils";
 import { IEvent, IEventList } from "../../models";
-import { useFillToNumber } from "../../hooks/useFillToNumber";
 import { DeleteBtn } from "./DeleteBtn";
+import ListHeaderInput from "./ListHeaderInput";
+import { useEventList } from "../../hooks/useLists";
 
-interface IProps {
+type EventListProps = {
   withDate?: boolean;
   readonly?: boolean;
   className?: string;
   fillToNumber?: number;
   eventList: IEventList;
   dispatch: (action: EventThunks) => void;
-}
+};
 
-export const EventList: FC<IProps> = ({
+export const EventList: FC<EventListProps> = ({
   withDate = false,
   readonly = false,
   className,
@@ -27,24 +27,30 @@ export const EventList: FC<IProps> = ({
   dispatch,
   fillToNumber
 }) => {
+  const { addOrUpdateEvent, deleteEvent, updateEventList } = eventThunks;
+  const { events, title, setTitle } = useEventList(eventList, fillToNumber);
+
   const onDelete = (eventID: number) => {
-    dispatch(eventThunks.deleteEvent(eventID));
+    eventID !== 0 && dispatch(deleteEvent(eventID));
   };
 
   const onUpdate = (event: IEvent) => {
     dispatch(
-      eventThunks.addOrUpdateEvent({
+      addOrUpdateEvent({
         ...event,
         ownerID: eventList.id
       })
     );
   };
 
-  const events = useFillToNumber(
-    [...eventList.items],
-    fillToNumber,
-    getEmptyEvent
-  );
+  const handleBlur = () => {
+    dispatch(
+      updateEventList({
+        ...eventList,
+        title
+      })
+    );
+  };
 
   const getItemText = (event: IEvent): string => {
     if (!withDate || event.id === 0) return event.subject;
@@ -60,8 +66,16 @@ export const EventList: FC<IProps> = ({
   };
 
   return (
-    <div style={{ marginTop: "40px" }} className={className}>
-      <h1 className="todo-list-header">{eventList.title}</h1>
+    <div className={`mt-40 ${className}`}>
+      <h1 className="todo-list-header">
+        <ListHeaderInput
+          value={title}
+          handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setTitle(e.target.value)
+          }
+          handleBlur={handleBlur}
+        />
+      </h1>
       <ul className="todos">
         {events.map((event: IEvent, i) => (
           <li key={event.id !== 0 ? event.id : i + 80} className="list-item">

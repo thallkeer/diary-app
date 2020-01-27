@@ -7,8 +7,10 @@ namespace DiaryApp.Core
         [ScaffoldColumn(false)]
         public int ID { get; set; }
         [Required]
+        [Range(2020,9999)]
         public int Year { get; set; }
         [Required]
+        [Range(1, 12)]
         public int Month { get; set; }
         public virtual AppUser User { get; set; }
     }

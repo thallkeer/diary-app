@@ -5,9 +5,11 @@ using DiaryApp.Core;
 using Microsoft.AspNetCore.Mvc;
 using DiaryApp.Data.Services;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DiaryApp.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EventsController : ControllerBase
@@ -15,9 +17,9 @@ namespace DiaryApp.API.Controllers
         private readonly IEventService eventService;
         private readonly IMapper mapper;
 
-        public EventsController(ApplicationContext context, IMapper mapper)
+        public EventsController(IEventService eventService, IMapper mapper)
         {
-            this.eventService = new EventService(context);
+            this.eventService = eventService;
             this.mapper = mapper;
         }
 
@@ -38,18 +40,25 @@ namespace DiaryApp.API.Controllers
             var allLists = lists.Select(l => mapper.Map<EventListModel>(l));
             return Ok(allLists);
         }
- 
+
         [HttpPost]
+        public async Task<IActionResult> AddEventList([FromBody] EventListModel eventListModel)
+        {
+            var eventList = mapper.Map<EventList>(eventListModel);
+            await eventService.Create(eventList);
+            return Ok(eventList.ID);
+        }
+ 
+        [HttpPost("addEvent")]
         public async Task<IActionResult> AddEvent([FromBody]EventModel eventData)
         {
             var newEvent = mapper.Map<EventItem>(eventData);
             await eventService.AddItem(newEvent, eventData.OwnerID);
-            eventData.ID = newEvent.ID;
-            return Ok(eventData);
+            return Ok(newEvent.ID);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateTodo([FromBody] EventModel eventModel)
+        public async Task<IActionResult> UpdateEvent([FromBody] EventModel eventModel)
         {
             var _event = mapper.Map<EventItem>(eventModel);
             await eventService.UpdateItem(_event);

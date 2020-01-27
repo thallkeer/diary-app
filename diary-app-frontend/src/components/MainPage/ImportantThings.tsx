@@ -6,11 +6,15 @@ import { useTodos } from "../../hooks/useLists";
 
 export const ImportantThings = () => {
   const { page } = useContext(MainPageContext);
-  const [state, dispatch] = useTodos(page);
+  const state = useTodos(page);
 
   if (state.loading || !state.list) return <Loader />;
 
   return (
-    <TodoList fillToNumber={6} todoList={state.list} dispatch={dispatch} />
+    <TodoList
+      fillToNumber={6}
+      todoList={state.list}
+      dispatch={state.dispatch}
+    />
   );
 };

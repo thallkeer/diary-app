@@ -9,4 +9,15 @@
   min-width: 25px;
   cursor: pointer;
 }
+
+.marked {
+  background-color: skyblue;
+}
+
+.goal-name {
+  border-bottom: 1px solid black;
+  font-family: "AmaticSC-Regular";
+  font-weight: bold;
+  font-size: 24px;
+}
 /*# sourceMappingURL=habits-tracker.css.map */

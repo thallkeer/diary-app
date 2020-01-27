@@ -1,17 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { getRandomId } from "../../utils";
-import { IHabitsTracker } from "../../models";
+import { IHabitsTracker, IMonthPage } from "../../models";
+import axios from "axios";
+import { config } from "../../helpers/config";
 
 type Props = {
   tracker: IHabitsTracker;
+  page: IMonthPage;
 };
 
-export const HabitsTracker: React.FC<Props> = ({ tracker }) => {
-  console.log(tracker);
+export const HabitsTracker: React.FC<Props> = ({ tracker, page }) => {
+  const [trackerState, setTrackerState] = useState<IHabitsTracker>(tracker);
+  const { baseApi, headers } = config;
+
+  const updateTracker = (data: IHabitsTracker) => {
+    axios
+      .put(baseApi + "habitTracker", data, { headers })
+      .then(res => setTrackerState({ ...data }));
+  };
 
   const onDayClick = (e: React.MouseEvent<HTMLElement>, day: number) => {
     let target = e.target as HTMLElement;
-    target.style.backgroundColor = "skyblue";
+    let updatedTracker: IHabitsTracker;
+    if (trackerState.selectedDays.includes(day)) {
+      target.classList.remove("marked");
+      updatedTracker = {
+        ...trackerState,
+        selectedDays: trackerState.selectedDays.filter(sd => sd !== day)
+      };
+    } else {
+      target.classList.add("marked");
+      updatedTracker = {
+        ...trackerState,
+        selectedDays: [...trackerState.selectedDays, day]
+      };
+    }
+    updateTracker(updatedTracker);
   };
 
   const getDaysInMonth = () => {
@@ -25,8 +49,11 @@ export const HabitsTracker: React.FC<Props> = ({ tracker }) => {
     ).getDate();
 
     for (let d = 1; d <= days; d++) {
+      let cn = `p-2 day-cell ${
+        trackerState.selectedDays.includes(d) ? "marked" : ""
+      }`;
       daysInMonth.push(
-        <div className="p-2 day-cell" key={d} onClick={e => onDayClick(e, d)}>
+        <div className={cn} key={d} onClick={e => onDayClick(e, d)}>
           {d}
         </div>
       );

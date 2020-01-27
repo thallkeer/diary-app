@@ -6,6 +6,7 @@ namespace DiaryApp.Core
     {
         [ScaffoldColumn(false)]
         public int ID { get; set; }
+        [MaxLength(200)]
         public string Subject { get; set; } = string.Empty;
         [Required]
         public int OwnerID { get; set; }

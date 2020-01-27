@@ -1,11 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
 import { ITodoList, IPurchasesArea } from "../../models";
 import { Row, Col } from "react-bootstrap";
 import { TodoList } from "../Lists/TodoList";
-import { MonthPageContext } from "../../context";
 import Loader from "../Loader";
-import { useTodos } from "../../hooks/useLists";
 import usePageArea from "../../hooks/usePageArea";
+import { useTodos } from "../../hooks/useLists";
+import { AddListBtn } from "../AddListBtn";
+import { getRandomId } from "../../utils";
+import axios from "axios";
+import { config } from "../../helpers/config";
 
 type ListPair = {
   list1: ITodoList;
@@ -13,10 +16,35 @@ type ListPair = {
 };
 
 export const PurchasesArea: React.FC = () => {
-  const [_, dispatch] = useTodos(null); //just for get a dispatch
-  const { areaState } = usePageArea<IPurchasesArea>("purchasesArea");
+  const { areaState, setAreaState, page } = usePageArea<IPurchasesArea>(
+    "purchasesArea"
+  );
 
-  function getListColumn(list: ITodoList) {
+  const { baseApi, headers } = config;
+
+  const addPurchaseList = () => {
+    const todoList: ITodoList = {
+      id: 0,
+      items: [],
+      pageId: page.id,
+      title: "Список покупок"
+    };
+
+    axios.post(baseApi + "todo", todoList, { headers }).then(res => {
+      todoList.id = res.data;
+      setAreaState({
+        ...areaState,
+        area: {
+          ...areaState.area,
+          purchasesLists: [...areaState.area.purchasesLists, todoList]
+        }
+      });
+    });
+  };
+
+  const OneList: React.FC<{ todoList: ITodoList }> = ({ todoList }) => {
+    const { dispatch, list } = useTodos(null, todoList);
+
     return (
       <Col md={5}>
         <TodoList
@@ -27,14 +55,19 @@ export const PurchasesArea: React.FC = () => {
         />
       </Col>
     );
-  }
+  };
 
   const getRow = (pair: ListPair) => {
     return (
       <Row key={pair.list1.id}>
-        {getListColumn(pair.list1)}
+        {<OneList todoList={pair.list1} />}
         <Col md={2}>{""}</Col>
-        {getListColumn(pair.list2)}
+        {pair.list2 && <OneList todoList={pair.list2} />}
+        {/* {pair.list2 ? (
+          <OneList todoList={pair.list2} />
+        ) : (
+          <AddListBtn onClick={addPurchaseList} />
+        )} */}
       </Row>
     );
   };
@@ -45,10 +78,18 @@ export const PurchasesArea: React.FC = () => {
       rows.push(getRow({ list1: todoLists[i], list2: todoLists[i + 1] }));
     }
 
-    if (todoLists.length % 2 !== 0)
+    if (todoLists.length % 2 !== 0) {
       rows.push(
         getRow({ list1: todoLists[todoLists.length - 1], list2: null })
       );
+    }
+
+    rows.push(
+      <Row key={getRandomId()}>
+        <AddListBtn onClick={addPurchaseList} />
+      </Row>
+    );
+
     return rows;
   };
 

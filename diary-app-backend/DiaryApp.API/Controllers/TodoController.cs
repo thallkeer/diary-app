@@ -1,12 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
 using DiaryApp.Data.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DiaryApp.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TodoController : ControllerBase
@@ -14,9 +17,9 @@ namespace DiaryApp.API.Controllers
         private readonly ITodoService todoService;
         private readonly IMapper mapper;
 
-        public TodoController(ApplicationContext context, IMapper mapper)
+        public TodoController(ITodoService todoService, IMapper mapper)
         {
-            this.todoService = new TodoService(context);
+            this.todoService = todoService;
             this.mapper = mapper;
         }
 
@@ -30,7 +33,7 @@ namespace DiaryApp.API.Controllers
             return Ok(model);
         }
 
-        [HttpPost]
+        [HttpPost("addTodo")]
         public async Task<IActionResult> AddTodo([FromBody] TodoModel todo)
         {
             var newTodo = mapper.Map<TodoItem>(todo);
@@ -39,11 +42,37 @@ namespace DiaryApp.API.Controllers
             return Ok(todo);
         }
 
-        [HttpPut]
+        [HttpPost]
+        public async Task<IActionResult> AddTodoList([FromBody] TodoListModel todoListModel)
+        {
+            var todoList = mapper.Map<TodoList>(todoListModel);
+            await todoService.Create(todoList);
+            return Ok(todoList.ID);
+        }
+
+        [HttpPut("toggle/{todoID}")]
+        public async Task<IActionResult> ToggleTodo(int todoId)
+        {
+            var todo = await todoService.GetItemByID(todoId);
+            todo.Done = !todo.Done;
+            await todoService.UpdateItem(todo);
+            return Ok();
+        }
+
+        [HttpPut("updateTodo")]
         public async Task<IActionResult> UpdateTodo([FromBody] TodoModel todoModel)
         {
             var todo = mapper.Map<TodoItem>(todoModel);
             await todoService.UpdateItem(todo);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateTodoList([FromBody] TodoListModel todoListModel)
+        {
+            var todoList = await todoService.GetById(todoListModel.ID);
+            todoList.Title = todoListModel.Title;
+            await todoService.Update(todoList);
             return Ok();
         }
 

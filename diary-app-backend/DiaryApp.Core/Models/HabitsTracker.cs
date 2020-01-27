@@ -8,10 +8,7 @@ namespace DiaryApp.Core
         [ScaffoldColumn(false)]
         public int ID { get; set; }
         [Required]
-        public int Month { get; set; }
-        [Required]
-        public int Year { get; set; }
-        [Required]
+        [MaxLength(100)]
         public string GoalName { get; set; }
         public List<int> SelectedDays { get; set; } = new List<int>();
         [Required]

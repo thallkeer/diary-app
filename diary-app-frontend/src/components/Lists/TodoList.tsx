@@ -1,10 +1,10 @@
 import React from "react";
 import { TodoInput } from "./TodoInput";
 import { Thunks as todoThunks, TodoThunks } from "../../actions/todo-actions";
-import { getEmptyTodo } from "../../utils";
 import { ITodo, ITodoList } from "../../models";
-import { useFillToNumber } from "../../hooks/useFillToNumber";
 import { DeleteBtn } from "./DeleteBtn";
+import ListHeaderInput from "./ListHeaderInput";
+import { useTodoList } from "../../hooks/useLists";
 
 type TodoListProps = {
   className?: string;
@@ -19,15 +19,14 @@ export const TodoList: React.FC<TodoListProps> = ({
   todoList,
   dispatch
 }) => {
-  const { addOrUpdateTodo, toggleTodo, deleteTodo } = todoThunks;
+  const {
+    addOrUpdateTodo,
+    toggleTodo,
+    deleteTodo,
+    updateTodoList
+  } = todoThunks;
 
-  console.log("todo list component ", todoList);
-
-  const todos: ITodo[] = useFillToNumber(
-    [...todoList.items],
-    fillToNumber,
-    getEmptyTodo
-  );
+  const { title, setTitle, todos } = useTodoList(todoList, fillToNumber);
 
   const toggleTodoItem = (todoId: number) => {
     todoId !== 0 && dispatch(toggleTodo(todoId));
@@ -46,9 +45,27 @@ export const TodoList: React.FC<TodoListProps> = ({
     );
   };
 
+  const handleBlur = () => {
+    dispatch(
+      updateTodoList({
+        ...todoList,
+        title
+      })
+    );
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setTitle(e.target.value);
+
   return (
     <div className={`mt-52 ${className}`}>
-      <h1 className="todo-list-header">{todoList.title}</h1>
+      <h1 className="todo-list-header">
+        <ListHeaderInput
+          handleChange={handleChange}
+          handleBlur={handleBlur}
+          value={title}
+        />
+      </h1>
       <ul className="todos">
         {todos.map((todo, i) => (
           <li key={todo.id !== 0 ? todo.id : i * 80} className="list-item">

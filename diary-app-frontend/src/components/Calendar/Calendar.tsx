@@ -47,6 +47,7 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
 
   const getFirstDayOfMonth = (): number => {
     let curDate = new Date();
+
     let fDay = new Date(curDate.getFullYear(), curDate.getMonth(), 1).getDay();
     return fDay === 0 ? 7 : fDay;
   };
@@ -60,11 +61,20 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
     );
   };
 
-  const onDayClick = (
+  let eventClicked = false;
+
+  const onDayClick = (e: React.MouseEvent<HTMLElement>, day: number) => {
+    if (eventClicked) return;
+    e.preventDefault();
+    showModal(day);
+  };
+
+  const onEventClick = (
     e: React.MouseEvent<HTMLElement>,
     day: number,
-    event?: IEvent
+    event: IEvent
   ) => {
+    eventClicked = true;
     e.preventDefault();
     showModal(day, event);
   };
@@ -99,11 +109,12 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
 
   const getDays = (): any[] => {
     let daysInMonth = [];
+    let eventsByDay = getEventsByDay(eventsState);
 
     for (let d = 1; d <= getDaysInMonth(); d++) {
       let className = d === currentDay() ? "day current-day" : "day";
 
-      let curEvents = getEventsByDay(eventsState).filter(ev => ev.day === d);
+      let curEvents = eventsByDay.filter(ev => ev.day === d);
 
       let curEventClass = curEvents.length ? "day-with-event" : "no-events-day";
 
@@ -114,7 +125,7 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
             <div
               key={eventByDay.event.id}
               className={`mt-5 ${curEventClass}`}
-              onClick={e => onDayClick(e, d, eventByDay.event)}
+              onClick={e => onEventClick(e, d, eventByDay.event)}
             >
               {eventByDay.event.subject}
             </div>
@@ -198,11 +209,8 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
           day={state.clickedDay}
           show={state.showAddEventForm}
           handleClose={toggle}
-          eventInfo={{
-            ownerID: eventsState.list.id,
-            addEvent: addEvent,
-            event: state.clickedEvent
-          }}
+          addEvent={addEvent}
+          event={state.clickedEvent}
         />
       )}
     </div>

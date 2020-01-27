@@ -1,30 +1,43 @@
 import { ActionsUnion, createAction } from "./action-helpers";
 import { IEvent, IEventList } from "../models/index";
 import axios from "axios";
+import { config } from "../helpers/config";
 
 export const ADD_EVENT = "ADD_EVENT";
 export const UPDATE_EVENT = "UPDATE_EVENT";
 export const LOAD_EVENTS_START = "LOAD_EVENTS_START";
 export const LOAD_EVENTS = "LOAD_EVENTS";
 export const DELETE_EVENT = "DELETE_EVENT";
+export const UPDATE_EVENTLIST = "UPDATE_EVENTLIST";
 
 const Actions = {
   startLoadEvents: () => createAction(LOAD_EVENTS_START),
   finishLoadEvents: (events: IEventList) => createAction(LOAD_EVENTS, events),
   updateEvent: (event: IEvent) => createAction(UPDATE_EVENT, event),
   addEvent: (newEvent: IEvent) => createAction(ADD_EVENT, newEvent),
-  deleteEvent: (eventID: number) => createAction(DELETE_EVENT, eventID)
+  deleteEvent: (eventID: number) => createAction(DELETE_EVENT, eventID),
+  updateEventList: (eventList: IEventList) =>
+    createAction(UPDATE_EVENTLIST, eventList)
 };
 
-const baseApi = "https://localhost:44320/api/events/";
+const { baseApi, headers } = config;
+
+const baseEventsApi = `${baseApi}events/`;
 
 export const Thunks = {
-  loadEvents: (pageID: number) => {
+  loadEventsByPageID: (pageID: number) => {
     return dispatch => {
       dispatch(Actions.startLoadEvents());
-      axios.get(baseApi + pageID).then(response => {
+      axios.get(baseEventsApi + pageID, { headers }).then(response => {
         dispatch(Actions.finishLoadEvents(response.data));
       });
+    };
+  },
+
+  updateEventList: (eventList: IEventList) => {
+    return dispatch => {
+      axios.put(baseEventsApi, eventList, { headers });
+      dispatch(Actions.updateEventList(eventList));
     };
   },
 
@@ -34,21 +47,22 @@ export const Thunks = {
     if (event.id === 0) {
       return dispatch => {
         axios
-          .post(baseApi, event)
-          .then(res => dispatch(Actions.addEvent(res.data)));
+          .post(baseEventsApi + "addEvent", event, { headers })
+          .then(res => dispatch(Actions.addEvent({ ...event, id: res.data })));
       };
-    } else
+    } else {
       return dispatch => {
         axios
-          .put(baseApi, event)
+          .put(baseEventsApi, event, { headers })
           .then(res => dispatch(Actions.updateEvent(event)));
       };
+    }
   },
 
   deleteEvent: (eventID: number) => {
     return dispatch => {
       axios
-        .delete(baseApi + `${eventID}`)
+        .delete(baseEventsApi + `${eventID}`, { headers })
         .then(dispatch(Actions.deleteEvent(eventID)));
     };
   }

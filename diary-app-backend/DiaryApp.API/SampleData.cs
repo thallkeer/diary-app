@@ -202,8 +202,6 @@ namespace DiaryApp.API
                     new HabitsTracker
                     {
                         GoalName = "Делать зарядку по утрам",
-                        Month = 1,
-                        Year = 2020
                     }
                 },
                 Page = monthPage

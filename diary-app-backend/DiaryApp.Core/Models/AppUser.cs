@@ -7,6 +7,7 @@ namespace DiaryApp.Core
         [ScaffoldColumn(false)]
         public string ID { get; set; }
         [Required]
+        [MaxLength(50)]
         public string Username { get; set; }
         [Required]
         public byte[] PasswordHash { get; set; }

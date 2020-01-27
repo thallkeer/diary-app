@@ -2,8 +2,7 @@
 
 namespace DiaryApp.Core
 {
-    public interface IMainPageService : ICrudService<MainPage>
+    public interface IMainPageService : IPageService<MainPage>
     {
-        Task<MainPage> GetMainPageForUser(string userID, int year, int month);
     }
 }

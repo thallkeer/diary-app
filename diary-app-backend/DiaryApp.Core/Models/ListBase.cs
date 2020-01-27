@@ -6,7 +6,8 @@ namespace DiaryApp.Core
     public abstract class ListBase<T>
     {
         [ScaffoldColumn(false)]
-        public int ID { get; set; }       
+        public int ID { get; set; }
+        [MaxLength(50)]
         public string Title { get; set; }
         [Required]
         public int PageID { get; set; }        

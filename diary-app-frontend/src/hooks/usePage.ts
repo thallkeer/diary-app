@@ -22,8 +22,7 @@ export function usePage<T extends IMainPageContext | IMonthPageContext>(
   const { month, year } = useContext(AppContext);
   const user: IUser = JSON.parse(localStorage.getItem("user"));
 
-  const { baseApi, getHeader } = config;
-  const headers = getHeader();
+  const { baseApi, headers } = config;
 
   useEffect(() => {
     _setPageState({

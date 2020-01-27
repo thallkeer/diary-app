@@ -32,8 +32,10 @@ namespace DiaryApp.API
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc();
             services.AddCors();
+
+            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
+            
             services.AddAutoMapper(typeof(Startup));
 
             services.AddDbContext<ApplicationContext>(options =>
@@ -69,11 +71,22 @@ namespace DiaryApp.API
             services.AddScoped<ITodoService, TodoService>();
             services.AddScoped<IMainPageService, MainPageService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IMonthPageService, MonthPageService>();
+            services.AddScoped<IHabitTrackerService, HabitTrackerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.Use(async (ctx, next) =>
+            {
+                await next();
+                if (ctx.Response.StatusCode == 204)
+                {
+                    ctx.Response.ContentLength = 0;
+                }
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -86,13 +99,12 @@ namespace DiaryApp.API
 
             SampleData.Initialize(app.ApplicationServices);
 
-            app.UseCors(builder => builder
-            .AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials());
+            app.UseCors(builder =>
+                                    builder.AllowAnyOrigin()
+                                           .AllowAnyHeader()
+                                           .AllowAnyMethod());
 
-            app.UseAuthentication();
+            app.UseAuthentication();          
 
             app.UseHttpsRedirection();
             app.UseMvc();            

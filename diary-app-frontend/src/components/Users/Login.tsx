@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Button,
   FormGroup,
@@ -8,7 +8,6 @@ import {
   Navbar
 } from "react-bootstrap";
 import { login } from "../../services/users";
-import { AppContext } from "../../context";
 import history from "../history";
 import { IUser } from "../../models";
 //import { Link } from "react-router-dom";

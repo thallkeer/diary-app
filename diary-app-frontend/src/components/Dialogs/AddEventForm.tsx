@@ -12,23 +12,18 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { IEvent } from "../../models";
-
-export type EventInfo = {
-  event?: IEvent;
-  addEvent: (newEvent: IEvent, month: number, day: number) => void;
-  ownerID: number;
-};
+import { getEmptyEvent } from "../../utils";
 
 interface IFormProps {
   show: boolean;
   handleClose: () => void;
   day: number;
-  eventInfo: EventInfo;
+  event?: IEvent;
+  addEvent: (newEvent: IEvent) => void;
 }
 
 interface IFormState {
-  text: string;
-  date: Date;
+  item: IEvent;
   submitSuccess?: boolean;
 }
 
@@ -36,7 +31,8 @@ export const AddEventForm: React.FC<IFormProps> = ({
   show,
   handleClose,
   day,
-  eventInfo
+  addEvent,
+  event
 }) => {
   const getDateByDay = (day: number) => {
     const date: Date = new Date();
@@ -44,20 +40,23 @@ export const AddEventForm: React.FC<IFormProps> = ({
     return date;
   };
 
-  console.log(eventInfo);
-
   const [formState, setFormState] = useState<IFormState | null>({
-    text: eventInfo.event ? eventInfo.event.subject : "",
-    date: getDateByDay(day)
+    item: {
+      ...getEmptyEvent(),
+      date: getDateByDay(day)
+    }
   });
 
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.persist();
-    const { name, value } = e.target as HTMLInputElement;
+    const { value } = e.target as HTMLInputElement;
 
     setFormState({
       ...formState,
-      [name]: value
+      item: {
+        ...formState.item,
+        subject: value
+      }
     });
   };
 
@@ -73,7 +72,7 @@ export const AddEventForm: React.FC<IFormProps> = ({
   };
 
   const getDisplayDate = (): string => {
-    return formState.date.toLocaleString("ru", {
+    return formState.item.date.toLocaleString("ru", {
       day: "numeric",
       month: "long",
       year: "numeric"
@@ -82,17 +81,7 @@ export const AddEventForm: React.FC<IFormProps> = ({
 
   const submitForm = async (): Promise<boolean> => {
     try {
-      const event: IEvent = {
-        id: 0,
-        subject: formState.text,
-        date: formState.date,
-        ownerID: eventInfo.ownerID
-      };
-
-      const month: number = event.date.getMonth() + 1; //from 0 to 11
-      const day: number = event.date.getDate();
-
-      eventInfo.addEvent(event, month, day);
+      addEvent(formState.item);
       return true;
     } catch (ex) {
       console.log(ex);
@@ -116,8 +105,7 @@ export const AddEventForm: React.FC<IFormProps> = ({
             placeholder="Добавьте название"
             aria-label="Добавьте название"
             aria-describedby="basic-addon1"
-            value={formState.text}
-            name="text"
+            value={formState.item.subject}
             onChange={onChange}
           />
         </Modal.Header>

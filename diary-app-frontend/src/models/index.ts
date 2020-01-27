@@ -1,13 +1,11 @@
-export interface IList<T extends ITodo | IEvent> {
+export interface IList<T extends ListItem> {
   id: number;
   pageId: number;
-  month: number;
   title: string;
   items: T[];
 }
 
 export interface ITodoList extends IList<ITodo> {}
-
 export interface IEventList extends IList<IEvent> {}
 
 export interface IEventsByDay {

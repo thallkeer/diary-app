@@ -2,9 +2,8 @@
 
 namespace DiaryApp.Core
 {
-    public interface IMonthPageService : ICrudService<MonthPage>
+    public interface IMonthPageService : IPageService<MonthPage>
     {
-        Task<T> GetPageArea<T>(int pageID) where T : PageAreaBase;  
-        Task<MonthPage> GetMonthPageForUser(string userID, int year, int month);
+        Task<T> GetPageArea<T>(int pageID) where T : PageAreaBase;
     }
 }

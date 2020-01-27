@@ -30,8 +30,6 @@ namespace DiaryApp.Core
             modelBuilder.Entity<HabitsTracker>()
                 .HasAlternateKey(k => new
                 {
-                    k.Year,
-                    k.Month,
                     k.GoalName
                 });
         }

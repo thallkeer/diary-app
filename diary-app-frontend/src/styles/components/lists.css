@@ -4,6 +4,16 @@
   border-bottom: 1px solid black;
 }
 
+.list-header-input {
+  font-family: "AmaticSC-Regular";
+  font-weight: bold;
+  outline: none;
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+  border: none;
+}
+
 .todos {
   list-style: none;
   padding: 0;
@@ -68,5 +78,18 @@
 .month-lists-header h1 {
   font-family: "AmaticSC-Regular" !important;
   font-weight: bold !important;
+  border: none !important;
+}
+
+.more-btn {
+  background-color: rgba(135, 206, 235, 0.3) !important;
+  font-family: "AmaticSC-Regular" !important;
+  font-weight: bold !important;
+  font-size: 24px !important;
+  padding: 0 20px !important;
+}
+
+.more-btn:hover {
+  background-color: skyblue !important;
 }
 /*# sourceMappingURL=lists.css.map */

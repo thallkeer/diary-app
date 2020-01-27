@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DiaryApp.Core.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20200115172051_No-Identity")]
-    partial class NoIdentity
+    [Migration("20200122160657_AddConstraints")]
+    partial class AddConstraints
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,7 +35,8 @@ namespace DiaryApp.Core.Migrations
                     b.Property<string>("ProfileImageUrl");
 
                     b.Property<string>("Username")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.HasKey("ID");
 
@@ -49,7 +50,8 @@ namespace DiaryApp.Core.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Header")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.Property<int>("PageID");
 
@@ -66,19 +68,14 @@ namespace DiaryApp.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Color");
-
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("Description");
 
-                    b.Property<DateTime>("End");
-
-                    b.Property<bool>("FullDay");
-
                     b.Property<int>("OwnerID");
 
-                    b.Property<string>("Subject");
+                    b.Property<string>("Subject")
+                        .HasMaxLength(200);
 
                     b.Property<string>("Url");
 
@@ -101,7 +98,8 @@ namespace DiaryApp.Core.Migrations
 
                     b.Property<int>("PageID");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .HasMaxLength(100);
 
                     b.HasKey("ID");
 
@@ -123,7 +121,8 @@ namespace DiaryApp.Core.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Header")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.Property<int>("PageID");
 
@@ -141,19 +140,16 @@ namespace DiaryApp.Core.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("GoalName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.Property<int>("GoalsAreaID");
 
-                    b.Property<int>("Month");
-
                     b.Property<string>("SelectedDays");
-
-                    b.Property<int>("Year");
 
                     b.HasKey("ID");
 
-                    b.HasAlternateKey("Year", "Month", "GoalName");
+                    b.HasAlternateKey("GoalName");
 
                     b.HasIndex("GoalsAreaID");
 
@@ -167,7 +163,8 @@ namespace DiaryApp.Core.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Header")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.Property<int>("PageID");
 
@@ -209,7 +206,8 @@ namespace DiaryApp.Core.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Header")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.Property<int>("PageID");
 
@@ -230,7 +228,8 @@ namespace DiaryApp.Core.Migrations
 
                     b.Property<int>("OwnerID");
 
-                    b.Property<string>("Subject");
+                    b.Property<string>("Subject")
+                        .HasMaxLength(200);
 
                     b.HasKey("ID");
 
@@ -249,7 +248,8 @@ namespace DiaryApp.Core.Migrations
 
                     b.Property<int?>("PurchasesAreaID");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .HasMaxLength(100);
 
                     b.HasKey("ID");
 

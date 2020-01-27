@@ -19,8 +19,6 @@ export const MonthPage: React.FC = () => {
 
   const { loading, page } = pageState;
 
-  console.log(pageState);
-
   if (loading || !page) return <Loader />;
 
   return (

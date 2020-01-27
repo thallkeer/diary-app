@@ -8,7 +8,7 @@ import usePageArea from "../../hooks/usePageArea";
 
 export const IdeasArea: React.FC = () => {
   const { areaState, page } = usePageArea<IIdeasArea>("ideasArea");
-  const [events, dispatch] = useEvents(page);
+  const events = useEvents(page);
 
   if (!page || !areaState || areaState.loading || !events || events.loading)
     return <Loader />;
@@ -22,7 +22,7 @@ export const IdeasArea: React.FC = () => {
             className="mt-10 no-list-header"
             fillToNumber={6}
             eventList={events.list}
-            dispatch={dispatch}
+            dispatch={events.dispatch}
           />
         </Col>
       </Row>

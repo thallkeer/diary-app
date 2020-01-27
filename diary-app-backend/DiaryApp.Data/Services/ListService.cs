@@ -35,6 +35,11 @@ namespace DiaryApp.Data.Services
             return dbSet.FirstOrDefault(el => el.PageID == pageID);
         }
 
+        public async Task<TItem> GetItemByID(int itemID)
+        {
+            return await itemsService.GetById(itemID);
+        }
+
         public List<TList> GetListsByPageID(int pageID)
         {
             return dbSet.Where(el => el.PageID == pageID).ToList();

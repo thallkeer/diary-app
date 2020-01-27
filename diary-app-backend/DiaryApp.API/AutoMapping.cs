@@ -14,6 +14,8 @@ namespace DiaryApp.API
             CreateMap<EventModel, EventItem>();
             CreateMap<EventList, EventListModel>();
             CreateMap<TodoList, TodoListModel>();
+            CreateMap<EventListModel,EventList>();
+            CreateMap<TodoListModel,TodoList>();
             CreateMap<MainPage, MainPageModel>();
             CreateMap<MonthPage, MonthPageModel>();
             CreateMap<PurchasesArea, PurchasesAreaModel>();
@@ -23,6 +25,8 @@ namespace DiaryApp.API
             CreateMap<HabitsTracker, HabitsTrackerModel>();
             CreateMap<AppUser, UserModel>();
             CreateMap<UserModel, AppUser>();
+            CreateMap<HabitsTracker, HabitsTrackerModel>();
+            CreateMap<HabitsTrackerModel, HabitsTracker>();
         }
     }
 }

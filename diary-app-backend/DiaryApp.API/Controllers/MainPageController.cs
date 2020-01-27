@@ -3,7 +3,6 @@ using DiaryApp.Core;
 using Microsoft.AspNetCore.Mvc;
 using DiaryApp.API.Models;
 using AutoMapper;
-using DiaryApp.Data.Services;
 using Microsoft.AspNetCore.Authorization;
 
 namespace DiaryApp.API.Controllers
@@ -16,16 +15,16 @@ namespace DiaryApp.API.Controllers
         private readonly IMainPageService mainPageService;
         private readonly IMapper mapper;
 
-        public MainPageController(ApplicationContext context, IMapper mapper)
+        public MainPageController(IMainPageService mainPageService, IMapper mapper)
         {
-            this.mainPageService = new MainPageService(context);
+            this.mainPageService = mainPageService;
             this.mapper = mapper;
         }
 
         [HttpGet("{userId}/{year}/{month}")]
         public async Task<MainPageModel> GetMainPage(string userId,int year,int month)
         {
-            var mainPage = await mainPageService.GetMainPageForUser(userId, year, month);
+            var mainPage = await mainPageService.GetPageForUser(userId, year, month);
 
             var model = mapper.Map<MainPageModel>(mainPage);
 
