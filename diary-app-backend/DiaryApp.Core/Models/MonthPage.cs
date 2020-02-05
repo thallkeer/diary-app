@@ -16,21 +16,53 @@ namespace DiaryApp.Core
 
     public class PurchasesArea : PageAreaBase
     {
+        public PurchasesArea()
+        {
+
+        }
+        public PurchasesArea(PageBase page) : base(page, "Покупки")
+        {
+
+        }
+
         public virtual List<TodoList> PurchasesLists { get; set; } = new List<TodoList>();
     }
 
     public class DesiresArea : PageAreaBase
     {
+        public DesiresArea()
+        {
+
+        }
+        public DesiresArea(PageBase page) : base(page,"В этом месяце я хочу")
+        {}
+
         public virtual List<EventList> DesiresLists { get; set; } = new List<EventList>();
     }
 
     public class IdeasArea : PageAreaBase
     {
+        public IdeasArea()
+        {
+
+        }
+        public IdeasArea(PageBase page) : base(page, "Идеи этого месяца")
+        {
+
+        }
         public virtual EventList IdeasList { get; set; }
     }
 
     public class GoalsArea : PageAreaBase
     {
+        public GoalsArea()
+        {
+
+        }
+        public GoalsArea(PageBase page) : base(page, "Цели на этот месяц")
+        {
+
+        }
         public virtual List<HabitsTracker> GoalsLists { get; set; } = new List<HabitsTracker>();
     }
 }

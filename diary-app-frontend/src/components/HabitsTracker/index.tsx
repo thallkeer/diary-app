@@ -3,6 +3,7 @@ import { getRandomId } from "../../utils";
 import { IHabitsTracker, IMonthPage } from "../../models";
 import axios from "axios";
 import { config } from "../../helpers/config";
+import { IHabitTrackerContext } from "../../context";
 
 type Props = {
   tracker: IHabitsTracker;
@@ -59,7 +60,7 @@ export const HabitsTracker: React.FC<Props> = ({ tracker, page }) => {
       );
     }
 
-    if (days === 31)
+    if (days % 2 !== 0)
       daysInMonth.push(
         <div className="p-2 day-cell" key={getRandomId()}></div>
       );

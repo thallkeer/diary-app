@@ -1,6 +1,7 @@
 import React from "react";
 
 type Props = {
+  className?: string;
   value: string;
   handleBlur: (event?: React.FocusEvent<HTMLInputElement>) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -8,6 +9,7 @@ type Props = {
 
 export const ListHeaderInput: React.FC<Props> = ({
   value,
+  className,
   handleBlur,
   handleChange
 }) => {
@@ -15,9 +17,11 @@ export const ListHeaderInput: React.FC<Props> = ({
     if (event.key === "Enter") handleBlur();
   };
 
+  let cn = `list-header-input ${className || ""}`;
+
   return (
     <input
-      className="list-header-input"
+      className={cn}
       type="text"
       maxLength={50}
       value={value}

@@ -1,0 +1,846 @@
+User profile is available. Using 'C:\Users\Keer\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+Starting create-react-app server on port 57339...
+Request starting HTTP/1.1 GET http://localhost:5001/  
+Failed to determine the https port for redirect.
+> diary-app@0.1.0 start E:\repos\diaryApp\diary-app-frontend
+> react-scripts start
+
+Starting the development server...
+
+
+=============
+
+
+WARNING: You are currently running a version of TypeScript which is not officially supported by typescript-estree.
+
+You may find that it works just fine, or you may not.
+
+SUPPORTED TYPESCRIPT VERSIONS: >=3.2.1 <3.5.0
+
+YOUR TYPESCRIPT VERSION: 3.5.3
+
+Please only submit bug reports when using the officially supported version.
+
+=============
+Compiled with warnings.
+
+
+./src/components/Calendar/Calendar.tsx
+
+Request finished in 45174.2405ms 200 text/html; charset=UTF-8
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/0.chunk.js  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/bundle.js  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/main.chunk.js  
+Request finished in 303.9548ms 200 application/javascript; charset=UTF-8
+Request finished in 2073.6994ms 200 application/javascript; charset=UTF-8
+Request finished in 2073.9822ms 200 application/javascript; charset=UTF-8
+Request starting HTTP/1.1 GET http://localhost:5001/sockjs-node/info?t=1580747471793  
+Request starting HTTP/1.1 GET http://localhost:5001/manifest.json  
+Request starting HTTP/1.1 GET http://localhost:5001/favicon.ico  
+Request finished in 33.024ms 200 application/json; charset=UTF-8
+Request finished in 40.4795ms 200 application/json; charset=UTF-8
+Request starting HTTP/1.1 GET http://localhost:5001/sockjs-node/579/ns3qktcc/websocket  
+CORS policy execution successful.
+Request finished in 150.1748ms 200 image/x-icon
+Request starting HTTP/1.1 POST http://localhost:5001/sockjs-node/579/ywpxa4ls/xhr_streaming?t=1580747472757  0
+CORS policy execution successful.
+Request finished in 2129.7937ms 101 
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/bundle.js.map  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/0.chunk.js.map  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/main.chunk.js.map  
+Request finished in 2043.0198ms 200 application/json; charset=UTF-8
+Request finished in 2047.4896ms 200 application/json; charset=UTF-8
+Request finished in 2228.0342ms 200 application/json; charset=UTF-8
+User profile is available. Using 'C:\Users\Keer\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+Starting create-react-app server on port 57614...
+Request starting HTTP/1.1 GET http://localhost:5001/  
+Failed to determine the https port for redirect.
+> diary-app@0.1.0 start E:\repos\diaryApp\diary-app-frontend
+> react-scripts start
+
+Starting the development server...
+
+Request finished in 15331.18ms 0 
+
+=============
+
+Request starting HTTP/1.1 GET http://localhost:5001/  
+
+WARNING: You are currently running a version of TypeScript which is not officially supported by typescript-estree.
+
+You may find that it works just fine, or you may not.
+
+SUPPORTED TYPESCRIPT VERSIONS: >=3.2.1 <3.5.0
+
+YOUR TYPESCRIPT VERSION: 3.5.3
+
+Please only submit bug reports when using the officially supported version.
+
+=============
+Compiled with warnings.
+
+
+./src/components/Calendar/Calendar.tsx
+
+Request finished in 8165.0735ms 200 text/html; charset=UTF-8
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/0.chunk.js  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/main.chunk.js  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/bundle.js  
+Request finished in 1083.8919ms 200 application/javascript; charset=UTF-8
+Request finished in 2054.8985ms 200 application/javascript; charset=UTF-8
+Request finished in 2226.3ms 200 application/javascript; charset=UTF-8
+Request starting HTTP/1.1 GET http://localhost:5001/sockjs-node/info?t=1580747863212  
+Request starting HTTP/1.1 GET http://localhost:5001/manifest.json  
+Request finished in 20.7596ms 200 application/json; charset=UTF-8
+Request finished in 74.9676ms 304 
+Request starting HTTP/1.1 GET http://localhost:5001/sockjs-node/757/2fjckooa/websocket  
+CORS policy execution successful.
+Request starting HTTP/1.1 POST http://localhost:5001/sockjs-node/757/vjijig5g/xhr_streaming?t=1580747864353  0
+CORS policy execution successful.
+Request finished in 2109.2952ms 101 
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/bundle.js.map  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/0.chunk.js.map  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/main.chunk.js.map  
+Request finished in 2032.3969ms 200 application/json; charset=UTF-8
+Request finished in 2050.0626ms 304 
+Request finished in 2233.3882ms 200 application/json; charset=UTF-8
+User profile is available. Using 'C:\Users\Keer\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+Starting create-react-app server on port 57765...
+Request starting HTTP/1.1 GET http://localhost:5001/  
+Failed to determine the https port for redirect.
+Request starting HTTP/1.1 GET http://localhost:5001/  
+> diary-app@0.1.0 start E:\repos\diaryApp\diary-app-frontend
+> react-scripts start
+
+Starting the development server...
+
+Request finished in 5606.7882ms 0 
+
+=============
+
+
+WARNING: You are currently running a version of TypeScript which is not officially supported by typescript-estree.
+
+You may find that it works just fine, or you may not.
+
+SUPPORTED TYPESCRIPT VERSIONS: >=3.2.1 <3.5.0
+
+YOUR TYPESCRIPT VERSION: 3.5.3
+
+Please only submit bug reports when using the officially supported version.
+
+=============
+Compiled with warnings.
+
+
+./src/components/Calendar/Calendar.tsx
+
+Request finished in 10598.8855ms 200 text/html; charset=UTF-8
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/bundle.js  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/0.chunk.js  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/main.chunk.js  
+Request finished in 75.3971ms 200 application/javascript; charset=UTF-8
+Request finished in 2028.0942ms 200 application/javascript; charset=UTF-8
+Request finished in 2220.6753ms 200 application/javascript; charset=UTF-8
+Request starting HTTP/1.1 GET http://localhost:5001/sockjs-node/info?t=1580748103015  
+Request starting HTTP/1.1 GET http://localhost:5001/manifest.json  
+Request finished in 19.0285ms 200 application/json; charset=UTF-8
+Request finished in 26.7557ms 304 
+Request starting HTTP/1.1 GET http://localhost:5001/sockjs-node/117/3xg5rzc0/websocket  
+CORS policy execution successful.
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/bundle.js.map  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/0.chunk.js.map  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/main.chunk.js.map  
+Request finished in 2040.6444ms 200 application/json; charset=UTF-8
+Request finished in 2061.0214ms 304 
+Request finished in 2073.672ms 304 
+Request starting HTTP/1.1 POST http://localhost:5001/api/users/authenticate application/json;charset=UTF-8 68
+CORS policy execution successful.
+Executing endpoint 'DiaryApp.API.Controllers.UsersController.Authenticate (DiaryApp.API)'
+Route matched with {action = "Authenticate", controller = "Users"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Authenticate(DiaryApp.API.Models.UserModel) on controller DiaryApp.API.Controllers.UsersController (DiaryApp.API).
+The property 'SelectedDays' on entity type 'HabitsTracker' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Executed DbCommand (32ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (327ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (87ms) [Parameters=[@__username_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [u].[ID], [u].[PasswordHash], [u].[PasswordSalt], [u].[ProfileImageUrl], [u].[Username]
+FROM [Users] AS [u]
+WHERE [u].[Username] = @__username_0
+Executing ObjectResult, writing value of type 'System.String'.
+Executed action DiaryApp.API.Controllers.UsersController.Authenticate (DiaryApp.API) in 58725.4333ms
+Executed endpoint 'DiaryApp.API.Controllers.UsersController.Authenticate (DiaryApp.API)'
+Request finished in 58836.4997ms 400 text/plain; charset=utf-8
+Request finished in 93371.972ms 101 
+Request starting HTTP/1.1 POST http://localhost:5001/api/users/authenticate application/json;charset=UTF-8 67
+CORS policy execution successful.
+Executing endpoint 'DiaryApp.API.Controllers.UsersController.Authenticate (DiaryApp.API)'
+Route matched with {action = "Authenticate", controller = "Users"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Authenticate(DiaryApp.API.Models.UserModel) on controller DiaryApp.API.Controllers.UsersController (DiaryApp.API).
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (55ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (1ms) [Parameters=[@__username_0='?' (Size = 50)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [u].[ID], [u].[PasswordHash], [u].[PasswordSalt], [u].[ProfileImageUrl], [u].[Username]
+FROM [Users] AS [u]
+WHERE [u].[Username] = @__username_0
+Executing ObjectResult, writing value of type '<>f__AnonymousType0`3[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+Executed action DiaryApp.API.Controllers.UsersController.Authenticate (DiaryApp.API) in 12591.9028ms
+Executed endpoint 'DiaryApp.API.Controllers.UsersController.Authenticate (DiaryApp.API)'
+Request finished in 12660.2883ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:5001/api/mainpage/8185b9c2-304b-46de-9e11-db61d54df0d0/2020/2  
+Authorization failed.
+AuthenticationScheme: Bearer was challenged.
+Request finished in 46.0514ms 401 
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/0.chunk.js  
+Request finished in 2027.8896ms 304 
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/0.chunk.js.map  
+Request finished in 30.5636ms 304 
+Request starting HTTP/1.1 GET http://localhost:5001/  
+Request finished in 2026.7677ms 304 
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/bundle.js  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/0.chunk.js  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/main.chunk.js  
+Request finished in 39.3483ms 304 
+Request finished in 69.3579ms 304 
+Request finished in 80.122ms 304 
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/bundle.js.map  
+Request finished in 42.9997ms 304 
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/main.chunk.js.map  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/0.chunk.js.map  
+Request starting HTTP/1.1 GET http://localhost:5001/api/mainpage/8185b9c2-304b-46de-9e11-db61d54df0d0/2020/2  
+Request finished in 29.1411ms 304 
+Request finished in 52.3507ms 304 
+Request starting HTTP/1.1 GET http://localhost:5001/sockjs-node/info?t=1580748230999  
+Successfully validated the token.
+Request finished in 35.5231ms 200 application/json; charset=UTF-8
+Authorization was successful.
+Request starting HTTP/1.1 GET http://localhost:5001/favicon.ico  
+Request starting HTTP/1.1 GET http://localhost:5001/sockjs-node/572/y2zw3gfm/websocket  
+Executing endpoint 'DiaryApp.API.Controllers.MainPageController.GetMainPage (DiaryApp.API)'
+Request starting HTTP/1.1 GET http://localhost:5001/manifest.json  
+CORS policy execution successful.
+Route matched with {action = "GetMainPage", controller = "MainPage"}. Executing controller action with signature System.Threading.Tasks.Task`1[DiaryApp.API.Models.MainPageModel] GetMainPage(System.String, Int32, Int32) on controller DiaryApp.API.Controllers.MainPageController (DiaryApp.API).
+Authorization was successful.
+Request finished in 157.3551ms 200 image/x-icon
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (8ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (68ms) [Parameters=[@__userID_0='?' (Size = 450), @__month_1='?' (DbType = Int32), @__year_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [p].[ID], [p].[Discriminator], [p].[Month], [p].[UserID], [p].[Year], [p].[EventListID], [p].[TodoListID]
+FROM [PageBase] AS [p]
+INNER JOIN [Users] AS [u] ON [p].[UserID] = [u].[ID]
+WHERE ([p].[Discriminator] = N'MainPage') AND ((([u].[ID] = @__userID_0) AND ([p].[Month] = @__month_1)) AND ([p].[Year] = @__year_2))
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.MainPageModel'.
+Executed action DiaryApp.API.Controllers.MainPageController.GetMainPage (DiaryApp.API) in 344.6761ms
+Executed endpoint 'DiaryApp.API.Controllers.MainPageController.GetMainPage (DiaryApp.API)'
+Request finished in 695.8763ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:5001/api/events/1  
+Request starting HTTP/1.1 GET http://localhost:5001/api/todo/1  
+Successfully validated the token.
+Successfully validated the token.
+Request starting HTTP/1.1 GET http://localhost:5001/static/media/RadioVolna.6b4c8333.ttf  
+Authorization was successful.
+Authorization was successful.
+CORS policy execution successful.
+Executing endpoint 'DiaryApp.API.Controllers.EventsController.GetByPageID (DiaryApp.API)'
+Executing endpoint 'DiaryApp.API.Controllers.TodoController.GetByPageID (DiaryApp.API)'
+Request finished in 69.0295ms 200 font/ttf; charset=UTF-8
+Route matched with {action = "GetByPageID", controller = "Events"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetByPageID(Int32) on controller DiaryApp.API.Controllers.EventsController (DiaryApp.API).
+Route matched with {action = "GetByPageID", controller = "Todo"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetByPageID(Int32) on controller DiaryApp.API.Controllers.TodoController (DiaryApp.API).
+Authorization was successful.
+Authorization was successful.
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (11ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (25ms) [Parameters=[@__pageID_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[ID], [e].[DesiresAreaID], [e].[IdeasAreaID], [e].[PageID], [e].[Title]
+FROM [EventLists] AS [e]
+WHERE [e].[PageID] = @__pageID_0
+Executed DbCommand (33ms) [Parameters=[@__pageID_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [t].[ID], [t].[PageID], [t].[PurchasesAreaID], [t].[Title]
+FROM [TodoLists] AS [t]
+WHERE [t].[PageID] = @__pageID_0
+Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [e].[ID], [e].[Date], [e].[Description], [e].[OwnerID], [e].[Subject], [e].[Url]
+FROM [Events] AS [e]
+WHERE [e].[OwnerID] = @__p_0
+Executed DbCommand (13ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[ID], [t].[Done], [t].[OwnerID], [t].[Subject]
+FROM [Todos] AS [t]
+WHERE [t].[OwnerID] = @__p_0
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.TodoListModel'.
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.EventListModel'.
+Executed action DiaryApp.API.Controllers.TodoController.GetByPageID (DiaryApp.API) in 338.5913ms
+Executed action DiaryApp.API.Controllers.EventsController.GetByPageID (DiaryApp.API) in 352.5886ms
+Executed endpoint 'DiaryApp.API.Controllers.TodoController.GetByPageID (DiaryApp.API)'
+Executed endpoint 'DiaryApp.API.Controllers.EventsController.GetByPageID (DiaryApp.API)'
+Request finished in 509.7943ms 200 application/json; charset=utf-8
+Request finished in 518.3582ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:5001/static/media/AmaticSC-Regular.c4c98570.ttf  
+CORS policy execution successful.
+Request finished in 38.2488ms 200 font/ttf; charset=UTF-8
+Request starting HTTP/1.1 POST http://localhost:5001/sockjs-node/572/mvpdjxmo/xhr_streaming?t=1580748232568  0
+CORS policy execution successful.
+Request finished in 2123.5821ms 304 
+Request finished in 2191.4336ms 101 
+Request starting HTTP/1.1 GET http://localhost:5001/api/mainpage/8185b9c2-304b-46de-9e11-db61d54df0d0/2020/3  
+Successfully validated the token.
+Authorization was successful.
+Executing endpoint 'DiaryApp.API.Controllers.MainPageController.GetMainPage (DiaryApp.API)'
+Route matched with {action = "GetMainPage", controller = "MainPage"}. Executing controller action with signature System.Threading.Tasks.Task`1[DiaryApp.API.Models.MainPageModel] GetMainPage(System.String, Int32, Int32) on controller DiaryApp.API.Controllers.MainPageController (DiaryApp.API).
+Authorization was successful.
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (5ms) [Parameters=[@__userID_0='?' (Size = 450), @__month_1='?' (DbType = Int32), @__year_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [p].[ID], [p].[Discriminator], [p].[Month], [p].[UserID], [p].[Year], [p].[EventListID], [p].[TodoListID]
+FROM [PageBase] AS [p]
+INNER JOIN [Users] AS [u] ON [p].[UserID] = [u].[ID]
+WHERE ([p].[Discriminator] = N'MainPage') AND ((([u].[ID] = @__userID_0) AND ([p].[Month] = @__month_1)) AND ([p].[Year] = @__year_2))
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.MainPageModel'.
+Executed action DiaryApp.API.Controllers.MainPageController.GetMainPage (DiaryApp.API) in 115.9703ms
+Executed endpoint 'DiaryApp.API.Controllers.MainPageController.GetMainPage (DiaryApp.API)'
+Request finished in 210.6576ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:5001/api/todo/3  
+Request starting HTTP/1.1 GET http://localhost:5001/api/events/3  
+Successfully validated the token.
+Successfully validated the token.
+Authorization was successful.
+Authorization was successful.
+Executing endpoint 'DiaryApp.API.Controllers.TodoController.GetByPageID (DiaryApp.API)'
+Executing endpoint 'DiaryApp.API.Controllers.EventsController.GetByPageID (DiaryApp.API)'
+Route matched with {action = "GetByPageID", controller = "Todo"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetByPageID(Int32) on controller DiaryApp.API.Controllers.TodoController (DiaryApp.API).
+Route matched with {action = "GetByPageID", controller = "Events"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetByPageID(Int32) on controller DiaryApp.API.Controllers.EventsController (DiaryApp.API).
+Authorization was successful.
+Authorization was successful.
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (1ms) [Parameters=[@__pageID_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [t].[ID], [t].[PageID], [t].[PurchasesAreaID], [t].[Title]
+FROM [TodoLists] AS [t]
+WHERE [t].[PageID] = @__pageID_0
+Executed DbCommand (1ms) [Parameters=[@__pageID_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[ID], [e].[DesiresAreaID], [e].[IdeasAreaID], [e].[PageID], [e].[Title]
+FROM [EventLists] AS [e]
+WHERE [e].[PageID] = @__pageID_0
+Executed DbCommand (3ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[ID], [t].[Done], [t].[OwnerID], [t].[Subject]
+FROM [Todos] AS [t]
+WHERE [t].[OwnerID] = @__p_0
+Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [e].[ID], [e].[Date], [e].[Description], [e].[OwnerID], [e].[Subject], [e].[Url]
+FROM [Events] AS [e]
+WHERE [e].[OwnerID] = @__p_0
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.TodoListModel'.
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.EventListModel'.
+Executed action DiaryApp.API.Controllers.TodoController.GetByPageID (DiaryApp.API) in 142.8677ms
+Executed action DiaryApp.API.Controllers.EventsController.GetByPageID (DiaryApp.API) in 140.6097ms
+Executed endpoint 'DiaryApp.API.Controllers.TodoController.GetByPageID (DiaryApp.API)'
+Executed endpoint 'DiaryApp.API.Controllers.EventsController.GetByPageID (DiaryApp.API)'
+Request finished in 272.0767ms 200 application/json; charset=utf-8
+Request finished in 278.9641ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:5001/api/monthpage/8185b9c2-304b-46de-9e11-db61d54df0d0/2020/3  
+Successfully validated the token.
+Authorization was successful.
+Executing endpoint 'DiaryApp.API.Controllers.MonthPageController.GetMonthPage (DiaryApp.API)'
+Route matched with {action = "GetMonthPage", controller = "MonthPage"}. Executing controller action with signature System.Threading.Tasks.Task`1[DiaryApp.API.Models.MonthPageModel] GetMonthPage(System.String, Int32, Int32) on controller DiaryApp.API.Controllers.MonthPageController (DiaryApp.API).
+Authorization was successful.
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (3ms) [Parameters=[@__userID_0='?' (Size = 450), @__month_1='?' (DbType = Int32), @__year_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [p].[ID], [p].[Discriminator], [p].[Month], [p].[UserID], [p].[Year], [p].[DesiresAreaID], [p].[GoalsAreaID], [p].[IdeasAreaID], [p].[PurchasesAreaID]
+FROM [PageBase] AS [p]
+INNER JOIN [Users] AS [u] ON [p].[UserID] = [u].[ID]
+WHERE ([p].[Discriminator] = N'MonthPage') AND ((([u].[ID] = @__userID_0) AND ([p].[Month] = @__month_1)) AND ([p].[Year] = @__year_2))
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.MonthPageModel'.
+Executed action DiaryApp.API.Controllers.MonthPageController.GetMonthPage (DiaryApp.API) in 109.0083ms
+Executed endpoint 'DiaryApp.API.Controllers.MonthPageController.GetMonthPage (DiaryApp.API)'
+Request finished in 237.9182ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:5001/api/monthpage/purchasesArea/8  
+Request starting HTTP/1.1 GET http://localhost:5001/api/monthpage/desiresArea/8  
+Request starting HTTP/1.1 GET http://localhost:5001/api/monthpage/ideasArea/8  
+Successfully validated the token.
+Successfully validated the token.
+Successfully validated the token.
+Authorization was successful.
+Authorization was successful.
+Authorization was successful.
+Executing endpoint 'DiaryApp.API.Controllers.MonthPageController.GetPurchasesArea (DiaryApp.API)'
+Executing endpoint 'DiaryApp.API.Controllers.MonthPageController.GetDesiresArea (DiaryApp.API)'
+Executing endpoint 'DiaryApp.API.Controllers.MonthPageController.GetIdeasArea (DiaryApp.API)'
+Route matched with {action = "GetPurchasesArea", controller = "MonthPage"}. Executing controller action with signature System.Threading.Tasks.Task`1[DiaryApp.API.Models.PurchasesAreaModel] GetPurchasesArea(Int32) on controller DiaryApp.API.Controllers.MonthPageController (DiaryApp.API).
+Route matched with {action = "GetDesiresArea", controller = "MonthPage"}. Executing controller action with signature System.Threading.Tasks.Task`1[DiaryApp.API.Models.DesiresAreaModel] GetDesiresArea(Int32) on controller DiaryApp.API.Controllers.MonthPageController (DiaryApp.API).
+Route matched with {action = "GetIdeasArea", controller = "MonthPage"}. Executing controller action with signature System.Threading.Tasks.Task`1[DiaryApp.API.Models.IdeasAreaModel] GetIdeasArea(Int32) on controller DiaryApp.API.Controllers.MonthPageController (DiaryApp.API).
+Authorization was successful.
+Authorization was successful.
+Authorization was successful.
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Request starting HTTP/1.1 GET http://localhost:5001/api/monthpage/goalsArea/8  
+Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (3ms) [Parameters=[@__pageID_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [d].[ID], [d].[Header], [d].[PageID]
+FROM [DesiresAreas] AS [d]
+WHERE [d].[PageID] = @__pageID_0
+Successfully validated the token.
+Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Authorization was successful.
+Executed DbCommand (25ms) [Parameters=[@__pageID_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [p].[ID], [p].[Header], [p].[PageID]
+FROM [PurchasesAreas] AS [p]
+WHERE [p].[PageID] = @__pageID_0
+Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [e].[ID], [e].[DesiresAreaID], [e].[IdeasAreaID], [e].[PageID], [e].[Title]
+FROM [EventLists] AS [e]
+WHERE [e].[DesiresAreaID] = @__p_0
+Executed DbCommand (2ms) [Parameters=[@__pageID_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [i].[ID], [i].[Header], [i].[PageID]
+FROM [IdeasAreas] AS [i]
+WHERE [i].[PageID] = @__pageID_0
+Executing endpoint 'DiaryApp.API.Controllers.MonthPageController.GetGoalsArea (DiaryApp.API)'
+Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [e].[ID], [e].[Date], [e].[Description], [e].[OwnerID], [e].[Subject], [e].[Url]
+FROM [Events] AS [e]
+WHERE [e].[OwnerID] = @__p_0
+Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[ID], [t].[PageID], [t].[PurchasesAreaID], [t].[Title]
+FROM [TodoLists] AS [t]
+WHERE [t].[PurchasesAreaID] = @__p_0
+Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [e].[ID], [e].[DesiresAreaID], [e].[IdeasAreaID], [e].[PageID], [e].[Title]
+FROM [EventLists] AS [e]
+WHERE [e].[IdeasAreaID] = @__p_0
+Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [e].[ID], [e].[Date], [e].[Description], [e].[OwnerID], [e].[Subject], [e].[Url]
+FROM [Events] AS [e]
+WHERE [e].[OwnerID] = @__p_0
+Route matched with {action = "GetGoalsArea", controller = "MonthPage"}. Executing controller action with signature System.Threading.Tasks.Task`1[DiaryApp.API.Models.GoalsAreaModel] GetGoalsArea(Int32) on controller DiaryApp.API.Controllers.MonthPageController (DiaryApp.API).
+Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[ID], [t].[Done], [t].[OwnerID], [t].[Subject]
+FROM [Todos] AS [t]
+WHERE [t].[OwnerID] = @__p_0
+Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [e].[ID], [e].[Date], [e].[Description], [e].[OwnerID], [e].[Subject], [e].[Url]
+FROM [Events] AS [e]
+WHERE [e].[OwnerID] = @__p_0
+Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [e].[ID], [e].[Date], [e].[Description], [e].[OwnerID], [e].[Subject], [e].[Url]
+FROM [Events] AS [e]
+WHERE [e].[OwnerID] = @__p_0
+Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[ID], [t].[Done], [t].[OwnerID], [t].[Subject]
+FROM [Todos] AS [t]
+WHERE [t].[OwnerID] = @__p_0
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.DesiresAreaModel'.
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.IdeasAreaModel'.
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.PurchasesAreaModel'.
+Executed action DiaryApp.API.Controllers.MonthPageController.GetDesiresArea (DiaryApp.API) in 313.9289ms
+Executed action DiaryApp.API.Controllers.MonthPageController.GetIdeasArea (DiaryApp.API) in 316.7615ms
+Executed action DiaryApp.API.Controllers.MonthPageController.GetPurchasesArea (DiaryApp.API) in 342.3207ms
+Executed endpoint 'DiaryApp.API.Controllers.MonthPageController.GetDesiresArea (DiaryApp.API)'
+Executed endpoint 'DiaryApp.API.Controllers.MonthPageController.GetIdeasArea (DiaryApp.API)'
+Executed endpoint 'DiaryApp.API.Controllers.MonthPageController.GetPurchasesArea (DiaryApp.API)'
+Request finished in 522.6935ms 200 application/json; charset=utf-8
+Request finished in 528.4456ms 200 application/json; charset=utf-8
+Authorization was successful.
+Request finished in 540.597ms 200 application/json; charset=utf-8
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (8ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (16ms) [Parameters=[@__pageID_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [g].[ID], [g].[Header], [g].[PageID]
+FROM [GoalsAreas] AS [g]
+WHERE [g].[PageID] = @__pageID_0
+Executed DbCommand (13ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [h].[ID], [h].[GoalName], [h].[GoalsAreaID], [h].[SelectedDays]
+FROM [HabitsTrackers] AS [h]
+WHERE [h].[GoalsAreaID] = @__p_0
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.GoalsAreaModel'.
+Executed action DiaryApp.API.Controllers.MonthPageController.GetGoalsArea (DiaryApp.API) in 337.1974ms
+Executed endpoint 'DiaryApp.API.Controllers.MonthPageController.GetGoalsArea (DiaryApp.API)'
+Request finished in 766.0411ms 200 application/json; charset=utf-8
+Request finished in 27778.1286ms 200 application/javascript; charset=UTF-8
+User profile is available. Using 'C:\Users\Keer\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+Starting create-react-app server on port 58147...
+Request starting HTTP/1.1 GET http://localhost:5001/  
+Failed to determine the https port for redirect.
+Request starting HTTP/1.1 GET http://localhost:5001/  
+Request starting HTTP/1.1 GET http://localhost:5001/  
+> diary-app@0.1.0 start E:\repos\diaryApp\diary-app-frontend
+> react-scripts start
+
+Starting the development server...
+
+Request finished in 15363.3315ms 0 
+Request finished in 9014.0663ms 0 
+
+=============
+
+
+WARNING: You are currently running a version of TypeScript which is not officially supported by typescript-estree.
+
+You may find that it works just fine, or you may not.
+
+SUPPORTED TYPESCRIPT VERSIONS: >=3.2.1 <3.5.0
+
+YOUR TYPESCRIPT VERSION: 3.5.3
+
+Please only submit bug reports when using the officially supported version.
+
+=============
+Compiled with warnings.
+
+Request finished in 15331.0719ms 200 text/html; charset=UTF-8
+
+./src/components/Calendar/Calendar.tsx
+
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/bundle.js  
+Request finished in 32.3394ms 304 
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/0.chunk.js  
+Request starting HTTP/1.1 GET http://localhost:5001/static/js/main.chunk.js  
+Request finished in 23.5824ms 304 
+Request finished in 25.3137ms 304 
+Request starting HTTP/1.1 GET http://localhost:5001/api/mainpage/8185b9c2-304b-46de-9e11-db61d54df0d0/2020/2  
+Successfully validated the token.
+Authorization was successful.
+Executing endpoint 'DiaryApp.API.Controllers.MainPageController.GetMainPage (DiaryApp.API)'
+Route matched with {action = "GetMainPage", controller = "MainPage"}. Executing controller action with signature System.Threading.Tasks.Task`1[DiaryApp.API.Models.MainPageModel] GetMainPage(System.String, Int32, Int32) on controller DiaryApp.API.Controllers.MainPageController (DiaryApp.API).
+Authorization was successful.
+Request starting HTTP/1.1 GET http://localhost:5001/sockjs-node/info?t=1580749467014  
+Request finished in 19.4759ms 200 application/json; charset=UTF-8
+Request starting HTTP/1.1 GET http://localhost:5001/manifest.json  
+Request starting HTTP/1.1 GET http://localhost:5001/favicon.ico  
+Request starting HTTP/1.1 GET http://localhost:5001/sockjs-node/194/q4gyesfx/websocket  
+Request finished in 19.3506ms 304 
+CORS policy execution successful.
+Request finished in 57.4233ms 200 image/x-icon
+The property 'SelectedDays' on entity type 'HabitsTracker' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Executed DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (44ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (40ms) [Parameters=[@__userID_0='?' (Size = 450), @__month_1='?' (DbType = Int32), @__year_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [p].[ID], [p].[Discriminator], [p].[Month], [p].[UserID], [p].[Year], [p].[EventListID], [p].[TodoListID]
+FROM [PageBase] AS [p]
+INNER JOIN [Users] AS [u] ON [p].[UserID] = [u].[ID]
+WHERE ([p].[Discriminator] = N'MainPage') AND ((([u].[ID] = @__userID_0) AND ([p].[Month] = @__month_1)) AND ([p].[Year] = @__year_2))
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.MainPageModel'.
+Executed action DiaryApp.API.Controllers.MainPageController.GetMainPage (DiaryApp.API) in 3160.1185ms
+Executed endpoint 'DiaryApp.API.Controllers.MainPageController.GetMainPage (DiaryApp.API)'
+Request finished in 3568.0865ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:5001/api/todo/1  
+Request starting HTTP/1.1 GET http://localhost:5001/api/events/1  
+Successfully validated the token.
+Successfully validated the token.
+Authorization was successful.
+Authorization was successful.
+Executing endpoint 'DiaryApp.API.Controllers.TodoController.GetByPageID (DiaryApp.API)'
+Executing endpoint 'DiaryApp.API.Controllers.EventsController.GetByPageID (DiaryApp.API)'
+Route matched with {action = "GetByPageID", controller = "Todo"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetByPageID(Int32) on controller DiaryApp.API.Controllers.TodoController (DiaryApp.API).
+Route matched with {action = "GetByPageID", controller = "Events"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetByPageID(Int32) on controller DiaryApp.API.Controllers.EventsController (DiaryApp.API).
+Authorization was successful.
+Authorization was successful.
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Entity Framework Core 3.1.1 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: using lazy-loading proxies 
+Executed DbCommand (5ms) [Parameters=[@__pageID_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [t].[ID], [t].[PageID], [t].[PurchasesAreaID], [t].[Title]
+FROM [TodoLists] AS [t]
+WHERE [t].[PageID] = @__pageID_0
+Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+
+IF EXISTS
+    (SELECT *
+     FROM [sys].[objects] o
+     WHERE [o].[type] = 'U'
+     AND [o].[is_ms_shipped] = 0
+     AND NOT EXISTS (SELECT *
+         FROM [sys].[extended_properties] AS [ep]
+         WHERE [ep].[major_id] = [o].[object_id]
+             AND [ep].[minor_id] = 0
+             AND [ep].[class] = 1
+             AND [ep].[name] = N'microsoft_database_tools_support'
+    )
+)
+SELECT 1 ELSE SELECT 0
+Executed DbCommand (2ms) [Parameters=[@__pageID_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[ID], [e].[DesiresAreaID], [e].[IdeasAreaID], [e].[PageID], [e].[Title]
+FROM [EventLists] AS [e]
+WHERE [e].[PageID] = @__pageID_0
+Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[ID], [t].[Done], [t].[OwnerID], [t].[Subject]
+FROM [Todos] AS [t]
+WHERE [t].[OwnerID] = @__p_0
+Executed DbCommand (3ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [e].[ID], [e].[Date], [e].[Description], [e].[OwnerID], [e].[Subject], [e].[Url]
+FROM [Events] AS [e]
+WHERE [e].[OwnerID] = @__p_0
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.TodoListModel'.
+Executing ObjectResult, writing value of type 'DiaryApp.API.Models.EventListModel'.
+Executed action DiaryApp.API.Controllers.TodoController.GetByPageID (DiaryApp.API) in 201.4975ms
+Executed action DiaryApp.API.Controllers.EventsController.GetByPageID (DiaryApp.API) in 196.509ms
+Executed endpoint 'DiaryApp.API.Controllers.TodoController.GetByPageID (DiaryApp.API)'
+Executed endpoint 'DiaryApp.API.Controllers.EventsController.GetByPageID (DiaryApp.API)'
+Request finished in 301.6055ms 200 application/json; charset=utf-8
+Request finished in 307.7522ms 200 application/json; charset=utf-8
+Request starting HTTP/1.1 GET http://localhost:5001/static/media/AmaticSC-Regular.c4c98570.ttf  
+Request starting HTTP/1.1 GET http://localhost:5001/static/media/RadioVolna.6b4c8333.ttf  
+CORS policy execution successful.
+CORS policy execution successful.
+Request finished in 39.2146ms 304 
+Request finished in 46.5894ms 304 
+Request finished in 44761.8882ms 101 

@@ -8,7 +8,7 @@ namespace DiaryApp.Core
         [ScaffoldColumn(false)]
         public int ID { get; set; }
         [MaxLength(50)]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         [Required]
         public int PageID { get; set; }        
         public virtual PageBase Page { get; set; }

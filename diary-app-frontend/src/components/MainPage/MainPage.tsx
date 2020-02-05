@@ -18,7 +18,7 @@ export const MainPage: FC = () => {
     PageType.MainPage
   );
 
-  const { events, loading, page } = pageState;
+  const { loading, page } = pageState;
 
   if (loading || !page) return <Loader />;
 
@@ -31,7 +31,7 @@ export const MainPage: FC = () => {
             <ImportantEvents />
           </Col>
           <Col md="9">
-            {events ? <Calendar eventsState={events} /> : <Loader />}
+            <Calendar />
           </Col>
         </Row>
       </Container>

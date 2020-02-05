@@ -21,9 +21,7 @@ export default function App() {
 
   return (
     <Container fluid>
-      <AppContext.Provider
-        value={{ ...appState, setAppState: appState.setAppState }}
-      >
+      <AppContext.Provider value={appState}>
         <Router history={history}>
           <Switch>
             <PrivateRoute path="/" exact={true} component={MainPage} />

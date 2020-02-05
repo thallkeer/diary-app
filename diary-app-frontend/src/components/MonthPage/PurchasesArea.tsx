@@ -27,7 +27,8 @@ export const PurchasesArea: React.FC = () => {
       id: 0,
       items: [],
       pageId: page.id,
-      title: "Список покупок"
+      title: "Список покупок",
+      purchasesAreaId: areaState.area.id
     };
 
     axios.post(baseApi + "todo", todoList, { headers }).then(res => {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace DiaryApp.API
 {
@@ -7,12 +8,17 @@ namespace DiaryApp.API
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateWebHostBuilder(args)
+             //.UseKestrel()
+             .UseContentRoot(Directory.GetCurrentDirectory())
+             .UseIISIntegration()
+             .UseUrls("http://localhost:5001/")
+             .Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseDefaultServiceProvider(options => options.ValidateScopes = false);        
+               /* .UseDefaultServiceProvider(options => options.ValidateScopes = false)*/;        
     }
 }

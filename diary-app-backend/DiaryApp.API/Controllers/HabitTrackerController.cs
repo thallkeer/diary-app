@@ -21,6 +21,14 @@ namespace DiaryApp.API.Controllers
             this.mapper = mapper;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddTracker([FromBody] HabitsTrackerModel trackerModel)
+        {
+            var tracker = mapper.Map<HabitsTracker>(trackerModel);
+            await trackerService.Create(tracker);
+            return Ok(tracker.ID);
+        }
+
         [HttpPut]
         public async Task<IActionResult> UpdateTracker([FromBody] HabitsTrackerModel trackerModel)
         {

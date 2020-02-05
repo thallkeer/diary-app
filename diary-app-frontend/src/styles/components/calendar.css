@@ -111,6 +111,25 @@ tr {
   padding-top: 5px;
 }
 
+.month-name {
+  color: black;
+  margin: 0 12px;
+}
+
+.month-name:hover {
+  text-decoration: none;
+  color: black;
+}
+
+.mirrored-arrow {
+  -webkit-transform: scale(-1, 1);
+          transform: scale(-1, 1);
+}
+
+.month-nav img {
+  margin-bottom: 10px;
+}
+
 .month-popup {
   position: absolute;
   padding: 5px;

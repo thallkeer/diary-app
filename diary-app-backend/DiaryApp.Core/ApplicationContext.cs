@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
@@ -23,15 +24,16 @@ namespace DiaryApp.Core
                 v => v.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => int.Parse(val)).ToList()
                 );
 
-            modelBuilder.Entity<HabitsTracker>()
-                .Property(e => e.SelectedDays)
-                .HasConversion(converter);
+            var valueComparer = new ValueComparer<List<int>>(
+                (o1, o2) => o1.SequenceEqual(o2),
+                c => c.Aggregate(0, (a,v) => HashCode.Combine(a, v.GetHashCode())),
+                c => c.ToList()
+                );
 
             modelBuilder.Entity<HabitsTracker>()
-                .HasAlternateKey(k => new
-                {
-                    k.GoalName
-                });
+                .Property(e => e.SelectedDays)
+                .HasConversion(converter)
+                .Metadata.SetValueComparer(valueComparer);           
         }
 
         public DbSet<EventList> EventLists { get; set; }

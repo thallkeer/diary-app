@@ -1,7 +1,6 @@
 import { ActionsUnion, createAction } from "./action-helpers";
 import { IEvent, IEventList } from "../models/index";
-import axios from "axios";
-import { config } from "../helpers/config";
+import axios from "../axios/axios";
 
 export const ADD_EVENT = "ADD_EVENT";
 export const UPDATE_EVENT = "UPDATE_EVENT";
@@ -20,15 +19,13 @@ const Actions = {
     createAction(UPDATE_EVENTLIST, eventList)
 };
 
-const { baseApi, headers } = config;
-
-const baseEventsApi = `${baseApi}events/`;
+const baseEventsApi = `events/`;
 
 export const Thunks = {
   loadEventsByPageID: (pageID: number) => {
     return dispatch => {
       dispatch(Actions.startLoadEvents());
-      axios.get(baseEventsApi + pageID, { headers }).then(response => {
+      axios.get(baseEventsApi + pageID).then(response => {
         dispatch(Actions.finishLoadEvents(response.data));
       });
     };
@@ -36,7 +33,7 @@ export const Thunks = {
 
   updateEventList: (eventList: IEventList) => {
     return dispatch => {
-      axios.put(baseEventsApi, eventList, { headers });
+      axios.put(baseEventsApi, eventList);
       dispatch(Actions.updateEventList(eventList));
     };
   },
@@ -47,13 +44,13 @@ export const Thunks = {
     if (event.id === 0) {
       return dispatch => {
         axios
-          .post(baseEventsApi + "addEvent", event, { headers })
+          .post(baseEventsApi + "addEvent", event)
           .then(res => dispatch(Actions.addEvent({ ...event, id: res.data })));
       };
     } else {
       return dispatch => {
         axios
-          .put(baseEventsApi, event, { headers })
+          .put(baseEventsApi, event)
           .then(res => dispatch(Actions.updateEvent(event)));
       };
     }
@@ -62,7 +59,7 @@ export const Thunks = {
   deleteEvent: (eventID: number) => {
     return dispatch => {
       axios
-        .delete(baseEventsApi + `${eventID}`, { headers })
+        .delete(baseEventsApi + `${eventID}`)
         .then(dispatch(Actions.deleteEvent(eventID)));
     };
   }

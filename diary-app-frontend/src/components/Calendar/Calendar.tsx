@@ -1,15 +1,13 @@
-import React, { useState } from "react";
-//import moment, { Moment } from "moment";
+import React, { useState, useContext } from "react";
 import { getEventsByDay } from "../../selectors";
 import { AddEventForm } from "../Dialogs/AddEventForm";
 import { IEvent } from "../../models";
 import { Thunks as eventThunks } from "../../actions/events-actions";
-import { IEventListContext } from "../../context";
+import { MainPageContext, AppContext } from "../../context";
 import { Link } from "react-router-dom";
+import strelka from "../../images/strelochkaa.png";
 
 interface ICalendarState {
-  // momentContext: Moment;
-  //today: Moment;
   showMonthPopup: boolean;
   showYearPopup: boolean;
   showYearNav: boolean;
@@ -18,45 +16,45 @@ interface ICalendarState {
   clickedEvent?: IEvent;
 }
 
-interface ICalendarProps {
-  eventsState: IEventListContext;
-}
-
-export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
+export const Calendar: React.FC = () => {
   const [state, setState] = useState<ICalendarState>({
-    // today: moment(),
-    // momentContext: moment(),
     showMonthPopup: false,
     showYearPopup: false,
     showYearNav: false,
     showAddEventForm: false
   });
 
-  // const weekdays = (): string[] => moment.weekdays();
-  // const weekdaysShort = (): string[] => moment.weekdaysShort();
-  // const months = (): string[] => moment.months();
-  // const year = (): string => state.momentContext.format("Y");
-  // const month = (): string => state.momentContext.format("MMMM");
+  const appState = useContext(AppContext);
+  const { year, month, setAppState } = appState;
+  const pageState = useContext(MainPageContext);
+  const { events } = pageState;
 
   const getDaysInMonth = (): number => {
-    var curDate = new Date();
-    return new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0).getDate();
+    let curDate = currentDate();
+    let newDate = new Date(curDate.getFullYear(), curDate.getMonth(), 0);
+    return newDate.getDate();
   };
+
+  const currentDate = () => new Date(year, month);
 
   const currentDay = (): number => new Date().getDate();
 
   const getFirstDayOfMonth = (): number => {
-    let curDate = new Date();
+    let curDate = currentDate();
 
-    let fDay = new Date(curDate.getFullYear(), curDate.getMonth(), 1).getDay();
+    let fDay = new Date(
+      curDate.getFullYear(),
+      curDate.getMonth() - 1,
+      1
+    ).getDay();
     return fDay === 0 ? 7 : fDay;
   };
 
   const addEvent = (newEvent: IEvent) => {
-    eventsState.dispatch(
+    events.dispatch(
       eventThunks.addOrUpdateEvent({
         ...newEvent,
-        ownerID: eventsState.list.id
+        ownerID: events.list.id
       })
     );
   };
@@ -109,25 +107,29 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
 
   const getDays = (): any[] => {
     let daysInMonth = [];
-    let eventsByDay = getEventsByDay(eventsState);
+    let eventsByDay: Map<number, IEvent[]> = getEventsByDay(events);
+    let curDay = currentDay();
 
+    let isRealCurrentMonth =
+      currentDate().getMonth() === new Date().getMonth() + 1;
     for (let d = 1; d <= getDaysInMonth(); d++) {
-      let className = d === currentDay() ? "day current-day" : "day";
+      let className =
+        isRealCurrentMonth && d === curDay ? "day current-day" : "day";
 
-      let curEvents = eventsByDay.filter(ev => ev.day === d);
+      let curEvents: IEvent[] = eventsByDay[d] || [];
 
       let curEventClass = curEvents.length ? "day-with-event" : "no-events-day";
 
       daysInMonth.push(
         <td key={d} className={className} onClick={e => onDayClick(e, d)}>
           <div className="day-span">{d}</div>
-          {curEvents.map(eventByDay => (
+          {curEvents.map(event => (
             <div
-              key={eventByDay.event.id}
+              key={event.id}
               className={`mt-5 ${curEventClass}`}
-              onClick={e => onEventClick(e, d, eventByDay.event)}
+              onClick={e => onEventClick(e, d, event)}
             >
-              {eventByDay.event.subject}
+              {event.subject}
             </div>
           ))}
         </td>
@@ -162,8 +164,6 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
   };
 
   const showModal = (day: number, event?: IEvent) => {
-    console.log(day, event);
-
     setState({
       ...state,
       showAddEventForm: true,
@@ -186,15 +186,45 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
   };
 
   const getMonthName = (): string => {
-    let date = new Date();
+    let date = new Date(year, month - 1);
     let stringMonth = date.toLocaleString("ru", { month: "long" });
     return stringMonth[0].toUpperCase() + stringMonth.slice(1);
+  };
+
+  const changeMonth = (increment: boolean) => {
+    let newMonth = increment ? month + 1 : month - 1;
+
+    setAppState({
+      ...appState,
+      month: newMonth
+    });
+  };
+
+  const setNextMonth = () => {
+    changeMonth(true);
+  };
+
+  const setPrevMonth = () => {
+    changeMonth(false);
   };
 
   return (
     <div className="calendar-wrapper">
       <h1 className="text-center calendar-header">
-        {<Link to="/month">{getMonthName()}</Link>}
+        <span className="month-nav" onClick={setPrevMonth}>
+          <img
+            src={strelka}
+            className="mirrored-arrow"
+            width="30"
+            height="30"
+          />
+        </span>
+        <Link className="month-name" to="/month">
+          {getMonthName()}
+        </Link>
+        <span className="month-nav" onClick={setNextMonth}>
+          <img src={strelka} width="30" height="30" />
+        </span>
       </h1>
       <div className="calendar-container">
         <table className="calendar">
@@ -216,88 +246,5 @@ export const Calendar: React.FC<ICalendarProps> = ({ eventsState }) => {
     </div>
   );
 };
-
-// const setMonth = (month: string) => {
-//   let monthNumber = this.months.indexOf(month);
-//   let dateContext = Object.assign({}, this.state.momentContext);
-//   dateContext = moment(dateContext).set("month", monthNumber);
-//   this.setState({
-//     momentContext: dateContext
-//   });
-// };
-
-// nextMonth = () => {
-//   let dateContext = Object.assign({}, this.state.momentContext);
-//   dateContext = moment(dateContext).add(1, "month");
-//   this.setState({
-//     momentContext: dateContext
-//   });
-// };
-
-// prevMonth = () => {
-//   let dateContext = Object.assign({}, this.state.momentContext);
-//   dateContext = moment(dateContext).subtract(1, "month");
-//   this.setState({
-//     momentContext: dateContext
-//   });
-// };
-
-// SelectList = ({ months }) => {
-//   let popup = months.map(month => {
-//     return (
-//       <div key={month}>
-//         <a href="#" onClick={e => this.setMonth(month)}>
-//           {month}
-//         </a>
-//       </div>
-//     );
-//   });
-
-//   return <div className="month-popup">{popup}</div>;
-// };
-
-// onChangeMonth = (month: string) => {
-//   this.setState({
-//     showMonthPopup: !this.state.showMonthPopup
-//   });
-// };
-
-// MonthNav = () => {
-//   return (
-//     <span
-//       className="label-month"
-//       onClick={() => {
-//         this.onChangeMonth(this.month);
-//       }}
-//     >
-//       {this.month}
-//       {this.state.showMonthPopup && <this.SelectList months={this.months} />}
-//     </span>
-//   );
-// };
-
-{
-  /* <thead>
-              <tr className="calendar-header">
-                <td colSpan={5}>
-                  <this.MonthNav /> <this.YearNav />
-                </td>
-                <td colSpan={2} className="nav-month">
-                  <i
-                    className="prev fa fa-fw fa-chevron-left"
-                    onClick={e => {
-                      this.prevMonth();
-                    }}
-                  />
-                  <i
-                    className="prev fa fa-fw fa-chevron-right"
-                    onClick={e => {
-                      this.nextMonth();
-                    }}
-                  />
-                </td>
-              </tr>
-            </thead> */
-}
 
 export default Calendar;

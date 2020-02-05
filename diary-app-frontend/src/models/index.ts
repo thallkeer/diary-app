@@ -5,13 +5,10 @@ export interface IList<T extends ListItem> {
   items: T[];
 }
 
-export interface ITodoList extends IList<ITodo> {}
-export interface IEventList extends IList<IEvent> {}
-
-export interface IEventsByDay {
-  day: number;
-  event: IEvent;
+export interface ITodoList extends IList<ITodo> {
+  purchasesAreaId?: number;
 }
+export interface IEventList extends IList<IEvent> {}
 
 export interface IListItem {
   id: number;
@@ -34,6 +31,7 @@ export type ListItem = ITodo | IEvent;
 export interface IHabitsTracker {
   id: number;
   goalName: string;
+  goalsAreaId: number;
   selectedDays: number[];
 }
 

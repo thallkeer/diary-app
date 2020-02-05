@@ -3,21 +3,29 @@ using DiaryApp.Core;
 using DiaryApp.Data.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IO;
 using System.Text;
 
 namespace DiaryApp.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        readonly IWebHostEnvironment env;
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            this.env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -32,15 +40,31 @@ namespace DiaryApp.API
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddControllers();
+
+            services.AddMvc(options => options.EnableEndpointRouting = false)
+                    .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
+
+            services.AddSpaStaticFiles(configuration =>
+            configuration.RootPath = "diary-app-frontend/build"
+            );
+
             services.AddCors();
 
-            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
-            
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddDbContext<ApplicationContext>(options =>
-                options.UseLazyLoadingProxies()
-                       .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            if (env.IsDevelopment())
+            {
+                services.AddDbContext<ApplicationContext>(options =>
+                    options.UseLazyLoadingProxies()
+                           .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            }
+            else
+            {
+                services.AddDbContext<ApplicationContext>(options =>
+                 options.UseLazyLoadingProxies()
+                        .UseNpgsql(Configuration.GetConnectionString("ProdConnection")));
+            }
 
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -76,16 +100,19 @@ namespace DiaryApp.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.Use(async (ctx, next) =>
-            {
-                await next();
-                if (ctx.Response.StatusCode == 204)
-                {
-                    ctx.Response.ContentLength = 0;
-                }
-            });
+            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "logger.txt"));
+            var logger = loggerFactory.CreateLogger("FileLogger");
+
+            //app.Use(async (ctx, next) =>
+            //{
+            //    await next();
+            //    if (ctx.Response.StatusCode == 204)
+            //    {
+            //        ctx.Response.ContentLength = 0;
+            //    }
+            //});            
 
             if (env.IsDevelopment())
             {
@@ -93,21 +120,65 @@ namespace DiaryApp.API
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseExceptionHandler("/error");
                 app.UseHsts();
             }
 
-            SampleData.Initialize(app.ApplicationServices);
+            app.UseStatusCodePagesWithReExecute("/error", "?code={0}");
+
+            app.Map("/error", ap => ap.Run(async context =>
+            {               
+                logger.LogError($"{DateTime.Now} Error: {context.Request.Path} {context.Request.Query["code"]}");
+                await context.Response.WriteAsync($"Err: {context.Request.Query["code"]}");
+            }));
+
+            //SampleData.Initialize(app.ApplicationServices);
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All
+            });
+
+            app.UseRouting();
+
 
             app.UseCors(builder =>
                                     builder.AllowAnyOrigin()
                                            .AllowAnyHeader()
                                            .AllowAnyMethod());
 
-            app.UseAuthentication();          
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseHttpsRedirection();
-            app.UseMvc();            
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
+            //app.UseMvc();
+            app.UseSpa(spa =>
+            {
+                if (env.IsDevelopment())
+                {
+                    spa.Options.SourcePath = @"E:\repos\diaryApp\diary-app-frontend";
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+                else
+                {
+                    spa.Options.SourcePath = Path.Join(env.ContentRootPath, "diary-app-frontend");
+                        //spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                    }
+            });
+
+            app.Run(async (context) =>
+            {
+                logger.LogInformation($"Processing request {context.Request.Path}");
+                //await context.Response.WriteAsync("TEST");
+            });
         }
     }
 }

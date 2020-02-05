@@ -14,6 +14,6 @@ export const getHeader = () => {
 };
 
 export const config = {
-  baseApi: "https://localhost:44320/api/",
+  baseApi: process.env.REACT_APP_API_URL + "/api/",
   headers: getHeader()
 };

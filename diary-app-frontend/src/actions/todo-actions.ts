@@ -1,7 +1,6 @@
 import { ActionsUnion, createAction } from "./action-helpers";
 import { ITodo, ITodoList } from "../models";
-import axios from "axios";
-import { config } from "../helpers/config";
+import axios from "../axios/axios";
 
 export const ADD_TODO = "ADD_TODO";
 export const TOGGLE_TODO = "TOGGLE_TODO";
@@ -22,15 +21,13 @@ const Actions = {
     createAction(UPDATE_TODOLIST, todoList)
 };
 
-const { baseApi, headers } = config;
-
-const baseTodoApi: string = `${baseApi}todo/`;
+const baseTodoApi: string = `todo/`;
 
 export const Thunks = {
   loadTodos: (pageID: number) => {
     return dispatch => {
       dispatch(Actions.startLoadTodos());
-      axios.get(baseTodoApi + pageID, { headers }).then(response => {
+      axios.get(baseTodoApi + pageID).then(response => {
         dispatch(Actions.finishLoadTodos(response.data));
       });
     };
@@ -38,7 +35,7 @@ export const Thunks = {
 
   updateTodoList: (todoList: ITodoList) => {
     return dispatch => {
-      axios.put(baseTodoApi, todoList, { headers });
+      axios.put(baseTodoApi, todoList);
       dispatch(Actions.updateTodoList(todoList));
     };
   },
@@ -46,7 +43,7 @@ export const Thunks = {
   toggleTodo: (todoId: number) => {
     return dispatch => {
       axios
-        .put(`${baseTodoApi}toggle/${todoId}`, null, { headers })
+        .put(`${baseTodoApi}toggle/${todoId}`, null)
         .then(dispatch(Actions.toggleTodo(todoId)));
     };
   },
@@ -54,7 +51,7 @@ export const Thunks = {
   deleteTodo: (todoId: number) => {
     return dispatch => {
       axios
-        .delete(baseTodoApi + `${todoId}`, { headers })
+        .delete(baseTodoApi + `${todoId}`)
         .then(dispatch(Actions.deleteTodo(todoId)));
     };
   },
@@ -66,12 +63,12 @@ export const Thunks = {
       console.log("before add or update ", todo);
 
       if (todo.id === 0) {
-        axios.post(baseTodoApi + "addTodo", todo, { headers }).then(res => {
+        axios.post(baseTodoApi + "addTodo", todo).then(res => {
           console.log("add ", res.data);
           dispatch(Actions.addTodo(res.data));
         });
       } else {
-        axios.put(baseTodoApi + "updateTodo", todo, { headers }).then(res => {
+        axios.put(baseTodoApi + "updateTodo", todo).then(res => {
           console.log("update ", res.data);
           dispatch(Actions.updateTodo(todo));
         });

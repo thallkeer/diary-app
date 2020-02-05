@@ -1,6 +1,5 @@
 ﻿using DiaryApp.Core;
 using DiaryApp.Data.Services;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ namespace DiaryApp.API
 {
     public class SampleData
     {
-        public static async void Initialize(IServiceProvider serviceProvider)
+        public static void Initialize(IServiceProvider serviceProvider)
         {
             //using (var context = serviceProvider.GetRequiredService<ApplicationContext>())
             //{

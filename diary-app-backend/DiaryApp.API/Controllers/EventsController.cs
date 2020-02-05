@@ -3,7 +3,6 @@ using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
 using Microsoft.AspNetCore.Mvc;
-using DiaryApp.Data.Services;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 

@@ -63,7 +63,6 @@ export function useTodos(page: IPage, initList?: ITodoList): ITodoListContext {
   });
 
   useEffect(() => {
-    console.log("useTodos effect");
     page && !initList && state.dispatch(todoThunks.loadTodos(page.id));
   }, [page, initList]);
 
@@ -74,17 +73,27 @@ export function useEvents(
   page: IPage,
   initList?: IEventList
 ): IEventListContext {
+  let evList: IEventList = {
+    id: 324324324,
+    items: [],
+    pageId: 5656,
+    title: "kfhdsjkhfkjdshfkjds"
+  };
+
   const [state, _dispatch] = useReducer(eventsReducer, {
-    list: initList || null,
     loading: false,
-    dispatch: (action: EventThunks) => action(_dispatch)
+    dispatch: (action: EventThunks) => action(_dispatch),
+    list: initList
   });
 
   useEffect(() => {
-    page &&
-      !initList &&
+    if (page && !initList) {
+      console.log("effect");
       state.dispatch(eventThunks.loadEventsByPageID(page.id));
+    }
   }, [page, initList]);
+
+  console.log("state-", state);
 
   return state;
 }

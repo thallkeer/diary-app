@@ -48,6 +48,7 @@ export const eventsReducer = (
         }
       };
     default:
+      console.log("reducer", state);
       return state;
   }
 };

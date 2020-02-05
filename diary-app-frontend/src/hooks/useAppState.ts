@@ -4,8 +4,8 @@ import { IGlobalContext } from "../context";
 export const useAppState = (initialState: IGlobalContext) => {
   const [appState, _setAppState] = useState(initialState);
 
-  const setAppState = useCallback((appState: IGlobalContext): void => {
-    _setAppState({ ...appState });
+  const setAppState = useCallback((newState: IGlobalContext): void => {
+    _setAppState({ ...newState });
   }, []);
 
   return {
