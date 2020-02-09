@@ -24,7 +24,7 @@ const Actions = {
 const baseTodoApi: string = `todo/`;
 
 export const Thunks = {
-  loadTodos: (pageID: number) => {
+  loadTodosByPageID: (pageID: number) => {
     return dispatch => {
       dispatch(Actions.startLoadTodos());
       axios.get(baseTodoApi + pageID).then(response => {
@@ -60,16 +60,12 @@ export const Thunks = {
     return dispatch => {
       if (!todo) return;
 
-      console.log("before add or update ", todo);
-
       if (todo.id === 0) {
         axios.post(baseTodoApi + "addTodo", todo).then(res => {
-          console.log("add ", res.data);
           dispatch(Actions.addTodo(res.data));
         });
       } else {
         axios.put(baseTodoApi + "updateTodo", todo).then(res => {
-          console.log("update ", res.data);
           dispatch(Actions.updateTodo(todo));
         });
       }

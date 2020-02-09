@@ -13,7 +13,7 @@ namespace DiaryApp.Core
         [Range(1, 12)]
         public int Month { get; set; }
         [Required]
-        public string UserID { get; set; }
+        public int UserID { get; set; }
         public virtual AppUser User { get; set; }
     }
 }

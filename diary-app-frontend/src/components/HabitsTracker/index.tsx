@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { getRandomId } from "../../utils";
 import { IHabitsTracker, IMonthPage } from "../../models";
-import axios from "axios";
-import { config } from "../../helpers/config";
-import { IHabitTrackerContext } from "../../context";
+import axios from "../../axios/axios";
 
 type Props = {
   tracker: IHabitsTracker;
@@ -12,12 +10,9 @@ type Props = {
 
 export const HabitsTracker: React.FC<Props> = ({ tracker, page }) => {
   const [trackerState, setTrackerState] = useState<IHabitsTracker>(tracker);
-  const { baseApi, headers } = config;
 
   const updateTracker = (data: IHabitsTracker) => {
-    axios
-      .put(baseApi + "habitTracker", data, { headers })
-      .then(res => setTrackerState({ ...data }));
+    axios.put("habitTracker", data).then(res => setTrackerState({ ...data }));
   };
 
   const onDayClick = (e: React.MouseEvent<HTMLElement>, day: number) => {

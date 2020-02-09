@@ -3,10 +3,10 @@ import { IUser } from "../models";
 import { config } from "../helpers/config";
 import history from "../components/history";
 
-const { baseApi, headers } = config;
+const { baseApi } = config;
 
 interface ILoginResponse {
-  id: string;
+  id: number;
   userName: string;
   token: string;
 }
@@ -17,11 +17,9 @@ export const logoff = () => {
 };
 
 export const login = (user: IUser) => {
-  return axios.post<ILoginResponse>(`${baseApi}users/authenticate`, user, {
-    headers
-  });
+  return axios.post<ILoginResponse>(`${baseApi}users/authenticate`, user);
 };
 
 export const register = (user: IUser) => {
-  return axios.post(`${baseApi}users/register`, user, { headers });
+  return axios.post<ILoginResponse>(`${baseApi}users/register`, user);
 };

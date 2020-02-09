@@ -11,7 +11,7 @@ namespace DiaryApp.Data.Services
         {
         }
 
-        public async Task<T> GetPageForUser(string userID, int year, int month)
+        public async Task<T> GetPageForUser(int userID, int year, int month)
         {
             var page = await this.dbSet.FirstOrDefaultAsync
                (mp => mp.User.ID == userID && mp.Month == month && mp.Year == year);

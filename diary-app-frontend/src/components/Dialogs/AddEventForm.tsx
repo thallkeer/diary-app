@@ -40,12 +40,16 @@ export const AddEventForm: React.FC<IFormProps> = ({
     return date;
   };
 
-  const [formState, setFormState] = useState<IFormState | null>({
-    item: {
-      ...getEmptyEvent(),
-      date: getDateByDay(day)
-    }
-  });
+  const initialItem: IEvent = event || {
+    ...getEmptyEvent(),
+    date: getDateByDay(day)
+  };
+
+  const initialState: IFormState = {
+    item: initialItem
+  };
+
+  const [formState, setFormState] = useState<IFormState | null>(initialState);
 
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.persist();

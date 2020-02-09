@@ -1,12 +1,26 @@
+$list-input-font: "AmaticSC-Regular";
+$list-header-font: "RadioVolna";
+$main-lightblue-color: lightblue;
+
+%hidden-btn {
+  visibility: hidden;
+  position: absolute;
+  font-size: 14px;
+}
+
+%amatic-bold {
+  font-family: "AmaticSC-Regular" !important;
+  font-weight: bold !important;
+}
+
 .todo-list-header {
   font-size: 24px !important;
-  font-family: "RadioVolna";
+  font-family: $list-header-font;
   border-bottom: 1px solid black;
 }
 
 .list-header-input {
-  font-family: "AmaticSC-Regular";
-  font-weight: bold;
+  @extend %amatic-bold;
   outline: none;
   text-align: center;
   width: 100%;
@@ -30,12 +44,11 @@
 }
 
 .list-item-input {
+  @extend %amatic-bold;
   cursor: pointer;
   outline: none;
   border: none;
   font-size: 18px;
-  font-family: "AmaticSC-Regular";
-  font-weight: bold;
   padding-left: 30px;
   border-bottom: 1px solid black;
   width: 100%;
@@ -51,20 +64,23 @@
 
 .list-item {
   &:hover {
-    span {
+    span,
+    a {
       visibility: visible;
     }
     cursor: pointer;
   }
 }
 
+.list-item-link {
+  @extend %hidden-btn;
+  left: 88%;
+}
+
 .delete-list-item-btn {
-  visibility: hidden;
-  position: absolute;
-  left: 90%;
-  // border-radius: 50% !important;
-  color: lightblue !important;
-  font-size: 14px;
+  @extend %hidden-btn;
+  left: 93%;
+  color: $main-lightblue-color !important;
 }
 
 .no-list-header {
@@ -75,16 +91,14 @@
 
 .month-lists-header {
   h1 {
-    font-family: "AmaticSC-Regular" !important;
-    font-weight: bold !important;
+    @extend %amatic-bold;
     border: none !important;
   }
 }
 
 .more-btn {
+  @extend %amatic-bold;
   background-color: rgba(135, 206, 235, 0.3) !important;
-  font-family: "AmaticSC-Regular" !important;
-  font-weight: bold !important;
   font-size: 24px !important;
   padding: 0 20px !important;
   &:hover {

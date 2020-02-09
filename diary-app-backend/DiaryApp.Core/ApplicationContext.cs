@@ -33,7 +33,7 @@ namespace DiaryApp.Core
             modelBuilder.Entity<HabitsTracker>()
                 .Property(e => e.SelectedDays)
                 .HasConversion(converter)
-                .Metadata.SetValueComparer(valueComparer);           
+                .Metadata.SetValueComparer(valueComparer);
         }
 
         public DbSet<EventList> EventLists { get; set; }

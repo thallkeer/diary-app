@@ -5,6 +5,7 @@ import { ITodo, ITodoList } from "../../models";
 import { DeleteBtn } from "./DeleteBtn";
 import ListHeaderInput from "./ListHeaderInput";
 import { useTodoList } from "../../hooks/useLists";
+import { FaLink } from "react-icons/fa";
 
 type TodoListProps = {
   className?: string;
@@ -26,7 +27,7 @@ export const TodoList: React.FC<TodoListProps> = ({
     updateTodoList
   } = todoThunks;
 
-  const { title, setTitle, todos } = useTodoList(todoList, fillToNumber);
+  const [title, setTitle, todos] = useTodoList(todoList, fillToNumber);
 
   const toggleTodoItem = (todoId: number) => {
     todoId !== 0 && dispatch(toggleTodo(todoId));
@@ -68,14 +69,26 @@ export const TodoList: React.FC<TodoListProps> = ({
       </h1>
       <ul className="todos">
         {todos.map((todo, i) => (
-          <li key={todo.id !== 0 ? todo.id : i * 80} className="list-item">
+          <li key={todo.id !== 0 ? todo.id : i * -80} className="list-item">
             <TodoInput
               updateItem={updateTodo}
               todo={todo}
               toggleTodo={toggleTodoItem}
             />
             {todo.id !== 0 && (
-              <DeleteBtn onDelete={() => deleteTodoItem(todo.id)} />
+              <>
+                {todo.url && (
+                  <a
+                    className="list-item-link"
+                    href={todo.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FaLink style={{ color: "lightblue" }}></FaLink>
+                  </a>
+                )}
+                <DeleteBtn onDelete={() => deleteTodoItem(todo.id)} />
+              </>
             )}
           </li>
         ))}

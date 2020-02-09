@@ -61,4 +61,5 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 /diary-app-frontend/node_modules
-.appsettings.json
+appsettings.json
+logger.txt

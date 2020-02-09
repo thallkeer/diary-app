@@ -172,15 +172,6 @@ export const Calendar: React.FC = () => {
     });
   };
 
-  const hideModal = () => {
-    setState({
-      ...state,
-      showAddEventForm: false,
-      clickedDay: null,
-      clickedEvent: null
-    });
-  };
-
   const toggle = () => {
     setState({ ...state, showAddEventForm: !state.showAddEventForm });
   };
@@ -214,6 +205,7 @@ export const Calendar: React.FC = () => {
         <span className="month-nav" onClick={setPrevMonth}>
           <img
             src={strelka}
+            alt="previous month"
             className="mirrored-arrow"
             width="30"
             height="30"
@@ -223,7 +215,7 @@ export const Calendar: React.FC = () => {
           {getMonthName()}
         </Link>
         <span className="month-nav" onClick={setNextMonth}>
-          <img src={strelka} width="30" height="30" />
+          <img src={strelka} alt="next month" width="30" height="30" />
         </span>
       </h1>
       <div className="calendar-container">

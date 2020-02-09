@@ -121,6 +121,14 @@ tr {
   color: black;
 }
 
+.to-calendar-link {
+  font-family: "RadioVolna";
+  font-size: 40px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 .mirrored-arrow {
   -webkit-transform: scale(-1, 1);
           transform: scale(-1, 1);

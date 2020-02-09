@@ -5,6 +5,7 @@ export interface IList<T extends ListItem> {
   items: T[];
 }
 
+export type List = ITodoList | IEventList;
 export interface ITodoList extends IList<ITodo> {
   purchasesAreaId?: number;
 }
@@ -13,6 +14,7 @@ export interface IEventList extends IList<IEvent> {}
 export interface IListItem {
   id: number;
   subject: string;
+  url?: string;
   ownerID?: number;
 }
 
@@ -36,7 +38,7 @@ export interface IHabitsTracker {
 }
 
 export interface IUser {
-  id: string;
+  id: number;
   userName: string;
   password?: string;
   token?: string;

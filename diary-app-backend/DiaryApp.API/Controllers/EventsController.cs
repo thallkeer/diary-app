@@ -5,31 +5,40 @@ using DiaryApp.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace DiaryApp.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class EventsController : ControllerBase
+    public class EventsController : AppBaseController<EventsController>
     {
         private readonly IEventService eventService;
-        private readonly IMapper mapper;
 
-        public EventsController(IEventService eventService, IMapper mapper)
+        public EventsController(IEventService eventService, IMapper mapper, ILoggerFactory loggerFactory)
+            : base(mapper,loggerFactory)
         {
             this.eventService = eventService;
-            this.mapper = mapper;
         }
 
         [HttpGet("{pageID}")]
         public IActionResult GetByPageID(int pageID)
         {
-            var eventList = eventService.GetByPageID(pageID);
-            if (eventList == null)
-                return NotFound();
-            var model = mapper.Map<EventListModel>(eventList);
-            return Ok(model);
+            try
+            {
+                var eventList = eventService.GetByPageID(pageID);
+                if (eventList == null)
+                    return NotFound();
+                var model = mapper.Map<EventListModel>(eventList);
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                logger.LogErrorWithDate(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("all/{pageID}")]

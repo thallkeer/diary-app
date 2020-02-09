@@ -26,7 +26,6 @@ export default function App() {
           <Switch>
             <PrivateRoute path="/" exact={true} component={MainPage} />
             <Route path="/login" component={Login} />
-            {/* <Route path="/register" component={RegisterPage} /> */}
             <PrivateRoute path="/main" exact={true} component={MainPage} />
             <PrivateRoute path="/month" exact={true} component={MonthPage} />
             <Route component={NotFound} />

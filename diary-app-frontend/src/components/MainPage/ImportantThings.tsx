@@ -8,7 +8,12 @@ export const ImportantThings = () => {
   const { page } = useContext(MainPageContext);
   const state = useTodos(page);
 
-  if (state.loading || !state.list) return <Loader />;
+  if (state.loading || !state.list)
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
 
   return (
     <TodoList

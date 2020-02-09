@@ -14,7 +14,9 @@ export default function usePageArea<T extends IPageArea>(areaName: string) {
 
   useEffect(() => {
     if (page) {
-      setAreaState({ ...areaState, loading: true });
+      setAreaState(prevState => {
+        return { ...prevState, loading: true };
+      });
       axios
         .get(`monthpage/${areaName}/${page.id}`)
         .then(res => setAreaState({ area: res.data, loading: false }))

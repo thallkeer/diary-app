@@ -7,8 +7,7 @@ import usePageArea from "../../hooks/usePageArea";
 import { useTodos } from "../../hooks/useLists";
 import { AddListBtn } from "../AddListBtn";
 import { getRandomId } from "../../utils";
-import axios from "axios";
-import { config } from "../../helpers/config";
+import axios from "../../axios/axios";
 
 type ListPair = {
   list1: ITodoList;
@@ -20,8 +19,6 @@ export const PurchasesArea: React.FC = () => {
     "purchasesArea"
   );
 
-  const { baseApi, headers } = config;
-
   const addPurchaseList = () => {
     const todoList: ITodoList = {
       id: 0,
@@ -31,7 +28,7 @@ export const PurchasesArea: React.FC = () => {
       purchasesAreaId: areaState.area.id
     };
 
-    axios.post(baseApi + "todo", todoList, { headers }).then(res => {
+    axios.post("todo", todoList).then(res => {
       todoList.id = res.data;
       setAreaState({
         ...areaState,

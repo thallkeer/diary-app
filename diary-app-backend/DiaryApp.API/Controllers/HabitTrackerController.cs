@@ -3,6 +3,7 @@ using DiaryApp.API.Models;
 using DiaryApp.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace DiaryApp.API.Controllers
@@ -10,15 +11,14 @@ namespace DiaryApp.API.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class HabitTrackerController : ControllerBase
+    public class HabitTrackerController : AppBaseController<HabitTrackerController>
     {
         private readonly IHabitTrackerService trackerService;
-        private readonly IMapper mapper;
 
-        public HabitTrackerController(IHabitTrackerService habitTrackerService, IMapper mapper)
+        public HabitTrackerController(IHabitTrackerService habitTrackerService, IMapper mapper, ILoggerFactory loggerFactory)
+            : base(mapper,loggerFactory)
         {
             this.trackerService = habitTrackerService;
-            this.mapper = mapper;
         }
 
         [HttpPost]

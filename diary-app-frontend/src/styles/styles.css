@@ -178,6 +178,14 @@ tr {
   color: black;
 }
 
+.to-calendar-link {
+  font-family: "RadioVolna";
+  font-size: 40px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 .mirrored-arrow {
   -webkit-transform: scale(-1, 1);
           transform: scale(-1, 1);
@@ -185,10 +193,6 @@ tr {
 
 .month-nav img {
   margin-bottom: 10px;
-}
-
-.month-nav img:hover {
-  color: black;
 }
 
 .month-popup {
@@ -222,6 +226,17 @@ tr {
   cursor: pointer;
 }
 
+.list-item-link, .delete-list-item-btn {
+  visibility: hidden;
+  position: absolute;
+  font-size: 14px;
+}
+
+.list-header-input, .list-item-input, .month-lists-header h1, .more-btn {
+  font-family: "AmaticSC-Regular" !important;
+  font-weight: bold !important;
+}
+
 .todo-list-header {
   font-size: 24px !important;
   font-family: "RadioVolna";
@@ -229,8 +244,6 @@ tr {
 }
 
 .list-header-input {
-  font-family: "AmaticSC-Regular";
-  font-weight: bold;
   outline: none;
   text-align: center;
   width: 100%;
@@ -264,8 +277,6 @@ tr {
   outline: none;
   border: none;
   font-size: 18px;
-  font-family: "AmaticSC-Regular";
-  font-weight: bold;
   padding-left: 30px;
   border-bottom: 1px solid black;
   width: 100%;
@@ -283,16 +294,18 @@ tr {
   cursor: pointer;
 }
 
-.list-item:hover span {
+.list-item:hover span,
+.list-item:hover a {
   visibility: visible;
 }
 
+.list-item-link {
+  left: 88%;
+}
+
 .delete-list-item-btn {
-  visibility: hidden;
-  position: absolute;
-  left: 90%;
+  left: 93%;
   color: lightblue !important;
-  font-size: 14px;
 }
 
 .no-list-header h1 {
@@ -300,15 +313,11 @@ tr {
 }
 
 .month-lists-header h1 {
-  font-family: "AmaticSC-Regular" !important;
-  font-weight: bold !important;
   border: none !important;
 }
 
 .more-btn {
   background-color: rgba(135, 206, 235, 0.3) !important;
-  font-family: "AmaticSC-Regular" !important;
-  font-weight: bold !important;
   font-size: 24px !important;
   padding: 0 20px !important;
 }

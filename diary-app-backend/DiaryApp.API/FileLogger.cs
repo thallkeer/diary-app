@@ -59,5 +59,15 @@ namespace DiaryApp.API
             factory.AddProvider(new FileLoggerProvider(filePath));
             return factory;
         }
+
+        public static void LogErrorWithDate(this ILogger logger, Exception ex)
+        {
+            logger.LogErrorWithDate($"{ex.Message} {Environment.NewLine} {ex.StackTrace}");
+        }
+
+        public static void LogErrorWithDate(this ILogger logger, string message)
+        {
+            logger.LogWarning($"{DateTime.UtcNow} {message}");
+        }
     }
 }

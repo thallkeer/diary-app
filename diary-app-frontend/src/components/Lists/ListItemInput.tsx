@@ -1,46 +1,52 @@
 import React, { FC, useState } from "react";
 import { ListItem } from "../../models";
 
-type ReadonlyMode = {
-  getItemText: (item: ListItem) => string;
-};
-
 interface IProps {
   updateItem?: (item: ListItem) => void;
   item: ListItem;
-  readonlyMode?: ReadonlyMode;
+  getItemText?: (item: ListItem) => string;
+  canEditUrl?: boolean;
+}
+
+interface InputState {
+  editUrlMode?: boolean;
+  itemText: string;
+  url: string;
 }
 
 export const ListItemInput: FC<IProps> = ({
   updateItem,
   item,
-  readonlyMode
+  getItemText = null,
+  canEditUrl = false
 }) => {
-  const initialState: IProps = {
-    updateItem,
-    item,
-    readonlyMode
+  const initialState: InputState = {
+    itemText: item.subject,
+    url: item.url || "",
+    editUrlMode: false
   };
 
-  const [state, setState] = useState<IProps | null>(initialState);
+  const [state, setState] = useState<InputState>(initialState);
 
-  const handleTextChange = ev => {
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
-      item: {
-        ...item,
-        subject: ev.target.value
-      }
+      [e.target.name]: e.target.value
     });
   };
 
   const handleBlur = () => {
-    if (
-      updateItem &&
-      state.item.subject.length &&
-      state.item.subject !== item.subject
-    ) {
-      updateItem(state.item);
+    if (!updateItem) return;
+
+    if (state.editUrlMode) {
+      if (state.url.length && state.url !== item.url) {
+        item.url = state.url;
+        updateItem(item);
+      }
+      setState({ ...state, editUrlMode: false });
+    } else if (state.itemText.length && state.itemText !== item.subject) {
+      item.subject = state.itemText;
+      updateItem(item);
     }
   };
 
@@ -48,19 +54,43 @@ export const ListItemInput: FC<IProps> = ({
     if (event.key === "Enter") handleBlur();
   };
 
-  let inputValue =
-    state.readonlyMode && state.readonlyMode.getItemText
-      ? state.readonlyMode.getItemText(item)
-      : state.item.subject;
+  const handleDoubleClick = (
+    event: React.MouseEvent<HTMLInputElement, MouseEvent>
+  ) => {
+    if (!canEditUrl) return;
+    setState({
+      ...state,
+      editUrlMode: true
+    });
+  };
+
+  if (state.editUrlMode) {
+    return (
+      <input
+        type="url"
+        name="url"
+        value={state.url}
+        onChange={handleTextChange}
+        onBlur={handleBlur}
+        onKeyPress={handleKeyPress}
+        className="list-item-input"
+      />
+    );
+  }
+
+  let inputValue = getItemText ? getItemText(item) : state.itemText;
 
   return (
     <input
       type="text"
+      name="itemText"
+      maxLength={200}
       value={inputValue}
-      readOnly={state.readonlyMode ? true : false}
+      readOnly={getItemText ? true : false}
       onChange={handleTextChange}
       onBlur={handleBlur}
       onKeyPress={handleKeyPress}
+      onDoubleClick={handleDoubleClick}
       className="list-item-input"
     />
   );

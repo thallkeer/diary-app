@@ -16,43 +16,21 @@ import { eventsReducer } from "../context/events";
 import { useFillToNumber } from "./useFillToNumber";
 import { getEmptyEvent, getEmptyTodo } from "../utils";
 
-export const useEventList = (eventList: IEventList, fillTo: number) => {
-  const { title, setTitle, items } = useList<IEventList, IEvent>(
-    eventList,
-    fillTo,
-    getEmptyEvent
-  );
+export const useEventList = (eventList: IEventList, fillTo: number) =>
+  useList<IEventList, IEvent>(eventList, fillTo, getEmptyEvent);
 
-  return {
-    title,
-    setTitle,
-    events: items
-  };
-};
-
-export const useTodoList = (todoList: ITodoList, fillTo: number) => {
-  const { title, setTitle, items } = useList<ITodoList, ITodo>(
-    todoList,
-    fillTo,
-    getEmptyTodo
-  );
-
-  return {
-    title,
-    setTitle,
-    todos: items
-  };
-};
+export const useTodoList = (todoList: ITodoList, fillTo: number) =>
+  useList<ITodoList, ITodo>(todoList, fillTo, getEmptyTodo);
 
 function useList<T extends IList<TItem>, TItem extends ListItem>(
   list: T,
   fillTo: number,
   getEmptyItem: () => TItem
-) {
+): [string, React.Dispatch<React.SetStateAction<string>>, TItem[]] {
   const [listTitle, setListTitle] = useState(list.title);
   const items = useFillToNumber([...list.items], fillTo, getEmptyItem);
 
-  return { title: listTitle, setTitle: setListTitle, items };
+  return [listTitle, setListTitle, items];
 }
 
 export function useTodos(page: IPage, initList?: ITodoList): ITodoListContext {
@@ -62,9 +40,13 @@ export function useTodos(page: IPage, initList?: ITodoList): ITodoListContext {
     dispatch: (action: TodoThunks) => action(_dispatch)
   });
 
+  const { dispatch } = state;
+
   useEffect(() => {
-    page && !initList && state.dispatch(todoThunks.loadTodos(page.id));
-  }, [page, initList]);
+    if (page && !initList) {
+      dispatch(todoThunks.loadTodosByPageID(page.id));
+    }
+  }, [page, initList, dispatch]);
 
   return state;
 }
@@ -73,27 +55,19 @@ export function useEvents(
   page: IPage,
   initList?: IEventList
 ): IEventListContext {
-  let evList: IEventList = {
-    id: 324324324,
-    items: [],
-    pageId: 5656,
-    title: "kfhdsjkhfkjdshfkjds"
-  };
-
   const [state, _dispatch] = useReducer(eventsReducer, {
     loading: false,
     dispatch: (action: EventThunks) => action(_dispatch),
-    list: initList
+    list: initList || null
   });
+
+  const { dispatch } = state;
 
   useEffect(() => {
     if (page && !initList) {
-      console.log("effect");
-      state.dispatch(eventThunks.loadEventsByPageID(page.id));
+      dispatch(eventThunks.loadEventsByPageID(page.id));
     }
-  }, [page, initList]);
-
-  console.log("state-", state);
+  }, [page, initList, dispatch]);
 
   return state;
 }

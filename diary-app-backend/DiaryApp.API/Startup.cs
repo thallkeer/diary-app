@@ -3,10 +3,8 @@ using DiaryApp.Core;
 using DiaryApp.Data.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,7 +44,7 @@ namespace DiaryApp.API
                     .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
 
             services.AddSpaStaticFiles(configuration =>
-            configuration.RootPath = "diary-app-frontend/build"
+                configuration.RootPath = "client/build"
             );
 
             services.AddCors();
@@ -61,9 +59,11 @@ namespace DiaryApp.API
             }
             else
             {
-                services.AddDbContext<ApplicationContext>(options =>
-                 options.UseLazyLoadingProxies()
-                        .UseNpgsql(Configuration.GetConnectionString("ProdConnection")));
+                //.AddEntityFrameworkNpgsql()
+                services
+                        .AddDbContext<ApplicationContext>(options =>
+                            options.UseLazyLoadingProxies()
+                                   .UseNpgsql(Configuration.GetConnectionString("ProdConnection")));
             }
 
             // configure strongly typed settings objects
@@ -103,7 +103,7 @@ namespace DiaryApp.API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "logger.txt"));
-            var logger = loggerFactory.CreateLogger("FileLogger");
+            var logger = loggerFactory.CreateLogger<FileLogger>();
 
             //app.Use(async (ctx, next) =>
             //{
@@ -112,7 +112,7 @@ namespace DiaryApp.API
             //    {
             //        ctx.Response.ContentLength = 0;
             //    }
-            //});            
+            //});
 
             if (env.IsDevelopment())
             {
@@ -127,9 +127,11 @@ namespace DiaryApp.API
             app.UseStatusCodePagesWithReExecute("/error", "?code={0}");
 
             app.Map("/error", ap => ap.Run(async context =>
-            {               
-                logger.LogError($"{DateTime.Now} Error: {context.Request.Path} {context.Request.Query["code"]}");
-                await context.Response.WriteAsync($"Err: {context.Request.Query["code"]}");
+            {
+                string message = $"{DateTime.Now} {context.Request.Path} {context.Request.QueryString}" +
+                    $" Error: {context.Request.Path} {context.Request.Query["code"]}";
+                logger.LogError(message);
+                await context.Response.WriteAsync(message);
             }));
 
             //SampleData.Initialize(app.ApplicationServices);
@@ -165,18 +167,18 @@ namespace DiaryApp.API
                 if (env.IsDevelopment())
                 {
                     spa.Options.SourcePath = @"E:\repos\diaryApp\diary-app-frontend";
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    //spa.UseReactDevelopmentServer(npmScript: "start");
                 }
                 else
                 {
-                    spa.Options.SourcePath = Path.Join(env.ContentRootPath, "diary-app-frontend");
-                        //spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
-                    }
+                    spa.Options.SourcePath = Path.Join(env.ContentRootPath, "client");
+                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                }
             });
 
             app.Run(async (context) =>
             {
-                logger.LogInformation($"Processing request {context.Request.Path}");
+                logger.LogInformation($"{DateTime.Now} Processing request {context.Request.Path}");
                 //await context.Response.WriteAsync("TEST");
             });
         }

@@ -28,7 +28,7 @@ export const EventList: FC<EventListProps> = ({
   fillToNumber
 }) => {
   const { addOrUpdateEvent, deleteEvent, updateEventList } = eventThunks;
-  const { events, title, setTitle } = useEventList(eventList, fillToNumber);
+  const [title, setTitle, events] = useEventList(eventList, fillToNumber);
 
   const onDelete = (eventID: number) => {
     eventID !== 0 && dispatch(deleteEvent(eventID));
@@ -82,7 +82,7 @@ export const EventList: FC<EventListProps> = ({
             <ListItemInput
               item={event}
               updateItem={onUpdate}
-              readonlyMode={readonly ? { getItemText } : null}
+              getItemText={readonly ? getItemText : null}
             />
             {event.id !== 0 && (
               <DeleteBtn onDelete={() => onDelete(event.id)} />

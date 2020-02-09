@@ -1,43 +1,63 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace DiaryApp.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class TodoController : ControllerBase
+    public class TodoController : AppBaseController<TodoController>
     {
         private readonly ITodoService todoService;
-        private readonly IMapper mapper;
 
-        public TodoController(ITodoService todoService, IMapper mapper)
+        public TodoController(ITodoService todoService, IMapper mapper, ILoggerFactory loggerFactory)
+            : base(mapper, loggerFactory)
         {
             this.todoService = todoService;
-            this.mapper = mapper;
         }
 
         [HttpGet("{pageID}")]
         public IActionResult GetByPageID(int pageID)
         {
-            var todoList = todoService.GetByPageID(pageID);
-            if (todoList == null)
-                return NotFound();
-            var model = mapper.Map<TodoListModel>(todoList);
-            return Ok(model);
+            try
+            {
+                var todoList = todoService.GetByPageID(pageID);
+                if (todoList == null)
+                {
+                    logger.LogErrorWithDate($"Todolist not found for pageID {pageID}");
+                    return NotFound();
+                }
+                var model = mapper.Map<TodoListModel>(todoList);
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                logger.LogErrorWithDate(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("addTodo")]
         public async Task<IActionResult> AddTodo([FromBody] TodoModel todo)
         {
-            var newTodo = mapper.Map<TodoItem>(todo);
-            await todoService.AddItem(newTodo, todo.OwnerID);
-            todo.ID = newTodo.ID;
-            return Ok(todo);
+            try
+            {
+                var newTodo = mapper.Map<TodoItem>(todo);
+                await todoService.AddItem(newTodo, todo.OwnerID);
+                todo.ID = newTodo.ID;
+                return Ok(todo);
+            }
+            catch (Exception ex)
+            {
+                logger.LogErrorWithDate(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]

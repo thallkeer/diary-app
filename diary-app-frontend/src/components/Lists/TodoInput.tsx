@@ -17,10 +17,7 @@ export const TodoInput: FC<ITodoInputProps> = ({
   return (
     <>
       <CheckCircle id={todo.id} done={todo.done} toggleTodo={toggleTodo} />
-      {/* {todo.id !== 0 && (
-        <CheckCircle id={todo.id} done={todo.done} toggleTodo={toggleTodo} />
-      )} */}
-      <ListItemInput item={todo} updateItem={updateItem} />
+      <ListItemInput item={todo} updateItem={updateItem} canEditUrl={true} />
     </>
   );
 };

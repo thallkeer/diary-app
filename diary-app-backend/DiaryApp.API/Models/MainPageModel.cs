@@ -7,5 +7,10 @@
         public int Year { get; set; }
         //public TodoListModel ThingsTodo { get; set; }
         //public EventListModel ImportantEvents { get; set; }
+
+        public override string ToString()
+        {
+            return $"{ID} {Year} {Month}";
+        }
     }
 }

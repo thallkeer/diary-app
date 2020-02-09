@@ -2,6 +2,7 @@ import { useState, useCallback, useContext, useEffect } from "react";
 import { IMainPageContext, IMonthPageContext, AppContext } from "../context";
 import { IUser } from "../models";
 import axios from "../axios/axios";
+import { AxiosError } from "axios";
 
 export enum PageType {
   MainPage,
@@ -13,12 +14,6 @@ const routeByPageType = new Map([
   [PageType.MonthPage, "monthpage"]
 ]);
 
-type PageParams = {
-  userId: string;
-  year: number;
-  month: number;
-};
-
 export function usePage<T extends IMainPageContext | IMonthPageContext>(
   initialState: T,
   pageType: PageType
@@ -26,41 +21,32 @@ export function usePage<T extends IMainPageContext | IMonthPageContext>(
   const [pageState, _setPageState] = useState<T>(initialState);
   const { month, year } = useContext(AppContext);
   const user: IUser = JSON.parse(localStorage.getItem("user"));
-  const pageApi = `${routeByPageType.get(pageType)}/`;
-
-  const getPage = () => {
-    return axios.get(`${pageApi}${user.id}/${year}/${month}`);
-  };
+  const query = `${routeByPageType.get(pageType)}/${user.id}/${year}/${month}`;
 
   useEffect(() => {
-    _setPageState({
-      ...pageState,
-      loading: true
+    _setPageState(prevState => {
+      return {
+        ...prevState,
+        loading: true
+      };
     });
 
-    getPage().then(res => {
-      if (res.data) {
-        _setPageState({ ...pageState, page: res.data, loading: false });
-      } else {
-        createNewPage().then(res =>
-          _setPageState({ ...pageState, page: res.data, loading: false })
-        );
-      }
-    });
-  }, [pageType, year, month]);
+    const getPage = () => {
+      return axios.get(query);
+    };
+
+    getPage()
+      .then(res => {
+        _setPageState(prevState => {
+          return { ...prevState, page: res.data, loading: false };
+        });
+      })
+      .catch((err: AxiosError) => console.log(err));
+  }, [pageType, query, year, month]);
 
   const setPageState = useCallback((newPageState: T): void => {
     _setPageState({ ...newPageState });
   }, []);
-
-  const createNewPage = () => {
-    let data: PageParams = {
-      userId: user.id,
-      year,
-      month
-    };
-    return axios.post(pageApi + "createNew", data);
-  };
 
   return {
     ...pageState,
