@@ -32,7 +32,7 @@ namespace DiaryApp.Data.Services
             }
         }
 
-        public IQueryable<TEntity> GetAll()
+        public virtual IQueryable<TEntity> GetAll()
         {
             return dbSet.AsNoTracking();
         }

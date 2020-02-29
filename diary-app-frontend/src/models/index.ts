@@ -16,6 +16,7 @@ export interface IListItem {
   subject: string;
   url?: string;
   ownerID?: number;
+  readonly?: boolean;
 }
 
 export interface ITodo extends IListItem {

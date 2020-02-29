@@ -5,9 +5,10 @@ import {
   ListItem,
   IPage,
   IMonthPage,
-  IHabitsTracker,
   IEventList,
-  ITodoList
+  ITodoList,
+  IGoalsArea,
+  IUser
 } from "../models/index";
 import { EventThunks } from "../actions/events-actions";
 import { TodoThunks } from "../actions/todo-actions";
@@ -16,7 +17,8 @@ import { HabitTrackerThunks } from "../actions/habitTracker-actions";
 export interface IGlobalContext {
   month: number;
   year: number;
-  setAppState: (appState: IGlobalContext) => void;
+  user?: IUser;
+  setAppState?: (appState: IGlobalContext) => void;
 }
 
 export type PageState<T extends IPage> = {
@@ -46,14 +48,14 @@ export interface IListState<TList extends IList<ListItem>, TAction>
 export interface IEventListContext
   extends IListState<IEventList, EventThunks> {}
 export interface ITodoListContext extends IListState<ITodoList, TodoThunks> {}
-export interface IHabitTrackerContext
-  extends IDispatchable<HabitTrackerThunks> {
-  trackers: IHabitsTracker[];
-}
+
+export interface IGoalsAreaContext
+  extends IDispatchable<HabitTrackerThunks>,
+    IGoalsArea {}
 
 export const EventListContext = createContext<IEventListContext>(null);
 export const TodoListContext = createContext<ITodoListContext>(null);
 export const MainPageContext = createContext<IMainPageContext>(null);
 export const MonthPageContext = createContext<IMonthPageContext>(null);
+export const GoalsAreaContext = createContext<IGoalsAreaContext>(null);
 export const AppContext = createContext<IGlobalContext>(null);
-export const HabitsTrackerContext = createContext<IHabitTrackerContext>(null);

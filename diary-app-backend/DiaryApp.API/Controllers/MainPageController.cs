@@ -38,8 +38,7 @@ namespace DiaryApp.API.Controllers
                 if (mainPage == null)
                     return await CreateNewPage(new PageParams { UserId = userId, Year = year, Month = month });
 
-                var model = mapper.Map<MainPageModel>(mainPage);
-
+                var model = mapper.Map<MainPageModel>(mainPage);                
                 //model.ImportantEvents.Items = model.ImportantEvents.Items.OrderBy(e => e.Date).ToList();
                 return Ok(model);
             }

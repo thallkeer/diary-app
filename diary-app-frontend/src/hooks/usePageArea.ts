@@ -19,10 +19,14 @@ export default function usePageArea<T extends IPageArea>(areaName: string) {
       });
       axios
         .get(`monthpage/${areaName}/${page.id}`)
-        .then(res => setAreaState({ area: res.data, loading: false }))
+        .then(res =>
+          setAreaState(prevState => {
+            return { ...prevState, area: res.data, loading: false };
+          })
+        )
         .catch(err => console.log(err));
     }
   }, [page, areaName]);
 
-  return { areaState, setAreaState, page };
+  return { areaState, page };
 }

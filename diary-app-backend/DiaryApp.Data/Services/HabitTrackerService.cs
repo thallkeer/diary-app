@@ -1,4 +1,5 @@
 ﻿using DiaryApp.Core;
+using System.Linq;
 
 namespace DiaryApp.Data.Services
 {
@@ -6,6 +7,11 @@ namespace DiaryApp.Data.Services
     {
         public HabitTrackerService(ApplicationContext context) : base(context)
         {
+        }
+
+        public override IQueryable<HabitsTracker> GetAll()
+        {
+            return base.GetAll().OrderBy(t => t.ID);
         }
     }
 }

@@ -28,6 +28,7 @@ export const ListHeaderInput: React.FC<Props> = ({
       onBlur={handleBlur}
       onKeyPress={handleKeyPress}
       onChange={handleChange}
+      autoComplete={"off"}
     />
   );
 };

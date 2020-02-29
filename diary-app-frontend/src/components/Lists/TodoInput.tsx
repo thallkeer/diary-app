@@ -17,7 +17,12 @@ export const TodoInput: FC<ITodoInputProps> = ({
   return (
     <>
       <CheckCircle id={todo.id} done={todo.done} toggleTodo={toggleTodo} />
-      <ListItemInput item={todo} updateItem={updateItem} canEditUrl={true} />
+      <ListItemInput
+        item={todo}
+        updateItem={updateItem}
+        canEditUrl={true}
+        readonly={todo.readonly}
+      />
     </>
   );
 };

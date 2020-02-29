@@ -12,6 +12,13 @@ namespace DiaryApp.Core
         public virtual DesiresArea DesiresArea { get; set; }
         public virtual IdeasArea IdeasArea { get; set; }
         public virtual GoalsArea GoalsArea { get; set; }
+
+        public MonthPage()
+        {
+
+        }
+        public MonthPage(int year, int month, AppUser user) : base(year, month, user)
+        { }
     }
 
     public class PurchasesArea : PageAreaBase
@@ -26,6 +33,17 @@ namespace DiaryApp.Core
         }
 
         public virtual List<TodoList> PurchasesLists { get; set; } = new List<TodoList>();
+
+        public override PageAreaBase TransferAreaData(PageBase page)
+        {
+            var newArea = new PurchasesArea(page);
+            newArea.PurchasesLists = new List<TodoList>();
+                this.PurchasesLists?.ForEach(pl =>
+                {
+                    newArea.PurchasesLists.Add(new TodoList(pl));
+                });
+            return newArea;
+        }
     }
 
     public class DesiresArea : PageAreaBase
@@ -38,6 +56,17 @@ namespace DiaryApp.Core
         {}
 
         public virtual List<EventList> DesiresLists { get; set; } = new List<EventList>();
+
+        public override PageAreaBase TransferAreaData(PageBase page)
+        {
+            var newArea = new DesiresArea(page);
+            newArea.DesiresLists = new List<EventList>();
+                this.DesiresLists?.ForEach(dl =>
+                {
+                    newArea.DesiresLists.Add(new EventList(dl));
+                });
+            return newArea;
+        }
     }
 
     public class IdeasArea : PageAreaBase
@@ -51,6 +80,13 @@ namespace DiaryApp.Core
 
         }
         public virtual EventList IdeasList { get; set; }
+
+        public override PageAreaBase TransferAreaData(PageBase page)
+        {
+            var newArea = new IdeasArea(page);
+            newArea.IdeasList = new EventList(this.IdeasList);
+            return newArea;
+        }
     }
 
     public class GoalsArea : PageAreaBase
@@ -64,5 +100,17 @@ namespace DiaryApp.Core
 
         }
         public virtual List<HabitsTracker> GoalsLists { get; set; } = new List<HabitsTracker>();
+
+        public override PageAreaBase TransferAreaData(PageBase page)
+        {
+            var newArea = new GoalsArea(page);
+            newArea.GoalsLists = new List<HabitsTracker>();
+            if (this.GoalsLists != null)
+                this.GoalsLists.ForEach(tracker =>
+                {
+                    newArea.GoalsLists.Add(new HabitsTracker(tracker));
+                });
+            return newArea;
+        }
     }
 }

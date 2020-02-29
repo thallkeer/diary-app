@@ -28,14 +28,20 @@ export const MonthPage: React.FC = () => {
       <Container fluid className="mt-20 second-page-container text-center">
         <Link
           className="month-name"
-          style={{ border: "1px solid green", cursor: "pointer" }}
+          style={{
+            position: "absolute",
+            left: "0",
+            pointerEvents: "all",
+            cursor: "pointer",
+            zIndex: 10
+          }}
           to="/"
         >
           <img
             src={strelka}
             alt="return to calendar"
             className="mirrored-arrow"
-            style={{ border: "1px solid red", cursor: "pointer" }}
+            style={{ cursor: "pointer" }}
             width="30"
             height="30"
           />

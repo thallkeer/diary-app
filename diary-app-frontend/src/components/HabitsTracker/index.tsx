@@ -1,19 +1,14 @@
 import React, { useState } from "react";
 import { getRandomId } from "../../utils";
-import { IHabitsTracker, IMonthPage } from "../../models";
-import axios from "../../axios/axios";
+import { IHabitsTracker } from "../../models";
 
 type Props = {
   tracker: IHabitsTracker;
-  page: IMonthPage;
+  updateTracker: (tracker: IHabitsTracker) => void;
 };
 
-export const HabitsTracker: React.FC<Props> = ({ tracker, page }) => {
+export const HabitsTracker: React.FC<Props> = ({ tracker, updateTracker }) => {
   const [trackerState, setTrackerState] = useState<IHabitsTracker>(tracker);
-
-  const updateTracker = (data: IHabitsTracker) => {
-    axios.put("habitTracker", data).then(res => setTrackerState({ ...data }));
-  };
 
   const onDayClick = (e: React.MouseEvent<HTMLElement>, day: number) => {
     let target = e.target as HTMLElement;

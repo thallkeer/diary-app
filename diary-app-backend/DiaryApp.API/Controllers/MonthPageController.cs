@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
+using DiaryApp.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,26 @@ namespace DiaryApp.API.Controllers
             {
                 logger.LogErrorWithDate(ex);
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("transferData")]
+        public async Task<IActionResult> TransferPageDataToNextMonth(int prevPageID, TransferDataModel transferDataModel)
+        {            
+            if (transferDataModel == null)
+                return BadRequest("No transfer information is received, check transfer data model");
+            try
+            {
+                MonthPage prevPage = await monthPageService.GetById(prevPageID);
+                if (prevPage == null)
+                    return BadRequest("No original page received, check month page ID");
+                await monthPageService.TransferPageDataToNextMonth(prevPage, transferDataModel);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                logger.LogErrorWithDate(ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 

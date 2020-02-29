@@ -6,6 +6,8 @@ interface IProps {
   item: ListItem;
   getItemText?: (item: ListItem) => string;
   canEditUrl?: boolean;
+  readonly?: boolean;
+  style?: React.CSSProperties;
 }
 
 interface InputState {
@@ -17,8 +19,10 @@ interface InputState {
 export const ListItemInput: FC<IProps> = ({
   updateItem,
   item,
+  style,
   getItemText = null,
-  canEditUrl = false
+  canEditUrl = false,
+  readonly = false
 }) => {
   const initialState: InputState = {
     itemText: item.subject,
@@ -57,7 +61,7 @@ export const ListItemInput: FC<IProps> = ({
   const handleDoubleClick = (
     event: React.MouseEvent<HTMLInputElement, MouseEvent>
   ) => {
-    if (!canEditUrl) return;
+    if (!canEditUrl || readonly) return;
     setState({
       ...state,
       editUrlMode: true
@@ -74,6 +78,8 @@ export const ListItemInput: FC<IProps> = ({
         onBlur={handleBlur}
         onKeyPress={handleKeyPress}
         className="list-item-input"
+        style={style}
+        autoComplete={"off"}
       />
     );
   }
@@ -86,12 +92,14 @@ export const ListItemInput: FC<IProps> = ({
       name="itemText"
       maxLength={200}
       value={inputValue}
-      readOnly={getItemText ? true : false}
+      readOnly={readonly || (getItemText ? true : false)}
       onChange={handleTextChange}
       onBlur={handleBlur}
       onKeyPress={handleKeyPress}
       onDoubleClick={handleDoubleClick}
       className="list-item-input"
+      style={style}
+      autoComplete={"off"}
     />
   );
 };

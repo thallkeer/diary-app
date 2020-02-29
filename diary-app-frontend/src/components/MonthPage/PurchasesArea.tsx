@@ -1,5 +1,5 @@
-import React from "react";
-import { ITodoList, IPurchasesArea } from "../../models";
+import React, { useReducer } from "react";
+import { ITodoList, IPurchasesArea, IMonthPage } from "../../models";
 import { Row, Col } from "react-bootstrap";
 import { TodoList } from "../Lists/TodoList";
 import Loader from "../Loader";
@@ -7,17 +7,38 @@ import usePageArea from "../../hooks/usePageArea";
 import { useTodos } from "../../hooks/useLists";
 import { AddListBtn } from "../AddListBtn";
 import { getRandomId } from "../../utils";
-import axios from "../../axios/axios";
+import { purchasesAreaReducer } from "../../context/purchasesArea";
+import {
+  PurchasesAreaThunks,
+  Thunks as thunks
+} from "../../actions/purchasesArea-actions";
 
 type ListPair = {
   list1: ITodoList;
   list2: ITodoList;
 };
 
-export const PurchasesArea: React.FC = () => {
-  const { areaState, setAreaState, page } = usePageArea<IPurchasesArea>(
-    "purchasesArea"
+const OneList: React.FC<{ todoList: ITodoList }> = ({ todoList }) => {
+  const { dispatch, list } = useTodos(null, todoList);
+
+  return (
+    <Col md={5}>
+      <TodoList
+        fillToNumber={4}
+        className="mt-20 month-lists-header"
+        dispatch={dispatch}
+        todoList={list}
+      />
+    </Col>
   );
+};
+
+const PurchasesAreaLists: React.FC<{
+  area: IPurchasesArea;
+  page: IMonthPage;
+}> = ({ area, page }) => {
+  const [areaState, _dispatch] = useReducer(purchasesAreaReducer, area);
+  const dispatch = (action: PurchasesAreaThunks) => action(_dispatch);
 
   const addPurchaseList = () => {
     const todoList: ITodoList = {
@@ -25,34 +46,10 @@ export const PurchasesArea: React.FC = () => {
       items: [],
       pageId: page.id,
       title: "Список покупок",
-      purchasesAreaId: areaState.area.id
+      purchasesAreaId: areaState.id
     };
 
-    axios.post("todo", todoList).then(res => {
-      todoList.id = res.data;
-      setAreaState({
-        ...areaState,
-        area: {
-          ...areaState.area,
-          purchasesLists: [...areaState.area.purchasesLists, todoList]
-        }
-      });
-    });
-  };
-
-  const OneList: React.FC<{ todoList: ITodoList }> = ({ todoList }) => {
-    const { dispatch, list } = useTodos(null, todoList);
-
-    return (
-      <Col md={5}>
-        <TodoList
-          fillToNumber={4}
-          className="mt-20 month-lists-header"
-          dispatch={dispatch}
-          todoList={list}
-        />
-      </Col>
-    );
+    dispatch(thunks.addPurchasesList(todoList));
   };
 
   const getRow = (pair: ListPair) => {
@@ -61,11 +58,6 @@ export const PurchasesArea: React.FC = () => {
         {<OneList todoList={pair.list1} />}
         <Col md={2}>{""}</Col>
         {pair.list2 && <OneList todoList={pair.list2} />}
-        {/* {pair.list2 ? (
-          <OneList todoList={pair.list2} />
-        ) : (
-          <AddListBtn onClick={addPurchaseList} />
-        )} */}
       </Row>
     );
   };
@@ -82,21 +74,28 @@ export const PurchasesArea: React.FC = () => {
       );
     }
 
-    rows.push(
+    return rows;
+  };
+
+  return (
+    <>
+      {renderLists(areaState.purchasesLists)}
       <Row key={getRandomId()}>
         <AddListBtn onClick={addPurchaseList} />
       </Row>
-    );
+    </>
+  );
+};
 
-    return rows;
-  };
+export const PurchasesArea: React.FC = () => {
+  const { areaState, page } = usePageArea<IPurchasesArea>("purchasesArea");
 
   if (!areaState || areaState.loading) return <Loader />;
 
   return (
     <>
       <h1>{areaState.area.header}</h1>
-      {renderLists(areaState.area.purchasesLists)}
+      <PurchasesAreaLists area={areaState.area} page={page} />
     </>
   );
 };

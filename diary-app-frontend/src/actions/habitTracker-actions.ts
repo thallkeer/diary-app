@@ -21,11 +21,15 @@ export const Thunks = {
       console.log("before add or update ", tracker);
 
       if (tracker.id === 0) {
+        console.log("add tracker");
+
         axios.post(baseTrackerApi, tracker).then(res => {
           tracker.id = res.data;
           dispatch(Actions.addTracker(tracker));
         });
       } else {
+        console.log("update tracker");
+
         axios.put(baseTrackerApi, tracker).then(res => {
           dispatch(Actions.updateTracker(tracker));
         });

@@ -16,9 +16,8 @@ export const getEventsByDay = createSelector([getEventsState], s => {
   if (s && s.length) {
     s.forEach(ev => {
       let day = ev.date.getDate();
-      if (!eventsMap.has(day)) eventsMap[day] = [];
-
-      eventsMap[day].push(ev);
+      if (!eventsMap.has(day)) eventsMap.set(day, []);
+      eventsMap.get(day).push(ev);
     });
   }
 

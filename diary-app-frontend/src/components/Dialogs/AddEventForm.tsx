@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Button,
   Modal,
@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { IEvent } from "../../models";
 import { getEmptyEvent } from "../../utils";
+import { AppContext } from "../../context";
 
 interface IFormProps {
   show: boolean;
@@ -34,19 +35,13 @@ export const AddEventForm: React.FC<IFormProps> = ({
   addEvent,
   event
 }) => {
-  const getDateByDay = (day: number) => {
-    const date: Date = new Date();
-    date.setDate(day);
-    return date;
-  };
-
-  const initialItem: IEvent = event || {
-    ...getEmptyEvent(),
-    date: getDateByDay(day)
-  };
+  const { year, month } = useContext(AppContext);
 
   const initialState: IFormState = {
-    item: initialItem
+    item: event || {
+      ...getEmptyEvent(),
+      date: new Date(year, month - 1, day)
+    }
   };
 
   const [formState, setFormState] = useState<IFormState | null>(initialState);
@@ -104,7 +99,7 @@ export const AddEventForm: React.FC<IFormProps> = ({
       <Form id="add-event-form" onSubmit={handleSubmit} noValidate={true}>
         <Modal.Header closeButton>
           <FormControl
-            autoFocus
+            autoFocus={true}
             autoComplete={"off"}
             placeholder="Добавьте название"
             aria-label="Добавьте название"

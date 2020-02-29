@@ -80,9 +80,11 @@ export const EventList: FC<EventListProps> = ({
         {events.map((event: IEvent, i) => (
           <li key={event.id !== 0 ? event.id : i + 80} className="list-item">
             <ListItemInput
+              style={{ paddingLeft: "5px" }}
               item={event}
               updateItem={onUpdate}
               getItemText={readonly ? getItemText : null}
+              readonly={readonly || event.readonly}
             />
             {event.id !== 0 && (
               <DeleteBtn onDelete={() => onDelete(event.id)} />

@@ -14,5 +14,15 @@ namespace DiaryApp.Core
         [Required]
         public int GoalsAreaID { get; set; }
         public virtual GoalsArea GoalsArea { get; set; }
+
+        public HabitsTracker() { }
+
+        public HabitsTracker(HabitsTracker original)
+        {
+            this.ID = 0;
+            this.GoalName = original.GoalName;
+            this.SelectedDays = new List<int>(original.SelectedDays);
+            this.GoalsAreaID = original.GoalsAreaID;
+        }
     }
 }

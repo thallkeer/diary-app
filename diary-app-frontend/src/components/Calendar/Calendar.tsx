@@ -51,6 +51,8 @@ export const Calendar: React.FC = () => {
   };
 
   const addEvent = (newEvent: IEvent) => {
+    console.log(newEvent);
+
     events.dispatch(
       eventThunks.addOrUpdateEvent({
         ...newEvent,
@@ -116,7 +118,7 @@ export const Calendar: React.FC = () => {
       let className =
         isRealCurrentMonth && d === curDay ? "day current-day" : "day";
 
-      let curEvents: IEvent[] = eventsByDay[d] || [];
+      let curEvents: IEvent[] = eventsByDay.get(d) || [];
 
       let curEventClass = curEvents.length ? "day-with-event" : "no-events-day";
 
@@ -126,7 +128,8 @@ export const Calendar: React.FC = () => {
           {curEvents.map(event => (
             <div
               key={event.id}
-              className={`mt-5 ${curEventClass}`}
+              className={curEventClass}
+              style={{ marginTop: "5px" }}
               onClick={e => onEventClick(e, d, event)}
             >
               {event.subject}
@@ -183,6 +186,8 @@ export const Calendar: React.FC = () => {
   };
 
   const changeMonth = (increment: boolean) => {
+    if (!increment && month - 1 === 0) return;
+    if (increment && month + 1 === 12) return;
     let newMonth = increment ? month + 1 : month - 1;
 
     setAppState({
@@ -198,6 +203,8 @@ export const Calendar: React.FC = () => {
   const setPrevMonth = () => {
     changeMonth(false);
   };
+
+  console.log("calendar", year, month);
 
   return (
     <div className="calendar-wrapper">

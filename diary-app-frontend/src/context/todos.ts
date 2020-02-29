@@ -18,6 +18,8 @@ export const todosReducer = (
       };
 
     case "ADD_TODO": {
+      console.log("add todo payload", action.payload);
+
       return {
         ...state,
         list: {
@@ -45,15 +47,6 @@ export const todosReducer = (
       };
 
     case "TOGGLE_TODO":
-      console.log("todos reducer state", state);
-
-      console.log(
-        "todos reducer toggle",
-        getTodos(state).map(todo =>
-          todo.id === action.payload ? { ...todo, done: !todo.done } : todo
-        )
-      );
-
       return {
         ...state,
         list: {

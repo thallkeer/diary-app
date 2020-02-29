@@ -1,26 +1,22 @@
-import React, { useContext, useState } from "react";
-import { IHabitsTracker, IMonthPage } from "../../models";
+import React, { useState } from "react";
+import { IHabitsTracker } from "../../models";
 import { Row, Col } from "react-bootstrap";
 import { HabitsTracker } from "../HabitsTracker";
 import ListHeaderInput from "../Lists/ListHeaderInput";
-import { HabitsTrackerContext } from "../../context";
-import { Thunks as trackerThunks } from "../../actions/habitTracker-actions";
 
 export const TrackerRow: React.FC<{
   tracker: IHabitsTracker;
   index: number;
-  page: IMonthPage;
-}> = ({ index, tracker, page }) => {
+  onAddUpdate: (tracker: IHabitsTracker) => void;
+}> = ({ index, tracker, onAddUpdate }) => {
   const [state, setState] = useState(tracker);
-  const { dispatch } = useContext(HabitsTrackerContext);
 
   const handleBlur = () => {
-    dispatch(trackerThunks.addOrUpdateTracker(state));
+    onAddUpdate(state);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(state, e.target.value);
-    e.preventDefault();
+    //e.preventDefault();
     setState({
       ...state,
       goalName: e.target.value
@@ -38,7 +34,7 @@ export const TrackerRow: React.FC<{
       </h3>
     </Col>,
     <Col key={index + 2} md={8}>
-      <HabitsTracker tracker={tracker} page={page} />
+      <HabitsTracker tracker={tracker} updateTracker={onAddUpdate} />
     </Col>
   ];
 

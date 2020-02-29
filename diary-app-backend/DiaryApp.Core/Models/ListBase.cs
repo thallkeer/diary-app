@@ -26,11 +26,52 @@ namespace DiaryApp.Core
         public virtual DesiresArea DesiresArea { get; set; }
         public int? IdeasAreaID { get; set; }
         public virtual IdeasArea IdeasArea { get; set; }
+
+        public EventList()
+        {
+
+        }
+
+        public EventList(EventList original)
+        {
+            this.Title = original.Title;
+            this.Items = new List<EventItem>(original.Items.Count);
+            original.Items?.ForEach(item =>
+            {
+                this.Items.Add(new EventItem
+                {
+                    Subject = item.Subject,
+                    Url = item.Url,
+                    Description = item.Description,
+                    Date = item.Date
+                });
+            });
+        }
     }
 
     public class TodoList : ListBase<TodoItem>
     {   
         public int? PurchasesAreaID { get; set; }
         public virtual PurchasesArea PurchasesArea { get; set; }
+
+        public TodoList()
+        {
+
+        }
+
+        public TodoList(TodoList original)
+        {
+            this.Title = original.Title;
+            this.Items = new List<TodoItem>(original.Items.Count);
+            original.Items?.ForEach(item =>
+            {
+                this.Items.Add(new TodoItem
+                {
+                    Done = item.Done,
+                    Subject = item.Subject,
+                    Url = item.Url,
+                });
+            });
+        }
     }
 }

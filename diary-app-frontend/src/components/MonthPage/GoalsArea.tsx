@@ -4,57 +4,56 @@ import { Row } from "react-bootstrap";
 import Loader from "../Loader";
 import usePageArea from "../../hooks/usePageArea";
 import { AddListBtn } from "../AddListBtn";
-import { IHabitTrackerContext, HabitsTrackerContext } from "../../context";
 import { trackersReducer } from "../../context/trackers";
 import {
   HabitTrackerThunks,
   Thunks as trackerThunks
 } from "../../actions/habitTracker-actions";
 import { TrackerRow } from "./TrackerRow";
+import { GoalsAreaContext } from "../../context";
 
-export const GoalsArea: React.FC = () => {
-  const { areaState, page } = usePageArea<IGoalsArea>("goalsArea");
-  const initialValue: IHabitTrackerContext = {
-    trackers: areaState
-      ? areaState.area
-        ? areaState.area.goalsLists
-        : []
-      : [],
-    dispatch: null
-  };
-  const [trackersState, _dispatch] = useReducer(trackersReducer, initialValue);
-
-  if (!areaState || areaState.loading) return <Loader />;
-
+const Area: React.FC<{ goalsArea: IGoalsArea }> = ({ goalsArea }) => {
+  const [trackersState, _dispatch] = useReducer(trackersReducer, goalsArea);
+  const dispatch = (action: HabitTrackerThunks) => action(_dispatch);
   const { addOrUpdateTracker } = trackerThunks;
+  const { id, header, goalsLists } = trackersState;
 
-  const addHabitsTracker = () => {
-    const tracker: IHabitsTracker = {
-      id: 0,
-      goalName: "Цель на месяц",
-      selectedDays: [],
-      goalsAreaId: areaState.area.id
-    };
-
-    addOrUpdateTracker(tracker)(_dispatch);
+  const addHabitsTracker = (tracker?: IHabitsTracker) => {
+    if (!tracker) {
+      tracker = {
+        id: 0,
+        goalName: "Цель на месяц",
+        selectedDays: [],
+        goalsAreaId: id
+      };
+    }
+    dispatch(addOrUpdateTracker(tracker));
   };
 
   return (
     <>
-      <h1 className="mt-40">{areaState.area.header}</h1>
-      <HabitsTrackerContext.Provider
-        value={{
-          trackers: trackersState.trackers,
-          dispatch: (action: HabitTrackerThunks) => action(_dispatch)
-        }}
-      >
-        {areaState.area.goalsLists.map((gl, i) => (
-          <TrackerRow key={i} tracker={gl} index={i} page={page} />
+      <h1 className="mt-40">{header}</h1>
+      <GoalsAreaContext.Provider value={{ ...trackersState, dispatch }}>
+        {goalsLists.map((gl, i) => (
+          <TrackerRow
+            key={i}
+            tracker={gl}
+            index={i}
+            onAddUpdate={addHabitsTracker}
+          />
         ))}
         <Row className="mt-20">
-          <AddListBtn onClick={addHabitsTracker} />
+          <AddListBtn onClick={() => addHabitsTracker()} />
         </Row>
-      </HabitsTrackerContext.Provider>
+      </GoalsAreaContext.Provider>
     </>
   );
+};
+
+export const GoalsArea: React.FC = () => {
+  const { areaState } = usePageArea<IGoalsArea>("goalsArea");
+
+  if (!areaState || areaState.loading || !areaState.area) return <Loader />;
+
+  return <Area goalsArea={areaState.area} />;
 };

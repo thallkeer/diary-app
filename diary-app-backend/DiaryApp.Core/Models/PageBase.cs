@@ -15,5 +15,17 @@ namespace DiaryApp.Core
         [Required]
         public int UserID { get; set; }
         public virtual AppUser User { get; set; }
+
+        public PageBase()
+        {
+
+        }
+
+        public PageBase(int year, int month, AppUser user)
+        {
+            Year = year;
+            Month = month;
+            User = user;
+        }
     }
 }

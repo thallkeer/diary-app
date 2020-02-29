@@ -10,6 +10,6 @@ namespace DiaryApp.Core
         Task UpdateItem(TItem eventItem);
         Task DeleteItem(int itemID);
         Task<TItem> GetItemByID(int itemID);
-        List<TList> GetListsByPageID(int pageID);
+        IEnumerable<TList> GetListsByPageID(int pageID);
     }
 }

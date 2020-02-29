@@ -24,6 +24,14 @@ namespace DiaryApp.Core
             Header = header;
         }
 
+        /// <summary>
+        /// Derived classes will override this method to copy their data to the desired year and month.
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
+        public abstract PageAreaBase TransferAreaData(PageBase page);
+
         public override string ToString()
         {
             return Header;

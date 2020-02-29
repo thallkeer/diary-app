@@ -1,22 +1,25 @@
 import { HabitTrackerActions } from "../actions/habitTracker-actions";
-import { IHabitTrackerContext } from ".";
+import { IGoalsArea } from "../models";
 
 export const trackersReducer = (
-  state: IHabitTrackerContext,
+  state: IGoalsArea,
   action: HabitTrackerActions
-): IHabitTrackerContext => {
+): IGoalsArea => {
   switch (action.type) {
     case "ADD_TRACKER": {
+      console.log("add payload", action.payload);
       return {
         ...state,
-        trackers: [...state.trackers, action.payload]
+        goalsLists: [...state.goalsLists, action.payload]
       };
     }
 
     case "UPDATE_TRACKER":
+      console.log("update payload", action.payload);
+
       return {
         ...state,
-        trackers: state.trackers.map(t =>
+        goalsLists: state.goalsLists.map(t =>
           t.id === action.payload.id ? action.payload : t
         )
       };

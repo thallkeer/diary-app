@@ -22,6 +22,8 @@ export const MainPage: FC = () => {
 
   if (loading || !page) return <Loader />;
 
+  console.log(page);
+
   return (
     <MainPageContext.Provider value={pageState}>
       <Container fluid className="mt-20">

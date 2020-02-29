@@ -60,6 +60,7 @@ namespace DiaryApp.API.Controllers
         [HttpPost("addEvent")]
         public async Task<IActionResult> AddEvent([FromBody]EventModel eventData)
         {
+            eventData.Date = eventData.Date.ToLocalTime();
             var newEvent = mapper.Map<EventItem>(eventData);
             await eventService.AddItem(newEvent, eventData.OwnerID);
             return Ok(newEvent.ID);
@@ -73,10 +74,16 @@ namespace DiaryApp.API.Controllers
             return Ok();
         }
 
-        [HttpDelete("{eventID}")]
+        [HttpDelete("deleteEvent/{eventID}")]
         public async Task DeleteEvent(int eventID)
         {
             await eventService.DeleteItem(eventID);
+        }
+
+        [HttpDelete("{eventListID}")]
+        public async Task DeleteEventList(int eventListID)
+        {
+            await eventService.Delete(eventListID);
         }
     }
 }

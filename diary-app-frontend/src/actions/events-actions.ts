@@ -59,7 +59,7 @@ export const Thunks = {
   deleteEvent: (eventID: number) => {
     return dispatch => {
       axios
-        .delete(baseEventsApi + `${eventID}`)
+        .delete(baseEventsApi + "deleteEvent/" + eventID)
         .then(dispatch(Actions.deleteEvent(eventID)));
     };
   }
