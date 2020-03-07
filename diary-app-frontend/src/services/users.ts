@@ -7,13 +7,13 @@ const { baseApi } = config;
 
 interface ILoginResponse {
   id: number;
-  userName: string;
+  username: string;
   token: string;
 }
 
 export const logoff = () => {
   localStorage.removeItem("user");
-  history.push("/");
+  history.push("/login");
 };
 
 export const login = (user: IUser) => {

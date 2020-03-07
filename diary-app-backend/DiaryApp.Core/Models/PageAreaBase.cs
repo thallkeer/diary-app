@@ -18,10 +18,12 @@ namespace DiaryApp.Core
 
         }
 
-        public PageAreaBase(PageBase page, string header)
+        public PageAreaBase(PageBase page, string header, bool needInitialize)
         {
             Page = page;
             Header = header;
+            if (needInitialize)
+                Initialize();
         }
 
         /// <summary>
@@ -31,6 +33,10 @@ namespace DiaryApp.Core
         /// <param name="month"></param>
         /// <returns></returns>
         public abstract PageAreaBase TransferAreaData(PageBase page);
+
+        public abstract void AddFromOtherArea(PageAreaBase otherArea);
+
+        protected abstract void Initialize();
 
         public override string ToString()
         {

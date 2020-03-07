@@ -40,7 +40,7 @@ export interface IHabitsTracker {
 
 export interface IUser {
   id: number;
-  userName: string;
+  username: string;
   password?: string;
   token?: string;
 }

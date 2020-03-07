@@ -44,7 +44,8 @@ namespace DiaryApp.Data.Services
 
         public virtual async Task Update(TEntity entity)
         {
-            dbSet.Update(entity);
+            context.Entry(entity).State = EntityState.Modified;
+            //dbSet.Update(entity);
             await context.SaveChangesAsync();
         }
     }

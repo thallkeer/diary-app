@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
-using DiaryApp.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -46,15 +45,19 @@ namespace DiaryApp.API.Controllers
         }
 
         [HttpPost("transferData")]
-        public async Task<IActionResult> TransferPageDataToNextMonth(int prevPageID, TransferDataModel transferDataModel)
-        {            
+        public async Task<IActionResult> TransferPageDataToNextMonth(TransferDataRequestParams transferDataRequestParams)
+        {
+            var prevPageParams = transferDataRequestParams.PageParams;
+            var transferDataModel = transferDataRequestParams.TransferDataModel;
+            if (prevPageParams == null)
+                return BadRequest("No original page data received, check application state");
             if (transferDataModel == null)
                 return BadRequest("No transfer information is received, check transfer data model");
             try
             {
-                MonthPage prevPage = await monthPageService.GetById(prevPageID);
+                MonthPage prevPage = await monthPageService.GetPageForUser(prevPageParams.UserId, prevPageParams.Year, prevPageParams.Month);
                 if (prevPage == null)
-                    return BadRequest("No original page received, check month page ID");
+                    return BadRequest($"No original page found for {prevPageParams.UserId} {prevPageParams.Year} {prevPageParams.Month}");
                 await monthPageService.TransferPageDataToNextMonth(prevPage, transferDataModel);
                 return Ok();
             }
@@ -70,43 +73,7 @@ namespace DiaryApp.API.Controllers
         {
             try
             {
-                var monthPage = new MonthPage()
-                {
-                    UserID = pageParams.UserId,
-                    Year = pageParams.Year,
-                    Month = pageParams.Month
-                };
-
-                await monthPageService.Create(monthPage);
-
-                monthPage.DesiresArea = new DesiresArea(monthPage);
-                monthPage.GoalsArea = new GoalsArea(monthPage);
-                monthPage.PurchasesArea = new PurchasesArea(monthPage);
-                monthPage.IdeasArea = new IdeasArea(monthPage);
-
-                await monthPageService.Update(monthPage);
-
-                monthPage.PurchasesArea.PurchasesLists.AddRange(new TodoList[]
-                {
-                new TodoList {Title = "Название списка"},
-                new TodoList {Title = "Название списка"}
-                });
-
-                monthPage.PurchasesArea.PurchasesLists.ForEach(x => x.Page = monthPage);
-
-                monthPage.DesiresArea.DesiresLists.AddRange(new EventList[]
-                {
-                new EventList {Title = "Прочитать"},
-                new EventList {Title = "Посмотреть"},
-                new EventList {Title = "Посетить"},
-                });
-
-                monthPage.DesiresArea.DesiresLists.ForEach(x => x.Page = monthPage);
-
-                monthPage.IdeasArea.IdeasList = new EventList() { Page = monthPage };
-                monthPage.GoalsArea.GoalsLists.Add(new HabitsTracker() { GoalName = "Название цели" });
-
-                await monthPageService.Update(monthPage);
+                MonthPage monthPage = await monthPageService.CreatePageByParams(pageParams.UserId,pageParams.Year, pageParams.Month);
 
                 MonthPageModel model = mapper.Map<MonthPageModel>(monthPage);
                 return Ok(model);
@@ -116,7 +83,7 @@ namespace DiaryApp.API.Controllers
                 logger.LogErrorWithDate(ex);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-        }
+        }       
 
         [HttpGet("purchasesArea/{pageID}")]
         public async Task<IActionResult> GetPurchasesArea(int pageID)

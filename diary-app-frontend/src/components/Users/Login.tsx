@@ -32,7 +32,7 @@ export const Login: React.FC = () => {
     e.preventDefault();
     await onSubmit(signIn)({
       id: 0,
-      userName,
+      username: userName,
       password
     })
       .then(res => {

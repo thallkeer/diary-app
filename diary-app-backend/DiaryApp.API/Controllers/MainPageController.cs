@@ -54,29 +54,7 @@ namespace DiaryApp.API.Controllers
         {
             try
             {
-                var mainPage = new MainPage()
-                {
-                    UserID = pageParams.UserId,
-                    Year = pageParams.Year,
-                    Month = pageParams.Month,
-                };
-
-                await mainPageService.Create(mainPage);
-
-                var impEvents = new EventList()
-                {
-                    Title = "Важные события",
-                    Page = mainPage
-                };
-
-                var todos = new TodoList
-                {
-                    Title = "Важные дела",
-                    Page = mainPage
-                };
-
-                await eventService.Create(impEvents);
-                await todoService.Create(todos);
+                MainPage mainPage = await mainPageService.CreatePageByParams(pageParams.UserId, pageParams.Year, pageParams.Month);
 
                 MainPageModel model = mapper.Map<MainPageModel>(mainPage);
                 return Ok(model);

@@ -18,6 +18,8 @@ namespace DiaryApp.Core
         {
             return $"{Title} {Page?.Year} {Page?.Month}";
         }
+
+        protected abstract ListBase<T> CreateBasedOnItself(PageBase page);
     }
 
     public class EventList : ListBase<EventItem>
@@ -32,13 +34,17 @@ namespace DiaryApp.Core
 
         }
 
-        public EventList(EventList original)
+        protected override ListBase<EventItem> CreateBasedOnItself(PageBase page)
         {
-            this.Title = original.Title;
-            this.Items = new List<EventItem>(original.Items.Count);
-            original.Items?.ForEach(item =>
+            var eventList = new EventList
             {
-                this.Items.Add(new EventItem
+                Title = this.Title,
+                Items = new List<EventItem>(this.Items.Count),
+                Page = page
+            };
+            this.Items?.ForEach(item =>
+            {
+                eventList.Items.Add(new EventItem
                 {
                     Subject = item.Subject,
                     Url = item.Url,
@@ -46,7 +52,10 @@ namespace DiaryApp.Core
                     Date = item.Date
                 });
             });
+            return eventList; 
         }
+
+        public EventList CreateListBasedOnItself(PageBase page) => (EventList)CreateBasedOnItself(page);
     }
 
     public class TodoList : ListBase<TodoItem>
@@ -59,19 +68,26 @@ namespace DiaryApp.Core
 
         }
 
-        public TodoList(TodoList original)
+        protected override ListBase<TodoItem> CreateBasedOnItself(PageBase page)
         {
-            this.Title = original.Title;
-            this.Items = new List<TodoItem>(original.Items.Count);
-            original.Items?.ForEach(item =>
+            var todolist = new TodoList
             {
-                this.Items.Add(new TodoItem
+                Title = this.Title,
+                Items = new List<TodoItem>(this.Items.Count),
+                Page = page
+            };
+            this.Items?.ForEach(item =>
+            {
+                todolist.Items.Add(new TodoItem
                 {
                     Done = item.Done,
                     Subject = item.Subject,
                     Url = item.Url,
                 });
             });
+            return todolist;
         }
+
+        public TodoList CreateListBasedOnItself(PageBase page) => (TodoList)CreateBasedOnItself(page);
     }
 }

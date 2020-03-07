@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Calendar from "../Calendar/Calendar";
 import { Container, Row, Col } from "react-bootstrap";
 import { ImportantThings } from "./ImportantThings";
@@ -17,12 +17,6 @@ export const MainPage: FC = () => {
     },
     PageType.MainPage
   );
-
-  const { loading, page } = pageState;
-
-  if (loading || !page) return <Loader />;
-
-  console.log(page);
 
   return (
     <MainPageContext.Provider value={pageState}>

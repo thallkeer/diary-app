@@ -26,6 +26,7 @@ export const Thunks = {
     return dispatch => {
       dispatch(Actions.startLoadEvents());
       axios.get(baseEventsApi + pageID).then(response => {
+        console.log(response.data);
         dispatch(Actions.finishLoadEvents(response.data));
       });
     };

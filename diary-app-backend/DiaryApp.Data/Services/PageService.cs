@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace DiaryApp.Data.Services
 {
-    public class PageService<T> : CrudService<T>, IPageService<T>
+    public abstract class PageService<T> : CrudService<T>, IPageService<T>
         where T : PageBase
     {
         public PageService(ApplicationContext context) : base(context)
@@ -17,5 +17,7 @@ namespace DiaryApp.Data.Services
                (mp => mp.User.ID == userID && mp.Month == month && mp.Year == year);
             return page;
         }
+
+        public abstract Task<T> CreatePageByParams(int userID, int year, int month);
     }
 }

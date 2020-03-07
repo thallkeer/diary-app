@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -45,6 +45,12 @@ export const AddEventForm: React.FC<IFormProps> = ({
   };
 
   const [formState, setFormState] = useState<IFormState | null>(initialState);
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.persist();
@@ -98,22 +104,34 @@ export const AddEventForm: React.FC<IFormProps> = ({
     >
       <Form id="add-event-form" onSubmit={handleSubmit} noValidate={true}>
         <Modal.Header closeButton>
-          <FormControl
-            autoFocus={true}
-            autoComplete={"off"}
-            placeholder="Добавьте название"
-            aria-label="Добавьте название"
-            aria-describedby="basic-addon1"
-            value={formState.item.subject}
-            onChange={onChange}
-          />
+          <Modal.Title>
+            {formState.item.id === 0
+              ? "Новое событие"
+              : "Редактирование события"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FormGroup as={Row} style={{ marginBottom: "0" }}>
-            <FormLabel column sm="1">
+          <FormGroup as={Row}>
+            <FormLabel column sm="2">
+              Событие
+            </FormLabel>
+            <Col sm="10">
+              <FormControl
+                autoFocus={true}
+                autoComplete={"off"}
+                aria-describedby="basic-addon1"
+                value={formState.item.subject}
+                onChange={onChange}
+                ref={inputRef}
+                required
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup as={Row} className="mb-0">
+            <FormLabel column sm="2">
               <FontAwesomeIcon icon={faClock} />
             </FormLabel>
-            <Col sm="11">
+            <Col sm="10">
               <FormControl
                 plaintext
                 disabled
