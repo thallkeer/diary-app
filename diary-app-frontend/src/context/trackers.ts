@@ -1,4 +1,4 @@
-import { HabitTrackerActions } from "../actions/habitTracker-actions";
+import { HabitTrackerActions } from "./actions/habitTracker-actions";
 import { IGoalsArea } from "../models";
 
 export const trackersReducer = (

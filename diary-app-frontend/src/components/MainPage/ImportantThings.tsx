@@ -1,19 +1,26 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { TodoList } from "../Lists/TodoList";
 import { MainPageContext } from "../../context";
+import { TodoListState } from "../Lists/TodoListState";
+import { IMainPage } from "../../models";
 import Loader from "../Loader";
-import { useTodos } from "../../hooks/useLists";
 
 export const ImportantThings = () => {
-  const { page } = useContext(MainPageContext);
-  const { loading, list, dispatch } = useTodos(page);
+  const pageState = useContext(MainPageContext);
 
-  if (loading || !list)
-    return (
-      <div>
-        <Loader />
-      </div>
-    );
+  const [page, setPage] = useState<IMainPage>();
 
-  return <TodoList fillToNumber={6} todoList={list} dispatch={dispatch} />;
+  useEffect(() => {
+    const check: boolean = pageState && pageState.page !== null;
+    console.log("imp things wrap use effcet", pageState);
+    if (check) setPage(pageState.page);
+  }, [pageState.page]);
+
+  if (!page) return <Loader />;
+
+  return (
+    <TodoListState page={page}>
+      <TodoList />
+    </TodoListState>
+  );
 };

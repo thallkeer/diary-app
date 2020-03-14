@@ -1,4 +1,4 @@
-import { TodoActions } from "../actions/todo-actions";
+import { TodoActions } from "./actions/todo-actions";
 import { getTodos } from "../selectors";
 import { ITodoListContext } from ".";
 
@@ -18,8 +18,6 @@ export const todosReducer = (
       };
 
     case "ADD_TODO": {
-      console.log("add todo payload", action.payload);
-
       return {
         ...state,
         list: {

@@ -1,25 +1,13 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import Calendar from "../Calendar/Calendar";
 import { Container, Row, Col } from "react-bootstrap";
 import { ImportantThings } from "./ImportantThings";
 import { ImportantEvents } from "./ImportantEvents";
-import { MainPageContext, IMainPageContext } from "../../context";
-import Loader from "../Loader";
-import { usePage, PageType } from "../../hooks/usePage";
+import { MainPageState } from "./MainPageState";
 
 export const MainPage: FC = () => {
-  const pageState = usePage<IMainPageContext>(
-    {
-      loading: false,
-      events: null,
-      page: null,
-      setPageState: () => {}
-    },
-    PageType.MainPage
-  );
-
   return (
-    <MainPageContext.Provider value={pageState}>
+    <MainPageState>
       <Container fluid className="mt-20">
         <Row>
           <Col md="3" className="text-center">
@@ -31,6 +19,6 @@ export const MainPage: FC = () => {
           </Col>
         </Row>
       </Container>
-    </MainPageContext.Provider>
+    </MainPageState>
   );
 };

@@ -1,10 +1,10 @@
-import * as eventActions from "../actions/events-actions";
+import { EventActions } from "./actions/events-actions";
 import { IEventListContext } from ".";
 import { getEvents } from "../selectors";
 
 export const eventsReducer = (
   state: IEventListContext,
-  action: eventActions.EventActions
+  action: EventActions
 ): IEventListContext => {
   switch (action.type) {
     case "LOAD_EVENTS_START":
@@ -12,18 +12,18 @@ export const eventsReducer = (
 
     case "LOAD_EVENTS": {
       const eventList = action.payload;
+      console.log("events loaded", eventList);
+
       const events = eventList.items || [];
-
-      events.forEach(event => (event.date = new Date(event.date)));
-
-      let newEventList = {
-        ...eventList,
-        items: events
-      };
 
       return {
         ...state,
-        list: newEventList,
+        list: {
+          ...eventList,
+          items: events.map(event => {
+            return { ...event, date: new Date(event.date) };
+          })
+        },
         loading: false
       };
     }

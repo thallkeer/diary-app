@@ -8,11 +8,14 @@ import {
   IEventList,
   ITodoList,
   IGoalsArea,
-  IUser
+  IUser,
+  ITodo,
+  IEvent
 } from "../models/index";
-import { EventThunks } from "../actions/events-actions";
-import { TodoThunks } from "../actions/todo-actions";
-import { HabitTrackerThunks } from "../actions/habitTracker-actions";
+import { EventThunks } from "./actions/events-actions";
+import { TodoThunks } from "./actions/todo-actions";
+import { HabitTrackerThunks } from "./actions/habitTracker-actions";
+import { MainPageActions, MainPageThunks } from "./actions/mainPage-actions";
 
 export interface IGlobalContext {
   month: number;
@@ -21,33 +24,37 @@ export interface IGlobalContext {
   setAppState?: (appState: IGlobalContext) => void;
 }
 
+export interface IBasePageState extends PageState<IPage> {}
+
 export type PageState<T extends IPage> = {
   page: T;
   loading: boolean;
 };
 
-export interface IMainPageContext extends PageState<IMainPage> {
+export interface IMainPageContext
+  extends PageState<IMainPage>,
+    IDispatchable<MainPageThunks> {
   events: IEventListContext;
-  setPageState?: (pageState: IMainPageContext) => void;
 }
 
-export interface IMonthPageContext extends PageState<IMonthPage> {
-  setPageState?: (pageState: IMonthPageContext) => void;
-}
+export interface IMonthPageContext extends PageState<IMonthPage> {}
 
 interface IDispatchable<TAction> {
-  dispatch: (action: TAction) => void;
+  dispatch?: (action: TAction) => void;
 }
 
-export interface IListState<TList extends IList<ListItem>, TAction>
-  extends IDispatchable<TAction> {
+export interface IListState<TList extends IList<ListItem>> {
   list: TList;
   loading: boolean;
+  updateListTitle?: (title: string) => void;
+  addOrUpdateItem?: (item: ListItem) => void;
+  deleteItem?: (itemID: number) => void;
 }
 
-export interface IEventListContext
-  extends IListState<IEventList, EventThunks> {}
-export interface ITodoListContext extends IListState<ITodoList, TodoThunks> {}
+export interface IEventListContext extends IListState<IEventList> {}
+export interface ITodoListContext extends IListState<ITodoList> {
+  toggleTodoItem?: (todoId: number) => void;
+}
 
 export interface IGoalsAreaContext
   extends IDispatchable<HabitTrackerThunks>,

@@ -1,6 +1,6 @@
 import { ActionsUnion, createAction } from "./action-helpers";
-import { ITodo, ITodoList } from "../models";
-import axios from "../axios/axios";
+import { ITodo, ITodoList } from "../../models";
+import axios from "../../axios/axios";
 
 export const ADD_TODO = "ADD_TODO";
 export const TOGGLE_TODO = "TOGGLE_TODO";
@@ -24,12 +24,16 @@ const Actions = {
 const baseTodoApi: string = `todo/`;
 
 export const Thunks = {
+  setTodoList: (todoList: ITodoList) => {
+    return dispatch => dispatch(Actions.finishLoadTodos(todoList));
+  },
+
   loadTodosByPageID: (pageID: number) => {
     return dispatch => {
       dispatch(Actions.startLoadTodos());
-      axios.get(baseTodoApi + pageID).then(response => {
-        dispatch(Actions.finishLoadTodos(response.data));
-      });
+      axios
+        .get(baseTodoApi + pageID)
+        .then(response => dispatch(Actions.finishLoadTodos(response.data)));
     };
   },
 

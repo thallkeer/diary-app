@@ -5,19 +5,14 @@ import { PurchasesArea } from "./PurchasesArea";
 import { DesiresArea } from "./DesiresArea";
 import { IdeasArea } from "./IdeasArea";
 import { GoalsArea } from "./GoalsArea";
-import { usePage, PageType } from "../../hooks/usePage";
-import { IMonthPageContext, MonthPageContext } from "../../context";
+import { MonthPageContext } from "../../context";
 import { Link } from "react-router-dom";
 import strelka from "../../images/strelochkaa.png";
+import { usePage } from "../../hooks/usePage";
+import { PageType } from "../../context/actions/page-actions";
 
 export const MonthPage: React.FC = () => {
-  const pageState = usePage<IMonthPageContext>(
-    {
-      loading: false,
-      page: null
-    },
-    PageType.MonthPage
-  );
+  const pageState = usePage(PageType.MonthPage);
 
   const { loading, page } = pageState;
 

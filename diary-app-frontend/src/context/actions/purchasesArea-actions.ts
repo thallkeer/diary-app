@@ -1,6 +1,6 @@
 import { ActionsUnion, createAction } from "./action-helpers";
-import axios from "../axios/axios";
-import { ITodoList } from "../models";
+import axios from "../../axios/axios";
+import { ITodoList } from "../../models";
 
 export const ADD_PURCHASES_LIST = "ADD_PURCHASES_LIST";
 

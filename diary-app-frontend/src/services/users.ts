@@ -1,6 +1,6 @@
 import axios from "axios";
 import { IUser } from "../models";
-import { config } from "../helpers/config";
+import { config } from "../utils/config";
 import history from "../components/history";
 
 const { baseApi } = config;

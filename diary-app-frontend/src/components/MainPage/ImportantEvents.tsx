@@ -1,40 +1,46 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { EventList } from "../Lists/EventList";
-import { MainPageContext, IMainPageContext } from "../../context";
+import {
+  MainPageContext,
+  IMainPageContext,
+  EventListContext
+} from "../../context";
+import { EventListState } from "../Lists/EventListState";
+import { Thunks as mainPageThunks } from "../../context/actions/mainPage-actions";
+import { IMainPage } from "../../models";
 import Loader from "../Loader";
-import { useEvents } from "../../hooks/useLists";
-import { IEventList } from "../../models";
 
 export const ImportantEvents: React.FC = () => {
   const pageState = useContext(MainPageContext);
-  const { page, setPageState } = pageState;
-
-  const state = useEvents(page);
-  const { loading, list, dispatch } = state;
-
-  const newPageState: IMainPageContext = {
-    ...pageState,
-    events: state
-  };
+  const [page, setPage] = useState<IMainPage>(null);
 
   useEffect(() => {
-    list && setPageState(newPageState);
-  }, [list, setPageState]);
+    const check: boolean = pageState && pageState.page !== null;
 
-  if (loading || !list) return <Loader />;
+    console.log("imp events wrap use effcet", pageState, check);
+    if (check) setPage(pageState.page);
+  }, [pageState.page]);
 
-  let listCopy: IEventList;
-  listCopy = Object.assign({}, list);
-
-  listCopy.items.sort((e1, e2) => e1.date.getTime() - e2.date.getTime());
+  if (!page) return <Loader />;
 
   return (
-    <EventList
-      withDate
-      readonly
-      fillToNumber={6}
-      eventList={listCopy}
-      dispatch={dispatch}
-    />
+    <EventListState page={page}>
+      <ImportantEventsList pageState={pageState} />
+    </EventListState>
   );
+};
+
+export const ImportantEventsList: React.FC<{ pageState: IMainPageContext }> = ({
+  pageState
+}) => {
+  const state = useContext(EventListContext);
+  const { dispatch } = pageState;
+  const { list } = state;
+
+  useEffect(() => {
+    console.log("use effect imp ev", state);
+    if (list !== null) dispatch(mainPageThunks.setEvents(state));
+  }, [list]);
+
+  return <EventList withDate readonly />;
 };

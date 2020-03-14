@@ -1,56 +1,43 @@
 /*@typescript-eslint/no-unused-vars*/
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import { ListItemInput } from "./ListItemInput";
-import {
-  Thunks as eventThunks,
-  EventThunks
-} from "../../actions/events-actions";
-import { IEvent, IEventList } from "../../models";
+import { IEvent } from "../../models";
 import { DeleteBtn } from "./DeleteBtn";
 import ListHeaderInput from "./ListHeaderInput";
-import { useEventList } from "../../hooks/useLists";
+import { EventListContext } from "../../context";
+import Loader from "../Loader";
+import { getEmptyEvent, fillToNumber } from "../../utils";
 
 type EventListProps = {
   withDate?: boolean;
   readonly?: boolean;
   className?: string;
-  fillToNumber?: number;
-  eventList: IEventList;
-  dispatch: (action: EventThunks) => void;
 };
 
 export const EventList: FC<EventListProps> = ({
   withDate = false,
   readonly = false,
-  className,
-  eventList,
-  dispatch,
-  fillToNumber
+  className
 }) => {
-  const { addOrUpdateEvent, deleteEvent, updateEventList } = eventThunks;
-  const [title, setTitle, events] = useEventList(eventList, fillToNumber);
+  const {
+    list,
+    loading,
+    deleteItem,
+    updateListTitle,
+    addOrUpdateItem
+  } = useContext(EventListContext);
 
-  const onDelete = (eventID: number) => {
-    eventID !== 0 && dispatch(deleteEvent(eventID));
-  };
+  if (loading || !list) return <Loader />;
 
-  const onUpdate = (event: IEvent) => {
-    dispatch(
-      addOrUpdateEvent({
-        ...event,
-        ownerID: eventList.id
-      })
-    );
-  };
+  console.log(list.items);
 
-  const handleBlur = () => {
-    dispatch(
-      updateEventList({
-        ...eventList,
-        title
-      })
-    );
-  };
+  const items = [...list.items].sort((e1, e2) => {
+    console.log(e1, e1.date, e2, e2.date);
+
+    return e1.date.getTime() - e2.date.getTime();
+  });
+
+  const events = fillToNumber(items, 6, getEmptyEvent);
 
   const getItemText = (event: IEvent): string => {
     if (!withDate || event.id === 0) return event.subject;
@@ -68,13 +55,7 @@ export const EventList: FC<EventListProps> = ({
   return (
     <div className={`mt-40 ${className}`}>
       <h1 className="todo-list-header">
-        <ListHeaderInput
-          value={title}
-          handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setTitle(e.target.value)
-          }
-          handleBlur={handleBlur}
-        />
+        <ListHeaderInput value={list.title} handleBlur={updateListTitle} />
       </h1>
       <ul className="todos">
         {events.map((event: IEvent, i) => (
@@ -82,12 +63,12 @@ export const EventList: FC<EventListProps> = ({
             <ListItemInput
               style={{ paddingLeft: "5px" }}
               item={event}
-              updateItem={onUpdate}
+              updateItem={addOrUpdateItem}
               getItemText={readonly ? getItemText : null}
               readonly={readonly || event.readonly}
             />
             {event.id !== 0 && (
-              <DeleteBtn onDelete={() => onDelete(event.id)} />
+              <DeleteBtn onDelete={() => deleteItem(event.id)} />
             )}
           </li>
         ))}

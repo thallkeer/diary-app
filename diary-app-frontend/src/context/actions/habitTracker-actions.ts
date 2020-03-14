@@ -1,6 +1,6 @@
 import { ActionsUnion, createAction } from "./action-helpers";
-import { IHabitsTracker } from "../models";
-import axios from "../axios/axios";
+import { IHabitsTracker } from "../../models";
+import axios from "../../axios/axios";
 
 export const ADD_TRACKER = "ADD_TRACKER";
 export const UPDATE_TRACKER = "UPDATE_TRACKER";

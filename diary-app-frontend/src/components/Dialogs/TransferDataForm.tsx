@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Button, Modal, Row, Form, FormGroup } from "react-bootstrap";
+import React, { useState, useContext, useRef } from "react";
+import { Button, Modal, Row, Form, FormGroup, Overlay } from "react-bootstrap";
 import axios from "../../axios/axios";
 import { AppContext } from "../../context";
 
@@ -23,6 +23,7 @@ class TransferDataModel {
 interface IState {
   show: boolean;
   transferDataModel: TransferDataModel;
+  error: string;
 }
 
 type PageParams = {
@@ -42,8 +43,10 @@ export const TransferDataForm: React.FC<{
 }> = ({ show, onHide }) => {
   const [state, setState] = useState<IState>({
     show,
-    transferDataModel: new TransferDataModel()
+    transferDataModel: new TransferDataModel(),
+    error: null
   });
+  const target = useRef(null);
 
   const { year, month, user } = useContext(AppContext);
 
@@ -69,8 +72,14 @@ export const TransferDataForm: React.FC<{
 
     axios
       .post("monthpage/transferData", data)
-      .then(res => setState({ ...state, show: false }))
-      .catch(err => console.log(err));
+      .then(res => {
+        setState({ ...state, show: false });
+        onHide();
+      })
+      .catch(err => {
+        console.log(err);
+        setState({ ...state, error: "Error!!!" });
+      });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,6 +142,35 @@ export const TransferDataForm: React.FC<{
               />
             </FormGroup>
           ))}
+          {state.error && (
+            <Overlay
+              target={target.current}
+              show={state.error !== null}
+              placement="right"
+            >
+              {({
+                placement,
+                scheduleUpdate,
+                arrowProps,
+                outOfBoundaries,
+                show: _show,
+                ...props
+              }) => (
+                <div
+                  {...props}
+                  style={{
+                    backgroundColor: "rgba(255, 100, 100, 0.85)",
+                    padding: "2px 10px",
+                    color: "white",
+                    borderRadius: 3,
+                    ...props.style
+                  }}
+                >
+                  {state.error}
+                </div>
+              )}
+            </Overlay>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onHide}>

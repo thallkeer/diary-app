@@ -10,13 +10,24 @@ import { Login } from "./components/Users/Login";
 import { PrivateRoute } from "./components/Router/PrivateRoute";
 import { AppContext } from "./context";
 import { useAppState } from "./hooks/useAppState";
-import { logoff } from "./services/users";
 
 export default function App() {
   const curDate = new Date();
+
+  const getFromStorage = (key: string) => {
+    let item = localStorage.getItem(key);
+    if (item) return Number(item);
+    return null;
+  };
+
+  let year = getFromStorage("year") || curDate.getFullYear();
+  let month = getFromStorage("month") || curDate.getMonth() + 1;
+
+  console.log(year, month);
+
   const appState = useAppState({
-    month: curDate.getMonth() + 1,
-    year: curDate.getFullYear(),
+    month: month,
+    year: year,
     user: JSON.parse(localStorage.getItem("user"))
   });
 

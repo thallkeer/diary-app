@@ -1,5 +1,5 @@
 import { IPurchasesArea } from "../models";
-import { PurchasesAreaActions } from "../actions/purchasesArea-actions";
+import { PurchasesAreaActions } from "./actions/purchasesArea-actions";
 
 export const purchasesAreaReducer = (
   state: IPurchasesArea,

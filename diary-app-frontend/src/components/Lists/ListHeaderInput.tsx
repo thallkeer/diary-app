@@ -1,33 +1,33 @@
-import React from "react";
+import React, { useRef } from "react";
 
 type Props = {
   className?: string;
   value: string;
-  handleBlur: (event?: React.FocusEvent<HTMLInputElement>) => void;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleBlur: (title: string) => void;
 };
 
 export const ListHeaderInput: React.FC<Props> = ({
   value,
   className,
-  handleBlur,
-  handleChange
+  handleBlur
 }) => {
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") handleBlur();
+    if (event.key === "Enter") handleBlur(titleInput.current.value);
   };
+
+  const titleInput = useRef(null);
 
   let cn = `list-header-input ${className || ""}`;
 
   return (
     <input
+      ref={titleInput}
+      defaultValue={value}
       className={cn}
       type="text"
       maxLength={50}
-      value={value}
-      onBlur={handleBlur}
+      onBlur={() => handleBlur(titleInput.current.value)}
       onKeyPress={handleKeyPress}
-      onChange={handleChange}
       autoComplete={"off"}
     />
   );

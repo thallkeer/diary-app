@@ -8,7 +8,7 @@ import { trackersReducer } from "../../context/trackers";
 import {
   HabitTrackerThunks,
   Thunks as trackerThunks
-} from "../../actions/habitTracker-actions";
+} from "../../context/actions/habitTracker-actions";
 import { TrackerRow } from "./TrackerRow";
 import { GoalsAreaContext } from "../../context";
 

@@ -29,7 +29,7 @@ export const TrackerRow: React.FC<{
         <ListHeaderInput
           value={state.goalName}
           handleBlur={handleBlur}
-          handleChange={handleChange}
+          // handleChange={handleChange}
         />
       </h3>
     </Col>,

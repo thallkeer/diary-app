@@ -1,5 +1,5 @@
 import axios from "axios";
-import { config } from "../helpers/config";
+import { config } from "../utils/config";
 import { logoff } from "../services/users";
 const { baseApi, headers } = config;
 

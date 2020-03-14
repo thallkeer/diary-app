@@ -4,14 +4,14 @@ import { Row, Col } from "react-bootstrap";
 import { TodoList } from "../Lists/TodoList";
 import Loader from "../Loader";
 import usePageArea from "../../hooks/usePageArea";
-import { useTodos } from "../../hooks/useLists";
 import { AddListBtn } from "../AddListBtn";
 import { getRandomId } from "../../utils";
 import { purchasesAreaReducer } from "../../context/purchasesArea";
 import {
   PurchasesAreaThunks,
   Thunks as thunks
-} from "../../actions/purchasesArea-actions";
+} from "../../context/actions/purchasesArea-actions";
+import { TodoListState } from "../Lists/TodoListState";
 
 type ListPair = {
   list1: ITodoList;
@@ -19,16 +19,11 @@ type ListPair = {
 };
 
 const OneList: React.FC<{ todoList: ITodoList }> = ({ todoList }) => {
-  const { dispatch, list } = useTodos(null, todoList);
-
   return (
     <Col md={5}>
-      <TodoList
-        fillToNumber={4}
-        className="mt-20 month-lists-header"
-        dispatch={dispatch}
-        todoList={list}
-      />
+      <TodoListState initList={todoList}>
+        <TodoList className="mt-20 month-lists-header" />
+      </TodoListState>
     </Col>
   );
 };

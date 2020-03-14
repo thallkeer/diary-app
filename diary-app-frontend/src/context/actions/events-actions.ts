@@ -1,6 +1,6 @@
 import { ActionsUnion, createAction } from "./action-helpers";
-import { IEvent, IEventList } from "../models/index";
-import axios from "../axios/axios";
+import { IEvent, IEventList, ListItem } from "../../models/index";
+import axios from "../../axios/axios";
 
 export const ADD_EVENT = "ADD_EVENT";
 export const UPDATE_EVENT = "UPDATE_EVENT";
@@ -22,13 +22,20 @@ const Actions = {
 const baseEventsApi = `events/`;
 
 export const Thunks = {
+  setEventList: (eventList: IEventList) => {
+    return dispatch => {
+      console.log("setting event list", eventList);
+
+      dispatch(Actions.finishLoadEvents(eventList));
+    };
+  },
+
   loadEventsByPageID: (pageID: number) => {
     return dispatch => {
       dispatch(Actions.startLoadEvents());
-      axios.get(baseEventsApi + pageID).then(response => {
-        console.log(response.data);
-        dispatch(Actions.finishLoadEvents(response.data));
-      });
+      axios
+        .get(baseEventsApi + pageID)
+        .then(response => dispatch(Actions.finishLoadEvents(response.data)));
     };
   },
 

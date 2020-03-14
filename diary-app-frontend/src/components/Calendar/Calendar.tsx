@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import { getEventsByDay } from "../../selectors";
 import { AddEventForm } from "../Dialogs/AddEventForm";
 import { IEvent } from "../../models";
-import { Thunks as eventThunks } from "../../actions/events-actions";
 import { MainPageContext, AppContext } from "../../context";
 import { Link } from "react-router-dom";
 import strelka from "../../images/strelochkaa.png";
@@ -27,7 +26,8 @@ export const Calendar: React.FC = () => {
   const appState = useContext(AppContext);
   const { year, month, setAppState } = appState;
   const pageState = useContext(MainPageContext);
-  const { events } = pageState;
+
+  console.log("events context in calendar", pageState);
 
   const getDaysInMonth = (): number => {
     let curDate = currentDate();
@@ -52,13 +52,11 @@ export const Calendar: React.FC = () => {
 
   const addEvent = (newEvent: IEvent) => {
     console.log(newEvent);
-
-    events.dispatch(
-      eventThunks.addOrUpdateEvent({
-        ...newEvent,
-        ownerID: events.list.id
-      })
-    );
+    const { events } = pageState;
+    events.addOrUpdateItem({
+      ...newEvent,
+      ownerID: events.list.id
+    });
   };
 
   let eventClicked = false;
@@ -109,6 +107,7 @@ export const Calendar: React.FC = () => {
 
   const getDays = (): any[] => {
     let daysInMonth = [];
+    const { events } = pageState;
     let eventsByDay: Map<number, IEvent[]> = getEventsByDay(events);
     let curDay = currentDay();
 
@@ -203,8 +202,6 @@ export const Calendar: React.FC = () => {
   const setPrevMonth = () => {
     changeMonth(false);
   };
-
-  console.log("calendar", year, month);
 
   return (
     <div className="calendar-wrapper">
