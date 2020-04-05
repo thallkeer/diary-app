@@ -3,7 +3,7 @@ import { IPage, IEventList, IEvent } from "../../models";
 import { EventListContext } from "../../context";
 import {
   EventThunks,
-  Thunks as eventThunks
+  Thunks as eventThunks,
 } from "../../context/actions/events-actions";
 import { eventsReducer } from "../../context/events";
 
@@ -13,7 +13,7 @@ export const EventListState: React.FC<{
 }> = ({ page, initList, children }) => {
   const [state, _dispatch] = useReducer(eventsReducer, {
     loading: false,
-    list: null
+    list: null,
   });
 
   const { list } = state;
@@ -23,7 +23,7 @@ export const EventListState: React.FC<{
     deleteEvent,
     loadEventsByPageID,
     setEventList,
-    updateEventList
+    updateEventList,
   } = eventThunks;
 
   const dispatch = (action: EventThunks) => action(_dispatch);
@@ -43,16 +43,20 @@ export const EventListState: React.FC<{
     dispatch(
       addOrUpdateEvent({
         ...event,
-        ownerID: list.id
+        ownerID: list.id,
       })
     );
   };
+
+  // const deleteList = (list: IEventList) => {
+  //   dispatch();
+  // };
 
   const updateListTitle = (title: string) => {
     dispatch(
       updateEventList({
         ...list,
-        title
+        title,
       })
     );
   };
@@ -63,7 +67,7 @@ export const EventListState: React.FC<{
         ...state,
         deleteItem,
         updateListTitle,
-        addOrUpdateItem: addOrUpdate
+        addOrUpdateItem: addOrUpdate,
       }}
     >
       {children}

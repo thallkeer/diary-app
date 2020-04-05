@@ -10,9 +10,9 @@ namespace DiaryApp.Core
         [MaxLength(50)]
         public string Title { get; set; } = string.Empty;
         [Required]
-        public int PageID { get; set; }        
+        public int PageID { get; set; }
         public virtual PageBase Page { get; set; }
-        public virtual List<T> Items { get; set; }
+        public virtual List<T> Items { get; set; } = new List<T>();
 
         public override string ToString()
         {

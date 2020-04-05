@@ -4,21 +4,20 @@ import { IUser } from "../models";
 import {
   PageType,
   PageThunks,
-  Thunks as pageThunks
+  Thunks as pageThunks,
 } from "../context/actions/page-actions";
 import { pageReducer } from "../context/page";
 
 export function usePage(pageType: PageType) {
   const [pageState, _dispatch] = useReducer(pageReducer, {
     loading: false,
-    page: null
+    page: null,
   });
   const dispatch = (action: PageThunks) => action(_dispatch);
   const { month, year } = useContext(AppContext);
   const user: IUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    console.log("usePage effect");
     dispatch(pageThunks.loadPage(pageType, user, year, month));
   }, [year, month]);
 

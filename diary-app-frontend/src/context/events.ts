@@ -12,19 +12,17 @@ export const eventsReducer = (
 
     case "LOAD_EVENTS": {
       const eventList = action.payload;
-      console.log("events loaded", eventList);
-
       const events = eventList.items || [];
 
       return {
         ...state,
         list: {
           ...eventList,
-          items: events.map(event => {
+          items: events.map((event) => {
             return { ...event, date: new Date(event.date) };
-          })
+          }),
         },
-        loading: false
+        loading: false,
       };
     }
     case "ADD_EVENT":
@@ -35,8 +33,8 @@ export const eventsReducer = (
         ...state,
         list: {
           ...state.list,
-          items: [...getEvents(state), addedEvent]
-        }
+          items: [...getEvents(state), addedEvent],
+        },
       };
 
     case "DELETE_EVENT":
@@ -44,9 +42,12 @@ export const eventsReducer = (
         ...state,
         list: {
           ...state.list,
-          items: getEvents(state).filter(event => event.id !== action.payload)
-        }
+          items: getEvents(state).filter(
+            (event) => event.id !== action.payload
+          ),
+        },
       };
+
     default:
       console.log("reducer", state);
       return state;

@@ -20,14 +20,12 @@ export const Calendar: React.FC = () => {
     showMonthPopup: false,
     showYearPopup: false,
     showYearNav: false,
-    showAddEventForm: false
+    showAddEventForm: false,
   });
 
   const appState = useContext(AppContext);
   const { year, month, setAppState } = appState;
   const pageState = useContext(MainPageContext);
-
-  console.log("events context in calendar", pageState);
 
   const getDaysInMonth = (): number => {
     let curDate = currentDate();
@@ -51,11 +49,10 @@ export const Calendar: React.FC = () => {
   };
 
   const addEvent = (newEvent: IEvent) => {
-    console.log(newEvent);
     const { events } = pageState;
     events.addOrUpdateItem({
       ...newEvent,
-      ownerID: events.list.id
+      ownerID: events.list.id,
     });
   };
 
@@ -84,11 +81,11 @@ export const Calendar: React.FC = () => {
     "Чт",
     "Пт",
     "Сб",
-    "Вс"
+    "Вс",
   ];
 
   const getWeekdays = () => {
-    return weekdaysShortRussian.map(day => (
+    return weekdaysShortRussian.map((day) => (
       <td key={day} className="week-day">
         {day}
       </td>
@@ -122,14 +119,14 @@ export const Calendar: React.FC = () => {
       let curEventClass = curEvents.length ? "day-with-event" : "no-events-day";
 
       daysInMonth.push(
-        <td key={d} className={className} onClick={e => onDayClick(e, d)}>
+        <td key={d} className={className} onClick={(e) => onDayClick(e, d)}>
           <div className="day-span">{d}</div>
-          {curEvents.map(event => (
+          {curEvents.map((event) => (
             <div
               key={event.id}
               className={curEventClass}
               style={{ marginTop: "5px" }}
-              onClick={e => onEventClick(e, d, event)}
+              onClick={(e) => onEventClick(e, d, event)}
             >
               {event.subject}
             </div>
@@ -170,7 +167,7 @@ export const Calendar: React.FC = () => {
       ...state,
       showAddEventForm: true,
       clickedDay: day,
-      clickedEvent: event
+      clickedEvent: event,
     });
   };
 
@@ -191,7 +188,7 @@ export const Calendar: React.FC = () => {
 
     setAppState({
       ...appState,
-      month: newMonth
+      month: newMonth,
     });
   };
 

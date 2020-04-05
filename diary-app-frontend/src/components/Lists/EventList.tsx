@@ -17,23 +17,19 @@ type EventListProps = {
 export const EventList: FC<EventListProps> = ({
   withDate = false,
   readonly = false,
-  className
+  className,
 }) => {
   const {
     list,
     loading,
     deleteItem,
     updateListTitle,
-    addOrUpdateItem
+    addOrUpdateItem,
   } = useContext(EventListContext);
 
   if (loading || !list) return <Loader />;
 
-  console.log(list.items);
-
   const items = [...list.items].sort((e1, e2) => {
-    console.log(e1, e1.date, e2, e2.date);
-
     return e1.date.getTime() - e2.date.getTime();
   });
 
@@ -45,7 +41,7 @@ export const EventList: FC<EventListProps> = ({
     return (
       event.date.toLocaleString("ru", {
         day: "numeric",
-        month: "numeric"
+        month: "numeric",
       }) +
       " " +
       event.subject
@@ -56,6 +52,7 @@ export const EventList: FC<EventListProps> = ({
     <div className={`mt-40 ${className}`}>
       <h1 className="todo-list-header">
         <ListHeaderInput value={list.title} handleBlur={updateListTitle} />
+        <DeleteBtn onDelete={() => console.log("test")} />
       </h1>
       <ul className="todos">
         {events.map((event: IEvent, i) => (

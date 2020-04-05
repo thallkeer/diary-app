@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core
-{
+{    
     public abstract class ListItemBase<TOwner>
     {
         [ScaffoldColumn(false)]

@@ -10,8 +10,6 @@ export const pageReducer = (
       return { ...state, loading: true };
 
     case "FINISH_LOAD_PAGE":
-      console.log("page loaded", action.payload);
-
       return { ...state, loading: false, page: action.payload };
 
     default:

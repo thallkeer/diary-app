@@ -243,6 +243,10 @@ tr {
   border-bottom: 1px solid black;
 }
 
+.todo-list-header:hover span {
+  visibility: visible !important;
+}
+
 .list-header-input {
   outline: none;
   text-align: center;

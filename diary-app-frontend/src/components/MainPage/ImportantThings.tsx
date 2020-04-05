@@ -12,7 +12,6 @@ export const ImportantThings = () => {
 
   useEffect(() => {
     const check: boolean = pageState && pageState.page !== null;
-    console.log("imp things wrap use effcet", pageState);
     if (check) setPage(pageState.page);
   }, [pageState.page]);
 

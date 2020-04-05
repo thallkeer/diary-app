@@ -4,7 +4,7 @@ using System.Linq;
 namespace DiaryApp.Core
 {
     public class MonthPage : PageBase
-    {  
+    {
         public int? PurchasesAreaID { get; set; }
         public int? DesiresAreaID { get; set; }
         public int? IdeasAreaID { get; set; }
@@ -14,7 +14,7 @@ namespace DiaryApp.Core
         public virtual IdeasArea IdeasArea { get; set; }
         public virtual GoalsArea GoalsArea { get; set; }
 
-        public MonthPage() 
+        public MonthPage()
         {
         }
 
@@ -43,9 +43,12 @@ namespace DiaryApp.Core
 
         public override void AddFromOtherArea(PageAreaBase otherArea)
         {
-            PurchasesArea other = otherArea as PurchasesArea;
-            if (other != null)
+            if (otherArea is PurchasesArea other)
+            {
+                var emptyLists = this.PurchasesLists.FindAll(pl => pl.Items.Count == 0);
+                this.PurchasesLists.RemoveAll(pl => emptyLists.Contains(pl));
                 this.PurchasesLists.AddRange(other.PurchasesLists.Select(pl => pl.CreateListBasedOnItself(this.Page)));
+            }
         }
 
         public override PageAreaBase TransferAreaData(PageBase page)
@@ -78,7 +81,7 @@ namespace DiaryApp.Core
 
         }
         public DesiresArea(PageBase page, bool init) : base(page, "В этом месяце я хочу", init)
-        {}
+        { }
 
         public virtual List<EventList> DesiresLists { get; set; } = new List<EventList>(3);
 
@@ -97,9 +100,10 @@ namespace DiaryApp.Core
 
         public override void AddFromOtherArea(PageAreaBase otherArea)
         {
-            DesiresArea other = otherArea as DesiresArea;
-            if (other != null)
+            if (otherArea is DesiresArea other)
             {
+                var emptyLists = this.DesiresLists.FindAll(pl => pl.Items.Count == 0);
+                this.DesiresLists.RemoveAll(pl => emptyLists.Contains(pl));
                 for (int i = 0; i < other.DesiresLists.Count; i++)
                 {
                     this.DesiresLists[i].Items.AddRange(other.DesiresLists[i].Items);
@@ -126,7 +130,7 @@ namespace DiaryApp.Core
         }
         public IdeasArea(PageBase page, bool needInit) : base(page, "Идеи этого месяца", needInit)
         {
-            
+
         }
         public virtual EventList IdeasList { get; set; }
 
@@ -141,9 +145,10 @@ namespace DiaryApp.Core
 
         public override void AddFromOtherArea(PageAreaBase otherArea)
         {
-            IdeasArea other = otherArea as IdeasArea;
-            if (other != null)
+            if (otherArea is IdeasArea other)
+            {
                 this.IdeasList.Items.AddRange(other.IdeasList.Items);
+            }
         }
 
         protected override void Initialize()
@@ -160,15 +165,18 @@ namespace DiaryApp.Core
         }
         public GoalsArea(PageBase page, bool needInit) : base(page, "Цели на этот месяц", needInit)
         {
-            
+
         }
         public virtual List<HabitsTracker> GoalsLists { get; set; } = new List<HabitsTracker>();
 
         public override void AddFromOtherArea(PageAreaBase otherArea)
         {
-            GoalsArea other = otherArea as GoalsArea;
-            if (other != null)
+            if (otherArea is GoalsArea other)
+            {
+                if (this.GoalsLists.Count == 1 && this.GoalsLists[0].SelectedDays.Count == 0)
+                    this.GoalsLists = new List<HabitsTracker>(other.GoalsLists.Count);
                 this.GoalsLists.AddRange(other.GoalsLists.Select(gl => new HabitsTracker(gl)));
+            }
         }
 
         public override PageAreaBase TransferAreaData(PageBase page)

@@ -4,7 +4,7 @@ import { PageType } from "../../context/actions/page-actions";
 import { mainPageReducer } from "../../context/mainPage";
 import {
   MainPageThunks,
-  Thunks as mainPageThunks
+  Thunks as mainPageThunks,
 } from "../../context/actions/mainPage-actions";
 import { usePage } from "../../hooks/usePage";
 
@@ -13,14 +13,12 @@ export const MainPageState: React.FC = ({ children }) => {
   const [pageState, _dispatch] = useReducer(mainPageReducer, {
     page,
     loading,
-    events: null
+    events: null,
   });
 
   const dispatch = (action: MainPageThunks) => action(_dispatch);
 
   useEffect(() => {
-    console.log("main page effect", page);
-
     if (!loading && page !== null) dispatch(mainPageThunks.setPage(page));
   }, [page]);
 

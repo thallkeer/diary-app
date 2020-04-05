@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect } from "react";
 import {
   TodoThunks,
-  Thunks as todoThunks
+  Thunks as todoThunks,
 } from "../../context/actions/todo-actions";
 import { IPage, ITodoList, ITodo } from "../../models";
 import { TodoListContext } from "../../context";
@@ -12,8 +12,8 @@ export const TodoListState: React.FC<{
   initList?: ITodoList;
 }> = ({ page, initList, children }) => {
   const [state, _dispatch] = useReducer(todosReducer, {
-    list: initList || null,
-    loading: false
+    list: null,
+    loading: false,
   });
 
   const dispatch = (action: TodoThunks) => action(_dispatch);
@@ -26,19 +26,15 @@ export const TodoListState: React.FC<{
     addOrUpdateTodo,
     updateTodoList,
     loadTodosByPageID,
-    setTodoList
+    setTodoList,
   } = todoThunks;
-
-  console.log("render todolist", list);
 
   useEffect(() => {
     if (list !== null) return;
 
     if (initList) {
-      console.log("todolist effect setTodoList", list);
       dispatch(setTodoList(initList));
     } else if (page && !list) {
-      console.log("todolist effect loadTodoList", list);
       dispatch(loadTodosByPageID(page.id));
     }
   }, [page, initList, list]);
@@ -55,7 +51,7 @@ export const TodoListState: React.FC<{
     dispatch(
       addOrUpdateTodo({
         ...todo,
-        ownerID: list.id
+        ownerID: list.id,
       })
     );
   };
@@ -64,7 +60,7 @@ export const TodoListState: React.FC<{
     dispatch(
       updateTodoList({
         ...list,
-        title
+        title,
       })
     );
   };
@@ -76,7 +72,7 @@ export const TodoListState: React.FC<{
         updateListTitle,
         deleteItem: deleteTodoItem,
         toggleTodoItem,
-        addOrUpdateItem: updateTodo
+        addOrUpdateItem: updateTodo,
       }}
     >
       {children}

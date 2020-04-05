@@ -3,7 +3,7 @@ import { EventList } from "../Lists/EventList";
 import {
   MainPageContext,
   IMainPageContext,
-  EventListContext
+  EventListContext,
 } from "../../context";
 import { EventListState } from "../Lists/EventListState";
 import { Thunks as mainPageThunks } from "../../context/actions/mainPage-actions";
@@ -16,8 +16,6 @@ export const ImportantEvents: React.FC = () => {
 
   useEffect(() => {
     const check: boolean = pageState && pageState.page !== null;
-
-    console.log("imp events wrap use effcet", pageState, check);
     if (check) setPage(pageState.page);
   }, [pageState.page]);
 
@@ -31,14 +29,13 @@ export const ImportantEvents: React.FC = () => {
 };
 
 export const ImportantEventsList: React.FC<{ pageState: IMainPageContext }> = ({
-  pageState
+  pageState,
 }) => {
   const state = useContext(EventListContext);
   const { dispatch } = pageState;
   const { list } = state;
 
   useEffect(() => {
-    console.log("use effect imp ev", state);
     if (list !== null) dispatch(mainPageThunks.setEvents(state));
   }, [list]);
 
