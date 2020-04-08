@@ -245,6 +245,7 @@ tr {
 
 .todo-list-header:hover span {
   visibility: visible !important;
+  cursor: pointer;
 }
 
 .list-header-input {
@@ -351,6 +352,11 @@ tr {
   font-family: "AmaticSC-Regular";
   font-weight: bold;
   font-size: 24px;
+}
+
+.tracker-header:hover span {
+  visibility: visible !important;
+  cursor: pointer;
 }
 
 @media all and (min-width: 480px) {

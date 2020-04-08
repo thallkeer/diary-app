@@ -4,11 +4,14 @@ import axios from "../../axios/axios";
 
 export const ADD_TRACKER = "ADD_TRACKER";
 export const UPDATE_TRACKER = "UPDATE_TRACKER";
+export const DELETE_TRACKER = "DELETE_TRACKER";
 
 const Actions = {
   addTracker: (tracker: IHabitsTracker) => createAction(ADD_TRACKER, tracker),
   updateTracker: (tracker: IHabitsTracker) =>
     createAction(UPDATE_TRACKER, tracker),
+  deleteTracker: (tracker: IHabitsTracker) =>
+    createAction(DELETE_TRACKER, tracker),
 };
 
 const baseTrackerApi: string = "habitTracker";
@@ -28,6 +31,17 @@ export const Thunks = {
           dispatch(Actions.updateTracker(tracker));
         });
       }
+    };
+  },
+
+  deleteTracker: (tracker: IHabitsTracker) => {
+    return (dispatch) => {
+      if (!tracker) return;
+      console.log(tracker);
+
+      axios
+        .delete(baseTrackerApi + `/${tracker.id}`)
+        .then((res) => dispatch(Actions.deleteTracker(tracker)));
     };
   },
 };

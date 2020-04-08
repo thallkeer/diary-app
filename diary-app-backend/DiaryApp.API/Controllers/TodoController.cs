@@ -94,10 +94,16 @@ namespace DiaryApp.API.Controllers
             return Ok();
         }
 
-        [HttpDelete("{todoID}")]
+        [HttpDelete("deleteTodo/{todoID}")]
         public async Task DeleteTodo(int todoID)
         {
             await todoService.DeleteItem(todoID);
+        }
+
+        [HttpDelete("{todoListID}")]
+        public async Task DeleteEventList(int todoListID)
+        {
+            await todoService.Delete(todoListID);
         }
     }
 }

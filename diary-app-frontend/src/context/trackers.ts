@@ -7,21 +7,24 @@ export const trackersReducer = (
 ): IGoalsArea => {
   switch (action.type) {
     case "ADD_TRACKER": {
-      console.log("add payload", action.payload);
       return {
         ...state,
-        goalsLists: [...state.goalsLists, action.payload]
+        goalsLists: [...state.goalsLists, action.payload],
       };
     }
 
     case "UPDATE_TRACKER":
-      console.log("update payload", action.payload);
-
       return {
         ...state,
-        goalsLists: state.goalsLists.map(t =>
+        goalsLists: state.goalsLists.map((t) =>
           t.id === action.payload.id ? action.payload : t
-        )
+        ),
+      };
+
+    case "DELETE_TRACKER":
+      return {
+        ...state,
+        goalsLists: state.goalsLists.filter((t) => t.id !== action.payload.id),
       };
 
     default:

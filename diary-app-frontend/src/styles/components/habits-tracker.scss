@@ -18,3 +18,12 @@
   font-weight: bold;
   font-size: 24px;
 }
+
+.tracker-header {
+  &:hover {
+    span {
+      visibility: visible !important;
+      cursor: pointer;
+    }
+  }
+}

@@ -9,13 +9,10 @@ import {
   ITodoList,
   IGoalsArea,
   IUser,
-  ITodo,
-  IEvent
+  IHabitsTracker,
 } from "../models/index";
-import { EventThunks } from "./actions/events-actions";
-import { TodoThunks } from "./actions/todo-actions";
 import { HabitTrackerThunks } from "./actions/habitTracker-actions";
-import { MainPageActions, MainPageThunks } from "./actions/mainPage-actions";
+import { MainPageThunks } from "./actions/mainPage-actions";
 
 export interface IGlobalContext {
   month: number;
@@ -58,7 +55,10 @@ export interface ITodoListContext extends IListState<ITodoList> {
 
 export interface IGoalsAreaContext
   extends IDispatchable<HabitTrackerThunks>,
-    IGoalsArea {}
+    IGoalsArea {
+  addOrUpdate: (tracker?: IHabitsTracker) => void;
+  deleteTracker: (tracker: IHabitsTracker) => void;
+}
 
 export const EventListContext = createContext<IEventListContext>(null);
 export const TodoListContext = createContext<ITodoListContext>(null);

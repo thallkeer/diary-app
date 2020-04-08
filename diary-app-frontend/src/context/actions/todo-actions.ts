@@ -18,34 +18,34 @@ const Actions = {
   updateTodo: (todo: ITodo) => createAction(UPDATE_TODO, todo),
   deleteTodo: (todoId: number) => createAction(DELETE_TODO, todoId),
   updateTodoList: (todoList: ITodoList) =>
-    createAction(UPDATE_TODOLIST, todoList)
+    createAction(UPDATE_TODOLIST, todoList),
 };
 
 const baseTodoApi: string = `todo/`;
 
 export const Thunks = {
   setTodoList: (todoList: ITodoList) => {
-    return dispatch => dispatch(Actions.finishLoadTodos(todoList));
+    return (dispatch) => dispatch(Actions.finishLoadTodos(todoList));
   },
 
   loadTodosByPageID: (pageID: number) => {
-    return dispatch => {
+    return (dispatch) => {
       dispatch(Actions.startLoadTodos());
       axios
         .get(baseTodoApi + pageID)
-        .then(response => dispatch(Actions.finishLoadTodos(response.data)));
+        .then((response) => dispatch(Actions.finishLoadTodos(response.data)));
     };
   },
 
   updateTodoList: (todoList: ITodoList) => {
-    return dispatch => {
+    return (dispatch) => {
       axios.put(baseTodoApi, todoList);
       dispatch(Actions.updateTodoList(todoList));
     };
   },
 
   toggleTodo: (todoId: number) => {
-    return dispatch => {
+    return (dispatch) => {
       axios
         .put(`${baseTodoApi}toggle/${todoId}`, null)
         .then(dispatch(Actions.toggleTodo(todoId)));
@@ -53,28 +53,28 @@ export const Thunks = {
   },
 
   deleteTodo: (todoId: number) => {
-    return dispatch => {
+    return (dispatch) => {
       axios
-        .delete(baseTodoApi + `${todoId}`)
+        .delete(`${baseTodoApi}deleteTodo/${todoId}`)
         .then(dispatch(Actions.deleteTodo(todoId)));
     };
   },
 
   addOrUpdateTodo: (todo: ITodo) => {
-    return dispatch => {
+    return (dispatch) => {
       if (!todo) return;
 
       if (todo.id === 0) {
-        axios.post(baseTodoApi + "addTodo", todo).then(res => {
+        axios.post(baseTodoApi + "addTodo", todo).then((res) => {
           dispatch(Actions.addTodo(res.data));
         });
       } else {
-        axios.put(baseTodoApi + "updateTodo", todo).then(res => {
+        axios.put(baseTodoApi + "updateTodo", todo).then((res) => {
           dispatch(Actions.updateTodo(todo));
         });
       }
     };
-  }
+  },
 };
 
 export type TodoActions = ActionsUnion<typeof Actions>;

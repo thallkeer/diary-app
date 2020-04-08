@@ -36,5 +36,12 @@ namespace DiaryApp.API.Controllers
             await trackerService.Update(tracker);
             return Ok();
         }
+
+        [HttpDelete("{trackerID}")]
+        public async Task<IActionResult> DeleteTracker(int trackerID)
+        {
+            await trackerService.Delete(trackerID);
+            return Ok();
+        }
     }
 }

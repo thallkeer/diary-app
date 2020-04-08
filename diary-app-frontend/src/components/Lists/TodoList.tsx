@@ -18,7 +18,7 @@ export const TodoList: React.FC<TodoListProps> = ({ className }) => {
     deleteItem,
     toggleTodoItem,
     updateListTitle,
-    addOrUpdateItem
+    addOrUpdateItem,
   } = useContext(TodoListContext);
 
   if (loading || !list) return <Loader />;

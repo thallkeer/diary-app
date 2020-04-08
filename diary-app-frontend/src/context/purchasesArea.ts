@@ -9,7 +9,16 @@ export const purchasesAreaReducer = (
     case "ADD_PURCHASES_LIST": {
       return {
         ...state,
-        purchasesLists: [...state.purchasesLists, action.payload]
+        purchasesLists: [...state.purchasesLists, action.payload],
+      };
+    }
+
+    case "DELETE_PURCHASES_LIST": {
+      return {
+        ...state,
+        purchasesLists: state.purchasesLists.filter(
+          (pl) => pl.id !== action.payload.id
+        ),
       };
     }
 

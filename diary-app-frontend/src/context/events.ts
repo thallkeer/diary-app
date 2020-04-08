@@ -48,6 +48,12 @@ export const eventsReducer = (
         },
       };
 
+    case "DELETE_EVENT_LIST":
+      return {
+        ...state,
+        list: null,
+      };
+
     default:
       console.log("reducer", state);
       return state;

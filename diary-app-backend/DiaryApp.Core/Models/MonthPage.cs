@@ -185,11 +185,10 @@ namespace DiaryApp.Core
             {
                 GoalsLists = new List<HabitsTracker>()
             };
-            if (this.GoalsLists != null)
-                this.GoalsLists.ForEach(tracker =>
-                {
-                    newArea.GoalsLists.Add(new HabitsTracker(tracker));
-                });
+            this.GoalsLists?.ForEach(tracker =>
+            {
+                newArea.GoalsLists.Add(new HabitsTracker(tracker));
+            });
             return newArea;
         }
 

@@ -1,32 +1,30 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { getRandomId } from "../../utils";
 import { IHabitsTracker } from "../../models";
+import { HabitsTrackerContext } from "../MonthPage/GoalsArea";
+import { GoalsAreaContext } from "../../context";
 
-type Props = {
-  tracker: IHabitsTracker;
-  updateTracker: (tracker: IHabitsTracker) => void;
-};
-
-export const HabitsTracker: React.FC<Props> = ({ tracker, updateTracker }) => {
-  const [trackerState, setTrackerState] = useState<IHabitsTracker>(tracker);
+export const HabitsTracker = () => {
+  const { tracker } = useContext(HabitsTrackerContext);
+  const { addOrUpdate } = useContext(GoalsAreaContext);
 
   const onDayClick = (e: React.MouseEvent<HTMLElement>, day: number) => {
     let target = e.target as HTMLElement;
     let updatedTracker: IHabitsTracker;
-    if (trackerState.selectedDays.includes(day)) {
+    if (tracker.selectedDays.includes(day)) {
       target.classList.remove("marked");
       updatedTracker = {
-        ...trackerState,
-        selectedDays: trackerState.selectedDays.filter(sd => sd !== day)
+        ...tracker,
+        selectedDays: tracker.selectedDays.filter((sd) => sd !== day),
       };
     } else {
       target.classList.add("marked");
       updatedTracker = {
-        ...trackerState,
-        selectedDays: [...trackerState.selectedDays, day]
+        ...tracker,
+        selectedDays: [...tracker.selectedDays, day],
       };
     }
-    updateTracker(updatedTracker);
+    addOrUpdate(updatedTracker);
   };
 
   const getDaysInMonth = () => {
@@ -41,10 +39,10 @@ export const HabitsTracker: React.FC<Props> = ({ tracker, updateTracker }) => {
 
     for (let d = 1; d <= days; d++) {
       let cn = `p-2 day-cell ${
-        trackerState.selectedDays.includes(d) ? "marked" : ""
+        tracker.selectedDays.includes(d) ? "marked" : ""
       }`;
       daysInMonth.push(
-        <div className={cn} key={d} onClick={e => onDayClick(e, d)}>
+        <div className={cn} key={d} onClick={(e) => onDayClick(e, d)}>
           {d}
         </div>
       );
@@ -81,7 +79,7 @@ export const HabitsTracker: React.FC<Props> = ({ tracker, updateTracker }) => {
     });
 
     return rows
-      .filter(r => r.length !== 0)
+      .filter((r) => r.length !== 0)
       .map((d, i) => (
         <div className="d-flex" key={d + i}>
           {d}

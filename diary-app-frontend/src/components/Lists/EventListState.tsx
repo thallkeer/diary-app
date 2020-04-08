@@ -24,6 +24,7 @@ export const EventListState: React.FC<{
     loadEventsByPageID,
     setEventList,
     updateEventList,
+    deleteEventList,
   } = eventThunks;
 
   const dispatch = (action: EventThunks) => action(_dispatch);
@@ -48,9 +49,9 @@ export const EventListState: React.FC<{
     );
   };
 
-  // const deleteList = (list: IEventList) => {
-  //   dispatch();
-  // };
+  const deleteList = (list: IEventList) => {
+    dispatch(deleteEventList(list.id));
+  };
 
   const updateListTitle = (title: string) => {
     dispatch(
