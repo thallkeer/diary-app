@@ -18,7 +18,7 @@ export const ImportantThings = () => {
   if (!page) return <Loader />;
 
   return (
-    <TodoListState page={page}>
+    <TodoListState page={page} isDeletable={false}>
       <TodoList />
     </TodoListState>
   );

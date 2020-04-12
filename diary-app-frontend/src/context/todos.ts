@@ -14,7 +14,7 @@ export const todosReducer = (
       return {
         ...state,
         list: action.payload,
-        loading: false
+        loading: false,
       };
 
     case "ADD_TODO": {
@@ -22,8 +22,8 @@ export const todosReducer = (
         ...state,
         list: {
           ...state.list,
-          items: [...getTodos(state), action.payload]
-        }
+          items: [...getTodos(state), action.payload],
+        },
       };
     }
 
@@ -32,16 +32,24 @@ export const todosReducer = (
         ...state,
         list: {
           ...state.list,
-          items: getTodos(state).map(todo =>
+          items: getTodos(state).map((todo) =>
             todo.id === action.payload.id ? action.payload : todo
-          )
-        }
+          ),
+        },
+      };
+
+    case "DELETE_TODOLIST":
+      const newList = state.list.id === action.payload ? null : state.list;
+      console.log("in delete todolist reducer", newList);
+      return {
+        ...state,
+        list: newList,
       };
 
     case "UPDATE_TODOLIST":
       return {
         ...state,
-        list: action.payload
+        list: action.payload,
       };
 
     case "TOGGLE_TODO":
@@ -49,10 +57,10 @@ export const todosReducer = (
         ...state,
         list: {
           ...state.list,
-          items: getTodos(state).map(todo =>
+          items: getTodos(state).map((todo) =>
             todo.id === action.payload ? { ...todo, done: !todo.done } : todo
-          )
-        }
+          ),
+        },
       };
 
     case "DELETE_TODO":
@@ -60,8 +68,8 @@ export const todosReducer = (
         ...state,
         list: {
           ...state.list,
-          items: getTodos(state).filter(todo => todo.id !== action.payload)
-        }
+          items: getTodos(state).filter((todo) => todo.id !== action.payload),
+        },
       };
 
     default:

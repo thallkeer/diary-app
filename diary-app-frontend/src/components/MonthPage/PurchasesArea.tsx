@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useContext } from "react";
 import { ITodoList, IPurchasesArea, IMonthPage } from "../../models";
 import { Row, Col } from "react-bootstrap";
 import { TodoList } from "../Lists/TodoList";
@@ -9,7 +9,7 @@ import { getRandomId } from "../../utils";
 import { purchasesAreaReducer } from "../../context/purchasesArea";
 import {
   PurchasesAreaThunks,
-  Thunks as thunks
+  Thunks as thunks,
 } from "../../context/actions/purchasesArea-actions";
 import { TodoListState } from "../Lists/TodoListState";
 
@@ -19,14 +19,26 @@ type ListPair = {
 };
 
 const OneList: React.FC<{ todoList: ITodoList }> = ({ todoList }) => {
+  const { deletePurchaseList } = useContext(PurchasesAreaState);
+
   return (
     <Col md={5}>
-      <TodoListState initList={todoList}>
+      <TodoListState
+        initList={todoList}
+        deleteListFunc={deletePurchaseList}
+        isDeletable={true}
+      >
         <TodoList className="mt-20 month-lists-header" />
       </TodoListState>
     </Col>
   );
 };
+
+export interface IPurchasesAreaState {
+  deletePurchaseList: (purchaseList: ITodoList) => void;
+}
+
+const PurchasesAreaState = React.createContext<IPurchasesAreaState>(null);
 
 const PurchasesAreaLists: React.FC<{
   area: IPurchasesArea;
@@ -35,13 +47,17 @@ const PurchasesAreaLists: React.FC<{
   const [areaState, _dispatch] = useReducer(purchasesAreaReducer, area);
   const dispatch = (action: PurchasesAreaThunks) => action(_dispatch);
 
+  const deletePurchaseList = (purchaseList: ITodoList) => {
+    dispatch(thunks.deletePurchasesList(purchaseList));
+  };
+
   const addPurchaseList = () => {
     const todoList: ITodoList = {
       id: 0,
       items: [],
       pageId: page.id,
       title: "Список покупок",
-      purchasesAreaId: areaState.id
+      purchasesAreaId: areaState.id,
     };
 
     dispatch(thunks.addPurchasesList(todoList));
@@ -74,7 +90,9 @@ const PurchasesAreaLists: React.FC<{
 
   return (
     <>
-      {renderLists(areaState.purchasesLists)}
+      <PurchasesAreaState.Provider value={{ deletePurchaseList }}>
+        {renderLists(areaState.purchasesLists)}
+      </PurchasesAreaState.Provider>
       <Row key={getRandomId()}>
         <AddListBtn onClick={addPurchaseList} />
       </Row>

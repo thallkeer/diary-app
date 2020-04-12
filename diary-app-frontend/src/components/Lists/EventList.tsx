@@ -12,11 +12,13 @@ type EventListProps = {
   withDate?: boolean;
   readonly?: boolean;
   className?: string;
+  renderHeader?: boolean;
 };
 
 export const EventList: FC<EventListProps> = ({
   withDate = false,
   readonly = false,
+  renderHeader = true,
   className,
 }) => {
   const {
@@ -51,8 +53,11 @@ export const EventList: FC<EventListProps> = ({
   return (
     <div className={`mt-40 ${className}`}>
       <h1 className="todo-list-header">
-        <ListHeaderInput value={list.title} handleBlur={updateListTitle} />
-        <DeleteBtn onDelete={() => console.log("test")} />
+        <ListHeaderInput
+          value={list.title}
+          handleBlur={updateListTitle}
+          readonly={!renderHeader}
+        />
       </h1>
       <ul className="todos">
         {events.map((event: IEvent, i) => (

@@ -101,7 +101,7 @@ namespace DiaryApp.API.Controllers
         }
 
         [HttpDelete("{todoListID}")]
-        public async Task DeleteEventList(int todoListID)
+        public async Task DeleteTodoList(int todoListID)
         {
             await todoService.Delete(todoListID);
         }

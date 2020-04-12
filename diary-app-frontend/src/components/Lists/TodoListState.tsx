@@ -10,10 +10,13 @@ import { todosReducer } from "../../context/todos";
 export const TodoListState: React.FC<{
   page?: IPage;
   initList?: ITodoList;
-}> = ({ page, initList, children }) => {
+  deleteListFunc?: (todoList: ITodoList) => void;
+  isDeletable?: boolean;
+}> = ({ page, initList, isDeletable = false, deleteListFunc, children }) => {
   const [state, _dispatch] = useReducer(todosReducer, {
     list: null,
     loading: false,
+    isDeletable,
   });
 
   const dispatch = (action: TodoThunks) => action(_dispatch);
@@ -27,6 +30,7 @@ export const TodoListState: React.FC<{
     updateTodoList,
     loadTodosByPageID,
     setTodoList,
+    deleteTodoList,
   } = todoThunks;
 
   useEffect(() => {
@@ -65,6 +69,13 @@ export const TodoListState: React.FC<{
     );
   };
 
+  const removeTodoList = (todoList: ITodoList) => {
+    console.log("in remove todolist");
+
+    dispatch(deleteTodoList(todoList));
+    if (deleteListFunc !== null) deleteListFunc(todoList);
+  };
+
   return (
     <TodoListContext.Provider
       value={{
@@ -73,6 +84,7 @@ export const TodoListState: React.FC<{
         deleteItem: deleteTodoItem,
         toggleTodoItem,
         addOrUpdateItem: updateTodo,
+        deleteTodoList: removeTodoList,
       }}
     >
       {children}

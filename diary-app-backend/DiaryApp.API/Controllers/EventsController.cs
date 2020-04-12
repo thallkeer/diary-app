@@ -66,11 +66,19 @@ namespace DiaryApp.API.Controllers
             return Ok(newEvent.ID);
         }
 
-        [HttpPut]
+        [HttpPut("updateEvent}")]
         public async Task<IActionResult> UpdateEvent([FromBody] EventModel eventModel)
         {
             var _event = mapper.Map<EventItem>(eventModel);
             await eventService.UpdateItem(_event);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateEventList([FromBody] EventListModel eventListModel)
+        {
+            var _eventList = mapper.Map<EventList>(eventListModel);
+            await eventService.Update(_eventList);
             return Ok();
         }
 

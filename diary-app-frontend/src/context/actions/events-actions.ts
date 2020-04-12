@@ -61,7 +61,7 @@ export const Thunks = {
     } else {
       return (dispatch) => {
         axios
-          .put(baseEventsApi, event)
+          .put(baseEventsApi + "updateEvent", event)
           .then((res) => dispatch(Actions.updateEvent(event)));
       };
     }

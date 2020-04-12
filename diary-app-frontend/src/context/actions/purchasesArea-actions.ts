@@ -8,8 +8,8 @@ export const DELETE_PURCHASES_LIST = "DELETE_PURCHASES_LIST";
 const Actions = {
   addList: (purchasesList: ITodoList) =>
     createAction(ADD_PURCHASES_LIST, purchasesList),
-  deleteList: (purchasesList: ITodoList) =>
-    createAction(DELETE_PURCHASES_LIST, purchasesList),
+  deleteList: (purchasesListId: number) =>
+    createAction(DELETE_PURCHASES_LIST, purchasesListId),
 };
 
 export const Thunks = {
@@ -27,9 +27,8 @@ export const Thunks = {
   deletePurchasesList: (purchasesList: ITodoList) => {
     return (dispatch) => {
       if (!purchasesList) return;
-
-      axios.delete(`todo/${purchasesList.id}`);
-      dispatch(Actions.deleteList(purchasesList));
+      console.log("in purchases area delete func");
+      dispatch(Actions.deleteList(purchasesList.id));
     };
   },
 };

@@ -8,6 +8,7 @@ export const UPDATE_TODO = "UPDATE_TODO";
 export const LOAD_TODOS_START = "LOAD_TODOS_START";
 export const LOAD_TODOS = "LOAD_TODOS";
 export const DELETE_TODO = "DELETE_TODO";
+export const DELETE_TODOLIST = "DELETE_TODOLIST";
 export const UPDATE_TODOLIST = "UPDATE_TODOLIST";
 
 const Actions = {
@@ -17,6 +18,8 @@ const Actions = {
   addTodo: (todo: ITodo) => createAction(ADD_TODO, todo),
   updateTodo: (todo: ITodo) => createAction(UPDATE_TODO, todo),
   deleteTodo: (todoId: number) => createAction(DELETE_TODO, todoId),
+  deleteTodoList: (todoListId: number) =>
+    createAction(DELETE_TODOLIST, todoListId),
   updateTodoList: (todoList: ITodoList) =>
     createAction(UPDATE_TODOLIST, todoList),
 };
@@ -57,6 +60,16 @@ export const Thunks = {
       axios
         .delete(`${baseTodoApi}deleteTodo/${todoId}`)
         .then(dispatch(Actions.deleteTodo(todoId)));
+    };
+  },
+
+  deleteTodoList: (todoList: ITodoList) => {
+    return (dispatch) => {
+      console.log("in delete todolist main action");
+
+      axios
+        .delete(`${baseTodoApi}${todoList.id}`)
+        .then(dispatch(Actions.deleteTodoList(todoList.id)));
     };
   },
 

@@ -4,12 +4,14 @@ type Props = {
   className?: string;
   value: string;
   handleBlur: (title: string) => void;
+  readonly?: boolean;
 };
 
 export const ListHeaderInput: React.FC<Props> = ({
   value,
   className,
-  handleBlur
+  handleBlur,
+  readonly = false,
 }) => {
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") handleBlur(titleInput.current.value);
@@ -29,6 +31,7 @@ export const ListHeaderInput: React.FC<Props> = ({
       onBlur={() => handleBlur(titleInput.current.value)}
       onKeyPress={handleKeyPress}
       autoComplete={"off"}
+      readOnly={readonly}
     />
   );
 };

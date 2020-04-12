@@ -19,6 +19,8 @@ export const TodoList: React.FC<TodoListProps> = ({ className }) => {
     toggleTodoItem,
     updateListTitle,
     addOrUpdateItem,
+    deleteTodoList,
+    isDeletable,
   } = useContext(TodoListContext);
 
   if (loading || !list) return <Loader />;
@@ -29,6 +31,7 @@ export const TodoList: React.FC<TodoListProps> = ({ className }) => {
     <div className={`mt-52 ${className}`}>
       <h1 className="todo-list-header">
         <ListHeaderInput handleBlur={updateListTitle} value={list.title} />
+        {isDeletable && <DeleteBtn onDelete={() => deleteTodoList(list)} />}
       </h1>
       <ul className="todos">
         {todos.map((todo, i) => (

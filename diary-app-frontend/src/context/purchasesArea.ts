@@ -14,10 +14,12 @@ export const purchasesAreaReducer = (
     }
 
     case "DELETE_PURCHASES_LIST": {
+      console.log("in purchases area reducer");
+
       return {
         ...state,
         purchasesLists: state.purchasesLists.filter(
-          (pl) => pl.id !== action.payload.id
+          (pl) => pl.id !== action.payload
         ),
       };
     }

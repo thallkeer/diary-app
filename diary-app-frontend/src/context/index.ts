@@ -51,6 +51,8 @@ export interface IListState<TList extends IList<ListItem>> {
 export interface IEventListContext extends IListState<IEventList> {}
 export interface ITodoListContext extends IListState<ITodoList> {
   toggleTodoItem?: (todoId: number) => void;
+  deleteTodoList?: (todoList: ITodoList) => void;
+  isDeletable: boolean;
 }
 
 export interface IGoalsAreaContext

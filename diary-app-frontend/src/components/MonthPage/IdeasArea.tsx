@@ -17,7 +17,7 @@ export const IdeasArea: React.FC = () => {
       <Row>
         <Col md={12}>
           <EventListState initList={areaState.area.ideasList}>
-            <EventList className="mt-10 no-list-header" />
+            <EventList className="mt-10 no-list-header" renderHeader={false} />
           </EventListState>
         </Col>
       </Row>
