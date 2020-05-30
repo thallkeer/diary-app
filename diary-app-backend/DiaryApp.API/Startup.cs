@@ -40,14 +40,12 @@ namespace DiaryApp.API
 
             services.AddControllers();
 
+            services.AddCors();
+
             services.AddMvc(options => options.EnableEndpointRouting = false)
                     .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
 
-            services.AddSpaStaticFiles(configuration =>
-                configuration.RootPath = "client/build"
-            );
-
-            services.AddCors();
+            services.AddSpaStaticFiles(configuration => configuration.RootPath = "client/build");            
 
             services.AddAutoMapper(typeof(Startup));
 
@@ -124,6 +122,11 @@ namespace DiaryApp.API
                 app.UseHsts();
             }
 
+            app.UseCors(builder =>
+                                    builder.AllowAnyOrigin()
+                                           .AllowAnyHeader()
+                                           .AllowAnyMethod());
+
             app.UseStatusCodePagesWithReExecute("/error", "?code={0}");
 
             app.Map("/error", ap => ap.Run(async context =>
@@ -145,13 +148,7 @@ namespace DiaryApp.API
                 ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All
             });
 
-            app.UseRouting();
-
-
-            app.UseCors(builder =>
-                                    builder.AllowAnyOrigin()
-                                           .AllowAnyHeader()
-                                           .AllowAnyMethod());
+            app.UseRouting();            
 
             app.UseAuthentication();
             app.UseAuthorization();

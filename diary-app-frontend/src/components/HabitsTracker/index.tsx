@@ -3,6 +3,20 @@ import { getRandomId } from "../../utils";
 import { IHabitsTracker } from "../../models";
 import { HabitsTrackerContext } from "../MonthPage/GoalsArea";
 import { GoalsAreaContext } from "../../context";
+import { OverlayTrigger, Popover } from "react-bootstrap";
+
+const popover = (
+  <Popover id="popover-basic">
+    <Popover.Title as="h3">Заметка</Popover.Title>
+    <Popover.Content>
+      <input
+        type="text"
+        autoFocus
+        style={{ outline: "none", border: "none" }}
+      ></input>
+    </Popover.Content>
+  </Popover>
+);
 
 export const HabitsTracker = () => {
   const { tracker } = useContext(HabitsTrackerContext);
@@ -27,6 +41,27 @@ export const HabitsTracker = () => {
     addOrUpdate(updatedTracker);
   };
 
+  const WrappedDay = (className: string, day: number) => {
+    const dayComponent = (
+      <div className={className} key={day} onClick={(e) => onDayClick(e, day)}>
+        {day}
+      </div>
+    );
+
+    return className.indexOf("marked") === -1 ? (
+      dayComponent
+    ) : (
+      <OverlayTrigger
+        key={day}
+        trigger={["hover", "focus"]}
+        placement="top"
+        overlay={popover}
+      >
+        {dayComponent}
+      </OverlayTrigger>
+    );
+  };
+
   const getDaysInMonth = () => {
     let daysInMonth = [];
 
@@ -41,11 +76,7 @@ export const HabitsTracker = () => {
       let cn = `p-2 day-cell ${
         tracker.selectedDays.includes(d) ? "marked" : ""
       }`;
-      daysInMonth.push(
-        <div className={cn} key={d} onClick={(e) => onDayClick(e, d)}>
-          {d}
-        </div>
-      );
+      daysInMonth.push(WrappedDay(cn, d));
     }
 
     if (days % 2 !== 0)

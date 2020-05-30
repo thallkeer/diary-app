@@ -19,6 +19,11 @@ namespace DiaryApp.Core
             return $"{Title} {Page?.Year} {Page?.Month}";
         }
 
+        /// <summary>
+        /// Creates full deep copy of list
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
         protected abstract ListBase<T> CreateBasedOnItself(PageBase page);
     }
 

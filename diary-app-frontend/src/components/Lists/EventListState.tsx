@@ -30,10 +30,9 @@ export const EventListState: React.FC<{
   const dispatch = (action: EventThunks) => action(_dispatch);
 
   useEffect(() => {
-    if (!list) {
-      if (initList) dispatch(setEventList(initList));
-      else if (page) dispatch(loadEventsByPageID(page.id));
-    }
+    if (initList) dispatch(setEventList(initList));
+    else if (page && (!list || list.pageID !== page.id))
+      dispatch(loadEventsByPageID(page.id));
   }, [page, initList]);
 
   const deleteItem = (eventID: number) => {

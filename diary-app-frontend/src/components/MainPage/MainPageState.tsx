@@ -19,7 +19,10 @@ export const MainPageState: React.FC = ({ children }) => {
   const dispatch = (action: MainPageThunks) => action(_dispatch);
 
   useEffect(() => {
-    if (!loading && page !== null) dispatch(mainPageThunks.setPage(page));
+    if (!loading && page !== null) {
+      dispatch(mainPageThunks.setPage(page));
+      console.log("main page effect ", page);
+    }
   }, [page]);
 
   return (

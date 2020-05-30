@@ -34,11 +34,10 @@ export const TodoListState: React.FC<{
   } = todoThunks;
 
   useEffect(() => {
-    if (list !== null) return;
-
+    // if (list !== null) return;
     if (initList) {
       dispatch(setTodoList(initList));
-    } else if (page && !list) {
+    } else if (page && (!list || list.pageID !== page.id)) {
       dispatch(loadTodosByPageID(page.id));
     }
   }, [page, initList, list]);

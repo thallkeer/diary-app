@@ -102,8 +102,8 @@ namespace DiaryApp.Core
         {
             if (otherArea is DesiresArea other)
             {
-                var emptyLists = this.DesiresLists.FindAll(pl => pl.Items.Count == 0);
-                this.DesiresLists.RemoveAll(pl => emptyLists.Contains(pl));
+                //var emptyLists = this.DesiresLists.FindAll(pl => pl.Items.Count == 0);
+                //this.DesiresLists.RemoveAll(pl => emptyLists.Contains(pl));
                 for (int i = 0; i < other.DesiresLists.Count; i++)
                 {
                     this.DesiresLists[i].Items.AddRange(other.DesiresLists[i].Items);

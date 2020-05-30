@@ -1,6 +1,6 @@
 export interface IList<T extends ListItem> {
   id: number;
-  pageId: number;
+  pageID: number;
   title: string;
   items: T[];
 }

@@ -55,7 +55,7 @@ const PurchasesAreaLists: React.FC<{
     const todoList: ITodoList = {
       id: 0,
       items: [],
-      pageId: page.id,
+      pageID: page.id,
       title: "Список покупок",
       purchasesAreaId: areaState.id,
     };

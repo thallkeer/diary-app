@@ -7,11 +7,9 @@ import { TodoListContext } from "../../context";
 import Loader from "../Loader";
 import { getEmptyTodo, fillToNumber } from "../../utils";
 
-type TodoListProps = {
-  className?: string;
-};
-
-export const TodoList: React.FC<TodoListProps> = ({ className }) => {
+export const TodoList: React.FC<React.HtmlHTMLAttributes<
+  HTMLDivElement
+>> = () => {
   const {
     list,
     loading,
@@ -28,7 +26,7 @@ export const TodoList: React.FC<TodoListProps> = ({ className }) => {
   const todos = fillToNumber([...list.items], 6, getEmptyTodo);
 
   return (
-    <div className={`mt-52 ${className}`}>
+    <div className={`mt-52`}>
       <h1 className="todo-list-header">
         <ListHeaderInput handleBlur={updateListTitle} value={list.title} />
         {isDeletable && <DeleteBtn onDelete={() => deleteTodoList(list)} />}

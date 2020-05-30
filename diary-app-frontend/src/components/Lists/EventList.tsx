@@ -8,18 +8,16 @@ import { EventListContext } from "../../context";
 import Loader from "../Loader";
 import { getEmptyEvent, fillToNumber } from "../../utils";
 
-type EventListProps = {
+interface EventListProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
   withDate?: boolean;
   readonly?: boolean;
-  className?: string;
   renderHeader?: boolean;
-};
+}
 
 export const EventList: FC<EventListProps> = ({
   withDate = false,
   readonly = false,
   renderHeader = true,
-  className,
 }) => {
   const {
     list,
@@ -51,7 +49,7 @@ export const EventList: FC<EventListProps> = ({
   };
 
   return (
-    <div className={`mt-40 ${className}`}>
+    <div className={`mt-40`}>
       <h1 className="todo-list-header">
         <ListHeaderInput
           value={list.title}

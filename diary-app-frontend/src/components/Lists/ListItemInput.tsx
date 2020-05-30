@@ -1,13 +1,12 @@
 import React, { FC, useState } from "react";
 import { ListItem } from "../../models";
 
-interface IProps {
+interface ListItemInputProps extends React.HTMLAttributes<HTMLDivElement> {
   updateItem?: (item: ListItem) => void;
   item: ListItem;
   getItemText?: (item: ListItem) => string;
   canEditUrl?: boolean;
   readonly?: boolean;
-  style?: React.CSSProperties;
 }
 
 interface InputState {
@@ -16,18 +15,18 @@ interface InputState {
   url: string;
 }
 
-export const ListItemInput: FC<IProps> = ({
+export const ListItemInput: FC<ListItemInputProps> = ({
   updateItem,
   item,
   style,
   getItemText = null,
   canEditUrl = false,
-  readonly = false
+  readonly = false,
 }) => {
   const initialState: InputState = {
     itemText: item.subject,
     url: item.url || "",
-    editUrlMode: false
+    editUrlMode: false,
   };
 
   const [state, setState] = useState<InputState>(initialState);
@@ -35,7 +34,7 @@ export const ListItemInput: FC<IProps> = ({
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -64,7 +63,7 @@ export const ListItemInput: FC<IProps> = ({
     if (!canEditUrl || readonly) return;
     setState({
       ...state,
-      editUrlMode: true
+      editUrlMode: true,
     });
   };
 

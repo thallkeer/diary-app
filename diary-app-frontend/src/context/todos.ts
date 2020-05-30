@@ -1,4 +1,4 @@
-import { TodoActions, LOAD_TODOS_START } from "./actions/todo-actions";
+import { TodoActions } from "./actions/todo-actions";
 import { getTodos } from "../selectors";
 import { ITodoListContext } from ".";
 

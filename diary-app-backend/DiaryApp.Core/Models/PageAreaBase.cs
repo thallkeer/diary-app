@@ -34,6 +34,10 @@ namespace DiaryApp.Core
         /// <returns></returns>
         public abstract PageAreaBase TransferAreaData(PageBase page);
 
+        /// <summary>
+        /// Copy content from other area
+        /// </summary>
+        /// <param name="otherArea"></param>
         public abstract void AddFromOtherArea(PageAreaBase otherArea);
 
         protected abstract void Initialize();

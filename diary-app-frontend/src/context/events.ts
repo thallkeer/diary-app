@@ -27,6 +27,8 @@ export const eventsReducer = (
     }
     case "ADD_EVENT":
       let addedEvent = action.payload;
+      console.log("in reducer", addedEvent);
+
       addedEvent.date = new Date(addedEvent.date);
 
       return {
@@ -34,6 +36,17 @@ export const eventsReducer = (
         list: {
           ...state.list,
           items: [...getEvents(state), addedEvent],
+        },
+      };
+
+    case "UPDATE_EVENT":
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          items: getEvents(state).map((item) =>
+            item.id === action.payload.id ? action.payload : item
+          ),
         },
       };
 

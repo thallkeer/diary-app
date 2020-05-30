@@ -1,7 +1,7 @@
-import axios from "axios";
 import { IUser } from "../models";
 import { config } from "../utils/config";
 import history from "../components/history";
+import axios from "axios";
 
 const { baseApi } = config;
 

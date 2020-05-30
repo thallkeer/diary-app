@@ -52,17 +52,21 @@ export const Thunks = {
 
     if (event.id === 0) {
       return (dispatch) => {
-        axios
-          .post(baseEventsApi + "addEvent", event)
-          .then((res) =>
-            dispatch(Actions.addEvent({ ...event, id: res.data }))
-          );
+        console.log("adding event");
+
+        axios.post(baseEventsApi + "addEvent", event).then((res) => {
+          console.log("getting result", res.data);
+          dispatch(Actions.addEvent({ ...event, id: res.data }));
+        });
       };
     } else {
       return (dispatch) => {
-        axios
-          .put(baseEventsApi + "updateEvent", event)
-          .then((res) => dispatch(Actions.updateEvent(event)));
+        console.log("updating event", event);
+
+        axios.put(baseEventsApi + "updateEvent", event).then((res) => {
+          console.log("res empty");
+          dispatch(Actions.updateEvent(event));
+        });
       };
     }
   },

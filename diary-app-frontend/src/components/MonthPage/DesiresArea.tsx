@@ -15,7 +15,7 @@ export const DesiresArea: React.FC = () => {
     <>
       <h1 className="mt-40">{areaState.area.header}</h1>
       <Row>
-        {areaState.area.desiresLists.map(eventList => (
+        {areaState.area.desiresLists.map((eventList) => (
           <Col md={4} key={eventList.id}>
             <EventListState initList={eventList}>
               <EventList
