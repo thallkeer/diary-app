@@ -1,17 +1,17 @@
 import React, { useReducer, useContext } from "react";
-import { ITodoList, IPurchasesArea, IMonthPage } from "../../models";
+import { ITodoList, IPurchasesArea } from "../../models";
 import { Row, Col } from "react-bootstrap";
 import { TodoList } from "../Lists/TodoList";
-import Loader from "../Loader";
-import usePageArea from "../../hooks/usePageArea";
+import { PageAreaResult } from "../../hooks/usePageArea";
 import { AddListBtn } from "../AddListBtn";
 import { getRandomId } from "../../utils";
-import { purchasesAreaReducer } from "../../context/purchasesArea";
+import { purchasesAreaReducer } from "../../context/reducers/purchasesArea";
 import {
   PurchasesAreaThunks,
   Thunks as thunks,
 } from "../../context/actions/purchasesArea-actions";
 import { TodoListState } from "../Lists/TodoListState";
+import { MonthArea } from "./MonthAreaHOC";
 
 type ListPair = {
   list1: ITodoList;
@@ -40,11 +40,14 @@ export interface IPurchasesAreaState {
 
 const PurchasesAreaState = React.createContext<IPurchasesAreaState>(null);
 
-const PurchasesAreaLists: React.FC<{
-  area: IPurchasesArea;
-  page: IMonthPage;
-}> = ({ area, page }) => {
-  const [areaState, _dispatch] = useReducer(purchasesAreaReducer, area);
+const PurchasesAreaLists: React.FC<PageAreaResult<IPurchasesArea>> = ({
+  pageAreaState,
+  page,
+}) => {
+  const [areaState, _dispatch] = useReducer(
+    purchasesAreaReducer,
+    pageAreaState.area
+  );
   const dispatch = (action: PurchasesAreaThunks) => action(_dispatch);
 
   const deletePurchaseList = (purchaseList: ITodoList) => {
@@ -93,22 +96,25 @@ const PurchasesAreaLists: React.FC<{
       <PurchasesAreaState.Provider value={{ deletePurchaseList }}>
         {renderLists(areaState.purchasesLists)}
       </PurchasesAreaState.Provider>
-      <Row key={getRandomId()}>
+      <Row key={areaState.id}>
         <AddListBtn onClick={addPurchaseList} />
       </Row>
     </>
   );
 };
 
-export const PurchasesArea: React.FC = () => {
-  const { areaState, page } = usePageArea<IPurchasesArea>("purchasesArea");
-
-  if (!areaState || areaState.loading) return <Loader />;
-
+const PurchasesArea: React.FC = () => {
   return (
-    <>
-      <h1>{areaState.area.header}</h1>
-      <PurchasesAreaLists area={areaState.area} page={page} />
-    </>
+    <MonthArea
+      areaName="purchasesArea"
+      areaBody={(areaProps: PageAreaResult<IPurchasesArea>) => (
+        <PurchasesAreaLists
+          pageAreaState={areaProps.pageAreaState}
+          page={areaProps.page}
+        />
+      )}
+    />
   );
 };
+
+export default PurchasesArea;

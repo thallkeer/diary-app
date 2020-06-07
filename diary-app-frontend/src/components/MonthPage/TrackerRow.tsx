@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Row, Col } from "react-bootstrap";
-import { HabitsTracker } from "../HabitsTracker";
+import { HabitsTracker } from "../HabitsTracker/HabitsTracker";
 import ListHeaderInput from "../Lists/ListHeaderInput";
 import { HabitsTrackerContext } from "./GoalsArea";
 import { GoalsAreaContext } from "../../context";

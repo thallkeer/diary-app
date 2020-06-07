@@ -56,6 +56,8 @@ export const Thunks = {
   },
 
   deleteTodo: (todoId: number) => {
+    console.log("delete todo", todoId);
+
     return (dispatch) => {
       axios
         .delete(`${baseTodoApi}deleteTodo/${todoId}`)
@@ -65,8 +67,6 @@ export const Thunks = {
 
   deleteTodoList: (todoList: ITodoList) => {
     return (dispatch) => {
-      console.log("in delete todolist main action");
-
       axios
         .delete(`${baseTodoApi}${todoList.id}`)
         .then(dispatch(Actions.deleteTodoList(todoList.id)));

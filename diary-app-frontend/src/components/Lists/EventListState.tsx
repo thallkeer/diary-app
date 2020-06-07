@@ -5,7 +5,7 @@ import {
   EventThunks,
   Thunks as eventThunks,
 } from "../../context/actions/events-actions";
-import { eventsReducer } from "../../context/events";
+import { eventsReducer } from "../../context/reducers/events";
 
 export const EventListState: React.FC<{
   page?: IPage;
@@ -30,7 +30,7 @@ export const EventListState: React.FC<{
   const dispatch = (action: EventThunks) => action(_dispatch);
 
   useEffect(() => {
-    if (initList) dispatch(setEventList(initList));
+    if (initList && !list) dispatch(setEventList(initList));
     else if (page && (!list || list.pageID !== page.id))
       dispatch(loadEventsByPageID(page.id));
   }, [page, initList]);

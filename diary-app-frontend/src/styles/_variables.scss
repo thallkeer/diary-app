@@ -1,0 +1,14 @@
+$list-input-font: "AmaticSC-Regular";
+$list-header-font: "RadioVolna";
+$main-lightblue-color: lightblue;
+$skyblue-color: skyblue;
+%hidden-btn {
+  visibility: hidden;
+  position: absolute;
+  font-size: 14px;
+}
+
+%amatic-bold {
+  font-family: $list-input-font !important;
+  font-weight: bold !important;
+}

@@ -6,7 +6,7 @@ import {
   PageThunks,
   Thunks as pageThunks,
 } from "../context/actions/page-actions";
-import { pageReducer } from "../context/page";
+import { pageReducer } from "../context/reducers/page";
 
 export function usePage(pageType: PageType) {
   const [pageState, _dispatch] = useReducer(pageReducer, {

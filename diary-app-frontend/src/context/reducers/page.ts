@@ -1,5 +1,5 @@
-import { IBasePageState } from ".";
-import { PageActions } from "./actions/page-actions";
+import { IBasePageState } from "..";
+import { PageActions } from "../actions/page-actions";
 
 export const pageReducer = (
   state: IBasePageState,

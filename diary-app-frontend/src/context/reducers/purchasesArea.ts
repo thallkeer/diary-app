@@ -1,5 +1,5 @@
-import { IPurchasesArea } from "../models";
-import { PurchasesAreaActions } from "./actions/purchasesArea-actions";
+import { IPurchasesArea } from "../../models";
+import { PurchasesAreaActions } from "../actions/purchasesArea-actions";
 
 export const purchasesAreaReducer = (
   state: IPurchasesArea,
@@ -14,8 +14,6 @@ export const purchasesAreaReducer = (
     }
 
     case "DELETE_PURCHASES_LIST": {
-      console.log("in purchases area reducer");
-
       return {
         ...state,
         purchasesLists: state.purchasesLists.filter(

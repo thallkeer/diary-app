@@ -30,7 +30,7 @@ namespace DiaryApp.Data.Services
             await itemsService.Delete(itemID);
         }
 
-        public TList GetByPageID(int pageID)
+        public virtual TList GetByPageID(int pageID)
         {
             return dbSet.FirstOrDefault(el => el.PageID == pageID);
         }

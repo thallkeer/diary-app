@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import * as serviceWorker from "./serviceWorker";
-import "../src/styles/styles.css";
+import "../src/styles/css/styles.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 

@@ -1,17 +1,7 @@
-$list-input-font: "AmaticSC-Regular";
-$list-header-font: "RadioVolna";
-$main-lightblue-color: lightblue;
-
-%hidden-btn {
-  visibility: hidden;
-  position: absolute;
-  font-size: 14px;
-}
-
-%amatic-bold {
-  font-family: "AmaticSC-Regular" !important;
-  font-weight: bold !important;
-}
+// $list-input-font: "AmaticSC-Regular";
+// $list-header-font: "RadioVolna";
+// $main-lightblue-color: lightblue;
+@import "../variables";
 
 .todo-list-header {
   font-size: 24px !important;
@@ -84,6 +74,12 @@ $main-lightblue-color: lightblue;
   left: 88%;
 }
 
+.todo-link {
+  a:link {
+    color: $main-lightblue-color !important;
+  }
+}
+
 .delete-list-item-btn {
   @extend %hidden-btn;
   left: 93%;
@@ -109,6 +105,6 @@ $main-lightblue-color: lightblue;
   font-size: 24px !important;
   padding: 0 20px !important;
   &:hover {
-    background-color: skyblue !important;
+    background-color: $skyblue-color !important;
   }
 }

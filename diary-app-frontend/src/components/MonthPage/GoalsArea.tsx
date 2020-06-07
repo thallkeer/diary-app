@@ -1,16 +1,16 @@
 import React, { useReducer, createContext } from "react";
 import { IGoalsArea, IHabitsTracker } from "../../models";
 import { Row } from "react-bootstrap";
-import Loader from "../Loader";
-import usePageArea from "../../hooks/usePageArea";
+import { PageAreaResult } from "../../hooks/usePageArea";
 import { AddListBtn } from "../AddListBtn";
-import { trackersReducer } from "../../context/trackers";
+import { trackersReducer } from "../../context/reducers/trackers";
 import {
   HabitTrackerThunks,
   Thunks as trackerThunks,
 } from "../../context/actions/habitTracker-actions";
 import { TrackerRow } from "./TrackerRow";
 import { GoalsAreaContext } from "../../context";
+import { MonthArea } from "./MonthAreaHOC";
 
 interface IHabitsTrackerState {
   tracker: IHabitsTracker;
@@ -51,32 +51,39 @@ const Area: React.FC<{ goalsArea: IGoalsArea }> = ({ goalsArea }) => {
     dispatch(deleteTracker(tracker));
   };
 
+  {
+    /* <h1 className="mt-40 area-header">{header}</h1> */
+  }
+
   return (
-    <>
-      <h1 className="mt-40">{header}</h1>
-      <GoalsAreaContext.Provider
-        value={{
-          ...trackersState,
-          dispatch,
-          deleteTracker: deleteHabitsTracker,
-          addOrUpdate: addHabitsTracker,
-        }}
-      >
-        {goalsLists.map((gl, i) => (
-          <TrackerState index={i} key={i} tracker={gl} />
-        ))}
-        <Row className="mt-20">
-          <AddListBtn onClick={() => addHabitsTracker()} />
-        </Row>
-      </GoalsAreaContext.Provider>
-    </>
+    <GoalsAreaContext.Provider
+      value={{
+        ...trackersState,
+        dispatch,
+        deleteTracker: deleteHabitsTracker,
+        addOrUpdate: addHabitsTracker,
+      }}
+    >
+      {goalsLists.map((gl, i) => (
+        <TrackerState index={i} key={i} tracker={gl} />
+      ))}
+      <Row className="mt-20">
+        <AddListBtn onClick={() => addHabitsTracker()} />
+      </Row>
+    </GoalsAreaContext.Provider>
   );
 };
 
-export const GoalsArea: React.FC = () => {
-  const { areaState } = usePageArea<IGoalsArea>("goalsArea");
-
-  if (!areaState || areaState.loading || !areaState.area) return <Loader />;
-
-  return <Area goalsArea={areaState.area} />;
+const GoalsArea: React.FC = () => {
+  return (
+    <MonthArea
+      areaName="goalsArea"
+      areaBody={(areaProps: PageAreaResult<IGoalsArea>) => (
+        <Area goalsArea={areaProps.pageAreaState.area} />
+      )}
+      className="mt-40"
+    />
+  );
 };
+
+export default GoalsArea;

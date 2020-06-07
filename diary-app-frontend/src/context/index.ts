@@ -14,11 +14,11 @@ import {
 import { HabitTrackerThunks } from "./actions/habitTracker-actions";
 import { MainPageThunks } from "./actions/mainPage-actions";
 
-export interface IGlobalContext {
+export interface IAppState {
   month: number;
   year: number;
   user?: IUser;
-  setAppState?: (appState: IGlobalContext) => void;
+  setAppState?: (appState: IAppState) => void;
 }
 
 export interface IBasePageState extends PageState<IPage> {}
@@ -67,4 +67,4 @@ export const TodoListContext = createContext<ITodoListContext>(null);
 export const MainPageContext = createContext<IMainPageContext>(null);
 export const MonthPageContext = createContext<IMonthPageContext>(null);
 export const GoalsAreaContext = createContext<IGoalsAreaContext>(null);
-export const AppContext = createContext<IGlobalContext>(null);
+export const AppContext = createContext<IAppState>(null);

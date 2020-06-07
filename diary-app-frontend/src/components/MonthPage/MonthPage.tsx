@@ -1,17 +1,18 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Loader from "../Loader";
-import { PurchasesArea } from "./PurchasesArea";
-import { DesiresArea } from "./DesiresArea";
-import { IdeasArea } from "./IdeasArea";
-import { GoalsArea } from "./GoalsArea";
 import { MonthPageContext } from "../../context";
 import { Link } from "react-router-dom";
 import strelka from "../../images/strelochkaa.png";
 import { usePage } from "../../hooks/usePage";
 import { PageType } from "../../context/actions/page-actions";
 
-export const MonthPage: React.FC = () => {
+const PurchasesArea = lazy(() => import("./PurchasesArea"));
+const DesiresArea = lazy(() => import("./DesiresArea"));
+const IdeasArea = lazy(() => import("./IdeasArea"));
+const GoalsArea = lazy(() => import("./GoalsArea"));
+
+const MonthPage: React.FC = () => {
   const pageState = usePage(PageType.MonthPage);
 
   const { loading, page } = pageState;
@@ -28,7 +29,7 @@ export const MonthPage: React.FC = () => {
             left: "0",
             pointerEvents: "all",
             cursor: "pointer",
-            zIndex: 10
+            zIndex: 10,
           }}
           to="/"
         >
@@ -41,17 +42,21 @@ export const MonthPage: React.FC = () => {
             height="30"
           />
         </Link>
-        <Row>
-          <Col md={6}>
-            <PurchasesArea />
-            <DesiresArea />
-          </Col>
-          <Col md={6}>
-            <IdeasArea />
-            <GoalsArea />
-          </Col>
-        </Row>
+        <Suspense fallback={<Loader />}>
+          <Row>
+            <Col md={6}>
+              <PurchasesArea />
+              <DesiresArea />
+            </Col>
+            <Col md={6}>
+              <IdeasArea />
+              <GoalsArea />
+            </Col>
+          </Row>
+        </Suspense>
       </Container>
     </MonthPageContext.Provider>
   );
 };
+
+export default MonthPage;

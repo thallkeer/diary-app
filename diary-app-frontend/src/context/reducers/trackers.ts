@@ -1,5 +1,5 @@
-import { HabitTrackerActions } from "./actions/habitTracker-actions";
-import { IGoalsArea } from "../models";
+import { HabitTrackerActions } from "../actions/habitTracker-actions";
+import { IGoalsArea } from "../../models";
 
 export const trackersReducer = (
   state: IGoalsArea,

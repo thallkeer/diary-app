@@ -1,3 +1,5 @@
+@import "../variables";
+
 .calendar-container,
 .calendar,
 .calendar-header,
@@ -17,7 +19,7 @@ tr {
 }
 
 .add-event-form-dialog {
-  font-family: "Google Sans", "Roboto", Arial, sans-serif;
+  font-family: "Roboto", "Open Sans", "Google Sans", "Roboto", Arial, sans-serif;
 }
 
 .calendar {
@@ -28,7 +30,7 @@ tr {
 }
 
 .calendar-header {
-  font-family: "RadioVolna";
+  font-family: $list-header-font;
   font-size: 40px;
   // border-bottom: 1px dashed skyblue;
   // font-size: 1.6em;
@@ -53,7 +55,7 @@ tr {
 
 .week-day {
   font-size: 24px;
-  font-family: "RadioVolna";
+  font-family: $list-header-font;
 }
 
 .day-with-event {
@@ -63,7 +65,7 @@ tr {
   margin-right: 3px;
   font-size: 18px;
   line-height: 18px;
-  font-family: "AmaticSC-Regular";
+  font-family: $list-input-font;
   font-weight: bold;
 }
 
@@ -109,7 +111,7 @@ tr {
   left: 0;
   width: 35px;
   height: 30px;
-  font-family: RadioVolna;
+  font-family: $list-header-font;
   font-size: 24px;
   text-align: center;
   padding-top: 5px;
@@ -125,7 +127,7 @@ tr {
 }
 
 .to-calendar-link {
-  font-family: "RadioVolna";
+  font-family: $list-header-font;
   font-size: 40px;
   position: absolute;
   left: 0;
@@ -146,7 +148,7 @@ tr {
   position: absolute;
   padding: 5px;
   background: white;
-  border: 2px solid skyblue;
+  border: 2px solid $skyblue-color;
 }
 
 .month-popup div {

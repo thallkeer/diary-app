@@ -1,35 +1,23 @@
 import React, { useContext } from "react";
-import { getRandomId } from "../../utils";
-import { IHabitsTracker } from "../../models";
+import { IHabitsTracker, HabitDay } from "../../models";
 import { HabitsTrackerContext } from "../MonthPage/GoalsArea";
 import { GoalsAreaContext } from "../../context";
-import { OverlayTrigger, Popover } from "react-bootstrap";
-
-const popover = (
-  <Popover id="popover-basic">
-    <Popover.Title as="h3">Заметка</Popover.Title>
-    <Popover.Content>
-      <input
-        type="text"
-        autoFocus
-        style={{ outline: "none", border: "none" }}
-      ></input>
-    </Popover.Content>
-  </Popover>
-);
+import { HabitDayCell } from "./HabitDayCell";
 
 export const HabitsTracker = () => {
   const { tracker } = useContext(HabitsTrackerContext);
   const { addOrUpdate } = useContext(GoalsAreaContext);
 
-  const onDayClick = (e: React.MouseEvent<HTMLElement>, day: number) => {
+  const onDayClick = (e: React.MouseEvent<HTMLElement>, day: HabitDay) => {
     let target = e.target as HTMLElement;
     let updatedTracker: IHabitsTracker;
-    if (tracker.selectedDays.includes(day)) {
+    if (tracker.selectedDays.some((hd) => hd.number === day.number)) {
       target.classList.remove("marked");
       updatedTracker = {
         ...tracker,
-        selectedDays: tracker.selectedDays.filter((sd) => sd !== day),
+        selectedDays: tracker.selectedDays.filter(
+          (sd) => sd.number !== day.number
+        ),
       };
     } else {
       target.classList.add("marked");
@@ -39,27 +27,6 @@ export const HabitsTracker = () => {
       };
     }
     addOrUpdate(updatedTracker);
-  };
-
-  const WrappedDay = (className: string, day: number) => {
-    const dayComponent = (
-      <div className={className} key={day} onClick={(e) => onDayClick(e, day)}>
-        {day}
-      </div>
-    );
-
-    return className.indexOf("marked") === -1 ? (
-      dayComponent
-    ) : (
-      <OverlayTrigger
-        key={day}
-        trigger={["hover", "focus"]}
-        placement="top"
-        overlay={popover}
-      >
-        {dayComponent}
-      </OverlayTrigger>
-    );
   };
 
   const getDaysInMonth = () => {
@@ -73,15 +40,28 @@ export const HabitsTracker = () => {
     ).getDate();
 
     for (let d = 1; d <= days; d++) {
-      let cn = `p-2 day-cell ${
-        tracker.selectedDays.includes(d) ? "marked" : ""
-      }`;
-      daysInMonth.push(WrappedDay(cn, d));
+      let curDay = tracker.selectedDays.find((day) => day.number === d);
+      let cn = `p-2 day-cell ${curDay ? "marked" : ""}`;
+
+      if (d !== 1 && d !== 16) cn += " no-left-border";
+      if (d >= 16) cn += " no-top-border";
+
+      const dayCell = (
+        <div className={cn} key={d}>
+          <HabitDayCell
+            tracker={tracker}
+            day={curDay || { number: d, note: "" }}
+            isSelected={curDay ? true : false}
+            onDayClick={onDayClick}
+          />
+        </div>
+      );
+      daysInMonth.push(dayCell);
     }
 
     if (days % 2 !== 0)
       daysInMonth.push(
-        <div className="p-2 day-cell" key={getRandomId()}></div>
+        <div className="p-2 day-cell" key={daysInMonth.length + 1}></div>
       );
 
     return daysInMonth;

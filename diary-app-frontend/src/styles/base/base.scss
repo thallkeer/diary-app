@@ -1,3 +1,5 @@
+@import "../variables";
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -14,17 +16,42 @@ code {
 
 @font-face {
   font-family: "RadioVolna";
-  src: url("./fonts/RadioVolna.ttf");
+  src: url("../fonts/RadioVolna.ttf");
 }
 
 @font-face {
   font-family: "AmaticSC-Regular";
-  src: url("./fonts/AmaticSC-Regular.ttf");
+  src: url("../fonts/AmaticSC-Regular.ttf");
 }
 
-.second-page-container h1 {
-  font-size: 36px;
-  font-family: "RadioVolna";
+@mixin font-rv($size: false, $weight: false) {
+  font-family: $list-header-font, "Source Sans Pro", Helvetica, Arial,
+    sans-serif;
+  @if $size {
+    font-size: $size;
+  }
+  @if $weight {
+    font-weight: $weight;
+  }
+}
+
+@mixin font-amatic($size: false, $weight: false) {
+  font-family: $list-input-font, "Roboto", "Source Sans Pro", Helvetica, Arial,
+    sans-serif;
+  @if $size {
+    font-size: $size;
+  }
+  @if $weight {
+    font-weight: $weight;
+  }
+}
+
+@mixin radio-volna-header {
+  @include font-rv(50);
+}
+
+@mixin amatic-bold {
+  @include font-amatic(18, "bold");
 }
 
 @mixin mt($val) {
@@ -45,4 +72,17 @@ code {
 
 .mt-10 {
   @include mt(10px);
+}
+
+.area-header {
+  font-family: $list-header-font;
+  font-size: 36px;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none !important;
+  outline-width: 0 !important;
 }

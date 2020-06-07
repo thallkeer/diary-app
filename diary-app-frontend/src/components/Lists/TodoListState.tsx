@@ -5,7 +5,7 @@ import {
 } from "../../context/actions/todo-actions";
 import { IPage, ITodoList, ITodo } from "../../models";
 import { TodoListContext } from "../../context";
-import { todosReducer } from "../../context/todos";
+import { todosReducer } from "../../context/reducers/todos";
 
 export const TodoListState: React.FC<{
   page?: IPage;
@@ -34,8 +34,7 @@ export const TodoListState: React.FC<{
   } = todoThunks;
 
   useEffect(() => {
-    // if (list !== null) return;
-    if (initList) {
+    if (initList && !list) {
       dispatch(setTodoList(initList));
     } else if (page && (!list || list.pageID !== page.id)) {
       dispatch(loadTodosByPageID(page.id));
@@ -69,8 +68,6 @@ export const TodoListState: React.FC<{
   };
 
   const removeTodoList = (todoList: ITodoList) => {
-    console.log("in remove todolist");
-
     dispatch(deleteTodoList(todoList));
     if (deleteListFunc !== null) deleteListFunc(todoList);
   };

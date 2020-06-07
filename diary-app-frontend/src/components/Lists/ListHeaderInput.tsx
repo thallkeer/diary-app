@@ -1,15 +1,13 @@
 import React, { useRef } from "react";
 
-type Props = {
-  className?: string;
+interface ListHeaderProps extends React.HTMLAttributes<HTMLInputElement> {
   value: string;
   handleBlur: (title: string) => void;
   readonly?: boolean;
-};
+}
 
-export const ListHeaderInput: React.FC<Props> = ({
+export const ListHeaderInput: React.FC<ListHeaderProps> = ({
   value,
-  className,
   handleBlur,
   readonly = false,
 }) => {
@@ -17,18 +15,20 @@ export const ListHeaderInput: React.FC<Props> = ({
     if (event.key === "Enter") handleBlur(titleInput.current.value);
   };
 
-  const titleInput = useRef(null);
+  const onBlur = () => {
+    if (!readonly) handleBlur(titleInput.current.value);
+  };
 
-  let cn = `list-header-input ${className || ""}`;
+  const titleInput = useRef(null);
 
   return (
     <input
       ref={titleInput}
       defaultValue={value}
-      className={cn}
+      className="list-header-input"
       type="text"
       maxLength={50}
-      onBlur={() => handleBlur(titleInput.current.value)}
+      onBlur={onBlur}
       onKeyPress={handleKeyPress}
       autoComplete={"off"}
       readOnly={readonly}

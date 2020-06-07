@@ -1,4 +1,5 @@
 ﻿using DiaryApp.Core;
+using System.Linq;
 
 namespace DiaryApp.Data.Services
 {
@@ -8,6 +9,6 @@ namespace DiaryApp.Data.Services
         public EventService(ApplicationContext context) : base(context)
         {
             eventItemsService = new CrudService<EventItem>(context);
-        }
+        }       
     }
 }

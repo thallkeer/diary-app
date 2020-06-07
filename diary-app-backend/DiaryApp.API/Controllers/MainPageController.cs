@@ -16,16 +16,11 @@ namespace DiaryApp.API.Controllers
     public class MainPageController : AppBaseController<MainPageController>
     {
         private readonly IMainPageService mainPageService;
-        private readonly IEventService eventService;
-        private readonly ITodoService todoService;
 
-        public MainPageController(IMainPageService mainPageService, IEventService eventService, ITodoService todoService,
-            IMapper mapper, ILoggerFactory loggerFactory)
+        public MainPageController(IMainPageService mainPageService, IMapper mapper, ILoggerFactory loggerFactory)
             : base(mapper, loggerFactory)
         {
             this.mainPageService = mainPageService;
-            this.eventService = eventService;
-            this.todoService = todoService;
         }
 
         [HttpGet("{userId}/{year}/{month}")]

@@ -9,12 +9,15 @@ export type List = ITodoList | IEventList;
 export interface ITodoList extends IList<ITodo> {
   purchasesAreaId?: number;
 }
-export interface IEventList extends IList<IEvent> {}
+export interface IEventList extends IList<IEvent> {
+  ideasAreaID?: number;
+  desiresAreaID?: number;
+}
 
 export interface IListItem {
   id: number;
   subject: string;
-  url?: string;
+  url: string;
   ownerID?: number;
   readonly?: boolean;
 }
@@ -31,11 +34,16 @@ export interface IEvent extends IListItem {
 
 export type ListItem = ITodo | IEvent;
 
+export type HabitDay = {
+  number: number;
+  note: string;
+};
+
 export interface IHabitsTracker {
   id: number;
   goalName: string;
   goalsAreaId: number;
-  selectedDays: number[];
+  selectedDays: HabitDay[];
 }
 
 export interface IUser {

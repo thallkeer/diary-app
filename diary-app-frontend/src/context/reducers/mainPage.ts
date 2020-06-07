@@ -1,5 +1,5 @@
-import { IMainPageContext } from ".";
-import { MainPageActions } from "./actions/mainPage-actions";
+import { IMainPageContext } from "..";
+import { MainPageActions } from "../actions/mainPage-actions";
 
 export const mainPageReducer = (
   state: IMainPageContext,

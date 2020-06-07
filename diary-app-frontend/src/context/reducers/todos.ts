@@ -1,6 +1,6 @@
-import { TodoActions } from "./actions/todo-actions";
-import { getTodos } from "../selectors";
-import { ITodoListContext } from ".";
+import { TodoActions } from "../actions/todo-actions";
+import { getTodos } from "../../selectors";
+import { ITodoListContext } from "..";
 
 export const todosReducer = (
   state: ITodoListContext,

@@ -17,12 +17,12 @@ export const getRandomId = () => {
 };
 
 export const getEmptyTodo = () => {
-  const todo: ITodo = { id: 0, subject: "", done: false };
+  const todo: ITodo = { id: 0, subject: "", done: false, url: "" };
   return todo;
 };
 
 export const getEmptyEvent = () => {
-  const event: IEvent = { id: 0, subject: "", date: new Date() };
+  const event: IEvent = { id: 0, subject: "", date: new Date(), url: "" };
   return event;
 };
 

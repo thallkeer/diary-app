@@ -2,30 +2,33 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import { EventList } from "../Lists/EventList";
 import { IDesiresArea } from "../../models";
-import usePageArea from "../../hooks/usePageArea";
-import Loader from "../Loader";
+import { PageAreaResult } from "../../hooks/usePageArea";
 import { EventListState } from "../Lists/EventListState";
+import { MonthArea } from "./MonthAreaHOC";
 
-export const DesiresArea: React.FC = () => {
-  const { areaState } = usePageArea<IDesiresArea>("desiresArea");
-
-  if (!areaState || areaState.loading) return <Loader />;
+const DesiresArea: React.FC = () => {
+  const desiresArea = (areaProps: PageAreaResult<IDesiresArea>) => (
+    <Row>
+      {areaProps.pageAreaState.area.desiresLists.map((eventList) => (
+        <Col md={4} key={eventList.id}>
+          <EventListState initList={eventList}>
+            <EventList
+              className="mt-10 month-lists-header no-list-header-border"
+              readonly={false}
+            />
+          </EventListState>
+        </Col>
+      ))}
+    </Row>
+  );
 
   return (
-    <>
-      <h1 className="mt-40">{areaState.area.header}</h1>
-      <Row>
-        {areaState.area.desiresLists.map((eventList) => (
-          <Col md={4} key={eventList.id}>
-            <EventListState initList={eventList}>
-              <EventList
-                className="mt-10 month-lists-header no-list-header-border"
-                readonly={false}
-              />
-            </EventListState>
-          </Col>
-        ))}
-      </Row>
-    </>
+    <MonthArea
+      areaName="desiresArea"
+      areaBody={desiresArea}
+      className="mt-40"
+    />
   );
 };
+
+export default DesiresArea;

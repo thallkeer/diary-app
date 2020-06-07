@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import { MainPageContext } from "../../context";
 import { PageType } from "../../context/actions/page-actions";
-import { mainPageReducer } from "../../context/mainPage";
+import { mainPageReducer } from "../../context/reducers/mainPage";
 import {
   MainPageThunks,
   Thunks as mainPageThunks,
@@ -21,7 +21,6 @@ export const MainPageState: React.FC = ({ children }) => {
   useEffect(() => {
     if (!loading && page !== null) {
       dispatch(mainPageThunks.setPage(page));
-      console.log("main page effect ", page);
     }
   }, [page]);
 

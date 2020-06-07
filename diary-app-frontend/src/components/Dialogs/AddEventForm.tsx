@@ -7,7 +7,7 @@ import {
   Row,
   Form,
   FormGroup,
-  Col
+  Col,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
@@ -33,15 +33,15 @@ export const AddEventForm: React.FC<IFormProps> = ({
   handleClose,
   day,
   addEvent,
-  event
+  event,
 }) => {
   const { year, month } = useContext(AppContext);
 
   const initialState: IFormState = {
     item: event || {
       ...getEmptyEvent(),
-      date: new Date(year, month - 1, day)
-    }
+      date: new Date(year, month - 1, day),
+    },
   };
 
   const [formState, setFormState] = useState<IFormState | null>(initialState);
@@ -52,7 +52,7 @@ export const AddEventForm: React.FC<IFormProps> = ({
     inputRef.current.focus();
   }, []);
 
-  const onChange = (e: React.FormEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.persist();
     const { value } = e.target as HTMLInputElement;
 
@@ -60,8 +60,8 @@ export const AddEventForm: React.FC<IFormProps> = ({
       ...formState,
       item: {
         ...formState.item,
-        subject: value
-      }
+        subject: value,
+      },
     });
   };
 
@@ -80,7 +80,7 @@ export const AddEventForm: React.FC<IFormProps> = ({
     return formState.item.date.toLocaleString("ru", {
       day: "numeric",
       month: "long",
-      year: "numeric"
+      year: "numeric",
     });
   };
 

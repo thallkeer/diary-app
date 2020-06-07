@@ -115,9 +115,9 @@ namespace DiaryApp.Core
         {
             DesiresLists.AddRange(new EventList[]
                 {
-                new EventList {Title = "Прочитать", Page = this.Page},
-                new EventList {Title = "Посмотреть", Page = this.Page},
                 new EventList {Title = "Посетить", Page = this.Page},
+                new EventList {Title = "Посмотреть", Page = this.Page},
+                new EventList {Title = "Прочитать", Page = this.Page},
                 });
         }
     }

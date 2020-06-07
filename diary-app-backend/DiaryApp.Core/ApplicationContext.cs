@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DiaryApp.Core
 {
@@ -15,16 +16,22 @@ namespace DiaryApp.Core
             Database.EnsureCreated();
         }
 
+        private HabitDay FromString(string str)
+        {
+            var splited = str.Split(",");
+            return new HabitDay { Number = int.Parse(splited[0]), Note = splited.Length == 2 ? splited[1] : string.Empty };
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            var converter = new ValueConverter<List<int>, string>(
+            base.OnModelCreating(modelBuilder);            
+            
+            var converter = new ValueConverter<List<HabitDay>, string>(
                 v => string.Join(";", v),
-                v => v.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => int.Parse(val)).ToList()
-                );
+                v => v.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(FromString).ToList()
+            );          
 
-            var valueComparer = new ValueComparer<List<int>>(
+            var valueComparer = new ValueComparer<List<HabitDay>>(
                 (o1, o2) => o1.SequenceEqual(o2),
                 c => c.Aggregate(0, (a,v) => HashCode.Combine(a, v.GetHashCode())),
                 c => c.ToList()

@@ -1,6 +1,6 @@
-import { EventActions } from "./actions/events-actions";
-import { IEventListContext } from ".";
-import { getEvents } from "../selectors";
+import { EventActions } from "../actions/events-actions";
+import { IEventListContext } from "..";
+import { getEvents } from "../../selectors";
 
 export const eventsReducer = (
   state: IEventListContext,
@@ -27,7 +27,6 @@ export const eventsReducer = (
     }
     case "ADD_EVENT":
       let addedEvent = action.payload;
-      console.log("in reducer", addedEvent);
 
       addedEvent.date = new Date(addedEvent.date);
 
@@ -61,6 +60,12 @@ export const eventsReducer = (
         },
       };
 
+    case "UPDATE_EVENTLIST":
+      return {
+        ...state,
+        list: action.payload,
+      };
+
     case "DELETE_EVENT_LIST":
       return {
         ...state,
@@ -68,7 +73,7 @@ export const eventsReducer = (
       };
 
     default:
-      console.log("reducer", state);
+      console.log("unknown action type reducer", action, state);
       return state;
   }
 };

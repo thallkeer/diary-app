@@ -40,6 +40,9 @@ namespace DiaryApp.Core
         /// <param name="otherArea"></param>
         public abstract void AddFromOtherArea(PageAreaBase otherArea);
 
+        /// <summary>
+        /// Custom additional initialization
+        /// </summary>
         protected abstract void Initialize();
 
         public override string ToString()

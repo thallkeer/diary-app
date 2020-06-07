@@ -1,16 +1,19 @@
+@import "resets";
+@import "variables";
 @import "./base/base.scss";
 @import "./components/add-event.scss";
 @import "./components/calendar.scss";
 @import "./components/lists.scss";
 @import "./components/habits-tracker.scss";
 @import "./components/login.scss";
+@import "./components/context-menu.scss";
 
-@font-face {
-  font-family: "RadioVolna";
-  src: url("./fonts/RadioVolna.ttf");
-}
+// @font-face {
+//   font-family: "RadioVolna";
+//   src: url("../fonts/RadioVolna.ttf");
+// }
 
-@font-face {
-  font-family: "AmaticSC-Regular";
-  src: url("./fonts/AmaticSC-Regular.ttf");
-}
+// @font-face {
+//   font-family: "AmaticSC-Regular";
+//   src: url("../fonts/AmaticSC-Regular.ttf");
+// }

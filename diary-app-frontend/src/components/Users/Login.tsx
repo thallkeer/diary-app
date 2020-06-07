@@ -4,7 +4,7 @@ import {
   FormGroup,
   FormControl,
   FormLabel,
-  Container
+  Container,
 } from "react-bootstrap";
 import { login, register } from "../../services/users";
 import history from "../history";
@@ -12,7 +12,7 @@ import { IUser } from "../../models";
 import axios from "../../axios/axios";
 import { AppContext } from "../../context";
 
-export const Login: React.FC = () => {
+const Login: React.FC = () => {
   const [userName, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const appState = useContext(AppContext);
@@ -33,16 +33,16 @@ export const Login: React.FC = () => {
     await onSubmit(signIn)({
       id: 0,
       username: userName,
-      password
+      password,
     })
-      .then(res => {
+      .then((res) => {
         const user: IUser = res.data;
         localStorage.setItem("user", JSON.stringify(user));
         appState.setAppState({ ...appState, user });
         axios.defaults.headers.common["Authorization"] = "Bearer " + user.token;
         history.push("/");
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -55,14 +55,14 @@ export const Login: React.FC = () => {
               autoFocus={true}
               type="text"
               value={userName}
-              onChange={e => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </FormGroup>
           <FormGroup controlId="password">
             <FormLabel>Пароль</FormLabel>
             <FormControl
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               type="password"
             />
           </FormGroup>
@@ -95,3 +95,5 @@ export const Login: React.FC = () => {
     </Container>
   );
 };
+
+export default Login;

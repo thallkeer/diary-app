@@ -1,32 +1,39 @@
 import { useState, useEffect, useContext } from "react";
-import { IPageArea } from "../models";
+import { IPageArea, IMonthPage } from "../models";
 import { MonthPageContext } from "../context";
 import axios from "../axios/axios";
 
-type AreaState<T extends IPageArea> = {
+export type AreaState<T extends IPageArea> = {
   loading: boolean;
   area: T;
 };
 
-export default function usePageArea<T extends IPageArea>(areaName: string) {
+export type PageAreaResult<T extends IPageArea> = {
+  pageAreaState: AreaState<T>;
+  page?: IMonthPage;
+};
+
+export default function usePageArea<T extends IPageArea>(
+  areaName: string
+): PageAreaResult<T> {
   const { page } = useContext(MonthPageContext);
   const [areaState, setAreaState] = useState<AreaState<T>>(null);
 
   useEffect(() => {
     if (page) {
-      setAreaState(prevState => {
+      setAreaState((prevState) => {
         return { ...prevState, loading: true };
       });
       axios
         .get(`monthpage/${areaName}/${page.id}`)
-        .then(res =>
-          setAreaState(prevState => {
+        .then((res) =>
+          setAreaState((prevState) => {
             return { ...prevState, area: res.data, loading: false };
           })
         )
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
   }, [page, areaName]);
 
-  return { areaState, page };
+  return { pageAreaState: areaState, page };
 }
