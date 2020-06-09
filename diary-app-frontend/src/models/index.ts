@@ -1,4 +1,4 @@
-export interface IList<T extends ListItem> {
+export interface IList<T extends IListItem> {
   id: number;
   pageID: number;
   title: string;

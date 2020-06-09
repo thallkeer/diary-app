@@ -1,22 +1,26 @@
-import React, { FC, Suspense, lazy } from "react";
-import Calendar from "../Calendar/Calendar";
+import React, { Suspense, lazy } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { ImportantThings } from "./ImportantThings";
-import { ImportantEvents } from "./ImportantEvents";
 import { MainPageState } from "./MainPageState";
+import Loader from "../Loader";
 
-const MainPage: FC = () => {
+const ImportantThings = lazy(() => import("./ImportantThings"));
+const ImportantEvents = lazy(() => import("./ImportantEvents"));
+const Calendar = lazy(() => import("../Calendar/Calendar"));
+
+const MainPage: React.SFC = () => {
   return (
     <MainPageState>
       <Container fluid className="mt-20">
         <Row>
-          <Col md="3" className="text-center">
-            <ImportantThings />
-            <ImportantEvents />
-          </Col>
-          <Col md="9">
-            <Calendar />
-          </Col>
+          <Suspense fallback={<Loader />}>
+            <Col md="3" className="text-center">
+              <ImportantThings />
+              <ImportantEvents />
+            </Col>
+            <Col md="9">
+              <Calendar />
+            </Col>
+          </Suspense>
         </Row>
       </Container>
     </MainPageState>

@@ -12,7 +12,16 @@ import { IUser } from "../../models";
 import axios from "../../axios/axios";
 import { AppContext } from "../../context";
 
+type LoginError = {
+  isError: boolean;
+  errorMessage: string;
+};
+
 const Login: React.FC = () => {
+  const [error, setError] = useState<LoginError>({
+    isError: false,
+    errorMessage: "",
+  });
   const [userName, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const appState = useContext(AppContext);
@@ -23,6 +32,16 @@ const Login: React.FC = () => {
 
   const onSubmit = (signIn: boolean) => {
     return signIn ? login : register;
+  };
+
+  const errMsg = () => {
+    if (error.isError)
+      return (
+        <div className="alert alert-danger" role="alert">
+          {error.errorMessage.toString()}
+        </div>
+      );
+    return <></>;
   };
 
   async function handleSubmit(
@@ -42,7 +61,13 @@ const Login: React.FC = () => {
         axios.defaults.headers.common["Authorization"] = "Bearer " + user.token;
         history.push("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setError({
+          isError: true,
+          errorMessage: err,
+        });
+      });
   }
 
   return (
@@ -91,6 +116,7 @@ const Login: React.FC = () => {
             Регистрация
           </Button>
         </form>
+        {errMsg()}
       </div>
     </Container>
   );

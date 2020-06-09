@@ -16,6 +16,8 @@ export const EventListState: React.FC<{
     list: null,
   });
 
+  const dispatch = (action: EventThunks) => action(_dispatch);
+
   const { list } = state;
 
   const {
@@ -24,16 +26,13 @@ export const EventListState: React.FC<{
     loadEventsByPageID,
     setEventList,
     updateEventList,
-    deleteEventList,
   } = eventThunks;
-
-  const dispatch = (action: EventThunks) => action(_dispatch);
 
   useEffect(() => {
     if (initList && !list) dispatch(setEventList(initList));
     else if (page && (!list || list.pageID !== page.id))
       dispatch(loadEventsByPageID(page.id));
-  }, [page, initList]);
+  }, [page, initList, list]);
 
   const deleteItem = (eventID: number) => {
     eventID !== 0 && dispatch(deleteEvent(eventID));
@@ -46,10 +45,6 @@ export const EventListState: React.FC<{
         ownerID: list.id,
       })
     );
-  };
-
-  const deleteList = (list: IEventList) => {
-    dispatch(deleteEventList(list.id));
   };
 
   const updateListTitle = (title: string) => {

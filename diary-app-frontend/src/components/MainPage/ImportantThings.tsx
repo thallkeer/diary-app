@@ -5,7 +5,7 @@ import { TodoListState } from "../Lists/TodoListState";
 import { IMainPage } from "../../models";
 import Loader from "../Loader";
 
-export const ImportantThings = () => {
+const ImportantThings = () => {
   const pageState = useContext(MainPageContext);
 
   const [page, setPage] = useState<IMainPage>();
@@ -23,3 +23,5 @@ export const ImportantThings = () => {
     </TodoListState>
   );
 };
+
+export default ImportantThings;

@@ -10,7 +10,7 @@ import { Thunks as mainPageThunks } from "../../context/actions/mainPage-actions
 import { IMainPage } from "../../models";
 import Loader from "../Loader";
 
-export const ImportantEvents: React.FC = () => {
+const ImportantEvents: React.FC = () => {
   const pageState = useContext(MainPageContext);
   const [page, setPage] = useState<IMainPage>(null);
 
@@ -41,3 +41,5 @@ export const ImportantEventsList: React.FC<{ pageState: IMainPageContext }> = ({
 
   return <EventList withDate readonly />;
 };
+
+export default ImportantEvents;

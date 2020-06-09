@@ -1,5 +1,5 @@
 import { ActionsUnion, createAction } from "./action-helpers";
-import { ITodo, ITodoList } from "../../models";
+import { ITodo, ITodoList, List, IListItem, IList } from "../../models";
 import axios from "../../axios/axios";
 
 export const ADD_TODO = "ADD_TODO";
@@ -25,6 +25,15 @@ const Actions = {
 };
 
 const baseTodoApi: string = `todo/`;
+
+// export interface ListThunks<T extends IList<U>, U extends IListItem> {
+//   setList: (list: T) => (dispatch: any) => any;
+//   loadListByPageID: (pageID: number) => (dispatch: any) => void;
+//   updateList: (todoList: T) => (dispatch: any) => void;
+//   removeListItem: (todoId: number) => (dispatch: any) => void;
+//   deleteList: (todoList: T) => (dispatch: any) => void;
+//   addOrUpdateTodo: (todo: ITodo) => (dispatch: any) => void;
+// }
 
 export const Thunks = {
   setTodoList: (todoList: ITodoList) => {

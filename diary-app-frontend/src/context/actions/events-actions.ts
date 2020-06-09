@@ -64,7 +64,6 @@ export const Thunks = {
         console.log("updating event", event);
 
         axios.put(baseEventsApi + "updateEvent", event).then((res) => {
-          console.log("res empty");
           dispatch(Actions.updateEvent(event));
         });
       };

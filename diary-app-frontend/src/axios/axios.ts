@@ -5,15 +5,16 @@ const { baseApi, headers } = config;
 
 const axiosInstance = axios.create({
   baseURL: baseApi,
-  headers
+  headers,
 });
 
 axiosInstance.interceptors.response.use(
-  response => {
+  (response) => {
+    console.log("in interceptorr", response);
     return response;
   },
-  error => {
-    console.log("in interceptor", error);
+  (error) => {
+    console.log("in interceptorrr", error, "-", error.response);
 
     if (error.response && error.response.status === 401) logoff();
 

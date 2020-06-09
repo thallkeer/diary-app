@@ -24,7 +24,6 @@ export const TodoInput: FC<ITodoInputProps> = ({
   };
 
   const handleDeleteClick = () => {
-    console.log("handle delete click", todo);
     deleteTodo(todo.id);
   };
 

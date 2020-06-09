@@ -75,6 +75,7 @@ export const ListItemInput: FC<ListItemInputProps> = ({
   item,
   getItemText = null,
   readonly = false,
+  className,
 }) => {
   const validateAndUpdate = (value: string) => {
     if (value !== item.subject) {
@@ -97,7 +98,7 @@ export const ListItemInput: FC<ListItemInputProps> = ({
       readOnly={readonly || (getItemText ? true : false)}
       onBlur={handleBlur}
       onKeyPress={handleKeyPress}
-      className="list-item-input"
+      className={`${className || ""} list-item-input`}
       autoComplete={"off"}
       ref={inputRef}
     />
