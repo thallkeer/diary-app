@@ -1,29 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, useReducer, Reducer } from "react";
 import { IPageArea } from "../../models";
-import Loader from "../Loader";
-import usePageArea, { PageAreaResult } from "../../hooks/usePageArea";
+import usePageArea, { PageAreaState } from "../../hooks/usePageArea";
+import { store } from "../../context/store";
 
-interface MonthAreaProps<T extends IPageArea>
-  extends React.HTMLAttributes<HTMLDivElement> {
-  areaName: string;
-  areaBody: (areaProps: PageAreaResult<T>) => JSX.Element;
-}
+// interface MonthAreaProps<T extends IPageArea>
+// 	extends React.HTMLAttributes<HTMLDivElement> {
+// 	areaName: string;
+// 	areaBody: (areaProps: PageAreaState<T>) => JSX.Element;
+// }
 
-export function MonthArea<T extends IPageArea>(props: MonthAreaProps<T>) {
-  const { areaBody, areaName, className } = props;
-  const pageAreaRes = usePageArea<T>(areaName);
-  const { pageAreaState, page } = pageAreaRes;
+export function useMonthArea<T extends IPageArea, TAction>(
+	areaName: string,
+	reducer: Reducer<PageAreaState<T>, TAction>,
+	onLoad: (area: T) => TAction
+): [PageAreaState<T>, React.Dispatch<TAction>] {
+	const pageArea = usePageArea<T>(areaName);
+	const { area, loading } = pageArea;
+	const { selectedPage } = useContext(store).state;
 
-  useEffect(() => {}, [areaName, areaBody]);
+	const [state, dispatch] = useReducer(reducer, pageArea);
 
-  if (!page || !pageAreaState || pageAreaState.loading) return <Loader />;
+	useEffect(() => {
+		if (area && !loading) {
+			dispatch(onLoad(area));
+		}
+	}, [area, loading, selectedPage, onLoad]);
 
-  const cn = `${className || ""} area-header`;
-
-  return (
-    <>
-      <h1 className={cn}>{pageAreaState.area.header}</h1>
-      {areaBody(pageAreaRes)}
-    </>
-  );
+	return [state, dispatch];
 }

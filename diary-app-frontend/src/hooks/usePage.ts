@@ -1,25 +1,21 @@
 import { useContext, useEffect, useReducer } from "react";
-import { AppContext } from "../context";
-import { IUser } from "../models";
-import {
-  PageType,
-  PageThunks,
-  Thunks as pageThunks,
-} from "../context/actions/page-actions";
-import { pageReducer } from "../context/reducers/page";
+import { loadPage } from "../context/actions/page-actions";
+import { pageReducer } from "../context/reducers/page/page";
+import { store } from "../context/store";
 
-export function usePage(pageType: PageType) {
-  const [pageState, _dispatch] = useReducer(pageReducer, {
-    loading: false,
-    page: null,
-  });
-  const dispatch = (action: PageThunks) => action(_dispatch);
-  const { month, year } = useContext(AppContext);
-  const user: IUser = JSON.parse(localStorage.getItem("user"));
+export function usePage(pageName: string) {
+	const [state, dispatch] = useReducer(pageReducer, {
+		loading: false,
+		page: null,
+	});
+	const { year, month, user } = useContext(store).state;
 
-  useEffect(() => {
-    dispatch(pageThunks.loadPage(pageType, user, year, month));
-  }, [year, month]);
+	useEffect(() => {
+		let userFromState = user;
+		if (!userFromState)
+			userFromState = JSON.parse(localStorage.getItem("user"));
+		loadPage(pageName, user, year, month, dispatch);
+	}, [pageName, year, month, user]);
 
-  return pageState;
+	return state;
 }

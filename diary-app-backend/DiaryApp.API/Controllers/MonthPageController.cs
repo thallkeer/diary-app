@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
+using DiaryApp.Core.Models.PageAreas;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -114,15 +115,18 @@ namespace DiaryApp.API.Controllers
             where TDto : PageAreaModel
             where TEntity : PageAreaBase
         {
+            TEntity area;
             try
             {
-                var area = await monthPageService.GetPageArea<TEntity>(pageID);
+                area = await monthPageService.GetPageArea<TEntity>(pageID);
                 if (area == null)
                 {
-                    logger.LogError($"Page area {typeof(TEntity).FullName} not found for pageID {pageID}");
-                    return NotFound();
+                    string err = $"Page area {typeof(TEntity).FullName} not found for pageID {pageID}";
+                    logger.LogError(err);
+                    return NotFound(err);
                 }
-                return Ok(mapper.Map<TDto>(area));
+                var model = mapper.Map<TDto>(area);
+                return Ok(model);
             }
             catch (Exception ex)
             {

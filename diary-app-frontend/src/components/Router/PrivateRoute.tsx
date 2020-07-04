@@ -1,15 +1,15 @@
 import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { AppNavbar } from "../Navbars/AppNavbar";
-import { AppContext } from "../../context";
+import { store } from "../../context/store";
 
 export const PrivateRoute = ({ component: Component, path, ...rest }) => {
-  const { user } = useContext(AppContext);
+  const { user } = useContext(store).state;
 
   const routedComponent = (
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         user ? (
           <Component {...props} />
         ) : (
@@ -23,7 +23,7 @@ export const PrivateRoute = ({ component: Component, path, ...rest }) => {
 
   return (
     <>
-      <AppNavbar monthPage={path === "/month"} />
+      <AppNavbar isOnMonthPage={path === "/month"} />
       {routedComponent}
     </>
   );

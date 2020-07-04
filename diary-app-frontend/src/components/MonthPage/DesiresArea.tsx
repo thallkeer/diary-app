@@ -1,34 +1,41 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Row, Col } from "react-bootstrap";
-import { EventList } from "../Lists/EventList";
-import { IDesiresArea } from "../../models";
-import { PageAreaResult } from "../../hooks/usePageArea";
-import { EventListState } from "../Lists/EventListState";
-import { MonthArea } from "./MonthAreaHOC";
+import { CommonListState } from "../Lists/CommonList/CommonListState";
+import { CommonList } from "../Lists/CommonList/CommonList";
+import { DesiresAreaState, desiresAreaContext } from "./DesiresAreaState";
+import Loader from "../Loader";
 
 const DesiresArea: React.FC = () => {
-  const desiresArea = (areaProps: PageAreaResult<IDesiresArea>) => (
-    <Row>
-      {areaProps.pageAreaState.area.desiresLists.map((eventList) => (
-        <Col md={4} key={eventList.id}>
-          <EventListState initList={eventList}>
-            <EventList
-              className="mt-10 month-lists-header no-list-header-border"
-              readonly={false}
-            />
-          </EventListState>
-        </Col>
-      ))}
-    </Row>
-  );
+	const DesiresAreaComponent = () => {
+		const { desiresAreaState } = useContext(desiresAreaContext);
+		const { area, loading } = desiresAreaState;
 
-  return (
-    <MonthArea
-      areaName="desiresArea"
-      areaBody={desiresArea}
-      className="mt-40"
-    />
-  );
+		if (!area || loading) return <Loader />;
+
+		return (
+			<>
+				<h1 className="mt-40 area-header">{area.header}</h1>
+				<Row>
+					{area.desiresLists.map((commonList) => (
+						<Col md={4} key={commonList.id}>
+							<CommonListState initList={commonList}>
+								<CommonList
+									readonlyTitle={true}
+									className="mt-10 month-lists-header no-list-header-border"
+								/>
+							</CommonListState>
+						</Col>
+					))}
+				</Row>
+			</>
+		);
+	};
+
+	return (
+		<DesiresAreaState>
+			<DesiresAreaComponent />
+		</DesiresAreaState>
+	);
 };
 
 export default DesiresArea;

@@ -1,23 +1,39 @@
-import React from "react";
-import { IIdeasArea } from "../../models";
+import React, { useContext } from "react";
 import { Row, Col } from "react-bootstrap";
-import { EventList } from "../Lists/EventList";
-import { PageAreaResult } from "../../hooks/usePageArea";
-import { EventListState } from "../Lists/EventListState";
-import { MonthArea } from "./MonthAreaHOC";
+import { ideasAreaContext, IdeasAreaState } from "./IdeasAreaState";
+import { CommonList } from "../Lists/CommonList/CommonList";
+import { CommonListState } from "../Lists/CommonList/CommonListState";
+import Loader from "../Loader";
 
 const IdeasArea: React.FC = () => {
-  const ideasArea = (areaProps: PageAreaResult<IIdeasArea>) => (
-    <Row>
-      <Col md={12}>
-        <EventListState initList={areaProps.pageAreaState.area.ideasList}>
-          <EventList className="mt-10 no-list-header" renderHeader={false} />
-        </EventListState>
-      </Col>
-    </Row>
-  );
+	const IdeasAreaComponent = () => {
+		const { ideasAreaState } = useContext(ideasAreaContext);
+		const { area, loading } = ideasAreaState;
 
-  return <MonthArea areaName="ideasArea" areaBody={ideasArea} />;
+		if (!area || loading) return <Loader />;
+
+		return (
+			<>
+				<h1 className="area-header">{area.header}</h1>
+				<Row>
+					<Col md={12}>
+						<CommonListState initList={area.ideasList}>
+							<CommonList
+								className="mt-10 no-list-header"
+								readonlyTitle={true}
+							/>
+						</CommonListState>
+					</Col>
+				</Row>
+			</>
+		);
+	};
+
+	return (
+		<IdeasAreaState>
+			<IdeasAreaComponent />
+		</IdeasAreaState>
+	);
 };
 
 export default IdeasArea;

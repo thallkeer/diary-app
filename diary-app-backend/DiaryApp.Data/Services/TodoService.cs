@@ -1,4 +1,5 @@
 ﻿using DiaryApp.Core;
+using DiaryApp.Core.Models;
 
 namespace DiaryApp.Data.Services
 {

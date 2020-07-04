@@ -1,27 +1,38 @@
-import React, { useContext, useState, useEffect } from "react";
-import { TodoList } from "../Lists/TodoList";
-import { MainPageContext } from "../../context";
-import { TodoListState } from "../Lists/TodoListState";
-import { IMainPage } from "../../models";
+import React, { useContext, useEffect } from "react";
+import { TodoList } from "../Lists/TodoList/TodoList";
+import {
+	TodoListState,
+	TodoListContext,
+} from "../Lists/TodoList/TodoListState";
+import { mainPageContext } from "./MainPageState";
+import { Actions } from "../../context/actions/mainPage-actions";
 import Loader from "../Loader";
 
 const ImportantThings = () => {
-  const pageState = useContext(MainPageContext);
+	const mpContext = useContext(mainPageContext);
+	const { mainPage, loading } = mpContext.state;
 
-  const [page, setPage] = useState<IMainPage>();
+	if (loading || !mainPage || !mainPage.page) return <Loader />;
 
-  useEffect(() => {
-    const check: boolean = pageState && pageState.page !== null;
-    if (check) setPage(pageState.page);
-  }, [pageState.page]);
+	return (
+		<TodoListState readonlyHeader={true} isDeletable={false}>
+			<ImportantThingsList />
+		</TodoListState>
+	);
+};
 
-  if (!page) return <Loader />;
+export const ImportantThingsList: React.FC = () => {
+	const pageState = useContext(mainPageContext);
+	const { dispatch } = pageState;
+	const todoListState = useContext(TodoListContext).todoListState;
 
-  return (
-    <TodoListState page={page} isDeletable={false}>
-      <TodoList />
-    </TodoListState>
-  );
+	useEffect(() => {
+		const { list, loading } = todoListState;
+
+		if (list && !loading) dispatch(Actions.setTodos(todoListState));
+	}, [todoListState, dispatch]);
+
+	return <TodoList />;
 };
 
 export default ImportantThings;

@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DiaryApp.Core;
+using DiaryApp.Core.Models.Lists;
 
 namespace DiaryApp.Data.Services
 {
     public class ListService<TList, TItem> : CrudService<TList>, IListService<TList, TItem> 
         where TList : ListBase<TItem> 
-        where TItem : ListItemBase<TList>
+        where TItem : ListItemBase
     {
         private readonly CrudService<TItem> itemsService;
         public ListService(ApplicationContext context) : base(context)

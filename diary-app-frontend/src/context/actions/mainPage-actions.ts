@@ -1,30 +1,18 @@
 import { ActionsUnion, createAction } from "./action-helpers";
-import { IEventList, IPage } from "../../models";
-import axios from "../../axios/axios";
-import { IEventListContext } from "..";
+import { ITodoListState } from "../../components/Lists/TodoList/TodoListState";
+import { IEventListContext } from "../../components/Lists/EventList/EventListState";
+import { IMainPage } from "../../models";
 
 export const SET_PAGE = "SET_PAGE";
 export const SET_EVENTS = "SET_EVENTS";
+export const SET_TODOS = "SET_TODOS";
 
-const Actions = {
-  setPage: (page: IPage) => createAction(SET_PAGE, page),
-  setEvents: (eventListContext: IEventListContext) =>
-    createAction(SET_EVENTS, eventListContext)
-};
-
-export const Thunks = {
-  setEvents: (eventList: IEventListContext) => {
-    return dispatch => {
-      dispatch(Actions.setEvents(eventList));
-    };
-  },
-
-  setPage: (page: IPage) => {
-    return dispatch => {
-      dispatch(Actions.setPage(page));
-    };
-  }
+export const Actions = {
+	setEvents: (eventListContext: IEventListContext) =>
+		createAction(SET_EVENTS, eventListContext),
+	setTodos: (todoListContext: ITodoListState) =>
+		createAction(SET_TODOS, todoListContext),
+	setPage: (mainPage: IMainPage) => createAction(SET_PAGE, mainPage),
 };
 
 export type MainPageActions = ActionsUnion<typeof Actions>;
-export type MainPageThunks = ActionsUnion<typeof Thunks>;

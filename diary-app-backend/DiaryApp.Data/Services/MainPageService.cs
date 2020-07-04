@@ -1,4 +1,5 @@
 ﻿using DiaryApp.Core;
+using DiaryApp.Core.Models;
 using System.Threading.Tasks;
 
 namespace DiaryApp.Data.Services
@@ -24,7 +25,7 @@ namespace DiaryApp.Data.Services
 
             await Create(mainPage);
 
-            var impEvents = new EventList()
+            var impEvents = new EventList
             {
                 Title = "Важные события",
                 Page = mainPage

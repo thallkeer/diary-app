@@ -65,7 +65,6 @@ namespace DiaryApp.API.Controllers
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
-            // return basic user info (without password) and token to store client side
             return Ok(new
             {
                 user.ID,
@@ -87,9 +86,7 @@ namespace DiaryApp.API.Controllers
         {
             try
             {
-                // map dto to entity
                 var user = mapper.Map<AppUser>(userDto);
-                // save 
                 await userService.Create(user, userDto.Password);
                 return SendToken(user);
             }

@@ -1,39 +1,44 @@
 import { useState, useEffect, useContext } from "react";
-import { IPageArea, IMonthPage } from "../models";
-import { MonthPageContext } from "../context";
-import axios from "../axios/axios";
+import { IPageArea } from "../models";
+import { store } from "../context/store";
+import { getSelectedPage } from "../selectors";
+import { getPageArea } from "../context/actions/monthPage-actions";
 
-export type AreaState<T extends IPageArea> = {
-  loading: boolean;
-  area: T;
-};
-
-export type PageAreaResult<T extends IPageArea> = {
-  pageAreaState: AreaState<T>;
-  page?: IMonthPage;
+export type PageAreaState<T extends IPageArea> = {
+	loading: boolean;
+	area: T;
 };
 
 export default function usePageArea<T extends IPageArea>(
-  areaName: string
-): PageAreaResult<T> {
-  const { page } = useContext(MonthPageContext);
-  const [areaState, setAreaState] = useState<AreaState<T>>(null);
+	areaName: string
+): PageAreaState<T> {
+	const app = useContext(store).state;
+	const { monthPage } = app;
+	const page = getSelectedPage(app);
+	const [state, setState] = useState<PageAreaState<T>>({
+		loading: false,
+		area: null,
+	});
 
-  useEffect(() => {
-    if (page) {
-      setAreaState((prevState) => {
-        return { ...prevState, loading: true };
-      });
-      axios
-        .get(`monthpage/${areaName}/${page.id}`)
-        .then((res) =>
-          setAreaState((prevState) => {
-            return { ...prevState, area: res.data, loading: false };
-          })
-        )
-        .catch((err) => console.log(err));
-    }
-  }, [page, areaName]);
+	useEffect(() => {
+		let isUnmounting = false;
+		const fetchPageArea = async () => {
+			if (!isUnmounting) {
+				setState((prevState) => {
+					return { ...prevState, loading: true };
+				});
+				const pageArea = await getPageArea<T>(areaName, page.id);
+				setState((prevState) => {
+					return { ...prevState, area: pageArea.data, loading: false };
+				});
+			}
+		};
 
-  return { pageAreaState: areaState, page };
+		if (page && monthPage && page === monthPage.page) {
+			fetchPageArea();
+		}
+		return () => (isUnmounting = true);
+	}, [page, monthPage, areaName]);
+
+	return state;
 }

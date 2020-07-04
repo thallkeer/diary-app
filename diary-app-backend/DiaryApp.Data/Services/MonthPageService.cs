@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using DiaryApp.Core;
 using DiaryApp.Core.Models;
 using System;
+using DiaryApp.Core.Models.PageAreas;
 
 namespace DiaryApp.Data.Services
 {
     public class MonthPageService : PageService<MonthPage>, IMonthPageService
-    {
+    {        
         public MonthPageService(ApplicationContext context) : base(context)
         {
         }
@@ -31,28 +32,7 @@ namespace DiaryApp.Data.Services
             monthPage.CreateAreas();
 
             await Update(monthPage);
-
-            //monthPage.PurchasesArea.PurchasesLists.AddRange(new TodoList[]
-            //{
-            //    new TodoList {Title = "Название списка"},
-            //    new TodoList {Title = "Название списка"}
-            //});
-
-            //monthPage.PurchasesArea.PurchasesLists.ForEach(x => x.Page = monthPage);
-
-            //monthPage.DesiresArea.DesiresLists.AddRange(new EventList[]
-            //{
-            //    new EventList {Title = "Прочитать"},
-            //    new EventList {Title = "Посмотреть"},
-            //    new EventList {Title = "Посетить"},
-            //});
-
-            //monthPage.DesiresArea.DesiresLists.ForEach(x => x.Page = monthPage);
-
-            //monthPage.IdeasArea.IdeasList = new EventList() { Page = monthPage };
-            //monthPage.GoalsArea.GoalsLists.Add(new HabitsTracker() { GoalName = "Название цели" });
-
-            await Update(monthPage);
+           
             return monthPage;
         }
 
@@ -65,33 +45,65 @@ namespace DiaryApp.Data.Services
                 await Create(monthPage);
             }
 
-            monthPage.GoalsArea = await InitOrTransferArea(monthPage.GoalsArea, prevPage.GoalsArea, monthPage,transferDataModel.TransferGoalsArea, () => new GoalsArea(monthPage, true));
-            monthPage.DesiresArea = await InitOrTransferArea(monthPage.DesiresArea, prevPage.DesiresArea, monthPage, transferDataModel.TransferDesiresArea, () => new DesiresArea(monthPage, true));
-            monthPage.IdeasArea = await InitOrTransferArea(monthPage.IdeasArea, prevPage.IdeasArea, monthPage, transferDataModel.TransferIdeasArea, () => new IdeasArea(monthPage, true));
-            monthPage.PurchasesArea = await InitOrTransferArea(monthPage.PurchasesArea, prevPage.PurchasesArea, monthPage, transferDataModel.TransferPurchasesArea, () => new PurchasesArea(monthPage, true));
+            var transferOperations = new TransferAreaOperations(context, monthPage, transferDataModel);
+            
+            monthPage.GoalsArea = await transferOperations.InitOrTransferArea(monthPage.GoalsArea, prevPage.GoalsArea);
+            monthPage.DesiresArea = await transferOperations.InitOrTransferArea(monthPage.DesiresArea, prevPage.DesiresArea);
+            monthPage.IdeasArea = await transferOperations.InitOrTransferArea(monthPage.IdeasArea, prevPage.IdeasArea);
+            monthPage.PurchasesArea = await transferOperations.InitOrTransferArea(monthPage.PurchasesArea, prevPage.PurchasesArea);
 
             await Update(monthPage);
         }
 
-        private async Task<T> InitOrTransferArea<T>(T area, T prevArea, MonthPage monthPage, bool transfer, Func<T> areaCreator) where T : PageAreaBase
-        {
-            if (area == null)
-            {
-                if (transfer)
-                    area = (T)prevArea.TransferAreaData(monthPage);
-                else
-                    area = areaCreator();
+        private class TransferAreaOperations
+        {           
+            private readonly ApplicationContext context;
+            private readonly MonthPage monthPage;
+            private readonly TransferDataModel transferDataModel;
 
-                context.Set<T>().Add(area);
-                await context.SaveChangesAsync();
-            }
-            else if (transfer)
+            private PageAreaFactoryCreator factoryCreator;
+            private PageAreaFactoryCreator FactoryCreator
             {
-                area.AddFromOtherArea(prevArea);
-                context.Set<T>().Update(area);
-                await context.SaveChangesAsync();
-            }            
-            return area;
+                get
+                {
+                    if (factoryCreator == null)
+                        factoryCreator = new PageAreaFactoryCreator();
+                    return factoryCreator;
+                }
+            }
+            
+
+            public TransferAreaOperations(ApplicationContext context, MonthPage monthPage, TransferDataModel transferDataModel)
+            {
+                this.context = context;
+                this.monthPage = monthPage;
+                this.transferDataModel = transferDataModel;
+            }
+
+            public async Task<T> InitOrTransferArea<T>(T area, T prevArea) where T : PageAreaBase
+            {
+                bool transfer = transferDataModel.GetValueForArea(prevArea.AreaType);
+                if (area == null)
+                {
+                    if (transfer)
+                        area = (T)prevArea.TransferAreaData(monthPage);
+                    else
+                    {
+                        IPageAreaFactory pageAreaFactory = FactoryCreator.GetFactoryByAreaType(prevArea.AreaType);
+                        area = (T)pageAreaFactory.CreatePageArea(monthPage);
+                    }
+
+                    context.Set<T>().Add(area);
+                    await context.SaveChangesAsync();
+                }
+                else if (transfer)
+                {
+                    area.AddFromOtherArea(prevArea);
+                    context.Set<T>().Update(area);
+                    await context.SaveChangesAsync();
+                }
+                return area;
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef } from "react";
 import { Button, Modal, Row, Form, FormGroup, Overlay } from "react-bootstrap";
 import axios from "../../axios/axios";
-import { AppContext } from "../../context";
+import { store } from "../../context/store";
 
 class TransferDataModel {
   transferGoalsArea: boolean;
@@ -44,11 +44,11 @@ export const TransferDataForm: React.FC<{
   const [state, setState] = useState<IState>({
     show,
     transferDataModel: new TransferDataModel(),
-    error: null
+    error: null,
   });
   const target = useRef(null);
 
-  const { year, month, user } = useContext(AppContext);
+  const { year, month, user } = useContext(store).state;
 
   const { transferDataModel } = state;
 
@@ -56,7 +56,7 @@ export const TransferDataForm: React.FC<{
     transferDesiresArea,
     transferGoalsArea,
     transferIdeasArea,
-    transferPurchasesArea
+    transferPurchasesArea,
   } = transferDataModel;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -65,18 +65,18 @@ export const TransferDataForm: React.FC<{
       pageParams: {
         year,
         month,
-        userId: user.id
+        userId: user.id,
       },
-      transferDataModel
+      transferDataModel,
     };
 
     axios
       .post("monthpage/transferData", data)
-      .then(res => {
+      .then((res) => {
         setState({ ...state, show: false });
         onHide();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         setState({ ...state, error: "Error!!!" });
       });
@@ -89,8 +89,8 @@ export const TransferDataForm: React.FC<{
       ...state,
       transferDataModel: {
         ...transferDataModel,
-        [name]: !transferDataModel[name]
-      }
+        [name]: !transferDataModel[name],
+      },
     });
   };
 
@@ -98,23 +98,23 @@ export const TransferDataForm: React.FC<{
     {
       name: "transferPurchasesArea",
       checkedState: transferPurchasesArea,
-      text: "Списки покупок"
+      text: "Списки покупок",
     },
     {
       name: "transferDesiresArea",
       checkedState: transferDesiresArea,
-      text: "Списки желаний"
+      text: "Списки желаний",
     },
     {
       name: "transferIdeasArea",
       checkedState: transferIdeasArea,
-      text: "Списки идеи"
+      text: "Списки идеи",
     },
     {
       name: "transferGoalsArea",
       checkedState: transferGoalsArea,
-      text: "Трекеры привычек"
-    }
+      text: "Трекеры привычек",
+    },
   ];
 
   return (
@@ -130,7 +130,7 @@ export const TransferDataForm: React.FC<{
           <Modal.Title>Перенести на следующий месяц</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {checkBoxes.map(cb => (
+          {checkBoxes.map((cb) => (
             <FormGroup key={cb.name} as={Row} className="ml-2">
               <Form.Check
                 custom
@@ -163,7 +163,7 @@ export const TransferDataForm: React.FC<{
                     padding: "2px 10px",
                     color: "white",
                     borderRadius: 3,
-                    ...props.style
+                    ...props.style,
                   }}
                 >
                   {state.error}

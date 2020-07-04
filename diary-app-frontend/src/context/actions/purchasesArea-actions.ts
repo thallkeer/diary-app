@@ -1,37 +1,50 @@
 import { ActionsUnion, createAction } from "./action-helpers";
 import axios from "../../axios/axios";
-import { ITodoList } from "../../models";
+import { ITodoList, IPurchasesArea } from "../../models";
+import { getPageArea } from "./monthPage-actions";
+import { PageAreaBaseActionsGen } from "./pageArea-actions";
 
-export const ADD_PURCHASES_LIST = "ADD_PURCHASES_LIST";
-export const DELETE_PURCHASES_LIST = "DELETE_PURCHASES_LIST";
+const ADD_PURCHASES_LIST = "ADD_PURCHASES_LIST";
+const DELETE_PURCHASES_LIST = "DELETE_PURCHASES_LIST";
 
-const Actions = {
-  addList: (purchasesList: ITodoList) =>
-    createAction(ADD_PURCHASES_LIST, purchasesList),
-  deleteList: (purchasesListId: number) =>
-    createAction(DELETE_PURCHASES_LIST, purchasesListId),
+const purcshasesAreaBaseActions = PageAreaBaseActionsGen<IPurchasesArea>();
+export const purcshasesAreaActions = {
+	...purcshasesAreaBaseActions,
+	addList: (purchasesList: ITodoList) =>
+		createAction(ADD_PURCHASES_LIST, purchasesList),
+	deleteList: (purchasesListId: number) =>
+		createAction(DELETE_PURCHASES_LIST, purchasesListId),
 };
 
-export const Thunks = {
-  addPurchasesList: (purchasesList: ITodoList) => {
-    return (dispatch) => {
-      if (!purchasesList) return;
+export async function loadPurchasesArea(
+	pageID: number,
+	dispatch: React.Dispatch<PurchasesAreaActions>
+) {
+	dispatch(purcshasesAreaActions.setLoading(true));
+	await getPageArea<IPurchasesArea>("purchasesArea", pageID).then((res) => {
+		dispatch(purcshasesAreaActions.setArea(res.data));
+		dispatch(purcshasesAreaActions.setLoading(false));
+	});
+}
 
-      axios.post("todo", purchasesList).then((res) => {
-        purchasesList.id = res.data;
-        dispatch(Actions.addList(purchasesList));
-      });
-    };
-  },
+export async function addPurchasesList(
+	purchasesList: ITodoList,
+	dispatch: React.Dispatch<PurchasesAreaActions>
+) {
+	if (!purchasesList) return;
 
-  deletePurchasesList: (purchasesList: ITodoList) => {
-    return (dispatch) => {
-      if (!purchasesList) return;
-      console.log("in purchases area delete func");
-      dispatch(Actions.deleteList(purchasesList.id));
-    };
-  },
-};
+	axios.post("todo", purchasesList).then((res) => {
+		purchasesList.id = res.data;
+		dispatch(purcshasesAreaActions.addList(purchasesList));
+	});
+}
 
-export type PurchasesAreaActions = ActionsUnion<typeof Actions>;
-export type PurchasesAreaThunks = ActionsUnion<typeof Thunks>;
+export async function deletePurchasesList(
+	purchasesList: ITodoList,
+	dispatch: React.Dispatch<PurchasesAreaActions>
+) {
+	if (!purchasesList) return;
+	dispatch(purcshasesAreaActions.deleteList(purchasesList.id));
+}
+
+export type PurchasesAreaActions = ActionsUnion<typeof purcshasesAreaActions>;

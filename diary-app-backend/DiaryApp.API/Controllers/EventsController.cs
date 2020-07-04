@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using System;
+using DiaryApp.Core.Models;
 
 namespace DiaryApp.API.Controllers
 {
@@ -16,29 +17,19 @@ namespace DiaryApp.API.Controllers
     public class EventsController : AppBaseController<EventsController>
     {
         private readonly IEventService eventService;
+        private readonly ListCrudContoller<EventList, EventItem, EventListModel, EventModel> crudController;
 
         public EventsController(IEventService eventService, IMapper mapper, ILoggerFactory loggerFactory)
             : base(mapper,loggerFactory)
         {
-            this.eventService = eventService;
+            this.crudController = new ListCrudContoller<EventList, EventItem, EventListModel, EventModel>(eventService, mapper, logger);
+            this.eventService = (IEventService) crudController.ListItemService;
         }
 
         [HttpGet("{pageID}")]
         public IActionResult GetByPageID(int pageID)
         {
-            try
-            {
-                var eventList = eventService.GetByPageID(pageID);
-                if (eventList == null)
-                    return NotFound();
-                var model = mapper.Map<EventListModel>(eventList);
-                return Ok(model);
-            }
-            catch (Exception ex)
-            {
-                logger.LogErrorWithDate(ex);
-                return BadRequest(ex.Message);
-            }
+            return crudController.GetByPageID(pageID);
         }
 
         [HttpGet("all/{pageID}")]
@@ -52,46 +43,38 @@ namespace DiaryApp.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEventList([FromBody] EventListModel eventListModel)
         {
-            var eventList = mapper.Map<EventList>(eventListModel);
-            await eventService.Create(eventList);
-            return Ok(eventList.ID);
+            return await crudController.AddList(eventListModel);
         }
  
         [HttpPost("addEvent")]
-        public async Task<IActionResult> AddEvent([FromBody]EventModel eventData)
+        public async Task<IActionResult> AddEvent([FromBody]EventModel eventModel)
         {
-            eventData.Date = eventData.Date.ToLocalTime();
-            var newEvent = mapper.Map<EventItem>(eventData);
-            await eventService.AddItem(newEvent, eventData.OwnerID);
-            return Ok(newEvent.ID);
+            eventModel.Date = eventModel.Date?.ToLocalTime();
+            return await crudController.AddItem(eventModel);
         }
 
         [HttpPut("updateEvent")]
         public async Task<IActionResult> UpdateEvent([FromBody] EventModel eventModel)
         {
-            var _event = mapper.Map<EventItem>(eventModel);
-            await eventService.UpdateItem(_event);
-            return Ok();
+            return await crudController.UpdateItem(eventModel);
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateEventList([FromBody] EventListModel eventListModel)
         {
-            var _eventList = mapper.Map<EventList>(eventListModel);
-            await eventService.Update(_eventList);
-            return Ok();
+            return await crudController.UpdateList(eventListModel);
         }
 
         [HttpDelete("deleteEvent/{eventID}")]
         public async Task DeleteEvent(int eventID)
         {
-            await eventService.DeleteItem(eventID);
+            await crudController.DeleteItem(eventID);
         }
 
         [HttpDelete("{eventListID}")]
         public async Task DeleteEventList(int eventListID)
         {
-            await eventService.Delete(eventListID);
+            await crudController.DeleteList(eventListID);
         }
     }
 }

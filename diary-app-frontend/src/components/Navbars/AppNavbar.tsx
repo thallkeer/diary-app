@@ -1,17 +1,20 @@
 import React, { useContext, useState } from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import { AppContext } from "../../context";
 import { logoff } from "../../services/users";
 import { TransferDataForm } from "../Dialogs/TransferDataForm";
+import { store } from "../../context/store";
+import { Actions as appActions } from "../../context/actions/app-actions";
 
-export const AppNavbar: React.FC<{ monthPage: boolean }> = ({ monthPage }) => {
-  const appState = useContext(AppContext);
+export const AppNavbar: React.FC<{ isOnMonthPage: boolean }> = ({
+  isOnMonthPage: monthPage,
+}) => {
+  const { state, dispatch } = useContext(store);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const onLogoff = () => {
-    appState.setAppState({ ...appState, user: null });
+    dispatch(appActions.setState({ ...state, user: null }));
     logoff();
   };
 
@@ -21,10 +24,10 @@ export const AppNavbar: React.FC<{ monthPage: boolean }> = ({ monthPage }) => {
         <Navbar.Brand href="/main">Diary App</Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
-          {appState.user && (
+          {state.user && (
             <Nav>
               <NavDropdown
-                title={appState.user.username}
+                title={state.user.username}
                 id="collasible-nav-dropdown"
                 alignRight
                 style={{ marginRight: "1rem", fontWeight: "bold" }}

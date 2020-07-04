@@ -1,103 +1,99 @@
-import { ActionsUnion, createAction } from "./action-helpers";
-import { ITodo, ITodoList, List, IListItem, IList } from "../../models";
-import axios from "../../axios/axios";
+import { ActionsUnion } from "./action-helpers";
+import { ITodo, ITodoList } from "../../models";
+import { getActions } from "./list-actions";
 
-export const ADD_TODO = "ADD_TODO";
-export const TOGGLE_TODO = "TOGGLE_TODO";
-export const UPDATE_TODO = "UPDATE_TODO";
-export const LOAD_TODOS_START = "LOAD_TODOS_START";
-export const LOAD_TODOS = "LOAD_TODOS";
-export const DELETE_TODO = "DELETE_TODO";
-export const DELETE_TODOLIST = "DELETE_TODOLIST";
-export const UPDATE_TODOLIST = "UPDATE_TODOLIST";
+const ADD_TODO = "ADD_TODO";
+const TOGGLE_TODO = "TOGGLE_TODO";
+const UPDATE_TODO = "UPDATE_TODO";
+const LOAD_TODOS_START = "LOAD_TODOS_START";
+const LOAD_TODOS = "LOAD_TODOS";
+const DELETE_TODO = "DELETE_TODO";
+const DELETE_TODOLIST = "DELETE_TODOLIST";
+const UPDATE_TODOLIST = "UPDATE_TODOLIST";
 
-const Actions = {
-  startLoadTodos: () => createAction(LOAD_TODOS_START),
-  finishLoadTodos: (todos: ITodoList) => createAction(LOAD_TODOS, todos),
-  toggleTodo: (todoId: number) => createAction(TOGGLE_TODO, todoId),
-  addTodo: (todo: ITodo) => createAction(ADD_TODO, todo),
-  updateTodo: (todo: ITodo) => createAction(UPDATE_TODO, todo),
-  deleteTodo: (todoId: number) => createAction(DELETE_TODO, todoId),
-  deleteTodoList: (todoListId: number) =>
-    createAction(DELETE_TODOLIST, todoListId),
-  updateTodoList: (todoList: ITodoList) =>
-    createAction(UPDATE_TODOLIST, todoList),
-};
+const todoListActions = getActions<ITodoList, ITodo>();
 
-const baseTodoApi: string = `todo/`;
+export type TodoListActions = ActionsUnion<typeof todoListActions>;
 
-// export interface ListThunks<T extends IList<U>, U extends IListItem> {
-//   setList: (list: T) => (dispatch: any) => any;
-//   loadListByPageID: (pageID: number) => (dispatch: any) => void;
-//   updateList: (todoList: T) => (dispatch: any) => void;
-//   removeListItem: (todoId: number) => (dispatch: any) => void;
-//   deleteList: (todoList: T) => (dispatch: any) => void;
-//   addOrUpdateTodo: (todo: ITodo) => (dispatch: any) => void;
+// export const Actions = {
+// 	startLoadTodos: () => createAction(LOAD_TODOS_START),
+// 	finishLoadTodos: (todos: ITodoList) => createAction(LOAD_TODOS, todos),
+// 	toggleTodo: (todoId: number) => createAction(TOGGLE_TODO, todoId),
+// 	addTodo: (todo: ITodo) => createAction(ADD_TODO, todo),
+// 	updateTodo: (todo: ITodo) => createAction(UPDATE_TODO, todo),
+// 	deleteTodo: (todoId: number) => createAction(DELETE_TODO, todoId),
+// 	deleteTodoList: (todoListId: number) =>
+// 		createAction(DELETE_TODOLIST, todoListId),
+// 	updateTodoList: (todoList: ITodoList) =>
+// 		createAction(UPDATE_TODOLIST, todoList),
+// };
+
+// const baseTodoApi: string = `todo/`;
+
+// export function setTodoList(
+// 	todoList: ITodoList,
+// 	dispatch: React.Dispatch<TodoActions>
+// ) {
+// 	dispatch(Actions.finishLoadTodos(todoList));
 // }
 
-export const Thunks = {
-  setTodoList: (todoList: ITodoList) => {
-    return (dispatch) => dispatch(Actions.finishLoadTodos(todoList));
-  },
+// export async function loadTodosByPageID(
+// 	pageID: number,
+// 	dispatch: React.Dispatch<TodoActions>
+// ) {
+// 	dispatch(Actions.startLoadTodos());
+// 	console.log("get todo list by page id ", pageID);
+// 	console.trace();
+// 	const response = await axios.get(baseTodoApi + pageID);
+// 	dispatch(Actions.finishLoadTodos(response.data));
+// }
 
-  loadTodosByPageID: (pageID: number) => {
-    return (dispatch) => {
-      dispatch(Actions.startLoadTodos());
-      axios
-        .get(baseTodoApi + pageID)
-        .then((response) => dispatch(Actions.finishLoadTodos(response.data)));
-    };
-  },
+// export async function updateTodoList(
+// 	todoList: ITodoList,
+// 	dispatch: React.Dispatch<TodoActions>
+// ) {
+// 	await axios.put(baseTodoApi, todoList);
+// 	dispatch(Actions.updateTodoList(todoList));
+// }
 
-  updateTodoList: (todoList: ITodoList) => {
-    return (dispatch) => {
-      axios.put(baseTodoApi, todoList);
-      dispatch(Actions.updateTodoList(todoList));
-    };
-  },
+// export async function toggleTodo(
+// 	todoId: number,
+// 	dispatch: React.Dispatch<TodoActions>
+// ) {
+// 	await axios.put(`${baseTodoApi}toggle/${todoId}`, null);
+// 	dispatch(Actions.toggleTodo(todoId));
+// }
 
-  toggleTodo: (todoId: number) => {
-    return (dispatch) => {
-      axios
-        .put(`${baseTodoApi}toggle/${todoId}`, null)
-        .then(dispatch(Actions.toggleTodo(todoId)));
-    };
-  },
+// export async function deleteTodo(
+// 	todoId: number,
+// 	dispatch: React.Dispatch<TodoActions>
+// ) {
+// 	await axios.delete(`${baseTodoApi}deleteTodo/${todoId}`);
+// 	dispatch(Actions.deleteTodo(todoId));
+// }
 
-  deleteTodo: (todoId: number) => {
-    console.log("delete todo", todoId);
+// export async function deleteTodoList(
+// 	todoList: ITodoList,
+// 	dispatch: React.Dispatch<TodoActions>
+// ) {
+// 	await axios.delete(`${baseTodoApi}${todoList.id}`);
+// 	dispatch(Actions.deleteTodoList(todoList.id));
+// }
 
-    return (dispatch) => {
-      axios
-        .delete(`${baseTodoApi}deleteTodo/${todoId}`)
-        .then(dispatch(Actions.deleteTodo(todoId)));
-    };
-  },
+// export async function addOrUpdateTodo(
+// 	todo: ITodo,
+// 	dispatch: React.Dispatch<TodoActions>
+// ) {
+// 	if (!todo) return;
 
-  deleteTodoList: (todoList: ITodoList) => {
-    return (dispatch) => {
-      axios
-        .delete(`${baseTodoApi}${todoList.id}`)
-        .then(dispatch(Actions.deleteTodoList(todoList.id)));
-    };
-  },
+// 	if (todo.id === 0) {
+// 		await axios.post(baseTodoApi + "addTodo", todo).then((res) => {
+// 			dispatch(Actions.addTodo({ ...todo, id: res.data }));
+// 		});
+// 	} else {
+// 		await axios.put(baseTodoApi + "updateTodo", todo);
+// 		dispatch(Actions.updateTodo(todo));
+// 	}
+// }
 
-  addOrUpdateTodo: (todo: ITodo) => {
-    return (dispatch) => {
-      if (!todo) return;
-
-      if (todo.id === 0) {
-        axios.post(baseTodoApi + "addTodo", todo).then((res) => {
-          dispatch(Actions.addTodo(res.data));
-        });
-      } else {
-        axios.put(baseTodoApi + "updateTodo", todo).then((res) => {
-          dispatch(Actions.updateTodo(todo));
-        });
-      }
-    };
-  },
-};
-
-export type TodoActions = ActionsUnion<typeof Actions>;
-export type TodoThunks = ActionsUnion<typeof Thunks>;
+// export type TodoActions = ActionsUnion<typeof Actions>;

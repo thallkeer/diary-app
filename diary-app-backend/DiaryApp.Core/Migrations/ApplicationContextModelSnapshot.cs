@@ -21,8 +21,10 @@ namespace DiaryApp.Core.Migrations
 
             modelBuilder.Entity("DiaryApp.Core.AppUser", b =>
                 {
-                    b.Property<string>("ID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
@@ -45,59 +47,7 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.DesiresArea", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Header")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<int>("PageID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("PageID");
-
-                    b.ToTable("DesiresAreas");
-                });
-
-            modelBuilder.Entity("DiaryApp.Core.EventItem", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OwnerID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Subject")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
-
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("OwnerID");
-
-                    b.ToTable("Events");
-                });
-
-            modelBuilder.Entity("DiaryApp.Core.EventList", b =>
+            modelBuilder.Entity("DiaryApp.Core.CommonList", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -106,6 +56,10 @@ namespace DiaryApp.Core.Migrations
 
                     b.Property<int?>("DesiresAreaID")
                         .HasColumnType("int");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("IdeasAreaID")
                         .HasColumnType("int");
@@ -127,29 +81,36 @@ namespace DiaryApp.Core.Migrations
 
                     b.HasIndex("PageID");
 
-                    b.ToTable("EventLists");
+                    b.ToTable("CommonLists");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("CommonList");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.GoalsArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.EventItem", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Header")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("PageID")
+                    b.Property<int>("OwnerID")
                         .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("PageID");
+                    b.HasIndex("OwnerID");
 
-                    b.ToTable("GoalsAreas");
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("DiaryApp.Core.HabitsTracker", b =>
@@ -177,12 +138,87 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("HabitsTrackers");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.IdeasArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.ListItem", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OwnerID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("OwnerID");
+
+                    b.ToTable("ListItems");
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.Models.EventList", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("PageID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PageID");
+
+                    b.ToTable("EventLists");
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.Models.TodoList", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("PageID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PurchasesAreaID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PageID");
+
+                    b.HasIndex("PurchasesAreaID");
+
+                    b.ToTable("TodoLists");
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.PageAreaBase", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Header")
                         .IsRequired()
@@ -196,7 +232,9 @@ namespace DiaryApp.Core.Migrations
 
                     b.HasIndex("PageID");
 
-                    b.ToTable("IdeasAreas");
+                    b.ToTable("PageAreas");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("PageAreaBase");
                 });
 
             modelBuilder.Entity("DiaryApp.Core.PageBase", b =>
@@ -213,9 +251,8 @@ namespace DiaryApp.Core.Migrations
                     b.Property<int>("Month")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
@@ -227,28 +264,6 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("PageBase");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("PageBase");
-                });
-
-            modelBuilder.Entity("DiaryApp.Core.PurchasesArea", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Header")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<int>("PageID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("PageID");
-
-                    b.ToTable("PurchasesAreas");
                 });
 
             modelBuilder.Entity("DiaryApp.Core.TodoItem", b =>
@@ -278,30 +293,46 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("Todos");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.TodoList", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.DesireList", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.HasBaseType("DiaryApp.Core.CommonList");
 
-                    b.Property<int>("PageID")
-                        .HasColumnType("int");
+                    b.HasDiscriminator().HasValue("DesireList");
+                });
 
-                    b.Property<int?>("PurchasesAreaID")
-                        .HasColumnType("int");
+            modelBuilder.Entity("DiaryApp.Core.Models.Lists.IdeasList", b =>
+                {
+                    b.HasBaseType("DiaryApp.Core.CommonList");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                    b.HasDiscriminator().HasValue("IdeasList");
+                });
 
-                    b.HasKey("ID");
+            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.DesiresArea", b =>
+                {
+                    b.HasBaseType("DiaryApp.Core.PageAreaBase");
 
-                    b.HasIndex("PageID");
+                    b.HasDiscriminator().HasValue("DesiresArea");
+                });
 
-                    b.HasIndex("PurchasesAreaID");
+            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.GoalsArea", b =>
+                {
+                    b.HasBaseType("DiaryApp.Core.PageAreaBase");
 
-                    b.ToTable("TodoLists");
+                    b.HasDiscriminator().HasValue("GoalsArea");
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.IdeasArea", b =>
+                {
+                    b.HasBaseType("DiaryApp.Core.PageAreaBase");
+
+                    b.HasDiscriminator().HasValue("IdeasArea");
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.PurchasesArea", b =>
+                {
+                    b.HasBaseType("DiaryApp.Core.PageAreaBase");
+
+                    b.HasDiscriminator().HasValue("PurchasesArea");
                 });
 
             modelBuilder.Entity("DiaryApp.Core.MainPage", b =>
@@ -338,8 +369,16 @@ namespace DiaryApp.Core.Migrations
                     b.HasDiscriminator().HasValue("MonthPage");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.DesiresArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.CommonList", b =>
                 {
+                    b.HasOne("DiaryApp.Core.Models.PageAreas.DesiresArea", "DesiresArea")
+                        .WithMany("DesiresLists")
+                        .HasForeignKey("DesiresAreaID");
+
+                    b.HasOne("DiaryApp.Core.Models.PageAreas.IdeasArea", "IdeasArea")
+                        .WithOne("IdeasList")
+                        .HasForeignKey("DiaryApp.Core.CommonList", "IdeasAreaID");
+
                     b.HasOne("DiaryApp.Core.PageBase", "Page")
                         .WithMany()
                         .HasForeignKey("PageID")
@@ -349,49 +388,54 @@ namespace DiaryApp.Core.Migrations
 
             modelBuilder.Entity("DiaryApp.Core.EventItem", b =>
                 {
-                    b.HasOne("DiaryApp.Core.EventList", "Owner")
+                    b.HasOne("DiaryApp.Core.Models.EventList", "Owner")
                         .WithMany("Items")
                         .HasForeignKey("OwnerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.EventList", b =>
-                {
-                    b.HasOne("DiaryApp.Core.DesiresArea", "DesiresArea")
-                        .WithMany("DesiresLists")
-                        .HasForeignKey("DesiresAreaID");
-
-                    b.HasOne("DiaryApp.Core.IdeasArea", "IdeasArea")
-                        .WithOne("IdeasList")
-                        .HasForeignKey("DiaryApp.Core.EventList", "IdeasAreaID");
-
-                    b.HasOne("DiaryApp.Core.PageBase", "Page")
-                        .WithMany()
-                        .HasForeignKey("PageID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DiaryApp.Core.GoalsArea", b =>
-                {
-                    b.HasOne("DiaryApp.Core.PageBase", "Page")
-                        .WithMany()
-                        .HasForeignKey("PageID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DiaryApp.Core.HabitsTracker", b =>
                 {
-                    b.HasOne("DiaryApp.Core.GoalsArea", "GoalsArea")
+                    b.HasOne("DiaryApp.Core.Models.PageAreas.GoalsArea", "GoalsArea")
                         .WithMany("GoalsLists")
                         .HasForeignKey("GoalsAreaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.IdeasArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.ListItem", b =>
+                {
+                    b.HasOne("DiaryApp.Core.CommonList", "Owner")
+                        .WithMany("Items")
+                        .HasForeignKey("OwnerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.Models.EventList", b =>
+                {
+                    b.HasOne("DiaryApp.Core.PageBase", "Page")
+                        .WithMany()
+                        .HasForeignKey("PageID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.Models.TodoList", b =>
+                {
+                    b.HasOne("DiaryApp.Core.PageBase", "Page")
+                        .WithMany()
+                        .HasForeignKey("PageID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DiaryApp.Core.Models.PageAreas.PurchasesArea", "PurchasesArea")
+                        .WithMany("PurchasesLists")
+                        .HasForeignKey("PurchasesAreaID");
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.PageAreaBase", b =>
                 {
                     b.HasOne("DiaryApp.Core.PageBase", "Page")
                         .WithMany()
@@ -409,52 +453,30 @@ namespace DiaryApp.Core.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.PurchasesArea", b =>
-                {
-                    b.HasOne("DiaryApp.Core.PageBase", "Page")
-                        .WithMany()
-                        .HasForeignKey("PageID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DiaryApp.Core.TodoItem", b =>
                 {
-                    b.HasOne("DiaryApp.Core.TodoList", "Owner")
+                    b.HasOne("DiaryApp.Core.Models.TodoList", "Owner")
                         .WithMany("Items")
                         .HasForeignKey("OwnerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.TodoList", b =>
-                {
-                    b.HasOne("DiaryApp.Core.PageBase", "Page")
-                        .WithMany()
-                        .HasForeignKey("PageID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DiaryApp.Core.PurchasesArea", "PurchasesArea")
-                        .WithMany("PurchasesLists")
-                        .HasForeignKey("PurchasesAreaID");
-                });
-
             modelBuilder.Entity("DiaryApp.Core.MonthPage", b =>
                 {
-                    b.HasOne("DiaryApp.Core.DesiresArea", "DesiresArea")
+                    b.HasOne("DiaryApp.Core.Models.PageAreas.DesiresArea", "DesiresArea")
                         .WithMany()
                         .HasForeignKey("DesiresAreaID");
 
-                    b.HasOne("DiaryApp.Core.GoalsArea", "GoalsArea")
+                    b.HasOne("DiaryApp.Core.Models.PageAreas.GoalsArea", "GoalsArea")
                         .WithMany()
                         .HasForeignKey("GoalsAreaID");
 
-                    b.HasOne("DiaryApp.Core.IdeasArea", "IdeasArea")
+                    b.HasOne("DiaryApp.Core.Models.PageAreas.IdeasArea", "IdeasArea")
                         .WithMany()
                         .HasForeignKey("IdeasAreaID");
 
-                    b.HasOne("DiaryApp.Core.PurchasesArea", "PurchasesArea")
+                    b.HasOne("DiaryApp.Core.Models.PageAreas.PurchasesArea", "PurchasesArea")
                         .WithMany()
                         .HasForeignKey("PurchasesAreaID");
                 });

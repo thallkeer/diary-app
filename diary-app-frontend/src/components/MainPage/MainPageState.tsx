@@ -1,32 +1,69 @@
-import React, { useEffect, useReducer } from "react";
-import { MainPageContext } from "../../context";
-import { PageType } from "../../context/actions/page-actions";
-import { mainPageReducer } from "../../context/reducers/mainPage";
+import React, { useEffect, useReducer, createContext, useContext } from "react";
+import { mainPageReducer } from "../../context/reducers/page/mainPage";
 import {
-  MainPageThunks,
-  Thunks as mainPageThunks,
+	MainPageActions,
+	Actions as mainPageActions,
 } from "../../context/actions/mainPage-actions";
+import { Actions as appActions } from "../../context/actions/app-actions";
 import { usePage } from "../../hooks/usePage";
+import { store } from "../../context/store";
+import { IMainPage } from "../../models";
 
-export const MainPageState: React.FC = ({ children }) => {
-  const { page, loading } = usePage(PageType.MainPage);
-  const [pageState, _dispatch] = useReducer(mainPageReducer, {
-    page,
-    loading,
-    events: null,
-  });
+export interface IMainPageState {
+	mainPage: IMainPage;
+	loading: boolean;
+}
 
-  const dispatch = (action: MainPageThunks) => action(_dispatch);
+export interface IMainPageContext {
+	state: IMainPageState;
+	dispatch: React.Dispatch<MainPageActions>;
+}
 
-  useEffect(() => {
-    if (!loading && page !== null) {
-      dispatch(mainPageThunks.setPage(page));
-    }
-  }, [page]);
-
-  return (
-    <MainPageContext.Provider value={{ ...pageState, dispatch }}>
-      {children}
-    </MainPageContext.Provider>
-  );
+const initialState: IMainPageState = {
+	mainPage: null,
+	loading: false,
 };
+
+const mainPageContext = createContext<IMainPageContext>({
+	state: initialState,
+	dispatch: null,
+});
+
+const { Provider } = mainPageContext;
+
+const MainPageState: React.FC = ({ children }) => {
+	const { page, loading } = usePage("mainPage");
+	const app = useContext(store);
+
+	const [state, dispatch] = useReducer(mainPageReducer, {
+		page,
+		events: null,
+		todos: null,
+	});
+
+	useEffect(() => {
+		if (!loading && page && state !== app.state.mainPage) {
+			const mainPage: IMainPage = { page, events: null, todos: null };
+			app.dispatch(appActions.setMainPage(mainPage));
+			dispatch(mainPageActions.setPage(mainPage));
+		}
+
+		return () => app.dispatch(appActions.setSelectedPage(app.state.monthPage));
+	}, [page]);
+
+	return (
+		<Provider
+			value={{
+				state: {
+					mainPage: state,
+					loading,
+				},
+				dispatch,
+			}}
+		>
+			{children}
+		</Provider>
+	);
+};
+
+export { mainPageContext, MainPageState };

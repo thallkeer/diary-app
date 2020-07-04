@@ -15,12 +15,12 @@ namespace DiaryApp.API.Models
 
     public class DesiresAreaModel : PageAreaModel
     {
-        public List<EventListModel> DesiresLists { get; set; } = new List<EventListModel>();
+        public List<CommonListModel> DesiresLists { get; set; } = new List<CommonListModel>();
     }
 
     public class IdeasAreaModel : PageAreaModel
     {
-        public EventListModel IdeasList { get; set; } = new EventListModel();
+        public CommonListModel IdeasList { get; set; } = new CommonListModel();
     }
     public class GoalsAreaModel : PageAreaModel
     {

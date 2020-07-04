@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using DiaryApp.Core;
+using DiaryApp.Core.ServiceInterfaces;
 using DiaryApp.Data.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System;
+using Newtonsoft.Json;
 using System.IO;
 using System.Text;
 
@@ -45,7 +47,7 @@ namespace DiaryApp.API
             services.AddMvc(options => options.EnableEndpointRouting = false)
                     .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
 
-            services.AddSpaStaticFiles(configuration => configuration.RootPath = "client/build");            
+            services.AddSpaStaticFiles(configuration => configuration.RootPath = "client/build");
 
             services.AddAutoMapper(typeof(Startup));
 
@@ -91,6 +93,7 @@ namespace DiaryApp.API
 
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<ITodoService, TodoService>();
+            services.AddScoped<ICommonListService, CommonListService>();
             services.AddScoped<IMainPageService, MainPageService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMonthPageService, MonthPageService>();
@@ -118,7 +121,16 @@ namespace DiaryApp.API
             }
             else
             {
-                app.UseExceptionHandler("/error");
+                app.UseExceptionHandler(a => a.Run(async context =>
+                {
+                    var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+                    var exception = exceptionHandlerPathFeature.Error;
+
+                    var result = JsonConvert.SerializeObject(new { error = exception.Message });
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsync(result);
+                }));
+                ///app.UseExceptionHandler("/error");
                 app.UseHsts();
             }
 
@@ -127,17 +139,20 @@ namespace DiaryApp.API
                                            .AllowAnyHeader()
                                            .AllowAnyMethod());
 
-            app.UseStatusCodePagesWithReExecute("/error", "?code={0}");
+            ///TODO: deal with errors and codes
+            //app.UseStatusCodePagesWithReExecute("/error", "?code={0}");
 
-            app.Map("/error", ap => ap.Run(async context =>
-            {
-                string message = $"{DateTime.Now} {context.Request.Path} {context.Request.QueryString}" +
-                    $" Error: {context.Request.Path} {context.Request.Query["code"]}";
-                logger.LogError(message);
-                await context.Response.WriteAsync(message);
-            }));
+            //app.Map("/error", ap => ap.Run(async context =>
+            //{
+            //    string message = $"{DateTime.Now} {context.Request.Path} {context.Request.QueryString}" +
+            //        $" Error: {context.Request.Path} {context.Request.Query["code"]}";
+            //    logger.LogError(message);
+            //    await context.Response.WriteAsync(message);
+            //}));
 
             //SampleData.Initialize(app.ApplicationServices);
+
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -148,7 +163,7 @@ namespace DiaryApp.API
                 ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All
             });
 
-            app.UseRouting();            
+            app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -163,6 +178,7 @@ namespace DiaryApp.API
             {
                 if (env.IsDevelopment())
                 {
+                    ///TODO: get source path from config
                     spa.Options.SourcePath = @"E:\repos\diaryApp\diary-app-frontend";
                     //spa.UseReactDevelopmentServer(npmScript: "start");
                 }
@@ -173,11 +189,11 @@ namespace DiaryApp.API
                 }
             });
 
-            app.Run(async (context) =>
-            {
-                logger.LogInformation($"{DateTime.Now} Processing request {context.Request.Path}");
-                //await context.Response.WriteAsync("TEST");
-            });
+            //app.Run(async (context) =>
+            //{
+            //    logger.LogInformation($"{DateTime.Now} Processing request {context.Request.Path}");
+            //    //await context.Response.WriteAsync("TEST");
+            //});
         }
     }
 }

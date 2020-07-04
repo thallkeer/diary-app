@@ -1,70 +1,44 @@
-import { createContext } from "react";
 import {
-  IList,
-  IMainPage,
-  ListItem,
-  IPage,
-  IMonthPage,
-  IEventList,
-  ITodoList,
-  IGoalsArea,
-  IUser,
-  IHabitsTracker,
+	IMainPage,
+	ListItem,
+	IPage,
+	IMonthPage,
+	IGoalsArea,
+	IUser,
+	IHabitsTracker,
+	List,
 } from "../models/index";
-import { HabitTrackerThunks } from "./actions/habitTracker-actions";
-import { MainPageThunks } from "./actions/mainPage-actions";
 
 export interface IAppState {
-  month: number;
-  year: number;
-  user?: IUser;
-  setAppState?: (appState: IAppState) => void;
+	month: number;
+	year: number;
+	user: IUser;
+	mainPage: IMainPage;
+	monthPage: IMonthPage;
+	selectedPage: PageType;
 }
 
-export interface IBasePageState extends PageState<IPage> {}
+export interface IPageState {
+	page: IPage;
+	loading: boolean;
+}
 
-export type PageState<T extends IPage> = {
-  page: T;
-  loading: boolean;
+export type PageType = IMainPage | IMonthPage;
+
+export type ListFunctions = {
+	setList: (list: List) => void;
+	loadByPageID: (pageID: number) => void;
+	updateListTitle: (title: string) => void;
+	addOrUpdateItem: (item: ListItem) => void;
+	deleteListItem: (itemID: number) => void;
 };
 
-export interface IMainPageContext
-  extends PageState<IMainPage>,
-    IDispatchable<MainPageThunks> {
-  events: IEventListContext;
+export interface IListContext {
+	listFunctions?: Partial<ListFunctions>;
 }
 
-export interface IMonthPageContext extends PageState<IMonthPage> {}
-
-interface IDispatchable<TAction> {
-  dispatch?: (action: TAction) => void;
+export interface IGoalsAreaContext {
+	goalsArea: IGoalsArea;
+	addOrUpdate: (tracker?: IHabitsTracker) => void;
+	deleteTracker: (tracker: IHabitsTracker) => void;
 }
-
-export interface IListState<TList extends IList<ListItem>> {
-  list: TList;
-  loading: boolean;
-  updateListTitle?: (title: string) => void;
-  addOrUpdateItem?: (item: ListItem) => void;
-  deleteItem?: (itemID: number) => void;
-}
-
-export interface IEventListContext extends IListState<IEventList> {}
-export interface ITodoListContext extends IListState<ITodoList> {
-  toggleTodoItem?: (todoId: number) => void;
-  deleteTodoList?: (todoList: ITodoList) => void;
-  isDeletable: boolean;
-}
-
-export interface IGoalsAreaContext
-  extends IDispatchable<HabitTrackerThunks>,
-    IGoalsArea {
-  addOrUpdate: (tracker?: IHabitsTracker) => void;
-  deleteTracker: (tracker: IHabitsTracker) => void;
-}
-
-export const EventListContext = createContext<IEventListContext>(null);
-export const TodoListContext = createContext<ITodoListContext>(null);
-export const MainPageContext = createContext<IMainPageContext>(null);
-export const MonthPageContext = createContext<IMonthPageContext>(null);
-export const GoalsAreaContext = createContext<IGoalsAreaContext>(null);
-export const AppContext = createContext<IAppState>(null);

@@ -1,45 +1,41 @@
-import React, { useEffect, useContext, useState } from "react";
-import { EventList } from "../Lists/EventList";
+import React, { useEffect, useContext } from "react";
+import { EventList } from "../Lists/EventList/EventList";
 import {
-  MainPageContext,
-  IMainPageContext,
-  EventListContext,
-} from "../../context";
-import { EventListState } from "../Lists/EventListState";
-import { Thunks as mainPageThunks } from "../../context/actions/mainPage-actions";
-import { IMainPage } from "../../models";
+	EventListState,
+	EventListContext,
+} from "../Lists/EventList/EventListState";
+import { mainPageContext } from "./MainPageState";
+import { Actions as mainPageActions } from "../../context/actions/mainPage-actions";
 import Loader from "../Loader";
+import { getPageEvents } from "../../selectors";
 
 const ImportantEvents: React.FC = () => {
-  const pageState = useContext(MainPageContext);
-  const [page, setPage] = useState<IMainPage>(null);
+	const mpContext = useContext(mainPageContext);
+	const { mainPage, loading } = mpContext.state;
 
-  useEffect(() => {
-    const check: boolean = pageState && pageState.page !== null;
-    if (check) setPage(pageState.page);
-  }, [pageState.page]);
+	if (loading || !mainPage || !mainPage.page) return <Loader />;
 
-  if (!page) return <Loader />;
-
-  return (
-    <EventListState page={page}>
-      <ImportantEventsList pageState={pageState} />
-    </EventListState>
-  );
+	return (
+		<EventListState>
+			<ImportantEventsList />
+		</EventListState>
+	);
 };
 
-export const ImportantEventsList: React.FC<{ pageState: IMainPageContext }> = ({
-  pageState,
-}) => {
-  const state = useContext(EventListContext);
-  const { dispatch } = pageState;
-  const { list } = state;
+export const ImportantEventsList: React.FC = () => {
+	const pageState = useContext(mainPageContext);
+	const { state, dispatch } = pageState;
+	const pageEvents = getPageEvents(state);
+	const eventsContext = useContext(EventListContext);
 
-  useEffect(() => {
-    if (list !== null) dispatch(mainPageThunks.setEvents(state));
-  }, [list]);
+	useEffect(() => {
+		const eventList = eventsContext.eventListState.list;
+		if (eventList !== null && (!pageEvents || pageEvents.list !== eventList)) {
+			dispatch(mainPageActions.setEvents(eventsContext));
+		}
+	}, [eventsContext, dispatch, pageEvents]);
 
-  return <EventList withDate readonly />;
+	return <EventList />;
 };
 
 export default ImportantEvents;

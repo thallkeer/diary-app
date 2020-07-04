@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { IEvent } from "../../models";
 import { getEmptyEvent } from "../../utils";
-import { AppContext } from "../../context";
+import { store } from "../../context/store";
 
 interface IFormProps {
   show: boolean;
@@ -35,7 +35,7 @@ export const AddEventForm: React.FC<IFormProps> = ({
   addEvent,
   event,
 }) => {
-  const { year, month } = useContext(AppContext);
+  const { year, month } = useContext(store).state;
 
   const initialState: IFormState = {
     item: event || {
