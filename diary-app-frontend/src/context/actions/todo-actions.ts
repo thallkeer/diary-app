@@ -1,6 +1,5 @@
 import { ActionsUnion } from "./action-helpers";
 import { ITodo, ITodoList } from "../../models";
-import { getActions } from "./list-actions";
 
 const ADD_TODO = "ADD_TODO";
 const TOGGLE_TODO = "TOGGLE_TODO";
@@ -10,10 +9,6 @@ const LOAD_TODOS = "LOAD_TODOS";
 const DELETE_TODO = "DELETE_TODO";
 const DELETE_TODOLIST = "DELETE_TODOLIST";
 const UPDATE_TODOLIST = "UPDATE_TODOLIST";
-
-const todoListActions = getActions<ITodoList, ITodo>();
-
-export type TodoListActions = ActionsUnion<typeof todoListActions>;
 
 // export const Actions = {
 // 	startLoadTodos: () => createAction(LOAD_TODOS_START),

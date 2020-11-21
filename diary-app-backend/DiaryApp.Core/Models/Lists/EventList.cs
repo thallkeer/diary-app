@@ -8,7 +8,7 @@ namespace DiaryApp.Core.Models
         {
 
         }
-        public EventList(string title, PageBase page) : base(title, page)
+        public EventList(string title) : base(title)
         {
         }
     }

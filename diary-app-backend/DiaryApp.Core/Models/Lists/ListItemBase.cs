@@ -1,5 +1,4 @@
-﻿using DiaryApp.Core.Models.Lists;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DiaryApp.Core

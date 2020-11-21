@@ -1,42 +1,45 @@
-﻿using DiaryApp.Core.Models.Lists;
+﻿using DiaryApp.Core.Interfaces;
+using DiaryApp.Core.Models.Lists;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
-    public class IdeasArea : PageAreaBase
+    public class IdeasArea : PageAreaBase<MonthPage>, IMonthPageArea<IdeasArea>
     {
-        public virtual CommonList IdeasList { get; set; }
+        private const string HeaderSTR = "Идеи этого месяца";
 
-        public override PageAreaType AreaType => PageAreaType.Ideas;
+        public virtual IdeasList IdeasList { get; set; }
+
+        public PageAreaType AreaType => PageAreaType.Ideas;
 
         public IdeasArea()
         {
 
         }
-        public IdeasArea(PageBase page, bool needInit) : base(page, "Идеи этого месяца", needInit)
+        public IdeasArea(MonthPage page, bool needInit = false) : base(page, HeaderSTR, needInit)
         {
 
         }
 
-        public override PageAreaBase TransferAreaData(PageBase page)
+        public IdeasArea TransferAreaData(MonthPage page)
         {
-            var newArea = new IdeasArea(page, false)
+            var newArea = new IdeasArea(page)
             {
-                IdeasList = this.IdeasList.CreateDeepCopy<CommonList, ListItem>(page)
+                IdeasList = new IdeasList
+                {
+                    List =  this.IdeasList.List.CreateDeepCopy<CommonList, ListItem>()
+                }
             };
             return newArea;
         }
 
-        public override void AddFromOtherArea(PageAreaBase otherArea)
+        public void AddFromOtherArea(IdeasArea other)
         {
-            if (otherArea is IdeasArea other)
-            {
-                this.IdeasList.Items.AddRange(other.IdeasList.Items);
-            }
+            this.IdeasList.Items.AddRange(other.IdeasList.Items);
         }
 
         protected override void Initialize()
         {
-            IdeasList = new CommonList("", this.Page);
+            IdeasList = new IdeasList(string.Empty);
         }
-    }
+    }   
 }

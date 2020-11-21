@@ -26,27 +26,6 @@ namespace DiaryApp.API.Controllers
             this.mapper = mapper;
         }
 
-        public virtual IActionResult GetByPageID(int pageID)
-        {
-            try
-            {
-                var list = ListItemService.GetByPageID(pageID);
-                if (list == null)
-                {
-                    string msg = $"List of type {typeof(TList).Name} not found for pageID {pageID}";
-                    logger.LogErrorWithDate(msg);
-                    return NotFound(msg);
-                }
-                var model = mapper.Map<TModel>(list);
-                return Ok(model);
-            }
-            catch (Exception ex)
-            {
-                logger.LogErrorWithDate(ex);
-                return BadRequest(ex.Message);
-            }
-        }
-
         public virtual async Task<IActionResult> AddList([FromBody] TModel eventListModel)
         {
             var eventList = mapper.Map<TList>(eventListModel);
@@ -90,9 +69,8 @@ namespace DiaryApp.API.Controllers
             }
             catch (Exception ex)
             {
-
-            }
-            return BadRequest("ERROR");
+                return BadRequest(ex.Message);
+            }            
         }
 
         public virtual async Task<IActionResult> DeleteItem(int eventID)

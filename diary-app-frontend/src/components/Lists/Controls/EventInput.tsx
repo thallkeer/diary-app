@@ -3,11 +3,14 @@ import { ListItemInput } from "./ListItemInput";
 import { IEvent } from "../../../models";
 import { withContextMenu } from "../CommonList/CommonListComponent";
 
-interface IEventInputProps {
-	event: IEvent;
+export interface IEventItemActions {
 	updateEvent: (event: IEvent) => void;
 	deleteEvent: (eventID: number) => void;
-	getItemText: (event: IEvent) => string;
+	getItemText?: (event: IEvent) => string;
+}
+
+interface IEventInputProps extends IEventItemActions {
+	event: IEvent;
 	readonly: boolean;
 }
 

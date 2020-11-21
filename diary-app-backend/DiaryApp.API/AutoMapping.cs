@@ -3,6 +3,8 @@ using DiaryApp.API.Models;
 using DiaryApp.Core;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
+using DiaryApp.Core.Models.Pages;
+using PageModel = DiaryApp.API.Models.PageModel;
 
 namespace DiaryApp.API
 {
@@ -10,33 +12,29 @@ namespace DiaryApp.API
     {
         public AutoMapping()
         {
-            CreateMap<TodoItem, TodoModel>();
-            CreateMap<TodoModel, TodoItem>();
-            CreateMap<TodoList, TodoListModel>();
-            CreateMap<TodoListModel, TodoList>();
+            CreateMap<TodoItem, TodoModel>().ReverseMap();
+            CreateMap<TodoList, TodoListModel>().ReverseMap();
 
-            CreateMap<EventItem, EventModel>();
-            CreateMap<EventModel, EventItem>();
-            CreateMap<EventList, EventListModel>();
-            CreateMap<EventListModel, EventList>();
+            CreateMap<EventItem, EventModel>().ReverseMap();
+            CreateMap<EventList, EventListModel>().ReverseMap();
 
-            CreateMap<ListItem, ListItemModel>();
-            CreateMap<ListItemModel, ListItem>();           
-            CreateMap<CommonList, CommonListModel>();           
-            CreateMap<CommonListModel, CommonList>();
+            CreateMap<ListItem, ListItemModel>().ReverseMap();           
+            CreateMap<CommonList, CommonListModel>().ReverseMap(); 
 
-            CreateMap<MainPage, MainPageModel>();
+            CreateMap<MainPage, PageModel>().ReverseMap();
+            CreateMap<MonthPage, PageModel>().ReverseMap();
+            CreateMap<WeekPage, PageModel>().ReverseMap();
 
-            CreateMap<MonthPage, MonthPageModel>();
-            CreateMap<PurchasesArea, PurchasesAreaModel>();
-            CreateMap<DesiresArea, DesiresAreaModel>();
-            CreateMap<IdeasArea, IdeasAreaModel>();
-            CreateMap<GoalsArea, GoalsAreaModel>();
-            CreateMap<HabitsTracker, HabitsTrackerModel>();
-            CreateMap<HabitsTrackerModel, HabitsTracker>();
+            CreateMap<ImportantThingsArea, ImportantThingsAreaModel>().ReverseMap();
+            CreateMap<ImportantEventsArea, ImportantEventsAreaModel>().ReverseMap();
 
-            CreateMap<AppUser, UserModel>();
-            CreateMap<UserModel, AppUser>();            
+            CreateMap<PurchasesArea, PurchasesAreaModel>().ReverseMap();
+            CreateMap<DesiresArea, DesiresAreaModel>().ReverseMap();
+            CreateMap<IdeasArea, IdeasAreaModel>().ReverseMap();
+            CreateMap<GoalsArea, GoalsAreaModel>().ReverseMap();
+            CreateMap<HabitsTracker, HabitsTrackerModel>().ReverseMap();
+
+            CreateMap<AppUser, UserModel>().ReverseMap();           
         }
     }
 }

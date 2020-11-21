@@ -3,10 +3,8 @@ using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
-using System;
 using DiaryApp.Core.Models;
 
 namespace DiaryApp.API.Controllers
@@ -24,20 +22,6 @@ namespace DiaryApp.API.Controllers
         {
             this.crudController = new ListCrudContoller<EventList, EventItem, EventListModel, EventModel>(eventService, mapper, logger);
             this.eventService = (IEventService) crudController.ListItemService;
-        }
-
-        [HttpGet("{pageID}")]
-        public IActionResult GetByPageID(int pageID)
-        {
-            return crudController.GetByPageID(pageID);
-        }
-
-        [HttpGet("all/{pageID}")]
-        public IActionResult GetAllByPageID(int pageID)
-        {
-            var lists = eventService.GetListsByPageID(pageID);
-            var allLists = lists.Select(l => mapper.Map<EventListModel>(l));
-            return Ok(allLists);
         }
 
         [HttpPost]

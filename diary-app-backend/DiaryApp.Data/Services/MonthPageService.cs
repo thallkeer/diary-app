@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using DiaryApp.Core;
 using DiaryApp.Core.Models;
-using System;
 using DiaryApp.Core.Models.PageAreas;
 
 namespace DiaryApp.Data.Services
@@ -11,25 +9,11 @@ namespace DiaryApp.Data.Services
     {        
         public MonthPageService(ApplicationContext context) : base(context)
         {
-        }
-
-        public async Task<T> GetPageArea<T>(int pageID) where T : PageAreaBase
-        {
-            return await context.Set<T>().FirstOrDefaultAsync(area => area.PageID == pageID);            
-        }
+        }       
 
         public override async Task<MonthPage> CreatePageByParams(int userID, int year, int month)
         {
-            var monthPage = new MonthPage()
-            {
-                UserID = userID,
-                Year = year,
-                Month = month
-            };
-
-            await Create(monthPage);
-
-            monthPage.CreateAreas();
+            var monthPage = await base.CreatePageByParams(userID, year, month);
 
             await Update(monthPage);
            
@@ -80,13 +64,13 @@ namespace DiaryApp.Data.Services
                 this.transferDataModel = transferDataModel;
             }
 
-            public async Task<T> InitOrTransferArea<T>(T area, T prevArea) where T : PageAreaBase
+            public async Task<T> InitOrTransferArea<T>(T area, T prevArea) where T : PageAreaBase<MonthPage>, IMonthPageArea<T>
             {
                 bool transfer = transferDataModel.GetValueForArea(prevArea.AreaType);
                 if (area == null)
                 {
                     if (transfer)
-                        area = (T)prevArea.TransferAreaData(monthPage);
+                        area = prevArea.TransferAreaData(monthPage);
                     else
                     {
                         IPageAreaFactory pageAreaFactory = FactoryCreator.GetFactoryByAreaType(prevArea.AreaType);

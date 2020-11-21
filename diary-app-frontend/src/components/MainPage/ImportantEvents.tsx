@@ -1,41 +1,40 @@
-import React, { useEffect, useContext } from "react";
-import { EventList } from "../Lists/EventList/EventList";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Row, Col } from "react-bootstrap";
+// import { loadImportantEventsArea } from "../../context/reducers/pageArea/importantEventsArea-reducer";
 import {
-	EventListState,
-	EventListContext,
-} from "../Lists/EventList/EventListState";
-import { mainPageContext } from "./MainPageState";
-import { Actions as mainPageActions } from "../../context/actions/mainPage-actions";
+	// getImportantEventsArea,
+	getImportantThingsArea,
+	getLoading,
+	getMainPage,
+} from "../../selectors/page-selectors";
 import Loader from "../Loader";
-import { getPageEvents } from "../../selectors";
 
-const ImportantEvents: React.FC = () => {
-	const mpContext = useContext(mainPageContext);
-	const { mainPage, loading } = mpContext.state;
+const ImportantEventsArea: React.FC = () => {
+	const dispatch = useDispatch();
+	const mainPage = useSelector(getMainPage);
+	// const { area, isLoading } = useSelector(getImportantEventsArea);
 
-	if (loading || !mainPage || !mainPage.page) return <Loader />;
+	useEffect(() => {
+		// if (mainPage !== null) dispatch(loadImportantEventsArea(mainPage.id));
+	}, [mainPage]);
+
+	// if (isLoading || !area) return <Loader />;
 
 	return (
-		<EventListState>
-			<ImportantEventsList />
-		</EventListState>
+		<>
+			<h1 className="area-header">
+				{/* {area.header} */}
+				</h1>
+			<Row>
+				<Col md={12}>
+					{/* <TodoListState readonlyHeader={true} isDeletable={false}>
+							<TodoList className="mt-10 no-list-header" />
+						</TodoListState> */}
+				</Col>
+			</Row>
+		</>
 	);
 };
 
-export const ImportantEventsList: React.FC = () => {
-	const pageState = useContext(mainPageContext);
-	const { state, dispatch } = pageState;
-	const pageEvents = getPageEvents(state);
-	const eventsContext = useContext(EventListContext);
-
-	useEffect(() => {
-		const eventList = eventsContext.eventListState.list;
-		if (eventList !== null && (!pageEvents || pageEvents.list !== eventList)) {
-			dispatch(mainPageActions.setEvents(eventsContext));
-		}
-	}, [eventsContext, dispatch, pageEvents]);
-
-	return <EventList />;
-};
-
-export default ImportantEvents;
+export default ImportantEventsArea;

@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import { IHabitsTracker } from "../../models";
+/*import { IHabitsTracker } from "../../models";
 import {
 	goalsAreaReducer,
 	IGoalsAreaState,
@@ -65,3 +65,4 @@ const GoalsAreaState: React.FC = ({ children }) => {
 };
 
 export { goalsAreaContext, GoalsAreaState };
+*/

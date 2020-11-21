@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
-using DiaryApp.Core.ServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -24,12 +19,6 @@ namespace DiaryApp.API.Controllers
             : base(mapper, loggerFactory)
         {
             this.crudController = new ListCrudContoller<CommonList, ListItem, CommonListModel, ListItemModel>(commonListService, mapper, logger);
-        }
-
-        [HttpGet("{pageID}")]
-        public IActionResult GetByPageID(int pageID)
-        {
-            return crudController.GetByPageID(pageID);
         }
 
         [HttpPost]

@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+
 namespace DiaryApp.Core
 {
     public abstract class PageBase
     {
-        [ScaffoldColumn(false)]
         public int ID { get; set; }
         [Required]
-        [Range(2020,9999)]
+        [Range(2020, 9999)]
         public int Year { get; set; }
         [Required]
         [Range(1, 12)]
@@ -27,5 +27,7 @@ namespace DiaryApp.Core
             Month = month;
             User = user;
         }
+
+        public abstract void CreateAreas();
     }
 }

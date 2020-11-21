@@ -1,46 +1,48 @@
-import React, { useContext } from "react";
-import { TodoInput } from "../Controls/TodoInput";
-import Loader from "../../Loader";
+import React from "react";
+import { ITodoItemActions, TodoInput } from "../Controls/TodoInput";
 import { getEmptyTodo, fillToNumber } from "../../../utils";
-import { TodoListContext } from "./TodoListState";
-import { CommonListComponent } from "../CommonList/CommonListComponent";
-import { ITodo } from "../../../models";
+import {
+	CommonListComponent,
+	IListActions,
+	IListOptions,
+} from "../CommonList/CommonListComponent";
+import { ITodo, ITodoList } from "../../../models";
 
-export const TodoList: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({
+export interface ITodoListProps extends IListActions, IListOptions {
+	todoList: ITodoList;
+	className: string;
+	todoItemActions: ITodoItemActions;
+}
+
+export const TodoList: React.FC<ITodoListProps> = ({
+	todoList,
+	updateTitle,
+	deleteList,
+	readonlyTitle,
+	isDeletable,
+	todoItemActions,
 	className,
 }) => {
-	const {
-		todoListState,
-		toggleTodoItem,
-		deleteTodoList,
-		isDeletable,
-		readonlyHeader,
-		listFunctions,
-	} = useContext(TodoListContext);
-
-	const { updateListTitle, addOrUpdateItem, deleteListItem } = listFunctions;
-
-	const { list, loading } = todoListState;
-
-	if (loading || !list) return <Loader />;
-
-	const todos = fillToNumber([...list.items], 6, getEmptyTodo);
+	const { updateTodo, deleteTodo, toggleTodo } = todoItemActions;
+	const todos = fillToNumber([...todoList.items], 6, () =>
+		getEmptyTodo(todoList.id)
+	);
 
 	return (
 		<CommonListComponent
 			className={`mt-52 ${className}`}
 			items={todos}
-			listTitle={list.title}
-			readonlyTitle={readonlyHeader}
-			updateListTitle={updateListTitle}
+			listTitle={todoList.title}
+			readonlyTitle={readonlyTitle}
+			updateTitle={updateTitle}
 			isDeletable={isDeletable}
-			onDeleteList={() => deleteTodoList(list)}
+			deleteList={deleteList}
 			renderItem={(todo: ITodo) => (
 				<TodoInput
 					todo={todo}
-					updateTodo={addOrUpdateItem}
-					toggleTodo={toggleTodoItem}
-					deleteTodo={deleteListItem}
+					updateTodo={updateTodo}
+					toggleTodo={toggleTodo}
+					deleteTodo={deleteTodo}
 				/>
 			)}
 		/>

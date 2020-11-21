@@ -8,6 +8,17 @@ namespace DiaryApp.API.Models
         public string Header { get; set; }
         public int PageID { get; set; }
     }
+
+    public class ImportantThingsAreaModel : PageAreaModel
+    {
+        public TodoListModel ImportantThings { get; set; }
+    }
+
+    public class ImportantEventsAreaModel : PageAreaModel
+    {
+        public EventListModel ImportantEvents { get; set; }
+    }
+
     public class PurchasesAreaModel : PageAreaModel
     {
         public List<TodoListModel> PurchasesLists { get; set; } = new List<TodoListModel>();

@@ -1,38 +1,53 @@
-import React, { useContext, useEffect } from "react";
-import { TodoList } from "../Lists/TodoList/TodoList";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Row, Col } from "react-bootstrap";
+import { loadImportantThingsArea } from "../../context/reducers/pageArea/importantThingsArea-reducer";
 import {
-	TodoListState,
-	TodoListContext,
-} from "../Lists/TodoList/TodoListState";
-import { mainPageContext } from "./MainPageState";
-import { Actions } from "../../context/actions/mainPage-actions";
+	getImportantThingsArea,
+	getImportantThingsList,
+	getMainPage,
+} from "../../selectors/page-selectors";
 import Loader from "../Loader";
+import { TodoList } from "../Lists/TodoList/TodoList";
+import { ITodoItemActions } from "../Lists/Controls/TodoInput";
+import { todoActions } from "../../context/reducers/list/todos";
 
-const ImportantThings = () => {
-	const mpContext = useContext(mainPageContext);
-	const { mainPage, loading } = mpContext.state;
+const ImportantThingsArea: React.FC = () => {
+	const dispatch = useDispatch();
+	const mainPage = useSelector(getMainPage);
+	const { area } = useSelector(getImportantThingsArea);
+	const { isLoading, list } = useSelector(getImportantThingsList);
 
-	if (loading || !mainPage || !mainPage.page) return <Loader />;
+	useEffect(() => {
+		if (mainPage && !list) {
+			dispatch(loadImportantThingsArea(mainPage.id));
+		}
+	}, [mainPage, list]);
+
+	if (isLoading || !mainPage || !list) return <Loader />;
+
+	const todoItemActions: ITodoItemActions = {
+		deleteTodo: (todoId) => dispatch(todoActions.deleteListItem(todoId)),
+		toggleTodo: (todoId) => dispatch(todoActions.toggleTodo(todoId)),
+		updateTodo: (todo) => dispatch(todoActions.addOrUpdateListItem(todo)),
+	};
 
 	return (
-		<TodoListState readonlyHeader={true} isDeletable={false}>
-			<ImportantThingsList />
-		</TodoListState>
+		<>
+			<h1 className="area-header">{area?.header}</h1>
+			<Row>
+				<Col md={12}>
+					<TodoList
+						className="mt-10 no-list-header"
+						isDeletable={false}
+						readonlyTitle={true}
+						todoList={list}
+						todoItemActions={todoItemActions}
+					/>
+				</Col>
+			</Row>
+		</>
 	);
 };
 
-export const ImportantThingsList: React.FC = () => {
-	const pageState = useContext(mainPageContext);
-	const { dispatch } = pageState;
-	const todoListState = useContext(TodoListContext).todoListState;
-
-	useEffect(() => {
-		const { list, loading } = todoListState;
-
-		if (list && !loading) dispatch(Actions.setTodos(todoListState));
-	}, [todoListState, dispatch]);
-
-	return <TodoList />;
-};
-
-export default ImportantThings;
+export default ImportantThingsArea;

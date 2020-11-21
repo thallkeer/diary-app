@@ -1,20 +1,21 @@
 import { List } from "../models";
 import { getSelectedPage } from "../selectors";
-import { useContext, useEffect } from "react";
-import { store } from "../context/store";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export function useList<T extends List>(
 	currentList: T,
 	onLoad: (pageID: number) => void
 ) {
-	const app = useContext(store);
-	const page = getSelectedPage(app.state);
+	const page = useSelector(getSelectedPage);
 
 	useEffect(() => {
 		let isUnmounting = false;
 		const needLoadList = () => !isUnmounting && page && !currentList;
-
+		console.log("useList", page, currentList);
 		if (needLoadList()) {
+			console.log("load list for page", page, currentList);
+
 			onLoad(page.id);
 		}
 

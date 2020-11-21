@@ -1,14 +1,14 @@
 import React, { FC, useEffect, useRef } from "react";
-import { ListItem } from "../../../models";
+import { IListItem } from "../../../models";
 
 interface ListItemInputPropsBase
 	extends React.HTMLAttributes<HTMLInputElement> {
-	updateItem?: (item: ListItem) => void;
-	item: ListItem;
+	updateItem?: (item: IListItem) => void;
+	item: IListItem;
 }
 
 interface ListItemInputProps extends ListItemInputPropsBase {
-	getItemText?: (item: ListItem) => string;
+	getItemText?: (item: IListItem) => string;
 	readonly?: boolean;
 }
 

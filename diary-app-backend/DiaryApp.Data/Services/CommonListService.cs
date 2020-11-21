@@ -1,8 +1,4 @@
 ﻿using DiaryApp.Core;
-using DiaryApp.Core.ServiceInterfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DiaryApp.Data.Services
 {

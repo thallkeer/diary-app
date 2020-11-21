@@ -1,14 +1,10 @@
 import axios from "../axios/axios";
-import { List, ListItem } from "../models";
+import { IList, IListItem } from "../models";
 
-export function getListService<T extends List, TItem extends ListItem>(
+export function getListService<T extends IList<TItem>, TItem extends IListItem>(
 	apiUrl: string,
 	itemName: string
 ) {
-	async function getByPageID(pageID: number): Promise<T> {
-		return await axios.get(apiUrl + pageID).then((response) => response.data);
-	}
-
 	async function update(list: T) {
 		await axios.put(apiUrl, list);
 	}
@@ -32,9 +28,8 @@ export function getListService<T extends List, TItem extends ListItem>(
 	}
 
 	return {
-		getByPageID,
 		update,
-		remove: deleteList,
+		deleteList,
 		addItem,
 		updateItem,
 		deleteItem,

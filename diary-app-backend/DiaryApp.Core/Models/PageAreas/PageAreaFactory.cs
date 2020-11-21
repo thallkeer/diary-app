@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiaryApp.Core.Interfaces;
+using System;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
@@ -9,7 +10,7 @@ namespace DiaryApp.Core.Models.PageAreas
         /// </summary>
         /// <param name="page">Page that owns page area</param>
         /// <returns></returns>
-        PageAreaBase CreatePageArea(PageBase page);
+        PageAreaBase<MonthPage> CreatePageArea(MonthPage page);
     }
 
     public class PageAreaFactoryCreator
@@ -27,21 +28,21 @@ namespace DiaryApp.Core.Models.PageAreas
 
     public class GoalsAreaFactory : IPageAreaFactory
     {
-        public PageAreaBase CreatePageArea(PageBase page) => new GoalsArea(page, true);
+        public PageAreaBase<MonthPage> CreatePageArea(MonthPage page) => new GoalsArea(page, true);
     }
 
     public class DesiresAreaFactory : IPageAreaFactory
     {
-        public PageAreaBase CreatePageArea(PageBase page) => new DesiresArea(page, true);
+        public PageAreaBase<MonthPage> CreatePageArea(MonthPage page) => new DesiresArea(page, true);
     }
 
     public class IdeasAreaFactory : IPageAreaFactory
     {
-        public PageAreaBase CreatePageArea(PageBase page) => new IdeasArea(page, true);
+        public PageAreaBase<MonthPage> CreatePageArea(MonthPage page) => new IdeasArea(page, true);
     }
 
     public class PurchasesAreaFactory : IPageAreaFactory
     {
-        public PageAreaBase CreatePageArea(PageBase page) => new PurchasesArea(page, true);
+        public PageAreaBase<MonthPage> CreatePageArea(MonthPage page) => new PurchasesArea(page, true);
     }
 }

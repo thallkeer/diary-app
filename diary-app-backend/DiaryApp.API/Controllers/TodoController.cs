@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core;
@@ -23,12 +22,6 @@ namespace DiaryApp.API.Controllers
         {
             this.crudController = new ListCrudContoller<TodoList, TodoItem, TodoListModel, TodoModel>(todoService, mapper, logger);
             this.todoService = (ITodoService)crudController.ListItemService;
-        }
-
-        [HttpGet("{pageID}")]
-        public IActionResult GetByPageID(int pageID)
-        {
-            return crudController.GetByPageID(pageID);
         }
 
         [HttpPost("addTodo")]

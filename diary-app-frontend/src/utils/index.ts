@@ -16,18 +16,20 @@ export const getRandomId = () => {
 	return Number(id);
 };
 
-export const getEmptyItem = () => {
-	const item: IListItem = { id: 0, subject: "", url: "" };
+export const getEmptyItem = (ownerId: number) => {
+	const item: IListItem = { id: 0, subject: "", url: "", ownerID: ownerId};
 	return item;
 };
 
-export const getEmptyTodo = () => {
-	const todo: ITodo = { id: 0, subject: "", done: false, url: "" };
+export const getEmptyTodo = (ownerId: number) => {
+	const todo: ITodo = { ...getEmptyItem(ownerId),done: false };
+	console.log(todo);
+	
 	return todo;
 };
 
-export const getEmptyEvent = () => {
-	const event: IEvent = { id: 0, subject: "", date: new Date(), url: "" };
+export const getEmptyEvent = (ownerId: number) => {
+	const event: IEvent = { ...getEmptyItem(ownerId), date: new Date() };
 	return event;
 };
 

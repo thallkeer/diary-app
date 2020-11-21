@@ -1,42 +1,53 @@
-import React, { FC } from "react";
-import { ListItem } from "../../../models";
+import React from "react";
+import { IListItem } from "../../../models";
 import ListHeaderInput from "../Controls/ListHeaderInput";
 import { DeleteBtn } from "../Controls/DeleteBtn";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import { getRandomId } from "../../../utils";
 
-interface ICommonListProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
-	items: ListItem[];
-	renderItem: (item: ListItem) => JSX.Element;
-	listTitle: string;
-	readonlyTitle: boolean;
-	updateListTitle?: (title: string) => void;
-	isDeletable: boolean;
-	onDeleteList?: () => void;
+export interface IListActions {
+	updateTitle?: (title: string) => void;
+	deleteList?: () => void;
 }
 
-export const CommonListComponent: FC<ICommonListProps> = ({
-	listTitle,
-	readonlyTitle,
-	items,
-	updateListTitle,
-	renderItem,
-	className,
-	isDeletable,
-	onDeleteList,
-}) => {
+export interface IListOptions {
+	readonlyTitle: boolean;
+	isDeletable: boolean;
+}
+
+export type ListComponentProps<T extends IListItem> = {
+	items: T[];
+	className: string;
+	listTitle: string;
+	renderItem: (item: T) => JSX.Element;
+};
+
+export const CommonListComponent = <T extends IListItem>(
+	props: IListActions & IListOptions & ListComponentProps<T>
+) => {
+	const {
+		listTitle,
+		readonlyTitle,
+		items,
+		updateTitle,
+		deleteList,
+		renderItem,
+		className,
+		isDeletable,
+	} = props;
+
 	return (
 		<div className={className}>
 			<h1 className="todo-list-header">
 				<ListHeaderInput
 					value={listTitle}
-					handleBlur={updateListTitle}
+					handleBlur={updateTitle}
 					readonly={readonlyTitle}
 				/>
-				{isDeletable && <DeleteBtn onDelete={onDeleteList} />}
+				{isDeletable && <DeleteBtn onDelete={deleteList} />}
 			</h1>
 			<ul className="todos">
-				{items.map((item: ListItem, i) => (
+				{items.map((item: T, i) => (
 					<li key={item.id !== 0 ? item.id : `item-${i}`} className="list-item">
 						{renderItem(item)}
 					</li>

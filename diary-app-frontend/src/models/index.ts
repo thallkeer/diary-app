@@ -1,5 +1,6 @@
-import { ITodoListState } from "../components/Lists/TodoList/TodoListState";
-import { IEventListContext } from "../components/Lists/EventList/EventListState";
+import {
+	IStateWithLoading,
+} from "../context/reducers/utilities/loading-reducer";
 
 export interface IList<T extends IListItem> {
 	id: number;
@@ -8,19 +9,15 @@ export interface IList<T extends IListItem> {
 	items: T[];
 }
 
-export interface IListState<T extends IList<TItem>, TItem extends IListItem> {
+export interface IListState<T extends IList<TItem>, TItem extends IListItem>
+	extends IStateWithLoading {
 	list: T;
-	loading: boolean;
+	listName: string;
 }
 
 export type List = ITodoList | IEventList | ICommonList;
-export interface ITodoList extends IList<ITodo> {
-	purchasesAreaId?: number;
-}
-export interface IEventList extends IList<IEvent> {
-	ideasAreaID?: number;
-	desiresAreaID?: number;
-}
+export interface ITodoList extends IList<ITodo> {}
+export interface IEventList extends IList<IEvent> {}
 
 export interface ICommonList extends IList<IListItem> {}
 
@@ -41,8 +38,6 @@ export interface IEvent extends IListItem {
 	fullDay?: boolean;
 	description?: string;
 }
-
-export type ListItem = ITodo | IEvent | IListItem;
 
 export type HabitDay = {
 	number: number;
@@ -65,23 +60,11 @@ export interface IUser {
 
 export interface IPage {
 	id: number;
-	year: number;
-	month: number;
-	user: IUser;
 }
 
-export interface IMainPage {
-	page: IPage;
-	todos: ITodoListState;
-	events: IEventListContext;
-}
-
-export interface IMonthPage {
-	page: IPage;
-	purchasesArea: IPurchasesArea;
-	desiresArea: IDesiresArea;
-	ideasArea: IIdeasArea;
-	goalsArea: IGoalsArea;
+export interface IPageState<T extends IPage> extends IStateWithLoading {
+	page: T;
+	pageName: string;
 }
 
 export interface IPageArea {
@@ -89,18 +72,8 @@ export interface IPageArea {
 	header: string;
 }
 
-export interface IPurchasesArea extends IPageArea {
-	purchasesLists: ITodoList[];
+export interface IPageAreaState extends IStateWithLoading {
+	area: IPageArea
+	pageAreaName: string;
 }
 
-export interface IDesiresArea extends IPageArea {
-	desiresLists: ICommonList[];
-}
-
-export interface IIdeasArea extends IPageArea {
-	ideasList: ICommonList;
-}
-
-export interface IGoalsArea extends IPageArea {
-	goalsLists: IHabitsTracker[];
-}

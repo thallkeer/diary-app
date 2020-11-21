@@ -1,49 +1,49 @@
-﻿using DiaryApp.Core.Models.Lists;
+﻿using DiaryApp.Core.Interfaces;
+using DiaryApp.Core.Models.Lists;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
-    public class PurchasesArea : PageAreaBase
+    public class PurchasesArea : PageAreaBase<MonthPage>, IMonthPageArea<PurchasesArea>
     {
-        public PurchasesArea()
+        private const string Title = "Название списка";
+        private const string HeaderSTR = "Покупки";
+
+        public virtual List<PurchasesList> PurchasesLists { get; set; } = new List<PurchasesList>();
+
+        public PageAreaType AreaType => PageAreaType.Purchases;
+
+        public PurchasesArea() : base()
         {
 
         }
-        public PurchasesArea(PageBase page, bool needInit) : base(page, "Покупки", needInit)
-        { }
+        public PurchasesArea(MonthPage page, bool needInit = false) : base(page, HeaderSTR, needInit)
+        { }        
 
-        public virtual List<TodoList> PurchasesLists { get; set; } = new List<TodoList>();
-
-        public override PageAreaType AreaType => PageAreaType.Purchases;
-
-        public override void AddFromOtherArea(PageAreaBase otherArea)
+        public void AddFromOtherArea(PurchasesArea other)
         {
-            if (otherArea is PurchasesArea other)
-            {
-                var emptyLists = this.PurchasesLists.FindAll(pl => pl.Items.Count == 0);
-                this.PurchasesLists.RemoveAll(pl => emptyLists.Contains(pl));
-                this.PurchasesLists.AddRange(other.PurchasesLists.Select(pl => pl.CreateDeepCopy<TodoList,TodoItem>(this.Page)));
-            }
+            var emptyLists = this.PurchasesLists.FindAll(pl => pl.Items.Count == 0);
+            this.PurchasesLists.RemoveAll(pl => emptyLists.Contains(pl));
+            this.PurchasesLists.AddRange(other.PurchasesLists.GetCopy<PurchasesList, TodoList, TodoItem>());
         }
 
-        public override PageAreaBase TransferAreaData(PageBase page)
+        public PurchasesArea TransferAreaData(MonthPage page)
         {
-            var newArea = new PurchasesArea(page, false)
+            var newArea = new PurchasesArea(page)
             {
-                PurchasesLists = new List<TodoList>()
+                PurchasesLists = new List<PurchasesList>(this.PurchasesLists.Count)
             };
-            newArea.PurchasesLists.AddRange(this.PurchasesLists.Select(pl => pl.CreateDeepCopy<TodoList, TodoItem>(page)));
+            newArea.PurchasesLists = this.PurchasesLists.GetCopy<PurchasesList, TodoList, TodoItem>();
             return newArea;
         }
 
         protected override void Initialize()
         {
-            PurchasesLists.AddRange(new TodoList[]
+            PurchasesLists.AddRange(new PurchasesList[]
                 {
-                new TodoList {Title = "Название списка", Page = this.Page},
-                new TodoList {Title = "Название списка", Page = this.Page}
+                new PurchasesList(Title),
+                new PurchasesList(Title)
                 });
         }
-    }
+    }    
 }

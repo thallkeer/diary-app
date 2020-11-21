@@ -1,6 +1,6 @@
 ﻿namespace DiaryApp.API.Models
 {
-    public class MainPageModel
+    public class PageModel
     {
         public int ID { get; set; }
         public int Month { get; set; }

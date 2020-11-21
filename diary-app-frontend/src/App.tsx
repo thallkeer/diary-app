@@ -6,7 +6,8 @@ import NotFound from "./components/NotFound";
 import history from "./components/history";
 import { PrivateRoute } from "./components/Router/PrivateRoute";
 import Loader from "./components/Loader";
-import { StateProvider } from "./context/store";
+import { Provider } from "react-redux";
+import store from "./context/store";
 
 const MainPage = lazy(() => import("./components/MainPage/MainPage"));
 const MonthPage = lazy(() => import("./components/MonthPage/MonthPage"));
@@ -34,11 +35,10 @@ export default function App() {
 	// };
 
 	return (
-		// <React.StrictMode>
-		<Container fluid>
-			<StateProvider>
-				<Suspense fallback={<Loader />}>
-					<Router history={history}>
+		<Router history={history}>
+			<Provider store={store}>
+				<Container fluid>
+					<Suspense fallback={<Loader />}>
 						<Switch>
 							<PrivateRoute path="/" exact={true} component={MainPage} />
 							<Route path="/login" component={Login} />
@@ -46,10 +46,9 @@ export default function App() {
 							<PrivateRoute path="/month" exact={true} component={MonthPage} />
 							<Route component={NotFound} />
 						</Switch>
-					</Router>
-				</Suspense>
-			</StateProvider>
-		</Container>
-		// </React.StrictMode>
+					</Suspense>
+				</Container>
+			</Provider>
+		</Router>
 	);
 }

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
 	Button,
 	FormGroup,
@@ -11,8 +11,8 @@ import history from "../history";
 import { IUser } from "../../models";
 import axios from "../../axios/axios";
 import { AxiosError } from "axios";
-import { store } from "../../context/store";
-import { Actions as appActions } from "../../context/actions/app-actions";
+import { setUser } from "../../context/reducers/app-reducer";
+import { useDispatch } from "react-redux";
 
 type LoginError = {
 	isError: boolean;
@@ -24,9 +24,9 @@ const Login: React.FC = () => {
 		isError: false,
 		errorMessage: "",
 	});
+	const dispatch = useDispatch();
 	const [userName, setUsername] = useState("");
 	const [password, setPassword] = useState("");
-	const { state, dispatch } = useContext(store);
 
 	function validateForm() {
 		return userName.length > 0 && password.length > 0;
@@ -51,7 +51,7 @@ const Login: React.FC = () => {
 	};
 
 	async function handleSubmit(
-		e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+		e: React.MouseEvent<HTMLElement, MouseEvent>,
 		signIn: boolean
 	) {
 		e.preventDefault();
@@ -62,8 +62,7 @@ const Login: React.FC = () => {
 		})
 			.then((res) => {
 				const user: IUser = res.data;
-				localStorage.setItem("user", JSON.stringify(user));
-				dispatch(appActions.setState({ ...state, user }));
+				dispatch(setUser(user));
 				axios.defaults.headers.common["Authorization"] = "Bearer " + user.token;
 				history.push("/");
 			})
@@ -99,7 +98,7 @@ const Login: React.FC = () => {
 						/>
 					</FormGroup>
 					<Button
-						onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+						onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) =>
 							handleSubmit(e, true)
 						}
 						className="btn btn-primary"
@@ -111,7 +110,7 @@ const Login: React.FC = () => {
 						Войти
 					</Button>
 					<Button
-						onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+						onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) =>
 							handleSubmit(e, false)
 						}
 						className="btn btn-success"

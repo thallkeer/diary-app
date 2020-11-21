@@ -8,7 +8,6 @@ namespace DiaryApp.API.Controllers
         where TModel : ListModel<UModel>
         where UModel : ListItemModel
     {
-        IActionResult GetByPageID(int pageID);
         Task<IActionResult> AddItem([FromBody] UModel itemModel);
         Task<IActionResult> AddList([FromBody] TModel listModel);
         Task<IActionResult> DeleteItem(int itemID);

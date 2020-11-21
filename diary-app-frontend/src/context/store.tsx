@@ -1,33 +1,70 @@
-import React, { createContext, useReducer, Dispatch } from "react";
-import { IAppState } from ".";
-import { appReducer } from "./reducers/app";
-import { AppActions } from "./actions/app-actions";
+import { appReducer } from "./reducers/app-reducer";
+import {
+	Action,
+	applyMiddleware,
+	combineReducers,
+	compose,
+	createStore,
+} from "redux";
+import logger from "redux-logger";
+import thunkMiddleware, { ThunkAction } from "redux-thunk";
+import { createBrowserHistory } from "history";
+import { routerMiddleware as createRouterMiddleware } from "connected-react-router";
+import { mainPageReducer } from "./reducers/page/mainPage-reducer";
+import { monthPageReducer } from "./reducers/page/monthPage-reducer";
+import { importantThingsAreaReducer, importantThingsListReducer } from "./reducers/pageArea/importantThingsArea-reducer";
 
-const curDate = new Date();
-const initialState: IAppState = {
-  month: curDate.getMonth() + 1,
-  year: curDate.getFullYear(),
-  user: JSON.parse(localStorage.getItem("user")),
-  mainPage: null,
-  monthPage: null,
-  selectedPage: null,
-};
+let rootReducer = combineReducers({
+	app: appReducer,
+	mainPage: mainPageReducer,
+	monthPage: monthPageReducer,
+	importantThingsArea: importantThingsAreaReducer,
+	importantThingsList: importantThingsListReducer,
+});
 
-interface IAppContextProps {
-  state: IAppState;
-  dispatch: Dispatch<AppActions>;
+export function createNamedWrapperReducer<TState, TAction>(
+	reducer: (state: TState, action: TAction) => TState,
+	initialState: TState,
+	reducerName: string,
+	actionNameSelector: (action: TAction) => string
+) {
+	return (state = initialState, action: TAction) => {
+		const subjectName = actionNameSelector(action);
+		const isInitializationCall = state === undefined;
+
+		if (reducerName !== subjectName && !isInitializationCall) return state;
+
+		return reducer(state, action);
+	};
 }
 
-const store = createContext<IAppContextProps>({
-  state: initialState,
-  dispatch: () => null,
-});
-const { Provider } = store;
+type RootReducerType = typeof rootReducer;
+export type AppStateType = ReturnType<RootReducerType>;
 
-const StateProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(appReducer, initialState);
+export type InferActionsTypes<T> = T extends {
+	[keys: string]: (...args: any[]) => infer U;
+}
+	? U
+	: never;
 
-  return <Provider value={{ state, dispatch }}>{children}</Provider>;
-};
+export type BaseThunkType<
+	A extends Action = Action,
+	R = Promise<void>
+> = ThunkAction<R, AppStateType, unknown, A>;
 
-export { store, StateProvider };
+// @ts-ignore
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+export const history = createBrowserHistory();
+const routerMiddleware = createRouterMiddleware(history);
+
+const middlewares = [thunkMiddleware, routerMiddleware, logger];
+
+const store = createStore(
+	rootReducer,
+	composeEnhancers(applyMiddleware(...middlewares))
+);
+// @ts-ignore
+window.__store__ = store;
+
+export default store;

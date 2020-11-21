@@ -5,11 +5,15 @@ import { ITodo } from "../../../models";
 import { MenuItem } from "react-contextmenu";
 import { withContextMenu } from "../CommonList/CommonListComponent";
 
-interface ITodoInputProps {
-	todo: ITodo;
+export interface ITodoItemActions {
 	toggleTodo: (todoId: number) => void;
 	updateTodo: (todo: ITodo) => void;
 	deleteTodo: (todoID: number) => void;
+}
+
+interface ITodoInputProps extends ITodoItemActions {
+	todo: ITodo;
+	
 }
 
 export const TodoInput: FC<ITodoInputProps> = ({

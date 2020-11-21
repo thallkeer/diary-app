@@ -1,11 +1,12 @@
-﻿using System;
+﻿using DiaryApp.Core.Interfaces;
+using System;
 
 namespace DiaryApp.Core.Models
 {
     [AttributeUsage(AttributeTargets.Property)]
     class PageAreaAttribute : Attribute
     {
-        public PageAreaType AreaType { get; private set; }
+        public PageAreaType AreaType { get; }
         public PageAreaAttribute(PageAreaType pageAreaType)
         {
             AreaType = pageAreaType;

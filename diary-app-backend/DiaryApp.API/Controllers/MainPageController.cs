@@ -4,21 +4,20 @@ using Microsoft.AspNetCore.Mvc;
 using DiaryApp.API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using System;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using DiaryApp.Core.Models.PageAreas;
 
 namespace DiaryApp.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class MainPageController : AppBaseController<MainPageController>
+    public class MainPageController : PageController<MainPage>
     {
         private readonly IMainPageService mainPageService;
 
         public MainPageController(IMainPageService mainPageService, IMapper mapper, ILoggerFactory loggerFactory)
-            : base(mapper, loggerFactory)
+            : base(mainPageService,mapper, loggerFactory)
         {
             this.mainPageService = mainPageService;
         }
@@ -26,39 +25,26 @@ namespace DiaryApp.API.Controllers
         [HttpGet("{userId}/{year}/{month}")]
         public async Task<IActionResult> GetMainPage(int userId, int year, int month)
         {
-            try
-            {
-                var mainPage = await mainPageService.GetPageForUser(userId, year, month);
-
-                if (mainPage == null)
-                    return await CreateNewPage(new PageParams { UserId = userId, Year = year, Month = month });
-
-                var model = mapper.Map<MainPageModel>(mainPage);                
-                //model.ImportantEvents.Items = model.ImportantEvents.Items.OrderBy(e => e.Date).ToList();
-                return Ok(model);
-            }
-            catch (Exception ex)
-            {
-                logger.LogErrorWithDate(ex);
-                return BadRequest(ex.Message);
-            }
+            return await GetPage(userId, year, month);
         }
 
         [HttpPost("createNew")]
-        public async Task<IActionResult> CreateNewPage(PageParams pageParams)
+        public override async Task<IActionResult> CreateNewPage(PageParams pageParams)
         {
-            try
-            {
-                MainPage mainPage = await mainPageService.CreatePageByParams(pageParams.UserId, pageParams.Year, pageParams.Month);
+            return await base.CreateNewPage(pageParams);
+        }
 
-                MainPageModel model = mapper.Map<MainPageModel>(mainPage);
-                return Ok(model);
-            }
-            catch (Exception ex)
-            {
-                logger.LogErrorWithDate(ex);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+        [HttpGet("importantThingsArea/{pageID}")]
+        public async Task<IActionResult> GetImportantThingsArea(int pageID)
+        {
+            var model = await GetPageArea<ImportantThingsArea, ImportantThingsAreaModel>(pageID);
+            return model;
+        }
+
+        [HttpGet("importantEventsArea/{pageID}")]
+        public async Task<IActionResult> GetImportantEventsArea(int pageID)
+        {
+            return await GetPageArea<ImportantEventsArea, ImportantEventsAreaModel>(pageID);
         }
     }
 }

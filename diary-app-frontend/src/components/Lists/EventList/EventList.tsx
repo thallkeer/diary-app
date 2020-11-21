@@ -1,25 +1,29 @@
-/*@typescript-eslint/no-unused-vars*/
-import React, { FC, useContext } from "react";
-import { IEvent } from "../../../models";
-import Loader from "../../Loader";
+import React, { FC } from "react";
+import { IEvent, IEventList } from "../../../models";
 import { getEmptyEvent, fillToNumber } from "../../../utils";
-import { EventInput } from "../Controls/EventInput";
-import { EventListContext } from "./EventListState";
-import { CommonListComponent } from "../CommonList/CommonListComponent";
+import { EventInput, IEventItemActions } from "../Controls/EventInput";
+import {
+	CommonListComponent,
+	IListActions,
+} from "../CommonList/CommonListComponent";
 
-export const EventList: FC = () => {
-	const { eventListState, listFunctions } = useContext(EventListContext);
-	const { deleteListItem, addOrUpdateItem } = listFunctions;
-	const { list, loading } = eventListState;
-	const eventList = list;
+export interface IEventListProps extends IListActions {
+	eventList: IEventList;
+	eventItemActions: IEventItemActions;
+	className: string;
+}
 
-	if (loading || !eventList) return <Loader />;
+export const EventList: FC<IEventListProps> = ({
+	eventList,
+	eventItemActions,
+}) => {
+	const { updateEvent, deleteEvent } = eventItemActions;
 
 	const items = [...eventList.items].sort(
 		(e1, e2) => e1.date.getTime() - e2.date.getTime()
 	);
 
-	const events = fillToNumber(items, 6, getEmptyEvent);
+	const events = fillToNumber(items, 6, () => getEmptyEvent(eventList.id));
 
 	const getItemText = (event: IEvent): string => {
 		if (event.id === 0) return event.subject;
@@ -44,8 +48,8 @@ export const EventList: FC = () => {
 			renderItem={(event: IEvent) => (
 				<EventInput
 					event={event}
-					updateEvent={addOrUpdateItem}
-					deleteEvent={deleteListItem}
+					updateEvent={updateEvent}
+					deleteEvent={deleteEvent}
 					getItemText={getItemText}
 					readonly={true}
 				/>

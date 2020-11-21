@@ -1,26 +1,28 @@
 ﻿using DiaryApp.Core.Models.PageAreas;
+using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core
 {
     public class MonthPage : PageBase
-    {
-        public int? PurchasesAreaID { get; set; }
-        public int? DesiresAreaID { get; set; }
-        public int? IdeasAreaID { get; set; }
-        public int? GoalsAreaID { get; set; }
+    {       
+        [Required]
         public virtual PurchasesArea PurchasesArea { get; set; }
+        [Required]
         public virtual DesiresArea DesiresArea { get; set; }
+        [Required]
         public virtual IdeasArea IdeasArea { get; set; }
+        [Required]
         public virtual GoalsArea GoalsArea { get; set; }
 
-        public MonthPage()
+        public MonthPage() : base()
         {
         }
 
         public MonthPage(int year, int month, AppUser user) : base(year, month, user)
-        { }
+        {
+        }
 
-        public void CreateAreas()
+        public override void CreateAreas()
         {
             this.DesiresArea = new DesiresArea(this, true);
             this.GoalsArea = new GoalsArea(this, true);

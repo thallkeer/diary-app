@@ -4,7 +4,7 @@ namespace DiaryApp.Core
 {
     public class TodoItem : ListItemBase
     {
-        public bool Done { get; set; } = false;
+        public bool Done { get; set; }
         public virtual new TodoList Owner { get; set; }
 
         public TodoItem()

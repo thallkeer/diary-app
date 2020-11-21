@@ -1,55 +1,53 @@
-﻿using DiaryApp.Core.Models.Lists;
+﻿using DiaryApp.Core.Interfaces;
+using DiaryApp.Core.Models.Lists;
 using System.Collections.Generic;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
-    public class DesiresArea : PageAreaBase
+    public class DesiresArea : PageAreaBase<MonthPage>, IMonthPageArea<DesiresArea>
     {
-        public DesiresArea()
+        private const string HeaderSTR = "В этом месяце я хочу";
+        private const string ToVisitSTR = "Посетить";
+        private const string ToWatchSTR = "Посмотреть";
+        private const string ToReadSTR = "Прочитать";
+
+        public virtual List<DesiresList> DesiresLists { get; set; } = new List<DesiresList>(3);
+        public PageAreaType AreaType => PageAreaType.Desires;
+
+        public DesiresArea() : base()
         {
 
         }
-        public DesiresArea(PageBase page, bool init) : base(page, "В этом месяце я хочу", init)
-        { }
+        public DesiresArea(MonthPage page, bool withInitialization = false) : base(page, HeaderSTR, withInitialization)
+        {
+        }      
 
-        public virtual List<CommonList> DesiresLists { get; set; } = new List<CommonList>(3);
+        public void AddFromOtherArea(DesiresArea other)
+        {
+            for (int i = 0; i < other.DesiresLists.Count; i++)
+            {
+                this.DesiresLists[i].Items.AddRange(other.DesiresLists[i].Items);
+            }
+        }
 
-        public override PageAreaType AreaType => PageAreaType.Desires;
-
-        public override PageAreaBase TransferAreaData(PageBase page)
+        public DesiresArea TransferAreaData(MonthPage page)
         {
             var newArea = new DesiresArea(page, false)
             {
-                DesiresLists = new List<CommonList>(3)
+                DesiresLists = new List<DesiresList>(3)
             };
-            this.DesiresLists.ForEach(dl =>
-            {
-                newArea.DesiresLists.Add(dl.CreateDeepCopy<CommonList, ListItem>(page));
-            });
+            newArea.DesiresLists = this.DesiresLists.GetCopy<DesiresList, CommonList, ListItem>();          
             return newArea;
-        }
-
-        public override void AddFromOtherArea(PageAreaBase otherArea)
-        {
-            if (otherArea is DesiresArea other)
-            {
-                //var emptyLists = this.DesiresLists.FindAll(pl => pl.Items.Count == 0);
-                //this.DesiresLists.RemoveAll(pl => emptyLists.Contains(pl));
-                for (int i = 0; i < other.DesiresLists.Count; i++)
-                {
-                    this.DesiresLists[i].Items.AddRange(other.DesiresLists[i].Items);
-                }
-            }
         }
 
         protected override void Initialize()
         {
-            DesiresLists.AddRange(new CommonList[]
+            DesiresLists.AddRange(new DesiresList[]
                 {
-                    new CommonList("Посетить", Page),
-                    new CommonList("Посмотреть", Page),
-                    new CommonList("Прочитать", Page)
+                    new DesiresList(ToVisitSTR),
+                    new DesiresList(ToWatchSTR),
+                    new DesiresList(ToReadSTR)
                 });
         }
-    }
+    }    
 }
