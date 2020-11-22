@@ -1,4 +1,4 @@
-import { ITodo, IEvent, IListItem, IList } from "../models/index";
+import { ITodo, IEvent, IListItem, IList, IListState } from "../models/index";
 
 var _getRandomInt = (min: number, max: number) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -16,15 +16,18 @@ export const getRandomId = () => {
 	return Number(id);
 };
 
+/**
+ * returns empty list item
+ *
+ * @param ownerId id of list that empty item will belongs
+ */
 export const getEmptyItem = (ownerId: number) => {
-	const item: IListItem = { id: 0, subject: "", url: "", ownerID: ownerId};
+	const item: IListItem = { id: 0, subject: "", url: "", ownerID: ownerId };
 	return item;
 };
 
 export const getEmptyTodo = (ownerId: number) => {
-	const todo: ITodo = { ...getEmptyItem(ownerId),done: false };
-	console.log(todo);
-	
+	const todo: ITodo = { ...getEmptyItem(ownerId), done: false };
 	return todo;
 };
 
@@ -32,16 +35,6 @@ export const getEmptyEvent = (ownerId: number) => {
 	const event: IEvent = { ...getEmptyItem(ownerId), date: new Date() };
 	return event;
 };
-
-export function updateListItems<
-	T extends IList<TItem>,
-	TItem extends IListItem
->(list: T, items: TItem[], updateFunction: (listItem: TItem) => TItem[]): T {
-	return {
-		...list,
-		items: items.map((item) => updateFunction(item)),
-	};
-}
 
 /**
  *
@@ -65,3 +58,28 @@ export function fillToNumber<T extends IListItem>(
 	list[length].readonly = false;
 	return list;
 }
+
+export const updateListInState = <
+	TState extends IListState<TList, TListItem>,
+	TList extends IList<TListItem>,
+	TListItem extends IListItem
+>(
+	state: TState,
+	updateItemsFunc: (listItems: TListItem[]) => TListItem[]
+) => {
+	return {
+		...state,
+		list: {
+			...state.list,
+			items: updateItemsFunc(getListItems(state)),
+		},
+	};
+};
+
+const getListItems = <
+	TState extends IListState<TList, TListItem>,
+	TList extends IList<TListItem>,
+	TListItem extends IListItem
+>(
+	state: TState
+) => state.list?.items ?? [];

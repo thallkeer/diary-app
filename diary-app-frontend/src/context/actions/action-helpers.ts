@@ -15,7 +15,6 @@ export function createAction<T extends string, P>(type: T, payload?: P) {
 
 export interface INamedAction<T extends string, P>
 	extends IActionWithPayload<T, P> {
-	payload: P;
 	subjectName: string;
 }
 export function createNamedAction<T extends string, P>(

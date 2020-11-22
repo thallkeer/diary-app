@@ -7,7 +7,7 @@ import Loader from "../Loader";
 
 const ImportantThings = lazy(() => import("./ImportantThings"));
 const ImportantEvents = lazy(() => import("./ImportantEvents"));
-// const Calendar = lazy(() => import("../Calendar/Calendar"));
+const Calendar = lazy(() => import("../Calendar/Calendar"));
 
 const MainPage: FC = () => {
 	const { user, year, month } = useSelector(getAppInfo);
@@ -26,7 +26,9 @@ const MainPage: FC = () => {
 						<ImportantThings />
 						<ImportantEvents />
 					</Col>
-					<Col md="9">{/* <Calendar /> */}</Col>
+					<Col md="9">
+						<Calendar />
+					</Col>
 				</Suspense>
 			</Row>
 		</Container>

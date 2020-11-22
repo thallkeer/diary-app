@@ -36,20 +36,6 @@ const Login: React.FC = () => {
 		return signIn ? login : register;
 	};
 
-	const errMsg = () => {
-		if (error.isError)
-			return (
-				<div
-					className="alert alert-danger"
-					style={{ marginTop: "1em" }}
-					role="alert"
-				>
-					{error.errorMessage}
-				</div>
-			);
-		return <></>;
-	};
-
 	async function handleSubmit(
 		e: React.MouseEvent<HTMLElement, MouseEvent>,
 		signIn: boolean
@@ -67,6 +53,8 @@ const Login: React.FC = () => {
 				history.push("/");
 			})
 			.catch((err: AxiosError) => {
+				console.log("error catched", err);
+
 				setError({
 					isError: true,
 					errorMessage: err.response
@@ -122,7 +110,17 @@ const Login: React.FC = () => {
 						Регистрация
 					</Button>
 				</form>
-				{errMsg()}
+				{error.isError ? (
+					<div
+						className="alert alert-danger"
+						style={{ marginTop: "1em" }}
+						role="alert"
+					>
+						{error.errorMessage}
+					</div>
+				) : (
+					<></>
+				)}
 			</div>
 		</Container>
 	);

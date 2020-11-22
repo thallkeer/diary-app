@@ -1,117 +1,74 @@
-// import { EventListActions } from "../../actions/events-actions";
-import { listReducer } from "../../actions/list-actions";
-// import { getEvents } from "../../../selectors";
-// import { IEventListState } from "../../../components/Lists/EventList/EventListState";
+import { IEvent, IEventList, IListState } from "../../../models";
+import { updateListInState } from "../../../utils";
+import { ActionsUnion } from "../../actions/action-helpers";
+import {
+	createListActions,
+	getListActions,
+	listReducer,
+} from "../../actions/list-actions";
+import { createNamedWrapperReducer } from "../../store";
+import { INITIAL_LOADABLE_STATE } from "../utilities/loading-reducer";
 
-// export const eventListReducer = (
-// 	state: IEventListState,
-// 	action: EventListActions
-// ): IEventListState => {
-// 	switch (action.type) {
-// 		case "SET_LIST":
-// 			const eventList = action.payload;
-// 			const events = eventList.items || [];
-// 			return {
-// 				...state,
-// 				list: {
-// 					...eventList,
-// 					items: events.map((event) => {
-// 						return { ...event, date: new Date(event.date) };
-// 					}),
-// 				},
-// 				loading: false,
-// 			};
+export interface IEventListState extends IListState<IEventList, IEvent> {
+	isDeletable: boolean;
+	readonlyHeader: boolean;
+}
 
-// 		case "ADD_LIST_ITEM":
-// 			let addedEvent = action.payload;
+const initialState: IEventListState = {
+	list: null,
+	isDeletable: false,
+	readonlyHeader: false,
+	listName: "eventlist",
+	...INITIAL_LOADABLE_STATE,
+};
 
-// 			addedEvent.date = new Date(addedEvent.date);
+export const createEventListReducer = (reducerName: string) => {
+	return createNamedWrapperReducer(
+		eventListReducer,
+		initialState,
+		reducerName,
+		(action) => action.subjectName
+	);
+};
 
-// 			return {
-// 				...state,
-// 				list: {
-// 					...state.list,
-// 					items: [...getEvents(state), addedEvent],
-// 				},
-// 			};
+export const eventListReducer = (
+	state = initialState,
+	action: EventListActions
+): IEventListState => {
+	switch (action.type) {
+		case "LOAD_LIST_SUCCESS":
+			const newState: IEventListState = {
+				...state,
+				list: action.payload,
+			};
 
-// 		default:
-// 			return listReducer(state, action);
-// 	}
-// };
+			return updateListInState(newState, (listItems) =>
+				listItems.map((event) => {
+					return { ...event, date: new Date(event.date) };
+				})
+			);
 
-// // export const eventsReducer = (
-// // 	state: IEventListState,
-// // 	action: EventActions
-// // ): IEventListState => {
-// // 	switch (action.type) {
-// // 		case "LOAD_EVENTS_START":
-// // 			return { ...state, loading: true };
+		case "ADD_LIST_ITEM":
+			let addedEvent = action.payload;
 
-// // 		case "LOAD_EVENTS": {
-// // 			const eventList = action.payload;
-// // 			const events = eventList.items || [];
+			addedEvent.date = new Date(addedEvent.date);
 
-// // 			return {
-// // 				...state,
-// // 				eventList: {
-// // 					...eventList,
-// // 					items: events.map((event) => {
-// // 						return { ...event, date: event.date ? new Date(event.date) : null };
-// // 					}),
-// // 				},
-// // 				loading: false,
-// // 			};
-// // 		}
-// // 		case "ADD_EVENT":
-// // 			let addedEvent = action.payload;
+			return updateListInState(state, (listItems) => [
+				...listItems,
+				addedEvent,
+			]);
 
-// // 			addedEvent.date = new Date(addedEvent.date);
+		default:
+			return listReducer<IEventListState, IEventList, IEvent>(state, action);
+	}
+};
 
-// // 			return {
-// // 				...state,
-// // 				eventList: {
-// // 					...state.eventList,
-// // 					items: [...getEvents(state), addedEvent],
-// // 				},
-// // 			};
+const actions = {
+	...createListActions<IEventList, IEvent>(),
+};
 
-// // 		case "UPDATE_EVENT":
-// // 			return {
-// // 				...state,
-// // 				eventList: {
-// // 					...state.eventList,
-// // 					items: getEvents(state).map((item) =>
-// // 						item.id === action.payload.id ? action.payload : item
-// // 					),
-// // 				},
-// // 			};
+export const eventsActions = {
+	...getListActions<IEventList, IEvent>("events/", "Event"),
+};
 
-// // 		case "DELETE_EVENT":
-// // 			return {
-// // 				...state,
-// // 				eventList: {
-// // 					...state.eventList,
-// // 					items: getEvents(state).filter(
-// // 						(event) => event.id !== action.payload
-// // 					),
-// // 				},
-// // 			};
-
-// // 		case "UPDATE_EVENTLIST":
-// // 			return {
-// // 				...state,
-// // 				eventList: action.payload,
-// // 			};
-
-// // 		case "DELETE_EVENT_LIST":
-// // 			return {
-// // 				...state,
-// // 				eventList: null,
-// // 			};
-
-// // 		default:
-// // 			console.log("unknown action type reducer", action, state);
-// // 			return state;
-// // 	}
-// // };
+type EventListActions = ActionsUnion<typeof actions>;

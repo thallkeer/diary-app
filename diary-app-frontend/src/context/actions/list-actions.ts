@@ -1,8 +1,8 @@
 import { ActionsUnion, createNamedAction } from "./action-helpers";
 import { IListItem, IList, IListState } from "../../models/index";
-import { getListService } from "../../services/lists";
-import { createPropSelector, getListItems } from "../../selectors";
-import { BaseThunkType, createNamedWrapperReducer } from "../store";
+import { getListService } from "../../services/listService";
+import { updateListInState } from "../../utils/index";
+import { BaseThunkType } from "../store";
 import withLoadingStates from "../reducers/utilities/loading-reducer";
 
 const LOAD_LIST_START = "LOAD_LIST_START";
@@ -13,19 +13,6 @@ const UPDATE_LIST_ITEM = "UPDATE_LIST_ITEM";
 const DELETE_LIST_ITEM = "DELETE_LIST_ITEM";
 const DELETE_LIST = "DELETE_LIST";
 const UPDATE_LIST = "UPDATE_LIST";
-
-export function createNamedWrapperListReducer<
-	TState extends IListState<TList, TListItem>,
-	TList extends IList<TListItem>,
-	TListItem extends IListItem
->(initialState: TState, reducerName: string) {
-	return createNamedWrapperReducer(
-		wrappedReducer,
-		initialState,
-		reducerName,
-		(action: ListActions) => action.subjectName
-	);
-}
 
 const wrappedReducer = withLoadingStates({
 	START: LOAD_LIST_START,
@@ -40,20 +27,11 @@ export const withListStates = () => {
 		TItem extends IListItem,
 		A extends ListActions
 	>(
-		baseReducer: (state: S | undefined, action: A) => S
-	) =>
-		// Returns a new reducer
-		(state: S | undefined, action: A): S => {
-			const nextState = wrappedReducer(state, action);
-			if (nextState !== state) return nextState;
-			console.log(
-				"not a common action, calling additional reducer",
-				state,
-				action
-			);
-
-			return baseReducer(nextState, action);
-		};
+		baseReducer: (state: S, action: A) => S
+	) => (state: S, action: A): S => {
+		const nextState = wrappedReducer(state, action);
+		return nextState !== state ? nextState : baseReducer(nextState, action);
+	};
 };
 
 export function listReducer<
@@ -69,35 +47,23 @@ export function listReducer<
 			};
 		}
 		case "ADD_LIST_ITEM":
-			return {
-				...state,
-				list: {
-					...state.list,
-					items: [...getListItems(state), action.payload],
-				},
-			};
+			return updateListInState(state, (listItems) => [
+				...listItems,
+				action.payload as TListItem,
+			]);
 
 		case "UPDATE_LIST_ITEM":
-			return {
-				...state,
-				list: {
-					...state.list,
-					items: getListItems(state).map((item) =>
-						item.id === action.payload.id ? action.payload : item
-					),
-				},
-			};
+			return updateListInState(state, (listItems) =>
+				listItems.map(
+					(item) =>
+						(item.id === action.payload.id ? action.payload : item) as TListItem
+				)
+			);
 
 		case "DELETE_LIST_ITEM":
-			return {
-				...state,
-				list: {
-					...state.list,
-					items: getListItems(state).filter(
-						(event) => event.id !== action.payload
-					),
-				},
-			};
+			return updateListInState(state, (listItems) =>
+				listItems.filter((event) => event.id !== action.payload)
+			);
 
 		case "UPDATE_LIST":
 			return {
@@ -112,27 +78,31 @@ export function listReducer<
 			};
 
 		default:
-			console.log("unknown action type reducer", action, state);
 			return state;
 	}
 }
 
-export const updateListItems = <
-	TState extends IListState<TList, TListItem>,
+export const createListActions = <
 	TList extends IList<TListItem>,
 	TListItem extends IListItem
->(
-	state: TState,
-	action: ListActions,
-	updateFunction: (action: ListActions, items: TListItem[]) => TState
-) => {
-	return {
-		...state,
-		list: {
-			...state.list,
-			items: updateFunction(action, getListItems(state)),
-		},
+>() => {
+	const actions = {
+		startLoadList: (listName: string) =>
+			createNamedAction(LOAD_LIST_START, listName, undefined),
+		finishLoadList: (list: TList, listName: string) =>
+			createNamedAction(LOAD_LIST_SUCCESS, listName, list),
+		updateListItem: (listItem: TListItem, listName: string) =>
+			createNamedAction(UPDATE_LIST_ITEM, listName, listItem),
+		addListItem: (newListItem: TListItem, listName: string) =>
+			createNamedAction(ADD_LIST_ITEM, listName, newListItem),
+		deleteListItem: (listItemID: number, listName: string) =>
+			createNamedAction(DELETE_LIST_ITEM, listName, listItemID),
+		deleteList: (listID: number, listName: string) =>
+			createNamedAction(DELETE_LIST, listName, listID),
+		updateList: (list: TList, listName: string) =>
+			createNamedAction(UPDATE_LIST, listName, list),
 	};
+	return actions;
 };
 
 const actions = {
@@ -177,44 +147,50 @@ export const getListActions = <
 		update,
 	} = getListService<TList, TListItem>(listUrl, listItemName);
 
-	const setList = (list: TList): ThunkType => async (dispatch) => {
-		dispatch(actions.finishLoadList(list, listItemName));
-	};
-
-	const updateList = (list: TList): ThunkType => async (dispatch) => {
-		await update(list);
-		dispatch(actions.updateList(list, listItemName));
-	};
-
-	const addOrUpdateListItem = (listItem: TListItem): ThunkType => async (
+	const setList = (list: TList, listName: string): ThunkType => async (
 		dispatch
 	) => {
+		dispatch(actions.finishLoadList(list, listName));
+	};
+
+	const updateList = (list: TList, listName: string): ThunkType => async (
+		dispatch
+	) => {
+		await update(list);
+		dispatch(actions.updateList(list, listName));
+	};
+
+	const addOrUpdateListItem = (
+		listItem: TListItem,
+		listName: string
+	): ThunkType => async (dispatch) => {
 		if (!listItem) return;
 
 		if (listItem.id === 0) {
 			await addItem(listItem).then((listItemID) =>
-				dispatch(
-					actions.addListItem({ ...listItem, id: listItemID }, listItemName)
-				)
+				dispatch(actions.addListItem({ ...listItem, id: listItemID }, listName))
 			);
 		} else {
 			await updateItem(listItem).then((_) =>
-				dispatch(actions.updateListItem(listItem, listItemName))
+				dispatch(actions.updateListItem(listItem, listName))
 			);
 		}
 	};
 
-	const deleteListItem = (listItemID: number): ThunkType => async (
-		dispatch
-	) => {
+	const deleteListItem = (
+		listItemID: number,
+		listName: string
+	): ThunkType => async (dispatch) => {
 		if (listItemID === 0) return;
 		await deleteItem(listItemID);
-		dispatch(actions.deleteListItem(listItemID, listItemName));
+		dispatch(actions.deleteListItem(listItemID, listName));
 	};
 
-	const removeList = (listID: number): ThunkType => async (dispatch) => {
+	const removeList = (listID: number, listName: string): ThunkType => async (
+		dispatch
+	) => {
 		await deleteList(listID);
-		dispatch(actions.deleteList(listID, listItemName));
+		dispatch(actions.deleteList(listID, listName));
 	};
 
 	return {

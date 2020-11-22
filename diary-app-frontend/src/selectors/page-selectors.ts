@@ -34,7 +34,6 @@ const getImportantThingsListSelector = (state: AppStateType) => {
 	return state.importantThingsList;
 };
 
-
 export const getImportantThingsList = createSelector(
 	getImportantThingsListSelector,
 	(importantThings) => {
@@ -42,13 +41,22 @@ export const getImportantThingsList = createSelector(
 	}
 );
 
-// const getImportantEventsAreaSelector = (state: AppStateType) => {
-// 	return state.importantEventsArea;
-// };
+export const getImportantEventsListSelector = (state: AppStateType) => {
+	return state.importantEventsList;
+};
 
-// export const getImportantEventsArea = createSelector(
-// 	getImportantEventsAreaSelector,
-// 	(importantEvents) => {
-// 		return importantEvents;
-// 	}
-// );
+export const getImportantEventsList = createSelector(
+	getImportantEventsListSelector,
+	(importantEvents) => {
+		return importantEvents;
+	}
+);
+
+const getImportantEventsAreaSelector = (state: AppStateType) => {
+	return state.importantEventsArea;
+};
+
+export const getImportantEventsArea = createSelector(
+	getImportantEventsAreaSelector,
+	(importantEvents) => importantEvents
+);

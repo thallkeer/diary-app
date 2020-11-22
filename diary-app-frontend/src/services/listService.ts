@@ -10,6 +10,8 @@ export function getListService<T extends IList<TItem>, TItem extends IListItem>(
 	}
 
 	async function addItem(item: TItem): Promise<number> {
+		console.log("add item ", item);
+
 		return await axios
 			.post(apiUrl + "add" + itemName, item)
 			.then((res) => res.data);

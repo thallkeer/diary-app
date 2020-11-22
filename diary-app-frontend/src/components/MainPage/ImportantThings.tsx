@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col } from "react-bootstrap";
-import { loadImportantThingsArea } from "../../context/reducers/pageArea/importantThingsArea-reducer";
 import {
-	getImportantThingsArea,
+	IMPORTANT_THINGS_LIST,
+	loadImportantThingsArea,
+} from "../../context/reducers/pageArea/importantThingsArea-reducer";
+import {
 	getImportantThingsList,
 	getMainPage,
 } from "../../selectors/page-selectors";
@@ -15,7 +17,6 @@ import { todoActions } from "../../context/reducers/list/todos";
 const ImportantThingsArea: React.FC = () => {
 	const dispatch = useDispatch();
 	const mainPage = useSelector(getMainPage);
-	const { area } = useSelector(getImportantThingsArea);
 	const { isLoading, list } = useSelector(getImportantThingsList);
 
 	useEffect(() => {
@@ -27,26 +28,26 @@ const ImportantThingsArea: React.FC = () => {
 	if (isLoading || !mainPage || !list) return <Loader />;
 
 	const todoItemActions: ITodoItemActions = {
-		deleteTodo: (todoId) => dispatch(todoActions.deleteListItem(todoId)),
-		toggleTodo: (todoId) => dispatch(todoActions.toggleTodo(todoId)),
-		updateTodo: (todo) => dispatch(todoActions.addOrUpdateListItem(todo)),
+		deleteTodo: (todoId) =>
+			dispatch(todoActions.deleteListItem(todoId, IMPORTANT_THINGS_LIST)),
+		toggleTodo: (todoId) =>
+			dispatch(todoActions.toggleTodo(todoId, IMPORTANT_THINGS_LIST)),
+		updateTodo: (todo) =>
+			dispatch(todoActions.addOrUpdateListItem(todo, IMPORTANT_THINGS_LIST)),
 	};
 
 	return (
-		<>
-			<h1 className="area-header">{area?.header}</h1>
-			<Row>
-				<Col md={12}>
-					<TodoList
-						className="mt-10 no-list-header"
-						isDeletable={false}
-						readonlyTitle={true}
-						todoList={list}
-						todoItemActions={todoItemActions}
-					/>
-				</Col>
-			</Row>
-		</>
+		<Row>
+			<Col md={12}>
+				<TodoList
+					className="mt-10 no-list-header"
+					isDeletable={false}
+					readonlyTitle={true}
+					todoList={list}
+					todoItemActions={todoItemActions}
+				/>
+			</Col>
+		</Row>
 	);
 };
 

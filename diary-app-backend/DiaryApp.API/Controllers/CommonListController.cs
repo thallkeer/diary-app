@@ -28,13 +28,13 @@ namespace DiaryApp.API.Controllers
         }
 
         [HttpPost("addItem")]
-        public async Task<IActionResult> AddEvent([FromBody] ListItemModel eventModel)
+        public async Task<IActionResult> AddItem([FromBody] ListItemModel eventModel)
         {
             return await crudController.AddItem(eventModel);
         }
 
         [HttpPut("updateItem")]
-        public async Task<IActionResult> UpdateEvent([FromBody] ListItemModel eventModel)
+        public async Task<IActionResult> UpdateItem([FromBody] ListItemModel eventModel)
         {
             return await crudController.UpdateItem(eventModel);
         }
@@ -46,7 +46,7 @@ namespace DiaryApp.API.Controllers
         }
 
         [HttpDelete("deleteItem/{itemID}")]
-        public async Task DeleteEvent(int itemID)
+        public async Task DeleteItem(int itemID)
         {
             await crudController.DeleteItem(itemID);
         }

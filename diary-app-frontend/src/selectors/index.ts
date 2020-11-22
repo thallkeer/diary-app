@@ -13,6 +13,8 @@ import {
 import { AppState } from "../context/reducers/app-reducer";
 import { ITodoListState } from "../context/reducers/list/todos";
 import { AppStateType } from "../context/store";
+import { IEventListState } from "../context/reducers/list/events";
+import { getImportantEventsList } from "./page-selectors";
 
 // const getGoalsListsFromState = (state: IGoalsAreaState) =>
 // 	state.area ? state.area.goalsLists : [];
@@ -35,24 +37,29 @@ export const getSelectedPage = createSelector(
 	(s) => s
 );
 
-// const getEventsState = (state: IEventListState) =>
-// 	getListState<IEventListState, IEventList, IEvent>(state);
+const getEventsState = (state: IEventListState) =>
+	getListState<IEventListState, IEventList, IEvent>(state);
 
-// export const getEvents = createSelector([getEventsState], (s) => s);
+export const getEvents = createSelector([getEventsState], (s) => s);
 
-// export const getEventsByDay = createSelector([getEventsState], (s) => {
-// 	let eventsMap = new Map<number, IEvent[]>();
+export const getEventsByDay = createSelector(
+	[getImportantEventsList],
+	(importantEvents) => {
+		let eventsMap = new Map<number, IEvent[]>();
 
-// 	if (s && s.length) {
-// 		s.forEach((ev) => {
-// 			let day = ev.date.getDate();
-// 			if (!eventsMap.has(day)) eventsMap.set(day, []);
-// 			eventsMap.get(day).push(ev);
-// 		});
-// 	}
+		const events = importantEvents.list?.items ?? [];
 
-// 	return eventsMap;
-// });
+		if (events && events.length) {
+			events.forEach((ev) => {
+				let day = ev.date.getDate();
+				if (!eventsMap.has(day)) eventsMap.set(day, []);
+				eventsMap.get(day).push(ev);
+			});
+		}
+
+		return eventsMap;
+	}
+);
 
 const getTodosState = (state: ITodoListState) =>
 	getListState<ITodoListState, ITodoList, ITodo>(state);
@@ -64,15 +71,9 @@ function getListState<
 	TList extends IList<TItem>,
 	TItem extends IListItem
 >(state: T) {
-	return state && state.list ? state.list.items : [];
-}
+	console.log("returning state of list ", state.list);
 
-export function getListItems<
-	T extends IListState<TList, TItem>,
-	TList extends IList<TItem>,
-	TItem extends IListItem
->() {
-	const res = createSelector([getListState<T, TList, TItem>], s => s);
+	return state.list?.items ?? [];
 }
 
 export function createPropSelector<T>(key: keyof T) {
