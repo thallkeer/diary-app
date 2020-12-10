@@ -1,6 +1,4 @@
-﻿using DiaryApp.Core.Models.Lists;
-
-namespace DiaryApp.Core
+﻿namespace DiaryApp.Core.Models
 {
     public class ListItem : ListItemBase
     {

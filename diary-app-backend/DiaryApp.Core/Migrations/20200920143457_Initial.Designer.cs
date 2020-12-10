@@ -180,7 +180,7 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("EventLists");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.Lists.DesiresList", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.DesiresList", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -202,7 +202,7 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("DesiresLists");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.Lists.IdeasList", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.IdeasList", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -225,7 +225,7 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("IdeasLists");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.Lists.PurchasesList", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.PurchasesList", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -247,7 +247,7 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("PurchasesLists");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.Lists.WeekPlansList", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.WeekPlansList", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -626,7 +626,7 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.Lists.DesiresList", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.DesiresList", b =>
                 {
                     b.HasOne("DiaryApp.Core.Models.PageAreas.DesiresArea", "DesiresArea")
                         .WithMany("DesiresLists")
@@ -645,11 +645,11 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("List");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.Lists.IdeasList", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.IdeasList", b =>
                 {
                     b.HasOne("DiaryApp.Core.Models.PageAreas.IdeasArea", "IdeasArea")
                         .WithOne("IdeasList")
-                        .HasForeignKey("DiaryApp.Core.Models.Lists.IdeasList", "IdeasAreaID")
+                        .HasForeignKey("DiaryApp.Core.Models.IdeasList", "IdeasAreaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -664,7 +664,7 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("List");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.Lists.PurchasesList", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.PurchasesList", b =>
                 {
                     b.HasOne("DiaryApp.Core.Models.TodoList", "List")
                         .WithMany()
@@ -683,7 +683,7 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("PurchasesArea");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.Lists.WeekPlansList", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.WeekPlansList", b =>
                 {
                     b.HasOne("DiaryApp.Core.Models.TodoList", "List")
                         .WithMany()
@@ -693,7 +693,7 @@ namespace DiaryApp.Core.Migrations
 
                     b.HasOne("DiaryApp.Core.Models.PageAreas.WeekPlansArea", "WeekPlansArea")
                         .WithOne("WeekPlansList")
-                        .HasForeignKey("DiaryApp.Core.Models.Lists.WeekPlansList", "WeekPlansAreaID")
+                        .HasForeignKey("DiaryApp.Core.Models.WeekPlansList", "WeekPlansAreaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

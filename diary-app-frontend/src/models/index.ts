@@ -1,6 +1,4 @@
-import {
-	IStateWithLoading,
-} from "../context/reducers/utilities/loading-reducer";
+import { IStateWithLoading } from "../context/reducers/utilities/loading-reducer";
 
 export interface IList<T extends IListItem> {
 	id: number;
@@ -72,8 +70,7 @@ export interface IPageArea {
 	header: string;
 }
 
-export interface IPageAreaState extends IStateWithLoading {
-	area: IPageArea
+export interface IPageAreaState<T extends IPageArea> extends IStateWithLoading {
+	area: T;
 	pageAreaName: string;
 }
-

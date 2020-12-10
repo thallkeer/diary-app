@@ -6,7 +6,7 @@ import strelka from "../../images/right-arrow.png";
 import { useDispatch, useSelector } from "react-redux";
 import { getAppInfo } from "../../selectors/app-selectors";
 import { loadMonthPage } from "../../context/reducers/page/monthPage-reducer";
-// const PurchasesArea = lazy(() => import("./PurchasesArea"));
+const PurchasesArea = lazy(() => import("./PurchasesArea"));
 // const DesiresArea = lazy(() => import("./DesiresArea"));
 // const IdeasArea = lazy(() => import("./IdeasArea"));
 // const GoalsArea = lazy(() => import("./GoalsArea"));
@@ -22,30 +22,14 @@ const MonthPage: React.FC = () => {
 
 	return (
 		<Container fluid className="mt-20 second-page-container text-center">
-			<Link
-				className="month-name"
-				style={{
-					position: "absolute",
-					left: "0",
-					pointerEvents: "all",
-					cursor: "pointer",
-					zIndex: 10,
-				}}
-				to="/"
-			>
-				<img
-					src={strelka}
-					alt="return to calendar"
-					className="mirrored-arrow"
-					style={{ cursor: "pointer" }}
-					width="30"
-					height="30"
-				/>
-			</Link>
+			<ReturnToCalendarLink />
 			<Suspense fallback={<Loader />}>
 				<Row>
-					<Col md={6}>{/* <PurchasesArea />
-							<DesiresArea /> */}</Col>
+					<Col md={6}>
+						<PurchasesArea />
+						{/* 
+							<DesiresArea /> */}
+					</Col>
 					<Col md={6}>{/* <IdeasArea />
 							<GoalsArea /> */}</Col>
 				</Row>
@@ -53,5 +37,28 @@ const MonthPage: React.FC = () => {
 		</Container>
 	);
 };
+
+const ReturnToCalendarLink = () => (
+	<Link
+		className="month-name"
+		style={{
+			position: "absolute",
+			left: "0",
+			pointerEvents: "all",
+			cursor: "pointer",
+			zIndex: 10,
+		}}
+		to="/"
+	>
+		<img
+			src={strelka}
+			alt="return to calendar"
+			className="mirrored-arrow"
+			style={{ cursor: "pointer" }}
+			width="30"
+			height="30"
+		/>
+	</Link>
+);
 
 export default MonthPage;

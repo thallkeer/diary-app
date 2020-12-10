@@ -144,8 +144,8 @@ export const getListActions = <
 		deleteItem,
 		deleteList,
 		updateItem,
-		update,
-	} = getListService<TList, TListItem>(listUrl, listItemName);
+		updateList,
+	} = getListService<TList, TListItem>(listUrl);
 
 	const setList = (list: TList, listName: string): ThunkType => async (
 		dispatch
@@ -153,10 +153,10 @@ export const getListActions = <
 		dispatch(actions.finishLoadList(list, listName));
 	};
 
-	const updateList = (list: TList, listName: string): ThunkType => async (
+	const updateListAction = (list: TList, listName: string): ThunkType => async (
 		dispatch
 	) => {
-		await update(list);
+		await updateList(list);
 		dispatch(actions.updateList(list, listName));
 	};
 
@@ -186,9 +186,10 @@ export const getListActions = <
 		dispatch(actions.deleteListItem(listItemID, listName));
 	};
 
-	const removeList = (listID: number, listName: string): ThunkType => async (
-		dispatch
-	) => {
+	const deleteListAction = (
+		listID: number,
+		listName: string
+	): ThunkType => async (dispatch) => {
 		await deleteList(listID);
 		dispatch(actions.deleteList(listID, listName));
 	};
@@ -198,7 +199,7 @@ export const getListActions = <
 		updateList,
 		addOrUpdateListItem,
 		deleteListItem,
-		removeList,
+		removeList: deleteListAction,
 	};
 };
 

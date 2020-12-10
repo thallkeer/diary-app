@@ -13,17 +13,19 @@ import {
 } from "../../context/reducers/pageArea/importantEventsArea-reducer";
 import { IEventItemActions } from "../Lists/Controls/EventInput";
 import { eventsActions } from "../../context/reducers/list/events";
+import { getAppInfo } from "../../selectors/app-selectors";
 
 const ImportantEventsArea: React.FC = () => {
 	const dispatch = useDispatch();
 	const mainPage = useSelector(getMainPage);
+	const { user, year, month } = useSelector(getAppInfo);
 	const { isLoading, list } = useSelector(getImportantEventsList);
 
 	useEffect(() => {
-		if (mainPage && !list) {
+		if (mainPage) {
 			dispatch(loadImportantEventsArea(mainPage.id));
 		}
-	}, [mainPage, list]);
+	}, [mainPage, user, year, month]);
 
 	if (isLoading || !mainPage || !list) return <Loader />;
 

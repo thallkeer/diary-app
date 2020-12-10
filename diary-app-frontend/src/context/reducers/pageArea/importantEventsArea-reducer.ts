@@ -1,3 +1,4 @@
+import { combineReducers } from "redux";
 import { IEventList, IPageArea, IPageAreaState } from "../../../models";
 import { ActionsUnion } from "../../actions/action-helpers";
 import { BaseThunkType } from "../../store";
@@ -8,7 +9,12 @@ import {
 	loadPageArea,
 } from "./pageArea-reducer";
 
-export interface IImportantEventsAreaState extends IPageAreaState {}
+interface IImportantEventsArea extends IPageArea {
+	importantEvents: IEventList;
+}
+
+export interface IImportantEventsAreaState
+	extends IPageAreaState<IImportantEventsArea> {}
 
 const initialState: IImportantEventsAreaState = {
 	area: null,
@@ -16,22 +22,17 @@ const initialState: IImportantEventsAreaState = {
 	...INITIAL_LOADABLE_STATE,
 };
 
-export const importantEventsAreaReducer = createNamedWrapperPageAreaReducer(
-	initialState,
-	initialState.pageAreaName
-);
-
 export const IMPORTANT_EVENTS_LIST = "importantEventsList";
 
-export const importantEventsListReducer = createEventListReducer(
-	IMPORTANT_EVENTS_LIST
-);
+export const importantEventsAreaReducer = combineReducers({
+	area: createNamedWrapperPageAreaReducer(
+		initialState,
+		initialState.pageAreaName
+	),
+	importantEventsList: createEventListReducer(IMPORTANT_EVENTS_LIST),
+});
 
 const actions = {};
-
-interface IImportantEventsArea extends IPageArea {
-	importantEvents: IEventList;
-}
 
 export const loadImportantEventsArea = (pageID: number): ThunkType => async (
 	dispatch

@@ -6,6 +6,11 @@ namespace DiaryApp.API.Extensions.ConfigureServices
 {
     public static class AuthenticationExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="key"></param>
         public static void ConfigureJwtAuthentication(this IServiceCollection services, byte[] key)
         {
             services.AddAuthentication(x =>

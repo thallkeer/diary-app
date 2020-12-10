@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using DiaryApp.API.Models;
-using DiaryApp.Core;
-using DiaryApp.Core.Models.PageAreas;
+using DiaryApp.Core.DTO;
+using DiaryApp.Core.Interfaces;
+using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,15 +11,16 @@ using System.Threading.Tasks;
 
 namespace DiaryApp.API.Controllers
 {
-    public class PageController<TPage> : AppBaseController<PageController<TPage>>
-        where TPage : PageBase
+    public class PageController<TPageDto, TService> : AppBaseController<PageController<TPageDto, TService>>        
+        where TPageDto : PageDto
+        where TService : IPageService<TPageDto>
     {    
-        private readonly IPageService<TPage> pageService;
+        protected readonly TService pageService;
 
-        public PageController(IPageService<TPage> monthPageService, IMapper mapper, ILoggerFactory loggerFactory)
+        public PageController(TService pageService, IMapper mapper, ILoggerFactory loggerFactory)
             : base(mapper, loggerFactory)
         {
-            this.pageService = monthPageService;
+            this.pageService = pageService;
         }
 
         protected virtual async Task<IActionResult> GetPage(int userId, int year, int month)
@@ -45,7 +47,7 @@ namespace DiaryApp.API.Controllers
         {
             try
             {
-                TPage page = await pageService.CreatePageByParams(pageParams.UserId, pageParams.Year, pageParams.Month);
+                TPageDto page = await pageService.CreatePageByParams(pageParams.UserId, pageParams.Year, pageParams.Month);
 
                 PageModel model = mapper.Map<PageModel>(page);
                 return Ok(model);
@@ -57,22 +59,20 @@ namespace DiaryApp.API.Controllers
             }
         }
 
-        protected async Task<IActionResult> GetPageArea<TEntity, TDto>(int pageID)
-            where TEntity : PageAreaBase<TPage>
-            where TDto : PageAreaModel
+        protected async Task<IActionResult> GetPageArea<TPageArea, TPageAreaDto>(int pageID)
+            where TPageArea : class, IPageArea
+            where TPageAreaDto : PageAreaDto
         {
-            TEntity area;
             try
             {
-                area = await pageService.GetPageArea<TEntity>(pageID);
+                var area = await pageService.GetPageArea<TPageAreaDto, TPageArea>(pageID);
                 if (area == null)
                 {
-                    string err = $"Page area {typeof(TEntity).FullName} not found for pageID {pageID}";
+                    string err = $"Page area {typeof(TPageArea).FullName} not found for pageID {pageID}";
                     logger.LogError(err);
                     return NotFound(err);
                 }
-                var model = mapper.Map<TDto>(area);
-                return Ok(model);
+                return Ok(area);
             }
             catch (Exception ex)
             {

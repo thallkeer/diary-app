@@ -13,17 +13,19 @@ import Loader from "../Loader";
 import { TodoList } from "../Lists/TodoList/TodoList";
 import { ITodoItemActions } from "../Lists/Controls/TodoInput";
 import { todoActions } from "../../context/reducers/list/todos";
+import { getAppInfo } from "../../selectors/app-selectors";
 
 const ImportantThingsArea: React.FC = () => {
 	const dispatch = useDispatch();
 	const mainPage = useSelector(getMainPage);
+	const { user, year, month } = useSelector(getAppInfo);
 	const { isLoading, list } = useSelector(getImportantThingsList);
 
 	useEffect(() => {
-		if (mainPage && !list) {
+		if (mainPage) {
 			dispatch(loadImportantThingsArea(mainPage.id));
 		}
-	}, [mainPage, list]);
+	}, [mainPage, user, year, month]);
 
 	if (isLoading || !mainPage || !list) return <Loader />;
 

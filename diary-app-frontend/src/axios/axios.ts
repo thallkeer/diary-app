@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { config } from "../utils/config";
-import { logoff } from "../services/users";
+import { usersService } from "../services/users";
 const { baseApi, headers } = config;
 
 const axiosInstance = axios.create({
@@ -9,14 +9,11 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.response.use(
-	(response) => {
-		//console.log("response in interceptor", response);
-		return response;
-	},
+	(response) => response,
 	(error: AxiosError) => {
-		console.log("error in interceptor", error.toJSON());
+		console.error("error in interceptor", error);
 
-		if (error.response && error.response.status === 401) logoff();
+		if (error.response?.status === 401) usersService.logoff();
 
 		return error;
 	}

@@ -3,7 +3,7 @@ import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../context/reducers/app-reducer";
 import { getAppInfo } from "../../selectors/app-selectors";
-import { logoff } from "../../services/users";
+import { usersService } from "../../services/users";
 import { TransferDataForm } from "../Dialogs/TransferDataForm";
 
 export const AppNavbar: React.FC<{ isOnMonthPage: boolean }> = ({
@@ -17,7 +17,7 @@ export const AppNavbar: React.FC<{ isOnMonthPage: boolean }> = ({
 
 	const onLogoff = () => {
 		dispatch(setUser(null));
-		logoff();
+		usersService.logoff();
 	};
 
 	return (

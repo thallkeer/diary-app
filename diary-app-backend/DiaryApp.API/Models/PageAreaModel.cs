@@ -21,7 +21,7 @@ namespace DiaryApp.API.Models
 
     public class PurchasesAreaModel : PageAreaModel
     {
-        public List<TodoListModel> PurchasesLists { get; set; } = new List<TodoListModel>();
+        public List<PurchasesListModel> PurchasesLists { get; set; } = new List<PurchasesListModel>();
     }
 
     public class DesiresAreaModel : PageAreaModel

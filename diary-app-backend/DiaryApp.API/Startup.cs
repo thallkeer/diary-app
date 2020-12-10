@@ -14,6 +14,10 @@ using System.Text;
 using DiaryApp.API.Extensions;
 using System.Threading.Tasks;
 using DiaryApp.API.Extensions.ConfigureServices;
+using DiaryApp.API.Controllers;
+using DiaryApp.Core.DTO;
+using DiaryApp.Data.ServiceInterfaces;
+using DiaryApp.Core.Models;
 
 namespace DiaryApp.API
 {

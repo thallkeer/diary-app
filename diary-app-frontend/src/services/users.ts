@@ -6,20 +6,26 @@ import axios from "axios";
 const { baseApi } = config;
 
 interface ILoginResponse {
-  id: number;
-  username: string;
-  token: string;
+	id: number;
+	username: string;
+	token: string;
 }
 
-export const logoff = () => {
-  localStorage.removeItem("user");
-  history.push("/login");
-};
+export const usersService = {
+	logoff() {
+		localStorage.removeItem("user");
+		history.push("/login");
+	},
 
-export const login = (user: IUser) => {
-  return axios.post<ILoginResponse>(`${baseApi}users/authenticate`, user);
-};
+	login(user: IUser) {
+		return axios
+			.post<ILoginResponse>(`${baseApi}users/authenticate`, user)
+			.then((res) => res.data);
+	},
 
-export const register = (user: IUser) => {
-  return axios.post<ILoginResponse>(`${baseApi}users/register`, user);
+	register(user: IUser) {
+		return axios
+			.post<ILoginResponse>(`${baseApi}users/register`, user)
+			.then((res) => res.data);
+	},
 };

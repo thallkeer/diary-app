@@ -1,6 +1,7 @@
 import { IPageAreaState, IPageArea } from "../../../models";
+import { createNamedWrapperReducer } from "../../../utils";
 import { ActionsUnion, createNamedAction } from "../../actions/action-helpers";
-import { BaseThunkType, createNamedWrapperReducer } from "../../store";
+import { BaseThunkType } from "../../store";
 import { pageAPI } from "../page/page-reducer";
 import withLoadingStates from "../utilities/loading-reducer";
 
@@ -8,10 +9,10 @@ const LOAD_PAGE_AREA_START = "PAGE_AREA/LOAD_PAGE_AREA_START";
 const LOAD_PAGE_AREA_SUCCESS = "PAGE_AREA/LOAD_PAGE_AREA_SUCCESS";
 const LOAD_PAGE_AREA_ERROR = "PAGE_AREA/LOAD_PAGE_AREA_ERROR";
 
-export function createNamedWrapperPageAreaReducer<T extends IPageAreaState>(
-	initialState: T,
-	reducerName: string
-) {
+export function createNamedWrapperPageAreaReducer<
+	TState extends IPageAreaState<TArea>,
+	TArea extends IPageArea
+>(initialState: TState, reducerName: string) {
 	return createNamedWrapperReducer(
 		wrappedReducer,
 		initialState,
@@ -28,7 +29,7 @@ export const wrappedReducer = withLoadingStates({
 
 export function pageAreaReducer<
 	T extends IPageArea,
-	U extends IPageAreaState
+	U extends IPageAreaState<T>
 >(state: U, action: PageAreaActions): U {
 	switch (action.type) {
 		case LOAD_PAGE_AREA_SUCCESS:
@@ -38,6 +39,18 @@ export function pageAreaReducer<
 			return state;
 	}
 }
+
+export const getPageAreaActions = <T extends IPageArea>() => {
+	const actions = {
+		loadPageAreaStart: (areaName: string) =>
+			createNamedAction(LOAD_PAGE_AREA_START, areaName, undefined),
+		loadPageAreaSuccess: (area: T, areaName: string) =>
+			createNamedAction(LOAD_PAGE_AREA_SUCCESS, areaName, area),
+		loadPageAreaError: (area: T, areaName: string) =>
+			createNamedAction(LOAD_PAGE_AREA_ERROR, areaName, area),
+	};
+	return actions;
+};
 
 const actions = {
 	loadPageAreaStart: (areaName: string) =>
@@ -49,7 +62,7 @@ const actions = {
 };
 
 /**
- * 
+ *
  * @param areaName Название зоны страницы
  * @param pageName Название страницы
  * @param pageId Идентификатор страницы
@@ -61,6 +74,7 @@ export const loadPageArea = <TArea extends IPageArea>(
 	pageId: number,
 	onAreaLoaded: (pageArea: TArea) => void
 ): PageAreaThunkType => async (dispatch) => {
+	const actions = getPageAreaActions<TArea>();
 	dispatch(actions.loadPageAreaStart(areaName));
 	const response = await pageAPI.getPageArea<TArea>(areaName, pageName, pageId);
 	dispatch(actions.loadPageAreaSuccess(response, areaName));

@@ -1,8 +1,9 @@
 import { ActionsUnion, createNamedAction } from "../../actions/action-helpers";
 import { IPage, IPageArea, IPageState, IUser } from "../../../models";
 import axios from "../../../axios/axios";
-import { BaseThunkType, createNamedWrapperReducer } from "../../store";
+import { BaseThunkType } from "../../store";
 import withLoadingStates from "../utilities/loading-reducer";
+import { createNamedWrapperReducer } from "../../../utils";
 
 export const LOAD_PAGE_START = "PAGE/LOAD_PAGE_START";
 export const LOAD_PAGE_SUCCESS = "PAGE/LOAD_PAGE_SUCCESS";

@@ -1,25 +1,23 @@
 ﻿using System.Threading.Tasks;
-using DiaryApp.Core;
 using Microsoft.AspNetCore.Mvc;
 using DiaryApp.API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using DiaryApp.Core.Models.PageAreas;
+using DiaryApp.Data.ServiceInterfaces;
+using DiaryApp.Core.DTO;
 
 namespace DiaryApp.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class MainPageController : PageController<MainPage>
+    public class MainPageController : PageController<MainPageDto, IMainPageService>
     {
-        private readonly IMainPageService mainPageService;
-
         public MainPageController(IMainPageService mainPageService, IMapper mapper, ILoggerFactory loggerFactory)
-            : base(mainPageService,mapper, loggerFactory)
+            : base(mainPageService, mapper, loggerFactory)
         {
-            this.mainPageService = mainPageService;
         }
 
         [HttpGet("{userId}/{year}/{month}")]
@@ -28,7 +26,7 @@ namespace DiaryApp.API.Controllers
             return await GetPage(userId, year, month);
         }
 
-        [HttpPost("createNew")]
+        [HttpPost]
         public override async Task<IActionResult> CreateNewPage(PageParams pageParams)
         {
             return await base.CreateNewPage(pageParams);
@@ -37,14 +35,14 @@ namespace DiaryApp.API.Controllers
         [HttpGet("importantThingsArea/{pageID}")]
         public async Task<IActionResult> GetImportantThingsArea(int pageID)
         {
-            var model = await GetPageArea<ImportantThingsArea, ImportantThingsAreaModel>(pageID);
+            var model = await GetPageArea<ImportantThingsArea, ImportantThingsAreaDto>(pageID);
             return model;
         }
 
         [HttpGet("importantEventsArea/{pageID}")]
         public async Task<IActionResult> GetImportantEventsArea(int pageID)
         {
-            return await GetPageArea<ImportantEventsArea, ImportantEventsAreaModel>(pageID);
+            return await GetPageArea<ImportantEventsArea, ImportantEventsAreaDto>(pageID);
         }
     }
 }

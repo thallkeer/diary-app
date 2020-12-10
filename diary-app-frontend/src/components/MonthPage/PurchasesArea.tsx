@@ -1,86 +1,125 @@
-import React, { useContext } from "react";
-// import { ITodoList } from "../../models";
-// import { Row, Col } from "react-bootstrap";
-// import { AddListBtn } from "../AddListBtn";
-// import { purchasesAreaContext, PurchasesAreaState } from "./PurchasesAreaState";
-// import Loader from "../Loader";
-// import { store } from "../../context/store";
-// import PurchaseList from "./PurchaseList";
-// import { addPurchasesList } from "../../context/actions/purchasesArea-actions";
-// import { getSelectedPage } from "../../selectors";
+import React, { useContext, useEffect } from "react";
+import { ITodo, ITodoList } from "../../models";
+import { Row, Col } from "react-bootstrap";
+import { AddListBtn } from "../AddListBtn";
+import Loader from "../Loader";
+import { getSelectedPage } from "../../selectors";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	getMainPage,
+	getMonthPage,
+	getPurchasesArea,
+} from "../../selectors/page-selectors";
+import {
+	addPurchasesList,
+	loadPurchasesArea,
+	PURCHASES_LIST,
+} from "../../context/reducers/pageArea/purchasesArea-reducer";
+import { getAppInfo } from "../../selectors/app-selectors";
+import { TodoList } from "../Lists/TodoList/TodoList";
+import { todoActions } from "../../context/reducers/list/todos";
 
-// type ListPair = {
-// 	list1: ITodoList;
-// 	list2: ITodoList;
-// };
+type ListPair = {
+	list1: ITodoList;
+	list2: ITodoList;
+};
 
-// const PurchasesAreaLists = () => {
-// 	const { purchasesAreaState, dispatch } = useContext(purchasesAreaContext);
-// 	const { area, loading } = purchasesAreaState;
-// 	const app = useContext(store).state;
+const PurchasesArea = () => {
+	const dispatch = useDispatch();
+	const monthPage = useSelector(getMonthPage);
+	const app = useSelector(getAppInfo);
+	const { user, year, month } = app;
+	const { area, isLoading } = useSelector(getPurchasesArea);
+	const selectedPage = useSelector(getSelectedPage);
 
-// 	if (!area || loading) return <Loader />;
+	useEffect(() => {
+		console.log("purchases area effect", selectedPage);
 
-// 	const getRow = (pair: ListPair) => {
-// 		return (
-// 			<Row key={pair.list1.id}>
-// 				{<PurchaseList todoList={pair.list1} />}
-// 				{pair.list2 && <PurchaseList todoList={pair.list2} />}
-// 			</Row>
-// 		);
-// 	};
+		if (monthPage) {
+			console.log("load purchases area");
+			dispatch(loadPurchasesArea(monthPage.id));
+		}
+	}, [monthPage, user, year, month]);
 
-// 	const renderLists = (todoLists: ITodoList[]) => {
-// 		const rows = [];
+	if (isLoading || !monthPage || !area) return <Loader />;
 
-// 		if (todoLists.length === 2) {
-// 			rows.push(getRow({ list1: todoLists[0], list2: todoLists[1] }));
-// 		} else {
-// 			for (let i = 0; i < todoLists.length - 1; i += 2) {
-// 				rows.push(getRow({ list1: todoLists[i], list2: todoLists[i + 1] }));
-// 			}
+	const getTodoItemActions = (listId: number) => {
+		const listName = `${PURCHASES_LIST}_${listId}`;
 
-// 			if (todoLists.length % 2 !== 0) {
-// 				rows.push(
-// 					getRow({ list1: todoLists[todoLists.length - 1], list2: null })
-// 				);
-// 			}
-// 		}
+		return {
+			deleteTodo: (todoId: number) =>
+				dispatch(todoActions.deleteListItem(todoId, listName)),
+			toggleTodo: (todoId: number) =>
+				dispatch(todoActions.toggleTodo(todoId, listName)),
+			updateTodo: (todo: ITodo) =>
+				dispatch(todoActions.addOrUpdateListItem(todo, listName)),
+		};
+	};
 
-// 		return rows;
-// 	};
+	const getRow = (pair: ListPair) => {
+		return (
+			<Row key={pair.list1.id}>
+				<TodoList
+					className="mt-20 month-lists-header"
+					isDeletable={true}
+					readonlyTitle={false}
+					todoItemActions={getTodoItemActions(pair.list1.id)}
+					todoList={pair.list1}
+				/>
 
-// 	const addList = () => {
-// 		const selectedPage = getSelectedPage(app);
-// 		const todoList: ITodoList = {
-// 			id: 0,
-// 			items: [],
-// 			pageID: selectedPage.id,
-// 			title: "Список покупок",
-// 			purchasesAreaId: area.id,
-// 		};
-// 		addPurchasesList(todoList, dispatch);
-// 	};
+				{pair.list2 && (
+					<TodoList
+						className="mt-20 month-lists-header"
+						isDeletable={true}
+						readonlyTitle={false}
+						todoItemActions={getTodoItemActions(pair.list2.id)}
+						todoList={pair.list2}
+					/>
+				)}
+			</Row>
+		);
+	};
 
-// 	if (loading) return <Loader />;
+	const renderLists = (todoLists: ITodoList[]) => {
+		const rows = [];
 
-// 	return (
-// 		<>
-// 			<h1 className="area-header">{area.header}</h1>
-// 			{renderLists(area.purchasesLists)}
-// 			<Row>
-// 				<AddListBtn onClick={addList} />
-// 			</Row>
-// 		</>
-// 	);
-// };
+		if (todoLists.length === 2) {
+			rows.push(getRow({ list1: todoLists[0], list2: todoLists[1] }));
+		} else {
+			for (let i = 0; i < todoLists.length - 1; i += 2) {
+				rows.push(getRow({ list1: todoLists[i], list2: todoLists[i + 1] }));
+			}
 
-// const PurchasesArea = () => {
-// 	return (
-// 		<PurchasesAreaState>
-// 			<PurchasesAreaLists />
-// 		</PurchasesAreaState>
-// 	);
-// };
+			if (todoLists.length % 2 !== 0) {
+				rows.push(
+					getRow({ list1: todoLists[todoLists.length - 1], list2: null })
+				);
+			}
+		}
 
-// export default PurchasesArea;
+		return rows;
+	};
+
+	const addList = () => {
+		//TODO: добавить идентификатор зоны, раньше он сюда передавался
+		const todoList: ITodoList = {
+			id: 0,
+			items: [],
+			pageID: selectedPage.id,
+			title: "Список покупок",
+		};
+		dispatch(addPurchasesList(todoList));
+	};
+
+	return (
+		<>
+			<h1 className="area-header">{area.header}</h1>
+			{renderLists(area.purchasesLists)}
+			<Row>
+				<AddListBtn onClick={addList} />
+			</Row>
+		</>
+	);
+};
+
+export default PurchasesArea;

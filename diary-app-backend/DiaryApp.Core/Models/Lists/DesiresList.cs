@@ -1,13 +1,13 @@
-﻿using DiaryApp.Core.Models.PageAreas;
+﻿using DiaryApp.Core.Interfaces;
+using DiaryApp.Core.Models.PageAreas;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DiaryApp.Core.Models.Lists
+namespace DiaryApp.Core.Models
 {
-    public class DesiresList : ICommonListWrapper
+    public class DesiresList : BaseEntity, ICommonListWrapper
     {
-        public int ID { get; set; }
         [Required]
         public int ListID { get; set; }
         public virtual CommonList List { get; set; }

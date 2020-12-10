@@ -1,39 +1,39 @@
 import axios from "../axios/axios";
 import { IList, IListItem } from "../models";
 
-export function getListService<T extends IList<TItem>, TItem extends IListItem>(
-	apiUrl: string,
-	itemName: string
-) {
-	async function update(list: T) {
-		await axios.put(apiUrl, list);
-	}
+export const getListService = <T extends IList<TItem>, TItem extends IListItem>(
+	apiUrl: string
+) => {
+	const createList = (list: T) => {
+		return axios.post<number>(apiUrl, list).then((res) => res.data);
+	};
 
-	async function addItem(item: TItem): Promise<number> {
-		console.log("add item ", item);
+	const updateList = (list: T) => {
+		return axios.put(apiUrl, list).then((res) => res.data);
+	};
 
-		return await axios
-			.post(apiUrl + "add" + itemName, item)
-			.then((res) => res.data);
-	}
+	const addItem = (item: TItem) => {
+		return axios.post<number>(`${apiUrl}items`, item).then((res) => res.data);
+	};
 
-	async function updateItem(item: TItem) {
-		await axios.put(apiUrl + "update" + itemName, item);
-	}
+	const updateItem = (item: TItem) => {
+		return axios.put(`${apiUrl}items`, item).then((res) => res.data);
+	};
 
-	async function deleteItem(itemID: number) {
-		await axios.delete(`${apiUrl}delete${itemName}/${itemID}`);
-	}
+	const deleteItem = (itemID: number) => {
+		return axios.delete(`${apiUrl}items/${itemID}`).then((res) => res.data);
+	};
 
-	async function deleteList(listID: number) {
-		await axios.delete(apiUrl + listID);
-	}
+	const deleteList = (listID: number) => {
+		return axios.delete(apiUrl + listID).then((res) => res.data);
+	};
 
 	return {
-		update,
+		createList,
+		updateList,
 		deleteList,
 		addItem,
 		updateItem,
 		deleteItem,
 	};
-}
+};

@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DiaryApp.Core.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core
 {
-    public class AppUser
+    public class AppUser : BaseEntity
     {
-        [ScaffoldColumn(false)]
-        public int ID { get; set; }
         [Required]
         [MaxLength(50)]
         public string Username { get; set; }
@@ -17,7 +16,7 @@ namespace DiaryApp.Core
 
         public override string ToString()
         {
-            return $"{ID} {Username}";
+            return $"{Id} {Username}";
         }
     }
 }

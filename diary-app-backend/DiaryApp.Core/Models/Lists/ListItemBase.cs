@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DiaryApp.Core
+namespace DiaryApp.Core.Models
 {
-    public abstract class ListItemBase
-    {
-        [ScaffoldColumn(false)]
-        public int ID { get; set; }
+    public abstract class ListItemBase : BaseEntity
+    {   
         public string Url { get; set; }
         [MaxLength(200)]
         public string Subject { get; set; } = string.Empty;

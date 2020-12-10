@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using DiaryApp.API.Models;
-using DiaryApp.Core;
+using DiaryApp.API.Models.Users;
+using DiaryApp.Core.DTO;
+using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -31,11 +33,11 @@ namespace DiaryApp.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]UserModel userDto)
+        public IActionResult Authenticate([FromBody]UserWithPasswordModel userDto)
         {
             try
             {
-                AppUser user = userService.Authenticate(userDto.Username, userDto.Password);
+                UserDto user = userService.Authenticate(userDto.Username, userDto.Password);
                 if (user == null)
                 {
                     logger.LogErrorWithDate("Username or password is incorrect");
@@ -50,7 +52,7 @@ namespace DiaryApp.API.Controllers
             }
         }
 
-        private IActionResult SendToken(AppUser user)
+        private IActionResult SendToken(UserDto user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
@@ -58,36 +60,37 @@ namespace DiaryApp.API.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.ID.ToString())
+                    new Claim(ClaimTypes.Name, user.Id.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
-            return Ok(new
+            var userWithToken = new UserAuthModel
             {
-                user.ID,
-                user.Username,
+                ID = user.Id,
+                Username = user.Username,
                 Token = tokenString
-            });
+            };
+            return Ok(userWithToken);
         }
 
         [HttpGet("all")]
         public IActionResult GetAll()
         {
-            var users = userService.GetAll();
+            var users = userService.GetAllAsync();
             return Ok(users);
         }
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody]UserModel userDto)
+        public async Task<IActionResult> Register([FromBody] UserWithPasswordModel userWithPasswordModel)
         {
             try
             {
-                var user = mapper.Map<AppUser>(userDto);
-                await userService.Create(user, userDto.Password);
+                var user = mapper.Map<UserDto>(userWithPasswordModel);
+                await userService.CreateAsync(user, userWithPasswordModel.Password);
                 return SendToken(user);
             }
             catch (Exception ex)

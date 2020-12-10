@@ -22,14 +22,14 @@ namespace DiaryApp.Core.Models.PageAreas
 
     }
 
-    public abstract class PageAreaBase<TPage> where TPage : PageBase
+    public abstract class PageAreaBase<TPage> : BaseEntity, IPageArea
+        where TPage : PageBase
     {
-        public int ID { get; set; }
         [Required]
         [MaxLength(100)]
         public string Header { get; set; } = string.Empty;
         [Required]
-        public int PageID { get; set; }
+        public int PageId { get; set; }
         public virtual TPage Page { get; set; }
 
         public PageAreaBase()

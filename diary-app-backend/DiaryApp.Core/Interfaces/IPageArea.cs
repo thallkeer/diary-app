@@ -12,7 +12,12 @@ namespace DiaryApp.Core.Interfaces
         Notes
     }
 
-    public interface IPageArea<T,TPage>
+    public interface IPageArea
+    {
+        int PageId { get; set; }
+    }
+
+    public interface IPageArea<T,TPage> : IPageArea
         where T : PageAreaBase<TPage>
         where TPage : PageBase
     {

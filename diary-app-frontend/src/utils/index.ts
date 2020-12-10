@@ -83,3 +83,33 @@ const getListItems = <
 >(
 	state: TState
 ) => state.list?.items ?? [];
+
+export function createNamedWrapperReducer<TState, TAction>(
+	reducer: (state: TState, action: TAction) => TState,
+	initialState: TState,
+	reducerName: string,
+	actionNameSelector: (action: TAction) => string
+) {
+	return (state = initialState, action: TAction) => {
+		const subjectName = actionNameSelector(action);
+		const isInitializationCall = state === undefined;
+		// console.log(
+		// 	"calling reducer ",
+		// 	reducerName,
+		// 	"with subject ",
+		// 	subjectName,
+		// 	"action ",
+		// 	action,
+		// 	"state ",
+		// 	state,
+		// 	"reducer func ",
+		// 	reducer
+		// );
+
+		if (reducerName !== subjectName && !isInitializationCall) {
+			return state;
+		}
+
+		return reducer(state, action);
+	};
+}

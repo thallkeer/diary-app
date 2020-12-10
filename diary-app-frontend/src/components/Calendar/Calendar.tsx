@@ -37,8 +37,6 @@ export const Calendar: React.FC = () => {
 	const { list } = useSelector(getImportantEventsList);
 	const eventsByDay: Map<number, IEvent[]> = useSelector(getEventsByDay);
 
-	//
-
 	const getDaysInMonth = (): number => {
 		let curDate = currentDate();
 		let newDate = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0);

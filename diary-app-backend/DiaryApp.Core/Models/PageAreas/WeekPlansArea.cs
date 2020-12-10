@@ -1,5 +1,4 @@
 ﻿using DiaryApp.Core.Interfaces;
-using DiaryApp.Core.Models.Lists;
 using DiaryApp.Core.Models.Pages;
 using System;
 using System.Collections.Generic;

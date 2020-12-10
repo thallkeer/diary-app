@@ -1,5 +1,5 @@
-﻿using DiaryApp.Core.Interfaces;
-using DiaryApp.Core.Models.Lists;
+﻿using DiaryApp.Core.Extensions;
+using DiaryApp.Core.Interfaces;
 
 namespace DiaryApp.Core.Models.PageAreas
 {

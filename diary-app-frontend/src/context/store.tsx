@@ -12,54 +12,18 @@ import { createBrowserHistory } from "history";
 import { routerMiddleware as createRouterMiddleware } from "connected-react-router";
 import { mainPageReducer } from "./reducers/page/mainPage-reducer";
 import { monthPageReducer } from "./reducers/page/monthPage-reducer";
-import {
-	importantThingsAreaReducer,
-	importantThingsListReducer,
-} from "./reducers/pageArea/importantThingsArea-reducer";
-import {
-	importantEventsAreaReducer,
-	importantEventsListReducer,
-} from "./reducers/pageArea/importantEventsArea-reducer";
+import { importantThingsAreaReducer } from "./reducers/pageArea/importantThingsArea-reducer";
+import { importantEventsAreaReducer } from "./reducers/pageArea/importantEventsArea-reducer";
+import { purchasesAreaReducer } from "./reducers/pageArea/purchasesArea-reducer";
 
 let rootReducer = combineReducers({
 	app: appReducer,
 	mainPage: mainPageReducer,
 	monthPage: monthPageReducer,
 	importantThingsArea: importantThingsAreaReducer,
-	importantThingsList: importantThingsListReducer,
 	importantEventsArea: importantEventsAreaReducer,
-	importantEventsList: importantEventsListReducer,
+	purchasesArea: purchasesAreaReducer,
 });
-
-export function createNamedWrapperReducer<TState, TAction>(
-	reducer: (state: TState, action: TAction) => TState,
-	initialState: TState,
-	reducerName: string,
-	actionNameSelector: (action: TAction) => string
-) {
-	return (state = initialState, action: TAction) => {
-		const subjectName = actionNameSelector(action);
-		const isInitializationCall = state === undefined;
-		// console.log(
-		// 	"calling reducer ",
-		// 	reducerName,
-		// 	"with subject ",
-		// 	subjectName,
-		// 	"action ",
-		// 	action,
-		// 	"state ",
-		// 	state,
-		// 	"reducer func ",
-		// 	reducer
-		// );
-
-		if (reducerName !== subjectName && !isInitializationCall) {
-			return state;
-		}
-
-		return reducer(state, action);
-	};
-}
 
 type RootReducerType = typeof rootReducer;
 export type AppStateType = ReturnType<RootReducerType>;

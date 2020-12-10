@@ -1,7 +1,6 @@
-﻿using DiaryApp.Core.Models;
-using System;
+﻿using System;
 
-namespace DiaryApp.Core
+namespace DiaryApp.Core.Models
 {
     public class EventItem : ListItemBase
     {

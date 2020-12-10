@@ -8,26 +8,11 @@ import {
 	IEventList,
 	ITodoList,
 } from "../models/index";
-// import { IPurchasesAreaState } from "../context/reducers/pageArea/purchasesArea-reducer";
-// import { IGoalsAreaState } from "../context/reducers/pageArea/goalsArea-reducer";
 import { AppState } from "../context/reducers/app-reducer";
 import { ITodoListState } from "../context/reducers/list/todos";
 import { AppStateType } from "../context/store";
 import { IEventListState } from "../context/reducers/list/events";
 import { getImportantEventsList } from "./page-selectors";
-
-// const getGoalsListsFromState = (state: IGoalsAreaState) =>
-// 	state.area ? state.area.goalsLists : [];
-
-// export const getGoalsLists = createSelector([getGoalsListsFromState], (s) => s);
-
-// const getPurchasesListsFromState = (state: IPurchasesAreaState) =>
-// 	state.area ? state.area.purchasesLists : [];
-
-// export const getPurchasesLists = createSelector(
-// 	[getPurchasesListsFromState],
-// 	(s) => s
-// );
 
 const getSelectedPageFromState = (state: AppState) =>
 	state.selectedPage ? state.selectedPage : null;

@@ -1,15 +1,13 @@
 import {
 	createListActions,
 	getListActions,
-	ListActions,
 	listReducer,
-	withListStates,
 } from "../../actions/list-actions";
 import { IListState, ITodo, ITodoList } from "../../../models";
 import { INITIAL_LOADABLE_STATE } from "../utilities/loading-reducer";
 import { ActionsUnion, createNamedAction } from "../../actions/action-helpers";
-import { BaseThunkType, createNamedWrapperReducer } from "../../store";
-import { updateListInState } from "../../../utils";
+import { BaseThunkType } from "../../store";
+import { createNamedWrapperReducer, updateListInState } from "../../../utils";
 import { todosService } from "../../../services/todosService";
 
 export interface ITodoListState extends IListState<ITodoList, ITodo> {
@@ -38,8 +36,6 @@ export const todosReducer = (
 	state = initialState,
 	action: TodoActions
 ): ITodoListState => {
-	console.log("todos reducer", state, action);
-
 	switch (action.type) {
 		case "TODOS/TOGGLE_TODO":
 			return updateListInState(state, (listItems) =>

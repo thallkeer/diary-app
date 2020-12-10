@@ -5,11 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0-rc.1.20451.17" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DiaryApp.Core\DiaryApp.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\PageAreas\" />
   </ItemGroup>
 
 </Project>

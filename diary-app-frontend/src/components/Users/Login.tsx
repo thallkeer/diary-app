@@ -6,7 +6,7 @@ import {
 	FormLabel,
 	Container,
 } from "react-bootstrap";
-import { login, register } from "../../services/users";
+import { usersService } from "../../services/users";
 import history from "../history";
 import { IUser } from "../../models";
 import axios from "../../axios/axios";
@@ -33,7 +33,7 @@ const Login: React.FC = () => {
 	}
 
 	const onSubmit = (signIn: boolean) => {
-		return signIn ? login : register;
+		return signIn ? usersService.login : usersService.register;
 	};
 
 	async function handleSubmit(
@@ -47,13 +47,17 @@ const Login: React.FC = () => {
 			password,
 		})
 			.then((res) => {
-				const user: IUser = res.data;
+				const user: IUser = {
+					id: res.id,
+					username: res.username,
+					token: res.token,
+				};
 				dispatch(setUser(user));
 				axios.defaults.headers.common["Authorization"] = "Bearer " + user.token;
 				history.push("/");
 			})
 			.catch((err: AxiosError) => {
-				console.log("error catched", err);
+				console.error(err);
 
 				setError({
 					isError: true,

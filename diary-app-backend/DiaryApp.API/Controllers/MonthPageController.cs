@@ -2,8 +2,9 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.API.Models;
-using DiaryApp.Core;
+using DiaryApp.Core.DTO;
 using DiaryApp.Core.Models.PageAreas;
+using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +15,11 @@ namespace DiaryApp.API.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class MonthPageController : PageController<MonthPage>
+    public class MonthPageController : PageController<MonthPageDto, IMonthPageService>
     {
-        private readonly IMonthPageService monthPageService;
-
         public MonthPageController(IMonthPageService monthPageService, IMapper mapper, ILoggerFactory loggerFactory)
             : base(monthPageService,mapper, loggerFactory)
         {
-            this.monthPageService = monthPageService;
         }
 
         [HttpGet("{userId}/{year}/{month}")]
@@ -39,26 +37,26 @@ namespace DiaryApp.API.Controllers
         [HttpGet("purchasesArea/{pageID}")]
         public async Task<IActionResult> GetPurchasesArea(int pageID)
         {
-            return await GetPageArea<PurchasesArea, PurchasesAreaModel>(pageID);
+            return await GetPageArea<PurchasesArea, PurchasesAreaDto>(pageID);
         }
 
         [HttpGet("desiresArea/{pageID}")]
         public async Task<IActionResult> GetDesiresArea(int pageID)
         {
-            return await GetPageArea<DesiresArea, DesiresAreaModel>(pageID);
+            return await GetPageArea<DesiresArea, DesiresAreaDto>(pageID);
         }
 
         [HttpGet("ideasArea/{pageID}")]
         public async Task<IActionResult> GetIdeasArea(int pageID)
         {
-            var model = await GetPageArea<IdeasArea, IdeasAreaModel>(pageID);
+            var model = await GetPageArea<IdeasArea, IdeasAreaDto>(pageID);
             return model;
         }
 
         [HttpGet("goalsArea/{pageID}")]
         public async Task<IActionResult> GetGoalsArea(int pageID)
         {
-            return await GetPageArea<GoalsArea, GoalsAreaModel>(pageID);
+            return await GetPageArea<GoalsArea, GoalsAreaDto>(pageID);
         }
 
         [HttpPost("transferData")]
@@ -72,10 +70,10 @@ namespace DiaryApp.API.Controllers
                 return BadRequest("No transfer information is received, check transfer data model");
             try
             {
-                MonthPage prevPage = await monthPageService.GetPageForUser(prevPageParams.UserId, prevPageParams.Year, prevPageParams.Month);
+                MonthPageDto prevPage = await pageService.GetPageForUser(prevPageParams.UserId, prevPageParams.Year, prevPageParams.Month);
                 if (prevPage == null)
                     return BadRequest($"No original page found for {prevPageParams.UserId} {prevPageParams.Year} {prevPageParams.Month}");
-                await monthPageService.TransferPageDataToNextMonth(prevPage, transferDataModel);
+                await pageService.TransferPageDataToNextMonth(prevPage, transferDataModel);
                 return Ok();
             }
             catch (Exception ex)

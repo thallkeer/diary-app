@@ -1,89 +1,120 @@
- import { IPageAreaState, ITodoList } from "../../../models";
-// import {
-// 	loadPageArea,
-// 	PageAreaActions,
-// 	pageAreaReducer,
-// } from "./pageArea-reducer";
-// import { getPurchasesLists } from "../../../selectors";
-// import { ActionsUnion, createAction } from "../../actions/action-helpers";
-// import axiosInstance from "../../../axios/axios";
-// import { BaseThunkType } from "../../store";
+import { IPageArea, IPageAreaState, ITodoList } from "../../../models";
+import {
+	getPageAreaActions,
+	loadPageArea,
+	pageAreaReducer,
+} from "./pageArea-reducer";
+import { ActionsUnion, createAction } from "../../actions/action-helpers";
+import { BaseThunkType } from "../../store";
+import { INITIAL_LOADABLE_STATE } from "../utilities/loading-reducer";
+import { todosService } from "../../../services/todosService";
+import { todoActions } from "../list/todos";
 
-// const ADD_PURCHASES_LIST = "ADD_PURCHASES_LIST";
-// const DELETE_PURCHASES_LIST = "DELETE_PURCHASES_LIST";
+const ADD_PURCHASES_LIST = "ADD_PURCHASES_LIST";
+const DELETE_PURCHASES_LIST = "DELETE_PURCHASES_LIST";
 
-// export interface IPurchasesAreaState extends IPageAreaState<IPurchasesArea> {}
+interface IPurchasesArea extends IPageArea {
+	purchasesLists: IPurchasesList[];
+}
 
-// export const purchasesAreaReducer = (
-// 	state: IPurchasesAreaState,
-// 	action: PurchasesAreaActions
-// ): IPurchasesAreaState => {
-// 	const purchasesArea = state.area;
-// 	const purchasesLists = getPurchasesLists(state);
+interface IPurchasesList {
+	id: number;
+	list: ITodoList;
+}
 
-// 	switch (action.type) {
-// 		case "ADD_PURCHASES_LIST": {
-// 			return {
-// 				...state,
-// 				area: {
-// 					...purchasesArea,
-// 					purchasesLists: [...purchasesLists, action.payload],
-// 				},
-// 			};
-// 		}
+export interface IPurchasesAreaState extends IPageAreaState<IPurchasesArea> {}
 
-// 		case "DELETE_PURCHASES_LIST": {
-// 			return {
-// 				...state,
-// 				area: {
-// 					...purchasesArea,
-// 					purchasesLists: purchasesLists.filter(
-// 						(pl) => pl.id !== action.payload
-// 					),
-// 				},
-// 			};
-// 		}
+const initialState: IPurchasesAreaState = {
+	area: null,
+	pageAreaName: "purchasesArea",
+	...INITIAL_LOADABLE_STATE,
+};
 
-// 		default:
-// 			return pageAreaReducer<IPurchasesArea, IPurchasesAreaState>(
-// 				state,
-// 				action
-// 			);
-// 	}
-// };
+export const PURCHASES_LIST = "purchasesList";
 
-// const purcshasesAreaActions = {
-// 	addList: (purchasesList: ITodoList) =>
-// 		createAction(ADD_PURCHASES_LIST, purchasesList),
-// 	deleteList: (purchasesListId: number) =>
-// 		createAction(DELETE_PURCHASES_LIST, purchasesListId),
-// };
+export const purchasesAreaReducer = (
+	state = initialState,
+	action: PurchasesAreaActions
+): IPurchasesAreaState => {
+	const purchasesArea = state.area;
+	const purchasesLists = purchasesArea?.purchasesLists;
 
-// export const loadPurchasesArea = (pageID: number): ThunkType => async (
-// 	dispatch
-// ) => {
-// 	dispatch(loadPageArea<IPurchasesArea>("purchasesArea", "monthPage", pageID));
-// };
+	switch (action.type) {
+		case "ADD_PURCHASES_LIST": {
+			return {
+				...state,
+				area: {
+					...purchasesArea,
+					purchasesLists: [...purchasesLists, action.payload],
+				},
+			};
+		}
 
-// export async function addPurchasesList(
-// 	purchasesList: ITodoList,
-// 	dispatch: React.Dispatch<PurchasesAreaActions>
-// ) {
-// 	if (!purchasesList) return;
+		case "DELETE_PURCHASES_LIST": {
+			return {
+				...state,
+				area: {
+					...purchasesArea,
+					purchasesLists: purchasesLists.filter(
+						(pl) => pl.id !== action.payload
+					),
+				},
+			};
+		}
 
-// 	axiosInstance.post("todo", purchasesList).then((res) => {
-// 		purchasesList.id = res.data;
-// 		dispatch(purcshasesAreaActions.addList(purchasesList));
-// 	});
-// }
+		default:
+			return pageAreaReducer<IPurchasesArea, IPurchasesAreaState>(
+				state,
+				action
+			);
+	}
+};
 
-// export async function deletePurchasesList(
-// 	purchasesList: ITodoList,
-// 	dispatch: React.Dispatch<PurchasesAreaActions>
-// ) {
-// 	if (!purchasesList) return;
-// 	dispatch(purcshasesAreaActions.deleteList(purchasesList.id));
-// }
+export const loadPurchasesArea = (pageID: number): ThunkType => async (
+	dispatch
+) => {
+	dispatch(
+		loadPageArea<IPurchasesArea>(
+			initialState.pageAreaName,
+			"monthPage",
+			pageID,
+			(purchasesArea) => {
+				console.log("purchasesArea", purchasesArea);
 
-// export type PurchasesAreaActions = ActionsUnion<typeof purcshasesAreaActions>;
-// type ThunkType = BaseThunkType<PurchasesAreaActions & PageAreaActions>;
+				purchasesArea.purchasesLists.forEach((pl) => {
+					dispatch(todoActions.setList(pl.list, `${PURCHASES_LIST}_${pl.id}`));
+				});
+			}
+		)
+	);
+};
+
+const purchasesAreaActions = {
+	...getPageAreaActions<IPurchasesArea>(),
+	addList: (purchasesList: IPurchasesList) =>
+		createAction(ADD_PURCHASES_LIST, purchasesList),
+	deleteList: (purchasesListId: number) =>
+		createAction(DELETE_PURCHASES_LIST, purchasesListId),
+};
+
+export const addPurchasesList = (purchasesList: ITodoList): ThunkType => async (
+	dispatch
+) => {
+	let id = await todosService.createList(purchasesList);
+
+	dispatch(
+		purchasesAreaActions.addList({
+			id: id,
+			list: purchasesList,
+		})
+	);
+};
+
+export const deletePurchasesList = (
+	purchasesList: ITodoList
+): ThunkType => async (dispatch) => {
+	dispatch(purchasesAreaActions.deleteList(purchasesList.id));
+};
+
+export type PurchasesAreaActions = ActionsUnion<typeof purchasesAreaActions>;
+type ThunkType = BaseThunkType<PurchasesAreaActions>;

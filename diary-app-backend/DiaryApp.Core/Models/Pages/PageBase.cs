@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DiaryApp.Core.Models;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace DiaryApp.Core
 {
-    public abstract class PageBase
+    public abstract class PageBase : BaseEntity
     {
-        public int ID { get; set; }
         [Required]
         [Range(2020, 9999)]
         public int Year { get; set; }

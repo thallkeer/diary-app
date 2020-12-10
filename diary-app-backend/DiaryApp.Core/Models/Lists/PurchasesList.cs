@@ -1,13 +1,13 @@
-﻿using DiaryApp.Core.Models.PageAreas;
+﻿using DiaryApp.Core.Interfaces;
+using DiaryApp.Core.Models.PageAreas;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DiaryApp.Core.Models.Lists
+namespace DiaryApp.Core.Models
 {
-    public class PurchasesList : ITodoListWrapper
+    public class PurchasesList : BaseEntity, ITodoListWrapper
     {
-        public int ID { get; set; }
         [Required]
         public int ListID { get; set; }
         public virtual TodoList List { get; set; }

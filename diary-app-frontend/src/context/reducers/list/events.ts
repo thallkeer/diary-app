@@ -1,12 +1,11 @@
 import { IEvent, IEventList, IListState } from "../../../models";
-import { updateListInState } from "../../../utils";
+import { createNamedWrapperReducer, updateListInState } from "../../../utils";
 import { ActionsUnion } from "../../actions/action-helpers";
 import {
 	createListActions,
 	getListActions,
 	listReducer,
 } from "../../actions/list-actions";
-import { createNamedWrapperReducer } from "../../store";
 import { INITIAL_LOADABLE_STATE } from "../utilities/loading-reducer";
 
 export interface IEventListState extends IListState<IEventList, IEvent> {
