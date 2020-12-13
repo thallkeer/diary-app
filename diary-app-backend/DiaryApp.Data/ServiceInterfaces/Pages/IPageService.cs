@@ -6,10 +6,17 @@ namespace DiaryApp.Data.ServiceInterfaces
 {
     public interface IPageService<TPageDto> where TPageDto : PageDto
     {
-        Task<TPageDto> GetPageForUser(int userID, int year, int month);
-        Task<TPageDto> CreatePageByParams(int userID, int year, int month);
+        /// <summary>
+        /// Returns page area of defined type
+        /// </summary>
+        /// <typeparam name="TPageAreaDto">Page area dto type</typeparam>
+        /// <typeparam name="TPageArea">Page area type</typeparam>
+        /// <param name="pageID">Page identifier</param>
+        /// <returns></returns>
         Task<TPageAreaDto> GetPageArea<TPageAreaDto, TPageArea>(int pageID)
             where TPageAreaDto : PageAreaDto
             where TPageArea : class, IPageArea;
+        Task<TPageDto> CreateAsync(int userID, int year, int month);
+        Task<TPageDto> GetPageAsync(int userID, int year, int month);        
     }
 }

@@ -36,6 +36,8 @@ namespace DiaryApp.Tests.Helpers
                 new MainPage { Id=4, UserID = 4, Year = 2020, Month = 1 }
             };
 
+            pages.ForEach(p => p.CreateAreas());
+
             context.MainPages.AddRange(pages);
 
             context.SaveChangesAsync();

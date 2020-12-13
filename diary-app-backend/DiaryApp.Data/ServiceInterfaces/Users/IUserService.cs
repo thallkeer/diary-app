@@ -8,5 +8,6 @@ namespace DiaryApp.Data.ServiceInterfaces
     {
         UserDto Authenticate(string username, string password);
         Task CreateAsync(UserDto user, string password);
+        Task<bool> IsUserExists(int userId);
     }
 }

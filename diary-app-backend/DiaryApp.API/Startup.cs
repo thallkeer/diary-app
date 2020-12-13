@@ -14,10 +14,7 @@ using System.Text;
 using DiaryApp.API.Extensions;
 using System.Threading.Tasks;
 using DiaryApp.API.Extensions.ConfigureServices;
-using DiaryApp.API.Controllers;
-using DiaryApp.Core.DTO;
-using DiaryApp.Data.ServiceInterfaces;
-using DiaryApp.Core.Models;
+using DiaryApp.Core.Bootstrap;
 
 namespace DiaryApp.API
 {
@@ -54,17 +51,11 @@ namespace DiaryApp.API
 
             if (env.IsDevelopment())
             {
-                services.AddDbContext<ApplicationContext>(options =>
-                    options.UseLazyLoadingProxies()
-                           .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                services.AddSqlServerContext(Configuration);
             }
             else
             {
-                //.AddEntityFrameworkNpgsql()
-                services
-                        .AddDbContext<ApplicationContext>(options =>
-                            options.UseLazyLoadingProxies()
-                                   .UseNpgsql(Configuration.GetConnectionString("ProdConnection")));
+                services.AddPostgresContext(Configuration);
             }
 
             // configure strongly typed settings objects

@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.Core;
 using DiaryApp.Core.DTO;
 using DiaryApp.Core.Models;
+using DiaryApp.Data.Exceptions;
 using DiaryApp.Data.Extensions;
 using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
@@ -29,21 +31,18 @@ namespace DiaryApp.Data.Services
         {
             var entity = dto.ToEntity<TEntity, TDto>(mapper);
             await dbSet.AddAsync(entity);
-            await context.SaveChangesAsync();
             return entity.Id;
         }
 
-        public async Task DeleteAsync(int id)
+        public virtual async Task DeleteAsync(int id)
         {
             var entity = await dbSet.FindAsync(id);
-            if (entity != null)
-            {
-                dbSet.Remove(entity);
-                await context.SaveChangesAsync();
-            }
+            if (entity == null)
+                throw new EntityNotFound();
+            dbSet.Remove(entity);
         }
 
-        public async virtual Task<IEnumerable<TDto>> GetAllAsync()
+        public async Task<IEnumerable<TDto>> GetAllAsync()
         {
             var entities = await dbSet.AsNoTracking().ToListAsync();
             return entities.ToDtos<TEntity, TDto>(mapper);
@@ -58,8 +57,16 @@ namespace DiaryApp.Data.Services
         public virtual async Task UpdateAsync(TDto dto)
         {
             var entity = dto.ToEntity<TEntity, TDto>(mapper);
-            context.Update(entity);
-            await context.SaveChangesAsync();
+            await Task.Run(() => context.Update(entity));            
+        }
+
+        /// <summary>
+        /// Returns queryable db set of non tracking entities
+        /// </summary>
+        /// <returns></returns>
+        protected IQueryable<TEntity> GetAsQueryable()
+        {
+            return dbSet.AsNoTracking();
         }
     }
 }

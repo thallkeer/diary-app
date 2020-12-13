@@ -18,9 +18,9 @@ namespace DiaryApp.Data.Services
             this.weekDayService = weekDayService;
         }
 
-        public async override Task<WeekPageDto> GetPageForUser(int userID, int year, int month)
+        public async override Task<WeekPageDto> GetPageAsync(int userID, int year, int month)
         {
-            WeekPageDto page = await base.GetPageForUser(userID, year, month);
+            WeekPageDto page = await base.GetPageAsync(userID, year, month);
             if (page == null)
                 return null;
             //TODO: deal with code

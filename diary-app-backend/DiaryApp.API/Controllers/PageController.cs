@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace DiaryApp.API.Controllers
 {
-    public class PageController<TPageDto, TService> : AppBaseController<PageController<TPageDto, TService>>        
+    public class PageController<TPageDto, TService> : AppBaseController<PageController<TPageDto, TService>>
         where TPageDto : PageDto
         where TService : IPageService<TPageDto>
-    {    
+    {
         protected readonly TService pageService;
 
         public PageController(TService pageService, IMapper mapper, ILoggerFactory loggerFactory)
@@ -27,14 +27,12 @@ namespace DiaryApp.API.Controllers
         {
             try
             {
-                var page = await pageService.GetPageForUser(userId, year, month);
+                var page = await pageService.GetPageAsync(userId, year, month);
 
                 if (page == null)
                     return await CreateNewPage(new PageParams { UserId = userId, Year = year, Month = month });
 
-                var model = mapper.Map<PageModel>(page);
-
-                return Ok(model);
+                return Ok(page);
             }
             catch (Exception ex)
             {
@@ -47,10 +45,9 @@ namespace DiaryApp.API.Controllers
         {
             try
             {
-                TPageDto page = await pageService.CreatePageByParams(pageParams.UserId, pageParams.Year, pageParams.Month);
+                TPageDto page = await pageService.CreateAsync(pageParams.UserId, pageParams.Year, pageParams.Month);
 
-                PageModel model = mapper.Map<PageModel>(page);
-                return Ok(model);
+                return Ok(page);
             }
             catch (Exception ex)
             {
@@ -72,7 +69,7 @@ namespace DiaryApp.API.Controllers
                     logger.LogError(err);
                     return NotFound(err);
                 }
-                return Ok(area);
+                return Ok();
             }
             catch (Exception ex)
             {

@@ -70,7 +70,7 @@ namespace DiaryApp.API.Controllers
                 return BadRequest("No transfer information is received, check transfer data model");
             try
             {
-                MonthPageDto prevPage = await pageService.GetPageForUser(prevPageParams.UserId, prevPageParams.Year, prevPageParams.Month);
+                MonthPageDto prevPage = await pageService.GetPageAsync(prevPageParams.UserId, prevPageParams.Year, prevPageParams.Month);
                 if (prevPage == null)
                     return BadRequest($"No original page found for {prevPageParams.UserId} {prevPageParams.Year} {prevPageParams.Month}");
                 await pageService.TransferPageDataToNextMonth(prevPage, transferDataModel);

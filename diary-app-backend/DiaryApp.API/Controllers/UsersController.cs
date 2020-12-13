@@ -76,13 +76,6 @@ namespace DiaryApp.API.Controllers
             return Ok(userWithToken);
         }
 
-        [HttpGet("all")]
-        public IActionResult GetAll()
-        {
-            var users = userService.GetAllAsync();
-            return Ok(users);
-        }
-
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserWithPasswordModel userWithPasswordModel)

@@ -6,10 +6,11 @@ using DiaryApp.Core;
 using DiaryApp.Core.DTO;
 using DiaryApp.Data.Extensions;
 using DiaryApp.Data.ServiceInterfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace DiaryApp.Data.Services
 {
-    public class UserService : CrudService<UserDto,AppUser>, IUserService
+    public class UserService : CrudServiceWithAutoSave<UserDto,AppUser>, IUserService
     {        
         public UserService(ApplicationContext context, IMapper mapper) : base(context, mapper)
         {
@@ -22,7 +23,6 @@ namespace DiaryApp.Data.Services
 
             var user = dbSet.SingleOrDefault(x => x.Username == username);
 
-            // check if username exists
             if (user == null)
                 return null;
 
@@ -34,14 +34,14 @@ namespace DiaryApp.Data.Services
             return user.ToDto<AppUser, UserDto>(mapper);
         }
 
-        public Task CreateAsync(UserDto userDto, string password)
+        public async Task CreateAsync(UserDto userDto, string password)
         {
             // validation
             if (string.IsNullOrWhiteSpace(password))
                 throw new Exception("Password is required");
 
-            if (dbSet.Any(x => x.Username == userDto.Username))
-                throw new Exception("Username '" + userDto.Username + "' is already taken");
+            if (await dbSet.AnyAsync(x => x.Username == userDto.Username))
+                throw new Exception($"Username '{userDto.Username}' is already taken");
 
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -50,7 +50,7 @@ namespace DiaryApp.Data.Services
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             ///TODO: deal with user creating and dto
-            return base.CreateAsync(userDto);
+            await base.CreateAsync(userDto);
         }
 
         public async override Task UpdateAsync(UserDto userToUpdate)
@@ -64,7 +64,7 @@ namespace DiaryApp.Data.Services
             {
                 // username has changed so check if the new username is already taken
                 if (dbSet.Any(x => x.Username == userToUpdate.Username))
-                    throw new Exception("Username " + userToUpdate.Username + " is already taken");
+                    throw new Exception($"Username '{userToUpdate.Username}' is already taken");
             }
 
             await base.UpdateAsync(userToUpdate);
@@ -97,6 +97,11 @@ namespace DiaryApp.Data.Services
             }
 
             return true;
+        }
+
+        public async Task<bool> IsUserExists(int userId)
+        {
+            return await dbSet.AnyAsync(u => u.Id == userId);
         }
     }
 }

@@ -5,29 +5,27 @@ using DiaryApp.Core;
 using DiaryApp.Core.DTO;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
+using DiaryApp.Data.Exceptions;
 using DiaryApp.Data.Extensions;
 using DiaryApp.Data.ServiceInterfaces;
 
 namespace DiaryApp.Data.Services
 {
     public class MonthPageService : PageService<MonthPageDto, MonthPage>, IMonthPageService
-    {        
-        public MonthPageService(ApplicationContext context, IMapper mapper) : base(context, mapper)
+    {
+        public MonthPageService(ApplicationContext context, IMapper mapper, IUserService userService) : base(context, mapper, userService)
         {
         }
 
         public async Task TransferPageDataToNextMonth(MonthPageDto prevPageDto, TransferDataModel transferDataModel)
         {
-            MonthPageDto monthPageDto = await GetPageForUser(prevPageDto.UserID, prevPageDto.Year, prevPageDto.Month + 1);
+            MonthPageDto monthPageDto = await GetPageAsync(prevPageDto.UserID, prevPageDto.Year, prevPageDto.Month + 1);
 
             using var transaction = await context.Database.BeginTransactionAsync();
 
             try
             {
-                if (monthPageDto == null)
-                {
-                    monthPageDto = await CreatePageByParams(prevPageDto.UserID, prevPageDto.Year, prevPageDto.Month + 1);
-                }
+                monthPageDto ??= await CreateAsync(prevPageDto.UserID, prevPageDto.Year, prevPageDto.Month + 1);
 
                 var monthPage = monthPageDto.ToEntity<MonthPage, MonthPageDto>(mapper);
 
@@ -44,11 +42,13 @@ namespace DiaryApp.Data.Services
 
                 await context.SaveChangesAsync();
 
+                // Commit transaction if all commands succeed, transaction will auto-rollback
+                // when disposed if either commands fails
                 await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
+                throw new PageDataTransferException("Could not transfer page data to the next month, exception is occured.", ex);
             }
         }
 

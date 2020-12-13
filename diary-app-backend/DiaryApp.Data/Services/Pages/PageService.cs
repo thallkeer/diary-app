@@ -15,17 +15,20 @@ namespace DiaryApp.Data.Services
         where TPageDto : PageDto
         where TPageEntity : PageBase, new()
     {
+        protected readonly IUserService userService;
         protected readonly IMapper mapper;
         protected readonly ApplicationContext context;
         protected readonly DbSet<TPageEntity> dbSet;
-        public PageService(ApplicationContext context, IMapper mapper)
+
+        public PageService(ApplicationContext context, IMapper mapper, IUserService userService)
         {
             this.context = context;
             this.mapper = mapper;
             this.dbSet = context.Set<TPageEntity>();
+            this.userService = userService;
         }
 
-        public virtual async Task<TPageDto> GetPageForUser(int userID, int year, int month)
+        public virtual async Task<TPageDto> GetPageAsync(int userID, int year, int month)
         {
             var page = await dbSet.FirstOrDefaultAsync
                (mp => mp.UserID == userID && mp.Month == month && mp.Year == year);
@@ -33,11 +36,11 @@ namespace DiaryApp.Data.Services
             return page.ToDto<TPageEntity, TPageDto>(mapper);
         }
 
-        public virtual async Task<TPageDto> CreatePageByParams(int userID, int year, int month)
+        public virtual async Task<TPageDto> CreateAsync(int userID, int year, int month)
         {
-            var existingPage = await GetPageForUser(userID, year, month);
-            if (existingPage != null)
-                throw new PageAlreadyExistsException();
+            var pageExists = await dbSet.AnyAsync(mp => mp.UserID == userID && mp.Month == month && mp.Year == year);
+            if (pageExists)
+                throw new PageAlreadyExistsException($"Page with such parameters already exists");
 
             if (month <= 0 || month > 12)
                 throw new ArgumentOutOfRangeException(nameof(month));
@@ -45,29 +48,23 @@ namespace DiaryApp.Data.Services
             if (year < 2020)
                 throw new ArgumentOutOfRangeException(nameof(year));
 
+            if (await userService.IsUserExists(userID))
+                throw new UserNotExistsException("User with such id is not found");
+
             var page = new TPageEntity()
             {
                 UserID = userID,
                 Year = year,
                 Month = month
-            };
+            };            
 
             page.CreateAreas();
 
             await dbSet.AddAsync(page);
 
-            //try
-            //{
-                await context.SaveChangesAsync();
-            //}
-            //catch (Exception ex)
-            //{
+            await context.SaveChangesAsync();
 
-            //}
-
-            var dto = page.ToDto<TPageEntity, TPageDto>(mapper);
-
-            return dto;
+            return page.ToDto<TPageEntity, TPageDto>(mapper);
         }
 
         public async Task<TPageAreaDto> GetPageArea<TPageAreaDto, TPageArea>(int pageID)
@@ -76,6 +73,6 @@ namespace DiaryApp.Data.Services
         {
             var entity = await context.Set<TPageArea>().FirstOrDefaultAsync(area => area.PageId == pageID);
             return entity.ToDto<TPageArea, TPageAreaDto>(mapper);
-        }
+        }        
     }
 }

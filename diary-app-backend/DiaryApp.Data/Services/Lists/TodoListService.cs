@@ -6,7 +6,7 @@ using DiaryApp.Data.ServiceInterfaces;
 
 namespace DiaryApp.Data.Services
 {
-    public class TodoListService : CrudService<TodoListDto, TodoList>, ITodoListService
+    public class TodoListService : CrudServiceWithAutoSave<TodoListDto, TodoList>, ITodoListService
     {
         public TodoListService(ApplicationContext context, IMapper mapper) : base(context, mapper)
         {

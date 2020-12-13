@@ -6,7 +6,7 @@ using DiaryApp.Data.ServiceInterfaces;
 
 namespace DiaryApp.Data.Services
 {
-    public class EventListService : CrudService<EventListDto, EventList>, IEventListService
+    public class EventListService : CrudServiceWithAutoSave<EventListDto, EventList>, IEventListService
     {
         public EventListService(ApplicationContext context, IMapper mapper) : base(context, mapper)
         {
