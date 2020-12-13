@@ -36,7 +36,8 @@ namespace DiaryApp.API
             CreateMap<GoalsArea, GoalsAreaDto>().ReverseMap();
             CreateMap<HabitTracker, HabitTrackerDto>().ReverseMap();
 
-            CreateMap<AppUser, UserDto>().ReverseMap();           
+            CreateMap<AppUser, UserDto>().ReverseMap();
+            CreateMap<AppUser, UserWithPasswordDto>().ReverseMap();
         }
     }
 }

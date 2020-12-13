@@ -48,7 +48,7 @@ namespace DiaryApp.Data.Services
             if (year < 2020)
                 throw new ArgumentOutOfRangeException(nameof(year));
 
-            if (await userService.IsUserExists(userID))
+            if (!await userService.IsUserExists(userID))
                 throw new UserNotExistsException("User with such id is not found");
 
             var page = new TPageEntity()

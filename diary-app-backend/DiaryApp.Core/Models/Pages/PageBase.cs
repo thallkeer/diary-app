@@ -29,5 +29,10 @@ namespace DiaryApp.Core
         }
 
         public abstract void CreateAreas();
+
+        public override string ToString()
+        {
+            return $"{Id} {Year} {Month} {UserID}";
+        }
     }
 }

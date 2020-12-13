@@ -16,27 +16,23 @@ namespace DiaryApp.Tests
 {
     public class MainPageServiceTests : BaseTests
     {
-        const int userTestId = 1;
-        const int testYear = 2020;
-        const int testMonth = 10;
+        private MainPageService GetMainPageService() => new MainPageService(_dbContext, _mapper, GetService<IUserService>());
 
-        private MainPageService GetMainPageService() => new MainPageService(_dbContext, _mapper, null);
-
-        [Fact]
-        public async Task ShouldReturnPageIfExists()
+        [Theory]
+        [InlineData(1, 2020, 1)]
+        [InlineData(1, 2020, 12)]
+        [InlineData(12, 2020, 12)]
+        [InlineData(2, 2020, 2)]
+        [InlineData(2, 2020, 1)]
+        public async Task ShouldReturnPageIfExists(int userId, int year, int month)
         {
-            // arrange
-            int pageId = 2;
-
             MainPageDto mainPage = await GetMainPageService()
-                                        .GetPageAsync(userTestId, testYear, testMonth);
+                                        .GetPageAsync(userId, year, month);
 
-            // assert
             Assert.True(mainPage != null);
-            Assert.Equal(pageId, mainPage.Id);
-            Assert.Equal(userTestId, mainPage.UserID);
-            Assert.Equal(testYear, mainPage.Year);
-            Assert.Equal(testMonth, mainPage.Month);     
+            Assert.Equal(userId, mainPage.UserID);
+            Assert.Equal(year, mainPage.Year);
+            Assert.Equal(month, mainPage.Month);     
         }
 
         [Fact]
@@ -51,12 +47,15 @@ namespace DiaryApp.Tests
             Assert.NotNull(pageArea.ImportantEvents.Items);
         }
 
-        [Fact]
-        public async Task CreatePageByParamsShouldFailIfPageExists()
+        [Theory]
+        [InlineData(1, 2020, 1)]
+        [InlineData(2, 2020, 2)]
+        [InlineData(12, 2020, 12)]
+        public async Task CreatePageByParamsShouldFailIfPageExists(int userId, int year, int month)
         {
             var service = GetMainPageService();
 
-            await Assert.ThrowsAsync<PageAlreadyExistsException>(async () => await service.CreateAsync(userTestId, testYear, testMonth));
+            await Assert.ThrowsAsync<PageAlreadyExistsException>(async () => await service.CreateAsync(userId, year, month));
         }
 
         [Theory]
@@ -65,7 +64,7 @@ namespace DiaryApp.Tests
         {
             var service = GetMainPageService();
 
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await service.CreateAsync(userTestId, testYear, inputMonth));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await service.CreateAsync(1, 2020, inputMonth));
         }
 
         [Theory]
@@ -74,18 +73,21 @@ namespace DiaryApp.Tests
         {
             var service = GetMainPageService();
 
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await service.CreateAsync(userTestId, inputYear, testMonth));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await service.CreateAsync(1, inputYear, 3));
         }
 
+        [Fact]
         public async Task CreatePageShouldFailIfUserDoesNotExists()
         {
+            var service = GetMainPageService();
 
+            await Assert.ThrowsAsync<UserNotExistsException>(async () => await service.CreateAsync(50, 2020, 2));
         }
 
         [Theory]
-        [InlineData(1, 2020, 2)]
-        [InlineData(1, 2020, 3)]
-        [InlineData(2, 2020, 5)]
+        [InlineData(11, 2020, 2)]
+        [InlineData(11, 2020, 3)]
+        [InlineData(12, 2020, 5)]
         public async Task CreatePageByParamsShouldCreatePage(int userId, int year, int month)
         {
             var service = GetMainPageService();

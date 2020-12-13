@@ -1,46 +1,48 @@
 ﻿using AutoMapper;
+using DiaryApp.API.Extensions.ConfigureServices;
 using DiaryApp.Core;
+using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DiaryApp.Tests.Helpers
 {
     internal static class Configurations
     {
-        //private static string ConnectionString { get; } = GetConfigurations().GetConnectionString("DefaultConnection");
-
-        //private static IConfiguration GetConfigurations()
-        //{
-        //    return new ConfigurationBuilder()
-        //        .AddJsonFile("appsettings.json")
-        //        .Build();
-        //}
-
         public static ApplicationContext GetDbContext()
         {
             var services = new ServiceCollection();
 
             services.AddDbContext<ApplicationContext>(options =>
-                options.UseInMemoryDatabase(databaseName: "DiaryAppDb"));
+                options.UseLazyLoadingProxies()
+                       .UseInMemoryDatabase(databaseName: "DiaryAppDb"));
+
+            services.AddApplicationServices();
+
+            services.AddAutoMapper(typeof(API.Startup).Assembly);
 
             var serviceProvider = services.BuildServiceProvider();
 
             var context = serviceProvider.GetRequiredService<ApplicationContext>();
 
-            var pages = new List<MainPage>
+            var userService = serviceProvider.GetRequiredService<IUserService>();
+
+            for (int i = 0; i < 12; i++)
             {
-                new MainPage { Id=1, UserID = 2, Year = 2020, Month = 8 },
-                new MainPage { Id=2, UserID = 1, Year = 2020, Month = 10 },
-                new MainPage { Id=3, UserID = 3, Year = 2020, Month = 4 },
-                new MainPage { Id=4, UserID = 4, Year = 2020, Month = 1 }
-            };
+                userService.CreateAsync(new Core.DTO.UserDto($"TestUser{i+1}"), $"testuser{i+1}-password");
+            }
 
-            pages.ForEach(p => p.CreateAreas());
+            var pageService = serviceProvider.GetRequiredService<IMainPageService>();
+            var pages = new List<MainPage>();
 
-            context.MainPages.AddRange(pages);
-
-            context.SaveChangesAsync();
+            foreach (var user in context.Users)
+            {
+                pageService.CreateAsync(user.Id, 2020, user.Id);
+                pageService.CreateAsync(user.Id, 2020, user.Id == 1 ? 12 : user.Id - 1);
+            }
 
             return context;
         }

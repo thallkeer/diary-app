@@ -12,7 +12,7 @@ namespace DiaryApp.Data.Services
     {
         private readonly IWeekDayService weekDayService;
         private readonly IEventListService eventService;
-        public WeekPageService(ApplicationContext context, IEventListService eventService, IWeekDayService weekDayService, IMapper mapper) : base(context, mapper)
+        public WeekPageService(ApplicationContext context, IEventListService eventService, IWeekDayService weekDayService, IMapper mapper, IUserService userService) : base(context, mapper, userService)
         {
             this.eventService = eventService;
             this.weekDayService = weekDayService;

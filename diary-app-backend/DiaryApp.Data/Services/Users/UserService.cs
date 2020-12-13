@@ -49,8 +49,10 @@ namespace DiaryApp.Data.Services
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            ///TODO: deal with user creating and dto
-            await base.CreateAsync(userDto);
+
+            var userWithPassword = user.ToDto<AppUser, UserWithPasswordDto>(mapper);
+
+            await base.CreateAsync(userWithPassword);
         }
 
         public async override Task UpdateAsync(UserDto userToUpdate)
@@ -101,7 +103,8 @@ namespace DiaryApp.Data.Services
 
         public async Task<bool> IsUserExists(int userId)
         {
-            return await dbSet.AnyAsync(u => u.Id == userId);
+            var res = await dbSet.AnyAsync(u => u.Id == userId);
+            return res;
         }
     }
 }
