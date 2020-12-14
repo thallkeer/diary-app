@@ -20,7 +20,7 @@ namespace DiaryApp.Core.Models.PageAreas
 
         }
 
-        protected override void Initialize()
+        public override void Initialize()
         {
             ImportantEvents = new EventList(Title);
         }

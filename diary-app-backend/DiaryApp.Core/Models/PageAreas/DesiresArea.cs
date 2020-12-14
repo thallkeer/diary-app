@@ -7,9 +7,9 @@ namespace DiaryApp.Core.Models.PageAreas
     public class DesiresArea : PageAreaBase<MonthPage>, IMonthPageArea<DesiresArea>
     {
         private const string HeaderSTR = "В этом месяце я хочу";
-        private const string ToVisitSTR = "Посетить";
-        private const string ToWatchSTR = "Посмотреть";
-        private const string ToReadSTR = "Прочитать";
+        public const string ToVisitSTR = "Посетить";
+        public const string ToWatchSTR = "Посмотреть";
+        public const string ToReadSTR = "Прочитать";
 
         public virtual List<DesiresList> DesiresLists { get; set; } = new List<DesiresList>(3);
         public PageAreaType AreaType => PageAreaType.Desires;
@@ -24,6 +24,8 @@ namespace DiaryApp.Core.Models.PageAreas
 
         public void AddFromOtherArea(DesiresArea other)
         {
+            if (DesiresLists.Count == 0)
+                Initialize();
             for (int i = 0; i < other.DesiresLists.Count; i++)
             {
                 this.DesiresLists[i].Items.AddRange(other.DesiresLists[i].Items);
@@ -40,7 +42,7 @@ namespace DiaryApp.Core.Models.PageAreas
             return newArea;
         }
 
-        protected override void Initialize()
+        public override void Initialize()
         {
             DesiresLists.AddRange(new DesiresList[]
                 {

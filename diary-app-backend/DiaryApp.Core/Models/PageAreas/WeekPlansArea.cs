@@ -21,7 +21,7 @@ namespace DiaryApp.Core.Models.PageAreas
         public WeekPlansArea(WeekPage page, bool init) : base(page, "На этой неделе я хочу", init)
         { }
 
-        protected override void Initialize()
+        public override void Initialize()
         {
             WeekPlansList = new WeekPlansList(string.Empty);
         }

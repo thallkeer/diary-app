@@ -37,7 +37,7 @@ namespace DiaryApp.Core.Models.PageAreas
             this.IdeasList.Items.AddRange(other.IdeasList.Items);
         }
 
-        protected override void Initialize()
+        public override void Initialize()
         {
             IdeasList = new IdeasList(string.Empty);
         }

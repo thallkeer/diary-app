@@ -1,6 +1,7 @@
 ﻿using DiaryApp.Core.Extensions;
 using DiaryApp.Core.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
@@ -22,9 +23,8 @@ namespace DiaryApp.Core.Models.PageAreas
 
         public void AddFromOtherArea(PurchasesArea other)
         {
-            var emptyLists = this.PurchasesLists.FindAll(pl => pl.Items.Count == 0);
-            this.PurchasesLists.RemoveAll(pl => emptyLists.Contains(pl));
-            this.PurchasesLists.AddRange(other.PurchasesLists.GetCopy<PurchasesList, TodoList, TodoItem>());
+            this.PurchasesLists.RemoveAll(pl => pl.Items.Count == 0);
+            this.PurchasesLists.AddRange(other.PurchasesLists.GetCopy<PurchasesList, TodoList, TodoItem>());            
         }
 
         public PurchasesArea TransferAreaData(MonthPage page)
@@ -37,7 +37,7 @@ namespace DiaryApp.Core.Models.PageAreas
             return newArea;
         }
 
-        protected override void Initialize()
+        public override void Initialize()
         {
             PurchasesLists.AddRange(new PurchasesList[]
                 {

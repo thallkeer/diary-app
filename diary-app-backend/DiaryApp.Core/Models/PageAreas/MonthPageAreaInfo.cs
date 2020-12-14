@@ -45,6 +45,6 @@ namespace DiaryApp.Core.Models.PageAreas
                 Initialize();
         }
 
-        protected abstract void Initialize();
+        public abstract void Initialize();
     }
 }

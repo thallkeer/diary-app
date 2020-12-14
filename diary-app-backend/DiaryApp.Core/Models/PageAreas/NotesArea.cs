@@ -16,7 +16,7 @@ namespace DiaryApp.Core.Models.PageAreas
         public NotesArea(WeekPage page, bool init) : base(page, "Заметки", init)
         { }        
 
-        protected override void Initialize()
+        public override void Initialize()
         {
 
         }

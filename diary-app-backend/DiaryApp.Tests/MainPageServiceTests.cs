@@ -24,7 +24,7 @@ namespace DiaryApp.Tests
         [InlineData(12, 2020, 12)]
         [InlineData(2, 2020, 2)]
         [InlineData(2, 2020, 1)]
-        public async Task ShouldReturnPageIfExists(int userId, int year, int month)
+        public async Task GetPageAsyncShouldReturnPageIfExists(int userId, int year, int month)
         {
             MainPageDto mainPage = await GetMainPageService()
                                         .GetPageAsync(userId, year, month);

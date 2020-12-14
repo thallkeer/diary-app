@@ -7,7 +7,7 @@ namespace DiaryApp.Core.Models.PageAreas
     public class GoalsArea : PageAreaBase<MonthPage>, IMonthPageArea<GoalsArea>
     {
         private const string HeaderSTR = "Цели на этот месяц";
-        private const string GoalNameSTR = "Название цели";
+        public const string GoalNameSTR = "Название цели";
 
         public virtual List<HabitTracker> GoalLists { get; set; } = new List<HabitTracker>();
 
@@ -20,13 +20,17 @@ namespace DiaryApp.Core.Models.PageAreas
         public GoalsArea(MonthPage page, bool needInit = false) : base(page, HeaderSTR, needInit)
         {
 
-        }       
+        }
 
         public void AddFromOtherArea(GoalsArea other)
         {
-            if (this.GoalLists.Count == 1 && this.GoalLists[0].SelectedDays.Count == 0)
-                this.GoalLists = new List<HabitTracker>(other.GoalLists.Count);
-            this.GoalLists.AddRange(other.GoalLists.Select(gl => new HabitTracker(gl, this)));
+            GoalLists.RemoveAll(gl => gl.SelectedDays.Count == 0 && gl.GoalName == GoalNameSTR);
+
+            var otherLists = other.GoalLists.Where(gl => gl.GoalName != GoalNameSTR).Select(gl => new HabitTracker(gl, this));
+
+            GoalLists.AddRange(otherLists);
+            if (GoalLists.Count == 0)
+                Initialize();
         }
 
         public GoalsArea TransferAreaData(MonthPage page)
@@ -42,7 +46,7 @@ namespace DiaryApp.Core.Models.PageAreas
             return newArea;
         }
 
-        protected override void Initialize()
+        public override void Initialize()
         {
             GoalLists.Add(new HabitTracker() { GoalName = GoalNameSTR });
         }
