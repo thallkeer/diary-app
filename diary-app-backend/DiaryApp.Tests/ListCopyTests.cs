@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DiaryApp.Core;
 using DiaryApp.Core.Extensions;
 using DiaryApp.Core.Models;
 using Xunit;
@@ -71,7 +67,7 @@ namespace DiaryApp.Tests
         }
 
         internal static void TestLists<TList, TItem>(TList original, TList copy, params Action<TItem, TItem>[] itemAdditionalCheck) 
-            where TList : ListBase<TItem>
+            where TList : DiaryList<TItem>
             where TItem : ListItemBase
         {
             Assert.NotEqual(original, copy);

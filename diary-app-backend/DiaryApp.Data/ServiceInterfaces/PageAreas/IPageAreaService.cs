@@ -1,6 +1,4 @@
-﻿using DiaryApp.Core;
-using DiaryApp.Core.DTO;
-using System.Threading.Tasks;
+﻿using DiaryApp.Core.DTO;
 
 namespace DiaryApp.Data.ServiceInterfaces
 {

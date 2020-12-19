@@ -13,7 +13,6 @@ namespace DiaryApp.Core.Models.PageAreas
         [Required]
         public virtual WeekPlansList WeekPlansList { get; set; }
         public virtual List<WeekDay> WeekDays { get; set; } = new List<WeekDay>();
-        public PageAreaType AreaType => PageAreaType.WeekPlans;
 
         public WeekPlansArea() : base()
         { }
@@ -21,7 +20,7 @@ namespace DiaryApp.Core.Models.PageAreas
         public WeekPlansArea(WeekPage page, bool init) : base(page, "На этой неделе я хочу", init)
         { }
 
-        public override void Initialize()
+        protected override void Initialize()
         {
             WeekPlansList = new WeekPlansList(string.Empty);
         }

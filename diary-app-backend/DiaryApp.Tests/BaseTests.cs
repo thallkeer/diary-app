@@ -2,7 +2,6 @@
 using DiaryApp.Core;
 using DiaryApp.Tests.Helpers;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using System;
 
 namespace DiaryApp.Tests
 {

@@ -9,8 +9,6 @@ namespace DiaryApp.Core.Models.PageAreas
 
         public virtual IdeasList IdeasList { get; set; }
 
-        public PageAreaType AreaType => PageAreaType.Ideas;
-
         public IdeasArea()
         {
 
@@ -20,24 +18,12 @@ namespace DiaryApp.Core.Models.PageAreas
 
         }
 
-        public IdeasArea TransferAreaData(MonthPage page)
-        {
-            var newArea = new IdeasArea(page)
-            {
-                IdeasList = new IdeasList
-                {
-                    List =  this.IdeasList.List.CreateDeepCopy<CommonList, ListItem>()
-                }
-            };
-            return newArea;
-        }
-
         public void AddFromOtherArea(IdeasArea other)
         {
             this.IdeasList.Items.AddRange(other.IdeasList.Items);
         }
 
-        public override void Initialize()
+        protected override void Initialize()
         {
             IdeasList = new IdeasList(string.Empty);
         }

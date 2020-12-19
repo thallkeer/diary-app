@@ -2,12 +2,8 @@
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
-using DiaryApp.Data.ServiceInterfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace DiaryApp.Tests
@@ -76,10 +72,16 @@ namespace DiaryApp.Tests
 
             var listsCountInputArea = goalsArea.GoalLists.Count;
             var emptyListsCountInputArea = goalsArea.GoalLists.Where(gl => gl.SelectedDays.Count == 0 && gl.GoalName == GoalsArea.GoalNameSTR).Count();
+
             var listsCountOtherArea = other.GoalLists.Count;
             var nonEmptyListsCountOtherArea = other.GoalLists.Where(gl => gl.GoalName != GoalsArea.GoalNameSTR).Count();
 
+            var selectedDaysInputAreaCount = goalsArea.GoalLists.Count(gl => gl.SelectedDays.Count != 0);
+            var selectedDaysOtherAreaCount = other.GoalLists.Count(gl => gl.SelectedDays.Count != 0);
+
             goalsArea.AddFromOtherArea(other);
+
+            Assert.Equal(goalsArea.GoalLists.Count(gl => gl.SelectedDays.Count != 0), selectedDaysOtherAreaCount + selectedDaysInputAreaCount);
 
             if (listsCountInputArea == emptyListsCountInputArea && nonEmptyListsCountOtherArea == 0)
             {
@@ -87,15 +89,13 @@ namespace DiaryApp.Tests
                 Assert.True(goalsArea.GoalLists.Count == 1);
             }
             else
-                Assert.Equal(goalsArea.GoalLists.Count, listsCountInputArea - emptyListsCountInputArea + nonEmptyListsCountOtherArea);
-
-            
+                Assert.True(goalsArea.GoalLists.Count == listsCountInputArea - emptyListsCountInputArea + nonEmptyListsCountOtherArea);
         }
 
         #region Utils
         private static T GenerateListWrapper<T, TList, TItem>(bool withItems)
             where T : IListWrapper<TList, TItem>, new()
-            where TList : ListBase<TItem>, new()
+            where TList : DiaryList<TItem>, new()
             where TItem : ListItemBase, new()
         {
 
@@ -176,7 +176,7 @@ namespace DiaryApp.Tests
                 GoalName = "custom name with selected days",
                 SelectedDays = new List<HabitDay>()
             };
-            pa.SelectedDays.Add(new HabitDay());
+            trackerWithCustomNameAndSelectedDays.SelectedDays.Add(new HabitDay());
 
             var trackerWithCustomNameAndWithoutSelectedDays = new HabitTracker
             {

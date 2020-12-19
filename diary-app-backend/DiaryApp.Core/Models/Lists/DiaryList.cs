@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace DiaryApp.Core.Models
 {
-    public class ListBase<T> : BaseEntity
+    public class DiaryList<T> : BaseEntity
         where T : ListItemBase
     {
         [MaxLength(50)]
@@ -12,11 +12,11 @@ namespace DiaryApp.Core.Models
         [NotNull]
         public virtual List<T> Items { get; set; } = new List<T>();
 
-        public ListBase()
+        public DiaryList()
         {
         }
 
-        public ListBase(string title)
+        public DiaryList(string title)
         {
             Title = title;
         }

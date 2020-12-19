@@ -1,14 +1,9 @@
 using DiaryApp.Core.DTO;
-using DiaryApp.Core.Interfaces;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Data.Exceptions;
 using DiaryApp.Data.ServiceInterfaces;
 using DiaryApp.Data.Services;
-using Microsoft.EntityFrameworkCore;
-using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -16,7 +11,7 @@ namespace DiaryApp.Tests
 {
     public class MainPageServiceTests : BaseTests
     {
-        private MainPageService GetMainPageService() => new MainPageService(_dbContext, _mapper, GetService<IUserService>());
+        private IMainPageService GetMainPageService() => GetService<IMainPageService>(); // new MainPageService(_dbContext, _mapper, GetService<IUserService>());
 
         [Theory]
         [InlineData(1, 2020, 1)]

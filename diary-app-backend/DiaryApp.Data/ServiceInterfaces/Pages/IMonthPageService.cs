@@ -12,6 +12,6 @@ namespace DiaryApp.Data.ServiceInterfaces
         /// <param name="monthPage"></param>
         /// <param name="transferDataModel"></param>
         /// <returns></returns>
-        Task TransferPageDataToNextMonth(MonthPageDto monthPage, TransferDataModel transferDataModel);
+        Task TransferPageDataToNextMonthAsync(MonthPageDto monthPage, TransferDataModel transferDataModel);
     }
 }

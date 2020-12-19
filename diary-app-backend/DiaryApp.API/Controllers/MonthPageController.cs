@@ -12,55 +12,47 @@ using Microsoft.Extensions.Logging;
 
 namespace DiaryApp.API.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MonthPageController : PageController<MonthPageDto, IMonthPageService>
+    public class MonthPageController : PageController<MonthPageDto>
     {
+        private readonly IMonthPageService _monthPageService;
+
         public MonthPageController(IMonthPageService monthPageService, IMapper mapper, ILoggerFactory loggerFactory)
             : base(monthPageService,mapper, loggerFactory)
         {
-        }
-
-        [HttpGet("{userId}/{year}/{month}")]
-        public async Task<IActionResult> GetMonthPage(int userId, int year, int month)
-        {
-            return await GetPage(userId, year, month);
-        }       
-
-        [HttpPost("createNew")]
-        public override async Task<IActionResult> CreateNewPage(PageParams pageParams)
-        {
-            return await base.CreateNewPage(pageParams);
-        }       
+            _monthPageService = monthPageService;
+        }     
 
         [HttpGet("purchasesArea/{pageID}")]
-        public async Task<IActionResult> GetPurchasesArea(int pageID)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPurchasesAreaAsync(int pageID)
         {
             return await GetPageArea<PurchasesArea, PurchasesAreaDto>(pageID);
         }
 
         [HttpGet("desiresArea/{pageID}")]
-        public async Task<IActionResult> GetDesiresArea(int pageID)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetDesiresAreaAsync(int pageID)
         {
             return await GetPageArea<DesiresArea, DesiresAreaDto>(pageID);
         }
 
         [HttpGet("ideasArea/{pageID}")]
-        public async Task<IActionResult> GetIdeasArea(int pageID)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetIdeasAreaAsync(int pageID)
         {
             var model = await GetPageArea<IdeasArea, IdeasAreaDto>(pageID);
             return model;
         }
 
         [HttpGet("goalsArea/{pageID}")]
-        public async Task<IActionResult> GetGoalsArea(int pageID)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetGoalsAreaAsync(int pageID)
         {
             return await GetPageArea<GoalsArea, GoalsAreaDto>(pageID);
         }
 
         [HttpPost("transferData")]
-        public async Task<IActionResult> TransferPageDataToNextMonth(TransferDataRequestParams transferDataRequestParams)
+        public async Task<IActionResult> PostTransferPageDataAsync(TransferDataRequestParams transferDataRequestParams)
         {
             var prevPageParams = transferDataRequestParams.PageParams;
             var transferDataModel = transferDataRequestParams.TransferDataModel;
@@ -73,7 +65,7 @@ namespace DiaryApp.API.Controllers
                 MonthPageDto prevPage = await pageService.GetPageAsync(prevPageParams.UserId, prevPageParams.Year, prevPageParams.Month);
                 if (prevPage == null)
                     return BadRequest($"No original page found for {prevPageParams.UserId} {prevPageParams.Year} {prevPageParams.Month}");
-                await pageService.TransferPageDataToNextMonth(prevPage, transferDataModel);
+                await _monthPageService.TransferPageDataToNextMonthAsync(prevPage, transferDataModel);
                 return Ok();
             }
             catch (Exception ex)

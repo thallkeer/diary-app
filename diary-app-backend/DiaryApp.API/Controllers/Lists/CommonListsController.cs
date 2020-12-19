@@ -1,20 +1,17 @@
-﻿using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
+using DiaryApp.API.Controllers.Lists;
 using DiaryApp.Core.DTO;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using DiaryApp.Core.Models;
+using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.Extensions.Logging;
 
 namespace DiaryApp.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
-    public class CommonListsController : AppBaseController<CommonListsController>
+    public class CommonListsController : CrudController<CommonListDto, CommonList>
     {
 
-        public CommonListsController(IMapper mapper, ILoggerFactory loggerFactory)
-            : base(mapper, loggerFactory)
+        public CommonListsController(ICommonListService commonListService, IMapper mapper, ILoggerFactory loggerFactory)
+            : base(commonListService, mapper, loggerFactory)
         {
         }       
     }

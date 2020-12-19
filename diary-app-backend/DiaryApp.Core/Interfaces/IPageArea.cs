@@ -2,22 +2,12 @@
 
 namespace DiaryApp.Core.Interfaces
 {
-    public enum PageAreaType
-    {
-        Purchases,
-        Desires,
-        Ideas,
-        Goals,
-        WeekPlans,
-        Notes
-    }
-
     public interface IPageArea
     {
         int PageId { get; set; }
     }
 
-    public interface IPageArea<T,TPage> : IPageArea
+    public interface IPageArea<T, TPage> : IPageArea
         where T : PageAreaBase<TPage>
         where TPage : PageBase
     {
@@ -25,20 +15,11 @@ namespace DiaryApp.Core.Interfaces
         /// Page
         /// </summary>
         TPage Page { get; set; }
-        /// <summary>
-        /// Area type
-        /// </summary>
-        PageAreaType AreaType { get; }        
+
         /// <summary>
         /// Copy content from other area
         /// </summary>
         /// <param name="otherArea"></param>
         void AddFromOtherArea(T other);
-        /// <summary>
-        /// Transfer data to page
-        /// </summary>
-        /// <param name="page"></param>
-        /// <returns></returns>
-        T TransferAreaData(TPage page);
     }
 }

@@ -15,7 +15,7 @@
         public override ListItemBase GetCopy() => new ListItem(this);
     }
 
-    public class CommonList : ListBase<ListItem>
+    public class CommonList : DiaryList<ListItem>
     {
         public CommonList()
         {

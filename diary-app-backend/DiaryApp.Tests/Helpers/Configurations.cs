@@ -5,8 +5,6 @@ using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DiaryApp.Tests.Helpers
 {
@@ -35,13 +33,18 @@ namespace DiaryApp.Tests.Helpers
                 userService.CreateAsync(new Core.DTO.UserDto($"TestUser{i+1}"), $"testuser{i+1}-password");
             }
 
-            var pageService = serviceProvider.GetRequiredService<IMainPageService>();
-            var pages = new List<MainPage>();
+            var mainPageService = serviceProvider.GetRequiredService<IMainPageService>();
+            var monthPageService = serviceProvider.GetRequiredService<IMonthPageService>();
 
             foreach (var user in context.Users)
             {
-                pageService.CreateAsync(user.Id, 2020, user.Id);
-                pageService.CreateAsync(user.Id, 2020, user.Id == 1 ? 12 : user.Id - 1);
+                mainPageService.CreateAsync(user.Id, 2020, user.Id);
+                mainPageService.CreateAsync(user.Id, 2020, user.Id == 1 ? 12 : user.Id - 1);
+
+                monthPageService.CreateAsync(user.Id, 2020, user.Id);
+                if (user.Id != 12)
+                    monthPageService.CreateAsync(user.Id, 2020, user.Id + 1);
+                monthPageService.CreateAsync(user.Id, 2020, user.Id == 1 ? 12 : user.Id - 1);
             }
 
             return context;

@@ -20,7 +20,7 @@ namespace DiaryApp.Core.Models.PageAreas
 
         }
 
-        public override void Initialize()
+        protected override void Initialize()
         {
             ImportantThings = new TodoList(Title);
         }

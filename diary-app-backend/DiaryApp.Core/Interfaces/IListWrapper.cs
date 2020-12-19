@@ -9,7 +9,7 @@ namespace DiaryApp.Core.Interfaces
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="U"></typeparam>
     public interface IListWrapper<T, U>
-        where T : ListBase<U>, new()
+        where T : DiaryList<U>, new()
         where U : ListItemBase
     {
         T List { get; set; }

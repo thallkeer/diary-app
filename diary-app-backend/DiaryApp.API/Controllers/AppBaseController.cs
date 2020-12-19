@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+using DiaryApp.API.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace DiaryApp.API.Controllers
 {
-    [Authorize]
+    [ModelValidation]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public abstract class AppBaseController<T> : ControllerBase where T : ControllerBase

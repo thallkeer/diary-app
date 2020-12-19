@@ -1,6 +1,6 @@
 ﻿namespace DiaryApp.Core.Models
 {
-    public class TodoList : ListBase<TodoItem>
+    public class TodoList : DiaryList<TodoItem>
     {
         public TodoList()
         {

@@ -5,22 +5,18 @@ using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace DiaryApp.API.Controllers.Lists
+namespace DiaryApp.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class CrudController<TDto, TEntity> : AppBaseController<CrudController<TDto, TEntity>>
         where TDto : BaseDto
         where TEntity : BaseEntity
     {
         private readonly ICrudService<TDto, TEntity> _crudService;
-        public CrudController(IMapper mapper, ILoggerFactory loggerFactory) : base(mapper, loggerFactory)
+        public CrudController(ICrudService<TDto, TEntity> crudService, IMapper mapper, ILoggerFactory loggerFactory) : base(mapper, loggerFactory)
         {
+            _crudService = crudService;
         }
 
         [HttpPost]
@@ -39,7 +35,7 @@ namespace DiaryApp.API.Controllers.Lists
             return Ok();
         }
 
-        [HttpDelete("{eventListID}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteAsync(int id)
         {

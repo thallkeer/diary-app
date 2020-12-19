@@ -17,26 +17,26 @@ namespace DiaryApp.Data.Services
         {
         }
 
-        public async Task TransferPageDataToNextMonth(MonthPageDto prevPageDto, TransferDataModel transferDataModel)
+        public async Task TransferPageDataToNextMonthAsync(MonthPageDto prevPageDto, TransferDataModel transferDataModel)
         {
-            MonthPageDto monthPageDto = await GetPageAsync(prevPageDto.UserID, prevPageDto.Year, prevPageDto.Month + 1);
+            PageDto nextPageDto = new PageDto(prevPageDto.UserID, prevPageDto.Year, prevPageDto.Month + 1);
 
-            using var transaction = await context.Database.BeginTransactionAsync();
+            MonthPageDto monthPageDto = await GetPageAsync(nextPageDto.UserID, nextPageDto.Year, nextPageDto.Month);
+
+            //using var transaction = await context.Database.BeginTransactionAsync();
 
             try
             {
-                monthPageDto ??= await CreateAsync(prevPageDto.UserID, prevPageDto.Year, prevPageDto.Month + 1);
+                monthPageDto ??= await CreateAsync(nextPageDto.UserID, nextPageDto.Year, nextPageDto.Month);
 
-                var monthPage = monthPageDto.ToEntity<MonthPage, MonthPageDto>(mapper);
+                var monthPage = await dbSet.FindAsync(monthPageDto.Id);
 
-                var transferOperations = new TransferAreaOperations(context, monthPage, transferDataModel);
+                var prevPage = await dbSet.FindAsync(prevPageDto.Id);
 
-                var prevPage = prevPageDto.ToEntity<MonthPage, MonthPageDto>(mapper);
-
-                monthPage.GoalsArea = await transferOperations.InitOrTransferArea(monthPage.GoalsArea, prevPage.GoalsArea);
-                monthPage.DesiresArea = await transferOperations.InitOrTransferArea(monthPage.DesiresArea, prevPage.DesiresArea);
-                monthPage.IdeasArea = await transferOperations.InitOrTransferArea(monthPage.IdeasArea, prevPage.IdeasArea);
-                monthPage.PurchasesArea = await transferOperations.InitOrTransferArea(monthPage.PurchasesArea, prevPage.PurchasesArea);
+                monthPage.GoalsArea = TransferAreaData(transferDataModel, monthPage.GoalsArea, prevPage.GoalsArea);
+                monthPage.DesiresArea = TransferAreaData(transferDataModel, monthPage.DesiresArea, prevPage.DesiresArea);
+                monthPage.PurchasesArea = TransferAreaData(transferDataModel, monthPage.PurchasesArea, prevPage.PurchasesArea);
+                monthPage.IdeasArea = TransferAreaData(transferDataModel, monthPage.IdeasArea, prevPage.IdeasArea);
 
                 context.Update(monthPage);
 
@@ -44,7 +44,8 @@ namespace DiaryApp.Data.Services
 
                 // Commit transaction if all commands succeed, transaction will auto-rollback
                 // when disposed if either commands fails
-                await transaction.CommitAsync();
+
+                //await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -52,54 +53,15 @@ namespace DiaryApp.Data.Services
             }
         }
 
-        private class TransferAreaOperations
-        {           
-            private readonly ApplicationContext context;
-            private readonly MonthPage monthPage;
-            private readonly TransferDataModel transferDataModel;
-
-            private PageAreaFactoryCreator factoryCreator;
-            private PageAreaFactoryCreator FactoryCreator
+        private T TransferAreaData<T>(TransferDataModel transferDataModel, T area, T prevArea) where T : PageAreaBase<MonthPage>, IMonthPageArea<T>
+        {
+            bool transfer = transferDataModel.GetValueForArea(typeof(T));
+            if (transfer)
             {
-                get
-                {
-                    if (factoryCreator == null)
-                        factoryCreator = new PageAreaFactoryCreator();
-                    return factoryCreator;
-                }
-            }            
-
-            public TransferAreaOperations(ApplicationContext context, MonthPage monthPage, TransferDataModel transferDataModel)
-            {
-                this.context = context;
-                this.monthPage = monthPage;
-                this.transferDataModel = transferDataModel;
+                area.AddFromOtherArea(prevArea);
+                context.Set<T>().Update(area);
             }
-
-            public async Task<T> InitOrTransferArea<T>(T area, T prevArea) where T : PageAreaBase<MonthPage>, IMonthPageArea<T>
-            {
-                bool transfer = transferDataModel.GetValueForArea(prevArea.AreaType);
-                if (area == null)
-                {
-                    if (transfer)
-                        area = prevArea.TransferAreaData(monthPage);
-                    else
-                    {
-                        IPageAreaFactory pageAreaFactory = FactoryCreator.GetFactoryByAreaType(prevArea.AreaType);
-                        area = (T) pageAreaFactory.CreatePageArea(monthPage);
-                    }
-
-                    context.Set<T>().Add(area);
-                    await context.SaveChangesAsync();
-                }
-                else if (transfer)
-                {
-                    area.AddFromOtherArea(prevArea);
-                    context.Set<T>().Update(area);
-                    await context.SaveChangesAsync();
-                }
-                return area;
-            }
+            return area;
         }
     }
 }

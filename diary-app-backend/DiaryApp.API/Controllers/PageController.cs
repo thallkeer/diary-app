@@ -11,26 +11,27 @@ using System.Threading.Tasks;
 
 namespace DiaryApp.API.Controllers
 {
-    public class PageController<TPageDto, TService> : AppBaseController<PageController<TPageDto, TService>>
+    public class PageController<TPageDto> : AppBaseController<PageController<TPageDto>>
         where TPageDto : PageDto
-        where TService : IPageService<TPageDto>
     {
-        protected readonly TService pageService;
+        protected readonly IPageService<TPageDto> pageService;
 
-        public PageController(TService pageService, IMapper mapper, ILoggerFactory loggerFactory)
+        public PageController(IPageService<TPageDto> pageService, IMapper mapper, ILoggerFactory loggerFactory)
             : base(mapper, loggerFactory)
         {
             this.pageService = pageService;
         }
 
-        protected virtual async Task<IActionResult> GetPage(int userId, int year, int month)
+        [HttpGet("{userId}/{year}/{month}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAsync(int userId, int year, int month)
         {
             try
             {
                 var page = await pageService.GetPageAsync(userId, year, month);
 
                 if (page == null)
-                    return await CreateNewPage(new PageParams { UserId = userId, Year = year, Month = month });
+                    return await PostAsync(new PageParams { UserId = userId, Year = year, Month = month });
 
                 return Ok(page);
             }
@@ -41,7 +42,9 @@ namespace DiaryApp.API.Controllers
             }
         }
 
-        public virtual async Task<IActionResult> CreateNewPage(PageParams pageParams)
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> PostAsync(PageParams pageParams)
         {
             try
             {

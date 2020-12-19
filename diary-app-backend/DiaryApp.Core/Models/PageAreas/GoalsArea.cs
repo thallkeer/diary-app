@@ -11,8 +11,6 @@ namespace DiaryApp.Core.Models.PageAreas
 
         public virtual List<HabitTracker> GoalLists { get; set; } = new List<HabitTracker>();
 
-        public PageAreaType AreaType => PageAreaType.Goals;
-
         public GoalsArea()
         {
 
@@ -33,20 +31,7 @@ namespace DiaryApp.Core.Models.PageAreas
                 Initialize();
         }
 
-        public GoalsArea TransferAreaData(MonthPage page)
-        {
-            var newArea = new GoalsArea(page)
-            {
-                GoalLists = new List<HabitTracker>()
-            };
-            this.GoalLists?.ForEach(tracker =>
-            {
-                newArea.GoalLists.Add(new HabitTracker(tracker, newArea));
-            });
-            return newArea;
-        }
-
-        public override void Initialize()
+        protected override void Initialize()
         {
             GoalLists.Add(new HabitTracker() { GoalName = GoalNameSTR });
         }

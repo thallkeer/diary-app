@@ -12,7 +12,6 @@ namespace DiaryApp.Core.Models.PageAreas
         public const string ToReadSTR = "Прочитать";
 
         public virtual List<DesiresList> DesiresLists { get; set; } = new List<DesiresList>(3);
-        public PageAreaType AreaType => PageAreaType.Desires;
 
         public DesiresArea() : base()
         {
@@ -32,17 +31,7 @@ namespace DiaryApp.Core.Models.PageAreas
             }
         }
 
-        public DesiresArea TransferAreaData(MonthPage page)
-        {
-            var newArea = new DesiresArea(page, false)
-            {
-                DesiresLists = new List<DesiresList>(3)
-            };
-            newArea.DesiresLists = this.DesiresLists.GetCopy<DesiresList, CommonList, ListItem>();          
-            return newArea;
-        }
-
-        public override void Initialize()
+        protected override void Initialize()
         {
             DesiresLists.AddRange(new DesiresList[]
                 {

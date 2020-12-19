@@ -10,18 +10,6 @@ namespace DiaryApp.Core.Models.PageAreas
 
     }
 
-    public interface IMainPageArea<T> : IPageArea<T, MainPage>
-        where T : PageAreaBase<MainPage>
-    {
-
-    }
-
-    public interface IWeekPageArea<T> : IPageArea<T, WeekPage>
-        where T : PageAreaBase<WeekPage>
-    {
-
-    }
-
     public abstract class PageAreaBase<TPage> : BaseEntity, IPageArea
         where TPage : PageBase
     {
@@ -36,7 +24,8 @@ namespace DiaryApp.Core.Models.PageAreas
         {
 
         }
-        public PageAreaBase(TPage page, string header, bool withInitialization = false)
+
+        public PageAreaBase(TPage page, string header, bool withInitialization)
         {
             Page = page;
             Header = header;
@@ -45,6 +34,6 @@ namespace DiaryApp.Core.Models.PageAreas
                 Initialize();
         }
 
-        public abstract void Initialize();
+        protected abstract void Initialize();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DiaryApp.Core.Interfaces;
+using DiaryApp.Core.Models.PageAreas;
 using System;
 
 namespace DiaryApp.Core.Models
@@ -6,8 +7,8 @@ namespace DiaryApp.Core.Models
     [AttributeUsage(AttributeTargets.Property)]
     class PageAreaAttribute : Attribute
     {
-        public PageAreaType AreaType { get; }
-        public PageAreaAttribute(PageAreaType pageAreaType)
+        public Type AreaType { get; }
+        public PageAreaAttribute(Type pageAreaType)
         {
             AreaType = pageAreaType;
         }
@@ -15,25 +16,40 @@ namespace DiaryApp.Core.Models
 
     public class TransferDataModel
     {
-        [PageArea(PageAreaType.Purchases)]
+        [PageArea(typeof(PurchasesArea))]
         public bool TransferPurchasesArea { get; set; }
-        [PageArea(PageAreaType.Desires)]
+
+        [PageArea(typeof(DesiresArea))]
         public bool TransferDesiresArea { get; set; }
-        [PageArea(PageAreaType.Goals)]
+
+        [PageArea(typeof(GoalsArea))]
         public bool TransferGoalsArea { get; set; }
-        [PageArea(PageAreaType.Ideas)]
+
+        [PageArea(typeof(IdeasArea))]
         public bool TransferIdeasArea { get; set; }
 
-        public bool GetValueForArea(PageAreaType pageAreaType)
+        public static TransferDataModel CreateFullTransferModel()
+        {
+            return new TransferDataModel
+            {
+                TransferDesiresArea = true,
+                TransferGoalsArea = true,
+                TransferIdeasArea = true,
+                TransferPurchasesArea = true
+            };
+        }
+
+        public bool GetValueForArea(Type pageAreaType)
         {
             Type transferDataType = typeof(TransferDataModel);
+            var pageAreaAttributeType = typeof(PageAreaAttribute);
             foreach (var property in transferDataType.GetProperties())
             {
-                PageAreaAttribute areaAttribute = (PageAreaAttribute) Attribute.GetCustomAttribute(property, typeof(PageAreaAttribute));
+                PageAreaAttribute areaAttribute = (PageAreaAttribute) Attribute.GetCustomAttribute(property, pageAreaAttributeType);
                 if (areaAttribute.AreaType == pageAreaType)
                     return (bool) property.GetValue(this);
             }
-            return false;
+            throw new NotSupportedException($"Type {pageAreaType} of page area is not expected at transfer data model!");
         }
     }
 }

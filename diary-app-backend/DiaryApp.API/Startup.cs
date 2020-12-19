@@ -95,24 +95,25 @@ namespace DiaryApp.API
             }
             else
             {
-                app.ConfigureExceptionHandler(logger);
                 app.UseHsts();
             }
+
+            app.ConfigureExceptionHandler(logger);
 
             app.UseCors(builder =>
                                     builder.AllowAnyOrigin()
                                            .AllowAnyHeader()
                                            .AllowAnyMethod());
 
-           
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All
-            });
+            //app.UseForwardedHeaders(new ForwardedHeadersOptions
+            //{
+            //    ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All
+            //});
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -148,12 +149,6 @@ namespace DiaryApp.API
                     spa.Options.SourcePath = Path.Join(env.ContentRootPath, "client");
                     //spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
                 }
-            });
-
-            app.Run(async (context) =>
-            {
-                await Task.Run(() => logger.LogInformation($"{DateTime.Now} Processing request {context.Request.Path}"));
-                //await context.Response.WriteAsync("TEST");
             });
         }
     }
