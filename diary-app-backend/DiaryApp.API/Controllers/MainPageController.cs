@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using DiaryApp.API.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Data.ServiceInterfaces;

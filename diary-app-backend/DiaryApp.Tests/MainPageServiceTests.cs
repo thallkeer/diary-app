@@ -2,7 +2,6 @@ using DiaryApp.Core.DTO;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Data.Exceptions;
 using DiaryApp.Data.ServiceInterfaces;
-using DiaryApp.Data.Services;
 using System;
 using System.Threading.Tasks;
 using Xunit;

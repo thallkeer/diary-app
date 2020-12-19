@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using DiaryApp.Core.DTO;
 using DiaryApp.Data.ServiceInterfaces;
-using DiaryApp.API.Controllers.Lists;
 using DiaryApp.Core.Models;
 
 namespace DiaryApp.API.Controllers

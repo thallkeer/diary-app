@@ -223,7 +223,7 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("IdeasLists");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PurchasesList", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.PurchaseList", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -662,7 +662,7 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("List");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PurchasesList", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.PurchaseList", b =>
                 {
                     b.HasOne("DiaryApp.Core.Models.TodoList", "List")
                         .WithMany()

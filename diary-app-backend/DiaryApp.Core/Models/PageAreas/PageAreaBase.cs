@@ -1,5 +1,4 @@
 ﻿using DiaryApp.Core.Interfaces;
-using DiaryApp.Core.Models.Pages;
 using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core.Models.PageAreas

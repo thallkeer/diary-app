@@ -5,9 +5,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core
 {
+    /// <summary>
+    /// Represents one day of month in a habit tracker
+    /// </summary>
     public class HabitDay
     {
+        /// <summary>
+        /// Number of day in month
+        /// </summary>
         public int Number { get; set; }
+        /// <summary>
+        /// Note for day
+        /// </summary>
         public string Note { get; set; }
 
         public override string ToString()
@@ -16,14 +25,23 @@ namespace DiaryApp.Core
         }
     }
 
+    /// <summary>
+    /// Tracks user habit along month
+    /// </summary>
     public class HabitTracker : BaseEntity
     {
         [Required]
         [MaxLength(100)]
         public string GoalName { get; set; }
+
+        /// <summary>
+        /// Days of habit. Contains only days user marked.
+        /// </summary>
         public List<HabitDay> SelectedDays { get; set; } = new List<HabitDay>();
+
         [Required]
         public int GoalsAreaID { get; set; }
+
         public virtual GoalsArea GoalsArea { get; set; }
 
         public HabitTracker() { }
@@ -32,7 +50,8 @@ namespace DiaryApp.Core
         {
             this.GoalName = original.GoalName;
             this.SelectedDays = new List<HabitDay>(original.SelectedDays);
-            original.SelectedDays.ForEach(sd => this.SelectedDays.Add(sd));            
+            //TODO: try to harmonize with the rest of the lists
+            original.SelectedDays.ForEach(sd => this.SelectedDays.Add(sd));
             this.GoalsArea = goalsArea;
         }
     }

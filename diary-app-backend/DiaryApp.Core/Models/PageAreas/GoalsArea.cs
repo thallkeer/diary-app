@@ -1,5 +1,4 @@
-﻿using DiaryApp.Core.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DiaryApp.Core.Models.PageAreas

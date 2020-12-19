@@ -14,16 +14,4 @@
 
         public override ListItemBase GetCopy() => new ListItem(this);
     }
-
-    public class CommonList : DiaryList<ListItem>
-    {
-        public CommonList()
-        {
-        }
-
-        public CommonList(string title)
-        {
-            Title = title;
-        }        
-    }
 }

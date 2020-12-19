@@ -1,7 +1,4 @@
-﻿using DiaryApp.Core.Extensions;
-using DiaryApp.Core.Interfaces;
-
-namespace DiaryApp.Core.Models.PageAreas
+﻿namespace DiaryApp.Core.Models.PageAreas
 {
     public class IdeasArea : PageAreaBase<MonthPage>, IMonthPageArea<IdeasArea>
     {

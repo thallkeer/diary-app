@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DiaryApp.API.Controllers.Lists;
 using DiaryApp.Core;
 using DiaryApp.Core.DTO;
 using DiaryApp.Data.ServiceInterfaces;

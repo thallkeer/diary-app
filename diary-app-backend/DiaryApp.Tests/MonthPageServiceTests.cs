@@ -1,13 +1,6 @@
 ﻿using DiaryApp.Data.ServiceInterfaces;
 using DiaryApp.Core.Models;
-    using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
-using DiaryApp.Core.DTO;
-using DiaryApp.Core;
 
 namespace DiaryApp.Tests
 {
