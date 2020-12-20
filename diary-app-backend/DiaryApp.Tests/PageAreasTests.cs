@@ -26,7 +26,7 @@ namespace DiaryApp.Tests
 
             Assert.Equal(purchasesArea.PurchasesLists.Count, otherAreaTotalListsCount + areaTotalListsCountBeforeAddFromOtherArea - emptyListsCountBeforeAddFromOtherArea);
             Assert.Equal(emptyListsCountAfterAddFromOtherArea, otherAreaEmptyListsCount);
-        }       
+        }
 
         [Theory]
         [MemberData(nameof(TheoryDesiresAreas))]
@@ -56,8 +56,8 @@ namespace DiaryApp.Tests
         {
             var other = new IdeasArea(null, true);
 
-            var itemsCountInputArea = ideasArea.IdeasList.Items.Count;
-            var itemsCountOtherArea = other.IdeasList.Items.Count;
+            int itemsCountInputArea = ideasArea.IdeasList?.Items.Count ?? 0;
+            int itemsCountOtherArea = other.IdeasList.Items.Count;
 
             ideasArea.AddFromOtherArea(other);
 
@@ -93,12 +93,12 @@ namespace DiaryApp.Tests
         }
 
         #region Utils
-        private static T GenerateListWrapper<T, TList, TItem>(bool withItems)
-            where T : IListWrapper<TList, TItem>, new()
+        private static T GenerateListWrapper<T, TList, TItem, TArea>(bool withItems)
+            where T : DiaryAreaList<TList, TItem, TArea, MonthPage>, new()
             where TList : DiaryList<TItem>, new()
             where TItem : ListItemBase, new()
+            where TArea : PageAreaBase<MonthPage>
         {
-
             var pa = new T()
             {
                 List = new TList(),
@@ -118,7 +118,7 @@ namespace DiaryApp.Tests
             var paWithCustomLists = new PurchasesArea(null, false);
             for (int i = 0; i < 4; i++)
             {
-                var pa = GenerateListWrapper<PurchasesList, TodoList, TodoItem>(i % 2 == 0);
+                var pa = GenerateListWrapper<PurchaseList, TodoList, TodoItem, PurchasesArea>(i % 2 == 0);
                 paWithCustomLists.PurchasesLists.Add(pa);
             }
             return new TheoryData<PurchasesArea>
@@ -128,7 +128,7 @@ namespace DiaryApp.Tests
                 paWithCustomLists
             };
         }
-        
+
         public static TheoryData<DesiresArea> TheoryDesiresAreas()
         {
             var paWithInitialize = new DesiresArea(null, true);

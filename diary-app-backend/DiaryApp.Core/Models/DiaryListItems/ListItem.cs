@@ -2,7 +2,7 @@
 {
     public class ListItem : ListItemBase
     {
-        public virtual new CommonList Owner { get; set; }
+        public virtual CommonList Owner { get; set; }
 
         public ListItem()
         {
@@ -13,17 +13,5 @@
         { }
 
         public override ListItemBase GetCopy() => new ListItem(this);
-    }
-
-    public class CommonList : DiaryList<ListItem>
-    {
-        public CommonList()
-        {
-        }
-
-        public CommonList(string title)
-        {
-            Title = title;
-        }        
     }
 }

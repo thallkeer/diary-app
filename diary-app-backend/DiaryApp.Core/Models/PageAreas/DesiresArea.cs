@@ -1,6 +1,5 @@
-﻿using DiaryApp.Core.Extensions;
-using DiaryApp.Core.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
@@ -17,7 +16,7 @@ namespace DiaryApp.Core.Models.PageAreas
         {
 
         }
-        public DesiresArea(MonthPage page, bool withInitialization = false) : base(page, HeaderSTR, withInitialization)
+        public DesiresArea(MonthPage page, bool withInitialization) : base(page, HeaderSTR, withInitialization)
         {
         }      
 
@@ -27,7 +26,8 @@ namespace DiaryApp.Core.Models.PageAreas
                 Initialize();
             for (int i = 0; i < other.DesiresLists.Count; i++)
             {
-                this.DesiresLists[i].Items.AddRange(other.DesiresLists[i].Items);
+                var otherItemsCopy = other.DesiresLists[i].CopyItems();
+                this.DesiresLists[i].Items.AddRange(otherItemsCopy);
             }
         }
 

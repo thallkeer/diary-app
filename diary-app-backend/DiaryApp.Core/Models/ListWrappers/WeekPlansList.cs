@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DiaryApp.Core.Models
 {
-    public class WeekPlansList : BaseEntity, ITodoListWrapper
+    public class WeekPlansList : BaseEntity
     {
         [Required]
         public int ListID { get; set; }

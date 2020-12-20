@@ -11,46 +11,46 @@ namespace DiaryApp.Core.Migrations
                 name: "CommonLists",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CommonLists", x => x.ID);
+                    table.PrimaryKey("PK_CommonLists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "EventLists",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventLists", x => x.ID);
+                    table.PrimaryKey("PK_EventLists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "TodoLists",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TodoLists", x => x.ID);
+                    table.PrimaryKey("PK_TodoLists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
@@ -59,14 +59,14 @@ namespace DiaryApp.Core.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.ID);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ListItems",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Subject = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
@@ -74,12 +74,12 @@ namespace DiaryApp.Core.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ListItems", x => x.ID);
+                    table.PrimaryKey("PK_ListItems", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ListItems_CommonLists_OwnerID",
                         column: x => x.OwnerID,
                         principalTable: "CommonLists",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -87,7 +87,7 @@ namespace DiaryApp.Core.Migrations
                 name: "Events",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -96,12 +96,12 @@ namespace DiaryApp.Core.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Events", x => x.ID);
+                    table.PrimaryKey("PK_Events", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Events_EventLists_OwnerID",
                         column: x => x.OwnerID,
                         principalTable: "EventLists",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -109,7 +109,7 @@ namespace DiaryApp.Core.Migrations
                 name: "Todos",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Done = table.Column<bool>(type: "bit", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -118,12 +118,12 @@ namespace DiaryApp.Core.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Todos", x => x.ID);
+                    table.PrimaryKey("PK_Todos", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Todos_TodoLists_OwnerID",
                         column: x => x.OwnerID,
                         principalTable: "TodoLists",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -131,7 +131,7 @@ namespace DiaryApp.Core.Migrations
                 name: "MainPages",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Year = table.Column<int>(type: "int", nullable: false),
                     Month = table.Column<int>(type: "int", nullable: false),
@@ -139,12 +139,12 @@ namespace DiaryApp.Core.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MainPages", x => x.ID);
+                    table.PrimaryKey("PK_MainPages", x => x.Id);
                     table.ForeignKey(
                         name: "FK_MainPages_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -152,7 +152,7 @@ namespace DiaryApp.Core.Migrations
                 name: "MonthPages",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Year = table.Column<int>(type: "int", nullable: false),
                     Month = table.Column<int>(type: "int", nullable: false),
@@ -160,33 +160,12 @@ namespace DiaryApp.Core.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MonthPages", x => x.ID);
+                    table.PrimaryKey("PK_MonthPages", x => x.Id);
                     table.ForeignKey(
                         name: "FK_MonthPages_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WeekPages",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Year = table.Column<int>(type: "int", nullable: false),
-                    Month = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WeekPages", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_WeekPages_Users_UserID",
-                        column: x => x.UserID,
-                        principalTable: "Users",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -194,26 +173,26 @@ namespace DiaryApp.Core.Migrations
                 name: "ImportantEventsAreas",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImportantEventsID = table.Column<int>(type: "int", nullable: false),
                     Header = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PageID = table.Column<int>(type: "int", nullable: false)
+                    PageId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ImportantEventsAreas", x => x.ID);
+                    table.PrimaryKey("PK_ImportantEventsAreas", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ImportantEventsAreas_EventLists_ImportantEventsID",
                         column: x => x.ImportantEventsID,
                         principalTable: "EventLists",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ImportantEventsAreas_MainPages_PageID",
-                        column: x => x.PageID,
+                        name: "FK_ImportantEventsAreas_MainPages_PageId",
+                        column: x => x.PageId,
                         principalTable: "MainPages",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -221,26 +200,26 @@ namespace DiaryApp.Core.Migrations
                 name: "ImportantThingsAreas",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImportantThingsID = table.Column<int>(type: "int", nullable: false),
                     Header = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PageID = table.Column<int>(type: "int", nullable: false)
+                    PageId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ImportantThingsAreas", x => x.ID);
+                    table.PrimaryKey("PK_ImportantThingsAreas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ImportantThingsAreas_MainPages_PageID",
-                        column: x => x.PageID,
+                        name: "FK_ImportantThingsAreas_MainPages_PageId",
+                        column: x => x.PageId,
                         principalTable: "MainPages",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ImportantThingsAreas_TodoLists_ImportantThingsID",
                         column: x => x.ImportantThingsID,
                         principalTable: "TodoLists",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -248,19 +227,19 @@ namespace DiaryApp.Core.Migrations
                 name: "DesiresAreas",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Header = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PageID = table.Column<int>(type: "int", nullable: false)
+                    PageId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DesiresAreas", x => x.ID);
+                    table.PrimaryKey("PK_DesiresAreas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DesiresAreas_MonthPages_PageID",
-                        column: x => x.PageID,
+                        name: "FK_DesiresAreas_MonthPages_PageId",
+                        column: x => x.PageId,
                         principalTable: "MonthPages",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -268,19 +247,19 @@ namespace DiaryApp.Core.Migrations
                 name: "GoalsAreas",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Header = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PageID = table.Column<int>(type: "int", nullable: false)
+                    PageId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GoalsAreas", x => x.ID);
+                    table.PrimaryKey("PK_GoalsAreas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GoalsAreas_MonthPages_PageID",
-                        column: x => x.PageID,
+                        name: "FK_GoalsAreas_MonthPages_PageId",
+                        column: x => x.PageId,
                         principalTable: "MonthPages",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -288,19 +267,19 @@ namespace DiaryApp.Core.Migrations
                 name: "IdeasAreas",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Header = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PageID = table.Column<int>(type: "int", nullable: false)
+                    PageId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdeasAreas", x => x.ID);
+                    table.PrimaryKey("PK_IdeasAreas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_IdeasAreas_MonthPages_PageID",
-                        column: x => x.PageID,
+                        name: "FK_IdeasAreas_MonthPages_PageId",
+                        column: x => x.PageId,
                         principalTable: "MonthPages",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -308,225 +287,156 @@ namespace DiaryApp.Core.Migrations
                 name: "PurchasesAreas",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Header = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PageID = table.Column<int>(type: "int", nullable: false)
+                    PageId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PurchasesAreas", x => x.ID);
+                    table.PrimaryKey("PK_PurchasesAreas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PurchasesAreas_MonthPages_PageID",
-                        column: x => x.PageID,
+                        name: "FK_PurchasesAreas_MonthPages_PageId",
+                        column: x => x.PageId,
                         principalTable: "MonthPages",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "NotesAreas",
+                name: "DesireLists",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Header = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PageID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NotesAreas", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_NotesAreas_WeekPages_PageID",
-                        column: x => x.PageID,
-                        principalTable: "WeekPages",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WeekPlansAreas",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    WeekNumber = table.Column<int>(type: "int", nullable: false),
-                    Header = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PageID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WeekPlansAreas", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_WeekPlansAreas_WeekPages_PageID",
-                        column: x => x.PageID,
-                        principalTable: "WeekPages",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DesiresLists",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ListID = table.Column<int>(type: "int", nullable: false),
-                    DesiresAreaID = table.Column<int>(type: "int", nullable: false)
+                    AreaOwnerID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DesiresLists", x => x.ID);
+                    table.PrimaryKey("PK_DesireLists", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DesiresLists_CommonLists_ListID",
+                        name: "FK_DesireLists_CommonLists_ListID",
                         column: x => x.ListID,
                         principalTable: "CommonLists",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DesiresLists_DesiresAreas_DesiresAreaID",
-                        column: x => x.DesiresAreaID,
+                        name: "FK_DesireLists_DesiresAreas_AreaOwnerID",
+                        column: x => x.AreaOwnerID,
                         principalTable: "DesiresAreas",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "HabitsTrackers",
+                name: "HabitTrackers",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GoalName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    SelectedDays = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GoalsAreaID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HabitsTrackers", x => x.ID);
+                    table.PrimaryKey("PK_HabitTrackers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HabitsTrackers_GoalsAreas_GoalsAreaID",
+                        name: "FK_HabitTrackers_GoalsAreas_GoalsAreaID",
                         column: x => x.GoalsAreaID,
                         principalTable: "GoalsAreas",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "IdeasLists",
+                name: "IdeaLists",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ListID = table.Column<int>(type: "int", nullable: false),
-                    IdeasAreaID = table.Column<int>(type: "int", nullable: false)
+                    AreaOwnerID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdeasLists", x => x.ID);
+                    table.PrimaryKey("PK_IdeaLists", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_IdeasLists_CommonLists_ListID",
+                        name: "FK_IdeaLists_CommonLists_ListID",
                         column: x => x.ListID,
                         principalTable: "CommonLists",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_IdeasLists_IdeasAreas_IdeasAreaID",
-                        column: x => x.IdeasAreaID,
+                        name: "FK_IdeaLists_IdeasAreas_AreaOwnerID",
+                        column: x => x.AreaOwnerID,
                         principalTable: "IdeasAreas",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PurchasesLists",
+                name: "PurchaseLists",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ListID = table.Column<int>(type: "int", nullable: false),
-                    PurchasesAreaID = table.Column<int>(type: "int", nullable: false)
+                    AreaOwnerID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PurchasesLists", x => x.ID);
+                    table.PrimaryKey("PK_PurchaseLists", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PurchasesLists_PurchasesAreas_PurchasesAreaID",
-                        column: x => x.PurchasesAreaID,
+                        name: "FK_PurchaseLists_PurchasesAreas_AreaOwnerID",
+                        column: x => x.AreaOwnerID,
                         principalTable: "PurchasesAreas",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PurchasesLists_TodoLists_ListID",
+                        name: "FK_PurchaseLists_TodoLists_ListID",
                         column: x => x.ListID,
                         principalTable: "TodoLists",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "WeekDays",
+                name: "HabitDays",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Day = table.Column<DateTime>(type: "date", nullable: false),
-                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WeekPlansAreaID = table.Column<int>(type: "int", nullable: false)
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HabitTrackerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WeekDays", x => x.ID);
+                    table.PrimaryKey("PK_HabitDays", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WeekDays_WeekPlansAreas_WeekPlansAreaID",
-                        column: x => x.WeekPlansAreaID,
-                        principalTable: "WeekPlansAreas",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WeekPlansLists",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ListID = table.Column<int>(type: "int", nullable: false),
-                    WeekPlansAreaID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WeekPlansLists", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_WeekPlansLists_TodoLists_ListID",
-                        column: x => x.ListID,
-                        principalTable: "TodoLists",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_WeekPlansLists_WeekPlansAreas_WeekPlansAreaID",
-                        column: x => x.WeekPlansAreaID,
-                        principalTable: "WeekPlansAreas",
-                        principalColumn: "ID",
+                        name: "FK_HabitDays_HabitTrackers_HabitTrackerId",
+                        column: x => x.HabitTrackerId,
+                        principalTable: "HabitTrackers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DesiresAreas_PageID",
-                table: "DesiresAreas",
-                column: "PageID",
-                unique: true);
+                name: "IX_DesireLists_AreaOwnerID",
+                table: "DesireLists",
+                column: "AreaOwnerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DesiresLists_DesiresAreaID",
-                table: "DesiresLists",
-                column: "DesiresAreaID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DesiresLists_ListID",
-                table: "DesiresLists",
+                name: "IX_DesireLists_ListID",
+                table: "DesireLists",
                 column: "ListID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DesiresAreas_PageId",
+                table: "DesiresAreas",
+                column: "PageId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_OwnerID",
@@ -534,32 +444,37 @@ namespace DiaryApp.Core.Migrations
                 column: "OwnerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GoalsAreas_PageID",
+                name: "IX_GoalsAreas_PageId",
                 table: "GoalsAreas",
-                column: "PageID",
+                column: "PageId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_HabitsTrackers_GoalsAreaID",
-                table: "HabitsTrackers",
+                name: "IX_HabitDays_HabitTrackerId",
+                table: "HabitDays",
+                column: "HabitTrackerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HabitTrackers_GoalsAreaID",
+                table: "HabitTrackers",
                 column: "GoalsAreaID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdeasAreas_PageID",
-                table: "IdeasAreas",
-                column: "PageID",
+                name: "IX_IdeaLists_AreaOwnerID",
+                table: "IdeaLists",
+                column: "AreaOwnerID",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdeasLists_IdeasAreaID",
-                table: "IdeasLists",
-                column: "IdeasAreaID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IdeasLists_ListID",
-                table: "IdeasLists",
+                name: "IX_IdeaLists_ListID",
+                table: "IdeaLists",
                 column: "ListID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdeasAreas_PageId",
+                table: "IdeasAreas",
+                column: "PageId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ImportantEventsAreas_ImportantEventsID",
@@ -567,9 +482,9 @@ namespace DiaryApp.Core.Migrations
                 column: "ImportantEventsID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImportantEventsAreas_PageID",
+                name: "IX_ImportantEventsAreas_PageId",
                 table: "ImportantEventsAreas",
-                column: "PageID",
+                column: "PageId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -578,9 +493,9 @@ namespace DiaryApp.Core.Migrations
                 column: "ImportantThingsID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImportantThingsAreas_PageID",
+                name: "IX_ImportantThingsAreas_PageId",
                 table: "ImportantThingsAreas",
-                column: "PageID",
+                column: "PageId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -599,73 +514,40 @@ namespace DiaryApp.Core.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NotesAreas_PageID",
-                table: "NotesAreas",
-                column: "PageID",
-                unique: true);
+                name: "IX_PurchaseLists_AreaOwnerID",
+                table: "PurchaseLists",
+                column: "AreaOwnerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PurchasesAreas_PageID",
-                table: "PurchasesAreas",
-                column: "PageID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PurchasesLists_ListID",
-                table: "PurchasesLists",
+                name: "IX_PurchaseLists_ListID",
+                table: "PurchaseLists",
                 column: "ListID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PurchasesLists_PurchasesAreaID",
-                table: "PurchasesLists",
-                column: "PurchasesAreaID");
+                name: "IX_PurchasesAreas_PageId",
+                table: "PurchasesAreas",
+                column: "PageId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Todos_OwnerID",
                 table: "Todos",
                 column: "OwnerID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WeekDays_WeekPlansAreaID",
-                table: "WeekDays",
-                column: "WeekPlansAreaID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WeekPages_UserID",
-                table: "WeekPages",
-                column: "UserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WeekPlansAreas_PageID",
-                table: "WeekPlansAreas",
-                column: "PageID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WeekPlansLists_ListID",
-                table: "WeekPlansLists",
-                column: "ListID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WeekPlansLists_WeekPlansAreaID",
-                table: "WeekPlansLists",
-                column: "WeekPlansAreaID",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DesiresLists");
+                name: "DesireLists");
 
             migrationBuilder.DropTable(
                 name: "Events");
 
             migrationBuilder.DropTable(
-                name: "HabitsTrackers");
+                name: "HabitDays");
 
             migrationBuilder.DropTable(
-                name: "IdeasLists");
+                name: "IdeaLists");
 
             migrationBuilder.DropTable(
                 name: "ImportantEventsAreas");
@@ -677,25 +559,16 @@ namespace DiaryApp.Core.Migrations
                 name: "ListItems");
 
             migrationBuilder.DropTable(
-                name: "NotesAreas");
-
-            migrationBuilder.DropTable(
-                name: "PurchasesLists");
+                name: "PurchaseLists");
 
             migrationBuilder.DropTable(
                 name: "Todos");
 
             migrationBuilder.DropTable(
-                name: "WeekDays");
-
-            migrationBuilder.DropTable(
-                name: "WeekPlansLists");
-
-            migrationBuilder.DropTable(
                 name: "DesiresAreas");
 
             migrationBuilder.DropTable(
-                name: "GoalsAreas");
+                name: "HabitTrackers");
 
             migrationBuilder.DropTable(
                 name: "IdeasAreas");
@@ -716,13 +589,10 @@ namespace DiaryApp.Core.Migrations
                 name: "TodoLists");
 
             migrationBuilder.DropTable(
-                name: "WeekPlansAreas");
+                name: "GoalsAreas");
 
             migrationBuilder.DropTable(
                 name: "MonthPages");
-
-            migrationBuilder.DropTable(
-                name: "WeekPages");
 
             migrationBuilder.DropTable(
                 name: "Users");

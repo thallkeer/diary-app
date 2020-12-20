@@ -4,7 +4,6 @@ using DiaryApp.Core;
 using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 
 namespace DiaryApp.Tests.Helpers
 {

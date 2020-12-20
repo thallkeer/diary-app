@@ -4,8 +4,11 @@ namespace DiaryApp.Core.Models
 {
     public class EventItem : ListItemBase
     {
+        /// <summary>
+        /// Date of event
+        /// </summary>
         public DateTime Date { get; set; }
-        public virtual new EventList Owner { get; set; }
+        public virtual EventList Owner { get; set; }
 
         public EventItem()
         {
@@ -13,7 +16,7 @@ namespace DiaryApp.Core.Models
         }
 
         public EventItem(EventItem original) : base(original)
-        {           
+        {
             this.Date = original.Date;
         }
 

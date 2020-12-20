@@ -2,8 +2,11 @@
 {
     public class TodoItem : ListItemBase
     {
+        /// <summary>
+        /// Is thing is done
+        /// </summary>
         public bool Done { get; set; }
-        public virtual new TodoList Owner { get; set; }
+        public virtual TodoList Owner { get; set; }
 
         public TodoItem()
         {

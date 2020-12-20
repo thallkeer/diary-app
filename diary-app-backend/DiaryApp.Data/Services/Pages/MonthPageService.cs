@@ -6,7 +6,6 @@ using DiaryApp.Core.DTO;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Data.Exceptions;
-using DiaryApp.Data.Extensions;
 using DiaryApp.Data.ServiceInterfaces;
 
 namespace DiaryApp.Data.Services

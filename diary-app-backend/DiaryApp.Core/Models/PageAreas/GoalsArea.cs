@@ -1,5 +1,4 @@
-﻿using DiaryApp.Core.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DiaryApp.Core.Models.PageAreas
@@ -15,7 +14,7 @@ namespace DiaryApp.Core.Models.PageAreas
         {
 
         }
-        public GoalsArea(MonthPage page, bool needInit = false) : base(page, HeaderSTR, needInit)
+        public GoalsArea(MonthPage page, bool needInit) : base(page, HeaderSTR, needInit)
         {
 
         }
@@ -24,9 +23,10 @@ namespace DiaryApp.Core.Models.PageAreas
         {
             GoalLists.RemoveAll(gl => gl.SelectedDays.Count == 0 && gl.GoalName == GoalNameSTR);
 
-            var otherLists = other.GoalLists.Where(gl => gl.GoalName != GoalNameSTR).Select(gl => new HabitTracker(gl, this));
+            var otherLists = other.GoalLists.Where(gl => gl.GoalName != GoalNameSTR).Select(gl => gl.GetCopy());
 
             GoalLists.AddRange(otherLists);
+
             if (GoalLists.Count == 0)
                 Initialize();
         }
