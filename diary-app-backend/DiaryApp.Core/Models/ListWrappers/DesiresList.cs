@@ -2,8 +2,13 @@
 
 namespace DiaryApp.Core.Models
 {
-    public class DesiresList : DiaryListWrapper<CommonList, ListItem, DesiresArea, MonthPage>
+    public class DesiresList : DiaryAreaList<CommonList, ListItem, DesiresArea, MonthPage>
     {
+        public DesiresList()
+        {
+
+        }
+
         public DesiresList(string title) : base(title)
         {
         }

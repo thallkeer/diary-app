@@ -2,7 +2,7 @@
 {
     public class ListItem : ListItemBase
     {
-        public virtual new CommonList Owner { get; set; }
+        public virtual CommonList Owner { get; set; }
 
         public ListItem()
         {

@@ -17,17 +17,18 @@ namespace DiaryApp.Core
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new HabitTrackerConfiguration());
+            //modelBuilder.ApplyConfiguration(new HabitTrackerConfiguration());
         }
 
         public DbSet<EventList> EventLists { get; set; }
         public DbSet<TodoList> TodoLists { get; set; }
         public DbSet<CommonList> CommonLists { get; set; }
-        public DbSet<DesiresList> DesiresLists { get; set; }
-        public DbSet<IdeasList> IdeasLists { get; set; }
-        public DbSet<PurchaseList> PurchasesLists { get; set; }
+        public DbSet<DesiresList> DesireLists { get; set; }
+        public DbSet<IdeasList> IdeaLists { get; set; }
+        public DbSet<PurchaseList> PurchaseLists { get; set; }
         //public DbSet<WeekPlansList> WeekPlansLists { get; set; }
-        public DbSet<HabitTracker> HabitsTrackers { get; set; }
+        public DbSet<HabitTracker> HabitTrackers { get; set; }
+        public DbSet<HabitDay> HabitDays { get; set; }
         public DbSet<ListItem> ListItems { get; set; }
         public DbSet<TodoItem> Todos { get; set; }
         public DbSet<EventItem> Events { get; set; }

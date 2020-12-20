@@ -1,24 +1,38 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DiaryApp.Core.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DiaryApp.Core.Models
 {
+    /// <summary>
+    /// Represents base class for diary list item.
+    /// </summary>
     public abstract class ListItemBase : BaseEntity
     {   
+        /// <summary>
+        /// Outer link for list item
+        /// </summary>
+        [DataType(DataType.Url)]
         public string Url { get; set; }
+
+        /// <summary>
+        /// Text content of item
+        /// </summary>
         [MaxLength(200)]
         public string Subject { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Id of list which contains item
+        /// </summary>
         [Required]
         public int OwnerID { get; set; }
-        [NotMapped]
-        public virtual object Owner { get; set; }
 
         public ListItemBase()
         {
 
         }
 
-        public ListItemBase(ListItemBase original)
+        protected ListItemBase(ListItemBase original)
         {
             Subject = original.Subject;
             Url = original.Url;

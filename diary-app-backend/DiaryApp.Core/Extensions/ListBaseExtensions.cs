@@ -32,7 +32,7 @@ namespace DiaryApp.Core.Extensions
         }
 
         public static List<TWrapper> GetCopy<TWrapper, TList, TItem, TArea, TPage>(this List<TWrapper> source)
-            where TWrapper : DiaryListWrapper<TList, TItem, TArea, TPage>, new()
+            where TWrapper : DiaryAreaList<TList, TItem, TArea, TPage>, new()
             where TList : DiaryList<TItem>, new()
             where TItem : ListItemBase
             where TArea : PageAreaBase<TPage>

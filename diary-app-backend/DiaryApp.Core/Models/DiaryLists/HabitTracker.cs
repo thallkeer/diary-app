@@ -2,22 +2,44 @@
 using DiaryApp.Core.Models.PageAreas;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace DiaryApp.Core
 {
     /// <summary>
     /// Represents one day of month in a habit tracker
     /// </summary>
-    public class HabitDay
+    public class HabitDay : BaseEntity
     {
         /// <summary>
         /// Number of day in month
         /// </summary>
         public int Number { get; set; }
+
         /// <summary>
         /// Note for day
         /// </summary>
         public string Note { get; set; }
+
+        [Required]
+        /// <summary>
+        /// Id of habit tracker which this day is belongs to
+        /// </summary>
+        public int HabitTrackerId { get; set; }
+
+        /// <summary>
+        /// Habit tracker which this day is belongs to
+        /// </summary>
+        public virtual HabitTracker HabitTracker { get; set; }
+
+        public HabitDay GetCopy()
+        {
+            return new HabitDay
+            {
+                Number = Number,
+                Note = Note
+            };
+        }
 
         public override string ToString()
         {
@@ -35,9 +57,9 @@ namespace DiaryApp.Core
         public string GoalName { get; set; }
 
         /// <summary>
-        /// Days of habit. Contains only days user marked.
+        /// Days of habit. Contains only days user has marked.
         /// </summary>
-        public List<HabitDay> SelectedDays { get; set; } = new List<HabitDay>();
+        public virtual List<HabitDay> SelectedDays { get; set; } = new List<HabitDay>();
 
         [Required]
         public int GoalsAreaID { get; set; }
@@ -46,13 +68,17 @@ namespace DiaryApp.Core
 
         public HabitTracker() { }
 
-        public HabitTracker(HabitTracker original, GoalsArea goalsArea)
+        public HabitTracker(string goalName)
         {
-            this.GoalName = original.GoalName;
-            this.SelectedDays = new List<HabitDay>(original.SelectedDays);
-            //TODO: try to harmonize with the rest of the lists
-            original.SelectedDays.ForEach(sd => this.SelectedDays.Add(sd));
-            this.GoalsArea = goalsArea;
+            GoalName = goalName;
+        }
+
+        public HabitTracker GetCopy()
+        {
+            var tracker = new HabitTracker(GoalName);
+            var selectedDaysCopy = SelectedDays.Select(sd => sd.GetCopy());
+            tracker.SelectedDays = new List<HabitDay>(selectedDaysCopy);
+            return tracker;
         }
     }
 }

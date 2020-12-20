@@ -6,9 +6,8 @@
         {
         }
 
-        public CommonList(string title)
+        public CommonList(string title) : base(title)
         {
-            Title = title;
-        }        
+        }
     }
 }

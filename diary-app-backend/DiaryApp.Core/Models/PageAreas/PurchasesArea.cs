@@ -20,13 +20,13 @@ namespace DiaryApp.Core.Models.PageAreas
 
         public void AddFromOtherArea(PurchasesArea other)
         {
-            this.PurchasesLists.RemoveAll(pl => pl.Items.Count == 0);
-            this.PurchasesLists.AddRange(other.PurchasesLists.CopyPurchaseLists());           
+            PurchasesLists.RemoveAll(pl => pl.Items.Count == 0);
+            PurchasesLists.AddRange(other.PurchasesLists.CopyPurchaseLists());           
         }
 
         protected override void Initialize()
         {
-            PurchasesLists.AddRange(new PurchaseList[] 
+            PurchasesLists.AddRange(new PurchaseList[]
             {
                 new PurchaseList(Title),
                 new PurchaseList(Title)
