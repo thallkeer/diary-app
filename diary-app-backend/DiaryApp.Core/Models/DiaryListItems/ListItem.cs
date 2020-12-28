@@ -1,6 +1,8 @@
-﻿namespace DiaryApp.Core.Models
+﻿using DiaryApp.Core.Interfaces;
+
+namespace DiaryApp.Core.Models
 {
-    public class ListItem : ListItemBase
+    public class ListItem : ListItemBase, IDiaryListItem<CommonList, ListItem>
     {
         public virtual CommonList Owner { get; set; }
 

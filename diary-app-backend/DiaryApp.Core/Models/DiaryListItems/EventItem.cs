@@ -1,8 +1,9 @@
-﻿using System;
+﻿using DiaryApp.Core.Interfaces;
+using System;
 
 namespace DiaryApp.Core.Models
 {
-    public class EventItem : ListItemBase
+    public class EventItem : ListItemBase, IDiaryListItem<EventList, EventItem>
     {
         /// <summary>
         /// Date of event

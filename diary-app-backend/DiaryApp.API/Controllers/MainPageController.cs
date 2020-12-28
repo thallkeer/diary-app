@@ -18,6 +18,7 @@ namespace DiaryApp.API.Controllers
 
         [HttpGet("importantThingsArea/{pageID}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetImportantThingsAreaAsync(int pageID)
         {
             var model = await GetPageArea<ImportantThingsArea, ImportantThingsAreaDto>(pageID);
@@ -26,6 +27,7 @@ namespace DiaryApp.API.Controllers
 
         [HttpGet("importantEventsArea/{pageID}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetImportantEventsAreaAsync(int pageID)
         {
             return await GetPageArea<ImportantEventsArea, ImportantEventsAreaDto>(pageID);

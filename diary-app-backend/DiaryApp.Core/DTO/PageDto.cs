@@ -7,15 +7,15 @@
 
         }
 
-        public PageDto(int userID, int year, int month)
+        public PageDto(int userId, int year, int month)
         {
-            UserID = userID;
+            UserId = userId;
             Year = year;
             Month = month;
         }
 
         public int Year { get; set; }
         public int Month { get; set; }
-        public int UserID { get; set; }
+        public int UserId { get; set; }
     }
 }

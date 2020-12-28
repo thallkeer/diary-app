@@ -1,10 +1,11 @@
 ﻿using DiaryApp.Core.Models.PageAreas;
 using System;
+using System.Reflection;
 
 namespace DiaryApp.Core.Models
 {
     [AttributeUsage(AttributeTargets.Property)]
-    class PageAreaAttribute : Attribute
+    public class PageAreaAttribute : Attribute
     {
         public Type AreaType { get; }
         public PageAreaAttribute(Type pageAreaType)
@@ -40,11 +41,10 @@ namespace DiaryApp.Core.Models
 
         public bool GetValueForArea(Type pageAreaType)
         {
-            Type transferDataType = typeof(TransferDataModel);
-            var pageAreaAttributeType = typeof(PageAreaAttribute);
+            Type transferDataType  = GetType();
             foreach (var property in transferDataType.GetProperties())
-            {
-                PageAreaAttribute areaAttribute = (PageAreaAttribute) Attribute.GetCustomAttribute(property, pageAreaAttributeType);
+            {                
+                PageAreaAttribute areaAttribute = property.GetCustomAttribute<PageAreaAttribute>();
                 if (areaAttribute.AreaType == pageAreaType)
                     return (bool) property.GetValue(this);
             }

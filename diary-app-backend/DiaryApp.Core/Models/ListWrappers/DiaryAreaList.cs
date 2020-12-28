@@ -1,5 +1,4 @@
-﻿using DiaryApp.Core.Extensions;
-using DiaryApp.Core.Models.PageAreas;
+﻿using DiaryApp.Core.Models.PageAreas;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

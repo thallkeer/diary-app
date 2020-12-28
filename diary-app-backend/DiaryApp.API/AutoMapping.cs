@@ -20,6 +20,8 @@ namespace DiaryApp.API
             CreateMap<CommonList, CommonListDto>().ReverseMap();
 
             CreateMap<PurchaseList, TodoListDto>().ReverseMap();
+            CreateMap<IdeasList, CommonListDto>().ReverseMap();
+            CreateMap<DesiresList, CommonListDto>().ReverseMap();
 
             CreateMap<MainPage, MainPageDto>().ReverseMap();
             CreateMap<MonthPage, MonthPageDto>().ReverseMap();            

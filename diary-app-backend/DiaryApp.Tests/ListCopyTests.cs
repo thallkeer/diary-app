@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using DiaryApp.Core;
 using DiaryApp.Core.Extensions;
 using DiaryApp.Core.Models;
 using Xunit;
+using AutoFixture;
+using DiaryApp.Core.Interfaces;
+using AutoFixture.Xunit2;
 
 namespace DiaryApp.Tests
 {
-    public class ListCopyTests
+    public class ListCopyTests : BaseTests
     {
         [Fact]
         public void CreateDeepCopyOnTodoListShouldWorkRight()
         {
-            var original = CreateList<TodoList, TodoItem>((todo) =>
-            {
-                todo.Done = true;
-            });
+            var original = CreateList<TodoList, TodoItem>();
 
             var copy = original.CreateDeepCopy<TodoList, TodoItem>();
 
@@ -24,9 +25,7 @@ namespace DiaryApp.Tests
         [Fact]
         public void CreateDeepCopyOnEventListShouldWorkRight()
         {
-            var original = CreateList<EventList, EventItem>((ev) => {
-                ev.Date = DateTime.Now.AddDays(1);
-            });
+            var original = CreateList<EventList, EventItem>();
 
             var copy = original.CreateDeepCopy<EventList, EventItem>();
 
@@ -43,31 +42,55 @@ namespace DiaryApp.Tests
             TestLists<CommonList, ListItem>(original, copy);
         }
 
-        internal static TList CreateList<TList, TItem>(Action<TItem> customItemSeed = null)
-            where TList : DiaryList<TItem>, new()
-            where TItem : ListItemBase, new()
+        [Fact]
+        public void HabitTrackerGetCopyShouldCreateRightCopy()
         {
-            var original = new TList
-            {
-                Id = 1,
-                Title = $"Test{typeof(TList)}",
-                Items = new List<TItem>()
-            };
+            var original = _fixture.Build<HabitTracker>()
+                .Without(ht => ht.SelectedDays)
+                .Without(ht => ht.GoalsArea).Create();
 
-            for (int i = 0; i < 5; i++)
+            var selectedDays = _fixture.Build<HabitDay>()
+                .With(hd => hd.HabitTracker, original)
+                .CreateMany();
+
+            original.SelectedDays.AddRange(selectedDays);
+
+            var copy = original.GetCopy();
+
+            Assert.NotEqual(original, copy);
+            Assert.NotEqual(original.Id, copy.Id);
+
+            Assert.Equal(original.GoalName, copy.GoalName);
+            Assert.Equal(original.SelectedDays.Count, copy.SelectedDays.Count);
+
+            for (int i = 0; i < original.SelectedDays.Count; i++)
             {
-                var item = new TItem
-                {
-                    Id = i + 1,
-                    Subject = $"test subject {i}",
-                    OwnerID = original.Id,
-                    Url = $"www.test-{i}.com"
-                };
-                customItemSeed?.Invoke(item);
-                original.Items.Add(item);
+                Assert.NotEqual(original.SelectedDays[i], copy.SelectedDays[i]);
+                Assert.NotEqual(original.SelectedDays[i].Id, copy.SelectedDays[i].Id);
+                Assert.NotEqual(original.SelectedDays[i].HabitTracker, copy.SelectedDays[i].HabitTracker);
+                Assert.NotEqual(original.SelectedDays[i].HabitTrackerId, copy.SelectedDays[i].HabitTrackerId);
+
+                Assert.Equal(original.SelectedDays[i].Number, copy.SelectedDays[i].Number);
+                Assert.Equal(original.SelectedDays[i].Note, copy.SelectedDays[i].Note);
             }
+        }
 
-            return original;
+        internal static TList CreateList<TList, TItem>()
+            where TList : DiaryList<TItem>, new()
+            where TItem : ListItemBase, IDiaryListItem<TList, TItem>, new()
+        {
+            var list = _fixture.Build<TList>()
+                                    .Without(l => l.Items)
+                                    .Create();
+
+            var items = _fixture.Build<TItem>()
+                                    .With(i => i.OwnerID, list.Id)
+                                    .With(i => i.Owner, list)
+                                    .CreateMany();
+
+            list.Items.AddRange(items);
+
+            return list;
         }
 
         internal static void TestLists<TList, TItem>(TList original, TList copy, params Action<TItem, TItem>[] itemAdditionalCheck) 

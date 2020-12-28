@@ -38,7 +38,7 @@ namespace DiaryApp.Data.Services
 
         public async Task<TPageDto> CreateAsync(PageDto pageDto, bool initializePageAreas)
         {
-            return await CreateAsync(pageDto.UserID, pageDto.Year, pageDto.Month, initializePageAreas);
+            return await CreateAsync(pageDto.UserId, pageDto.Year, pageDto.Month, initializePageAreas);
         }
 
         public async Task<TPageDto> CreateAsync(int userID, int year, int month)

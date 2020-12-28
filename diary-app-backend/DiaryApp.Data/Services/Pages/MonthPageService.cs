@@ -18,15 +18,15 @@ namespace DiaryApp.Data.Services
 
         public async Task TransferPageDataToNextMonthAsync(MonthPageDto prevPageDto, TransferDataModel transferDataModel)
         {
-            PageDto nextPageDto = new PageDto(prevPageDto.UserID, prevPageDto.Year, prevPageDto.Month + 1);
+            PageDto nextPageDto = new PageDto(prevPageDto.UserId, prevPageDto.Year, prevPageDto.Month + 1);
 
-            MonthPageDto monthPageDto = await GetPageAsync(nextPageDto.UserID, nextPageDto.Year, nextPageDto.Month);
+            MonthPageDto monthPageDto = await GetPageAsync(nextPageDto.UserId, nextPageDto.Year, nextPageDto.Month);
 
             //using var transaction = await context.Database.BeginTransactionAsync();
 
             try
             {
-                monthPageDto ??= await CreateAsync(nextPageDto.UserID, nextPageDto.Year, nextPageDto.Month);
+                monthPageDto ??= await CreateAsync(nextPageDto.UserId, nextPageDto.Year, nextPageDto.Month);
 
                 var monthPage = await dbSet.FindAsync(monthPageDto.Id);
 

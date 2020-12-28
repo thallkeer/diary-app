@@ -6,7 +6,7 @@ using DiaryApp.Data.ServiceInterfaces;
 
 namespace DiaryApp.Data.Services
 {
-    public class CommonListService : CrudServiceWithAutoSave<CommonListDto, CommonList>, ICommonListService
+    public class CommonListService : CrudService<CommonListDto, CommonList>, ICommonListService
     {
         public CommonListService(ApplicationContext context, IMapper mapper) : base(context, mapper)
         {

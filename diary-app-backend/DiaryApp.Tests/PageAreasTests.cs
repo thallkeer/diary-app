@@ -1,4 +1,5 @@
-﻿using DiaryApp.Core;
+﻿using AutoFixture;
+using DiaryApp.Core;
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
@@ -96,19 +97,20 @@ namespace DiaryApp.Tests
         private static T GenerateListWrapper<T, TList, TItem, TArea>(bool withItems)
             where T : DiaryAreaList<TList, TItem, TArea, MonthPage>, new()
             where TList : DiaryList<TItem>, new()
-            where TItem : ListItemBase, new()
+            where TItem : ListItemBase, IDiaryListItem<TList, TItem>, new()
             where TArea : PageAreaBase<MonthPage>
         {
-            var pa = new T()
-            {
-                List = new TList(),
-            };
-            pa.Items = new List<TItem>();
-            if (withItems)
-            {
-                pa.Items.Add(new TItem());
-            }
-            return pa;
+            var list = _fixture
+                                    .Build<T>()
+                                    .With(lw => lw.List, ListCopyTests.CreateList<TList, TItem>())
+                                    .Without(lw => lw.AreaOwner)
+                                    .Without(lw => lw.Items)
+                                    .Create();
+
+            if (!withItems)
+                list.List.Items.Clear();
+
+            return list;
         }
         #endregion
 
@@ -116,7 +118,8 @@ namespace DiaryApp.Tests
         public static TheoryData<PurchasesArea> TheoryPurchasesAreas()
         {
             var paWithCustomLists = new PurchasesArea(null, false);
-            for (int i = 0; i < 4; i++)
+
+            for (int i = 0; i < 2; i++)
             {
                 var pa = GenerateListWrapper<PurchaseList, TodoList, TodoItem, PurchasesArea>(i % 2 == 0);
                 paWithCustomLists.PurchasesLists.Add(pa);

@@ -5,7 +5,7 @@ using DiaryApp.Data.ServiceInterfaces;
 
 namespace DiaryApp.Data.Services
 {
-    public class HabitTrackerService : CrudServiceWithAutoSave<HabitTrackerDto, HabitTracker>, IHabitTrackerService
+    public class HabitTrackerService : CrudService<HabitTrackerDto, HabitTracker>, IHabitTrackerService
     {
         public HabitTrackerService(ApplicationContext context, IMapper mapper) : base(context, mapper)
         {

@@ -1,5 +1,7 @@
 ﻿using DiaryApp.Core.DTO;
 using DiaryApp.Core.Interfaces;
+using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DiaryApp.Data.ServiceInterfaces
@@ -41,6 +43,6 @@ namespace DiaryApp.Data.ServiceInterfaces
         /// <param name="year">Year</param>
         /// <param name="month">Month</param>
         /// <returns></returns>
-        Task<TPageDto> GetPageAsync(int userID, int year, int month);        
+        Task<TPageDto> GetPageAsync(int userID, int year, int month);
     }
 }

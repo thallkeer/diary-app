@@ -9,16 +9,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.IO;
-using System.Text;
 using DiaryApp.API.Extensions;
 using DiaryApp.API.Extensions.ConfigureServices;
 using DiaryApp.Core.Bootstrap;
+using DiaryApp.Data.Services.Users;
+using System;
 
 namespace DiaryApp.API
 {
     public class Startup
     {
         readonly IWebHostEnvironment env;
+        readonly string DiaryAppPolicy = nameof(DiaryAppPolicy);
+
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
@@ -34,12 +37,22 @@ namespace DiaryApp.API
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
 
             services.AddControllers();
 
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(DiaryAppPolicy,
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000");
+                        builder.WithMethods("GET", "POST", "PUT", "DELETE");
+                        builder.AllowAnyHeader();
+                        builder.SetPreflightMaxAge(TimeSpan.FromSeconds(2520));
+                    });
+            });
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
 
@@ -57,13 +70,10 @@ namespace DiaryApp.API
             }
 
             // configure strongly typed settings objects
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-
-            // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            byte[] key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.ConfigureJwtAuthentication(key);
+            var jwtTokenConfig = Configuration.GetSection("jwtTokenConfig").Get<JwtTokenConfig>();
+            services.AddSingleton(jwtTokenConfig);
+            
+            services.ConfigureJwtAuthentication(jwtTokenConfig);
 
             services.AddApplicationServices();
 
@@ -96,15 +106,18 @@ namespace DiaryApp.API
                 app.UseHsts();
             }
 
-            app.ConfigureExceptionHandler(logger);
-
-            app.UseCors(builder =>
-                                    builder.AllowAnyOrigin()
-                                           .AllowAnyHeader()
-                                           .AllowAnyMethod());
-
+            app.ConfigureExceptionHandler();           
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("./swagger/v1/swagger.json", "DiaryApp API V1");
+                c.DocumentTitle = "DiaryApp API";
+                c.RoutePrefix = string.Empty;
+            });
+
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
@@ -112,20 +125,10 @@ namespace DiaryApp.API
             //{
             //    ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All
             //});
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                //на сервере писать через относительный путь
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DiaryApp API V1");
-            });
+                       
 
             app.UseRouting();
-
+            app.UseCors(DiaryAppPolicy);
             app.UseAuthentication();
             app.UseAuthorization();
 

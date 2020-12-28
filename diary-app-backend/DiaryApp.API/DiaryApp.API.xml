@@ -4,12 +4,5 @@
         <name>DiaryApp.API</name>
     </assembly>
     <members>
-        <member name="M:DiaryApp.API.Extensions.ConfigureServices.AuthenticationExtensions.ConfigureJwtAuthentication(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Byte[])">
-            <summary>
-            
-            </summary>
-            <param name="services"></param>
-            <param name="key"></param>
-        </member>
     </members>
 </doc>

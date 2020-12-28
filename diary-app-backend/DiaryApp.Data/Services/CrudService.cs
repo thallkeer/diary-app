@@ -31,6 +31,7 @@ namespace DiaryApp.Data.Services
         {
             var entity = dto.ToEntity<TEntity, TDto>(mapper);
             await dbSet.AddAsync(entity);
+            await context.SaveChangesAsync();
             return entity.Id;
         }
 
@@ -38,8 +39,9 @@ namespace DiaryApp.Data.Services
         {
             var entity = await dbSet.FindAsync(id);
             if (entity == null)
-                throw new EntityNotFound();
+                throw new EntityNotFoundException($"Entity of type {typeof(TEntity)} with such id is not found!");
             dbSet.Remove(entity);
+            await context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<TDto>> GetAllAsync()
@@ -57,7 +59,8 @@ namespace DiaryApp.Data.Services
         public virtual async Task UpdateAsync(TDto dto)
         {
             var entity = dto.ToEntity<TEntity, TDto>(mapper);
-            await Task.Run(() => context.Update(entity));            
+            context.Update(entity);
+            await context.SaveChangesAsync();
         }
 
         /// <summary>

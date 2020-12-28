@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AutoFixture;
+using AutoMapper;
 using DiaryApp.Core;
 using DiaryApp.Tests.Helpers;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -10,6 +11,7 @@ namespace DiaryApp.Tests
         protected ApplicationContext _dbContext;
         protected IConfigurationProvider _mapperProvider;
         protected IMapper _mapper;
+        protected static IFixture _fixture = new Fixture();
 
         public BaseTests()
         {

@@ -16,13 +16,14 @@ namespace DiaryApp.API.Controllers
         private readonly IMonthPageService _monthPageService;
 
         public MonthPageController(IMonthPageService monthPageService, IMapper mapper, ILoggerFactory loggerFactory)
-            : base(monthPageService,mapper, loggerFactory)
+            : base(monthPageService, mapper, loggerFactory)
         {
             _monthPageService = monthPageService;
-        }     
+        }
 
         [HttpGet("purchasesArea/{pageID}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetPurchasesAreaAsync(int pageID)
         {
             return await GetPageArea<PurchasesArea, PurchasesAreaDto>(pageID);
@@ -30,6 +31,7 @@ namespace DiaryApp.API.Controllers
 
         [HttpGet("desiresArea/{pageID}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDesiresAreaAsync(int pageID)
         {
             return await GetPageArea<DesiresArea, DesiresAreaDto>(pageID);
@@ -37,6 +39,7 @@ namespace DiaryApp.API.Controllers
 
         [HttpGet("ideasArea/{pageID}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetIdeasAreaAsync(int pageID)
         {
             var model = await GetPageArea<IdeasArea, IdeasAreaDto>(pageID);
@@ -45,12 +48,15 @@ namespace DiaryApp.API.Controllers
 
         [HttpGet("goalsArea/{pageID}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetGoalsAreaAsync(int pageID)
         {
             return await GetPageArea<GoalsArea, GoalsAreaDto>(pageID);
         }
 
         [HttpPost("transferData")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PostTransferPageDataAsync(TransferDataRequestParams transferDataRequestParams)
         {
             var prevPageParams = transferDataRequestParams.PageParams;
@@ -59,19 +65,13 @@ namespace DiaryApp.API.Controllers
                 return BadRequest("No original page data received, check application state");
             if (transferDataModel == null)
                 return BadRequest("No transfer information is received, check transfer data model");
-            try
-            {
-                MonthPageDto prevPage = await pageService.GetPageAsync(prevPageParams.UserId, prevPageParams.Year, prevPageParams.Month);
-                if (prevPage == null)
-                    return BadRequest($"No original page found for {prevPageParams.UserId} {prevPageParams.Year} {prevPageParams.Month}");
-                await _monthPageService.TransferPageDataToNextMonthAsync(prevPage, transferDataModel);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                logger.LogErrorWithDate(ex);
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+
+            MonthPageDto prevPage = await pageService.GetPageAsync(prevPageParams.UserId, prevPageParams.Year, prevPageParams.Month);
+            if (prevPage == null)
+                return BadRequest($"No original page found for {prevPageParams.UserId} {prevPageParams.Year} {prevPageParams.Month}");
+
+            await _monthPageService.TransferPageDataToNextMonthAsync(prevPage, transferDataModel);
+            return Ok();
         }
     }
 }

@@ -1,44 +1,52 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.Core;
 using DiaryApp.Core.DTO;
 using DiaryApp.Data.Extensions;
 using DiaryApp.Data.ServiceInterfaces;
+using DiaryApp.Data.Services.Users;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DiaryApp.Data.Services
 {
-    public class UserService : CrudServiceWithAutoSave<UserDto,AppUser>, IUserService
-    {        
-        public UserService(ApplicationContext context, IMapper mapper) : base(context, mapper)
+    public class UserService : CrudService<UserDto,AppUser>, IUserService
+    {
+        private readonly JwtTokenConfig tokenConfig;
+
+        public UserService(ApplicationContext context, IMapper mapper, JwtTokenConfig tokenConfig) : base(context, mapper)
         {
+            this.tokenConfig = tokenConfig;
         }
 
         public UserDto Authenticate(string username, string password)
         {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-                return null;
+            if (string.IsNullOrEmpty(username))
+                throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(username));
+
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
 
             var user = dbSet.SingleOrDefault(x => x.Username == username);
 
             if (user == null)
                 return null;
 
-            // check if password is correct
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
                 return null;
 
-            // authentication successful
             return user.ToDto<AppUser, UserDto>(mapper);
         }
 
-        public async Task CreateAsync(UserDto userDto, string password)
+        public async Task RegisterAsync(UserDto userDto, string password)
         {
-            // validation
             if (string.IsNullOrWhiteSpace(password))
-                throw new Exception("Password is required");
+                throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
 
             if (await dbSet.AnyAsync(x => x.Username == userDto.Username))
                 throw new Exception($"Username '{userDto.Username}' is already taken");
@@ -55,23 +63,6 @@ namespace DiaryApp.Data.Services
             await base.CreateAsync(userWithPassword);
         }
 
-        public async override Task UpdateAsync(UserDto userToUpdate)
-        {
-            var user = await dbSet.FindAsync(userToUpdate.Id);
-
-            if (user == null)
-                throw new Exception("User not found");
-
-            if (userToUpdate.Username != user.Username)
-            {
-                // username has changed so check if the new username is already taken
-                if (dbSet.Any(x => x.Username == userToUpdate.Username))
-                    throw new Exception($"Username '{userToUpdate.Username}' is already taken");
-            }
-
-            await base.UpdateAsync(userToUpdate);
-        }
-
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             if (password == null) throw new ArgumentNullException(nameof(password));
@@ -79,7 +70,7 @@ namespace DiaryApp.Data.Services
 
             using var hmac = new System.Security.Cryptography.HMACSHA512();
             passwordSalt = hmac.Key;
-            passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
         }
 
         private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
@@ -105,6 +96,24 @@ namespace DiaryApp.Data.Services
         {
             var res = await dbSet.AnyAsync(u => u.Id == userId);
             return res;
+        }
+
+        public string GenerateToken(UserDto user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(tokenConfig.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(tokenConfig.AccessTokenExpiration),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+            return tokenString;
         }
     }
 }

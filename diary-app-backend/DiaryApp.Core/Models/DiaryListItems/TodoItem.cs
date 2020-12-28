@@ -1,6 +1,8 @@
-﻿namespace DiaryApp.Core.Models
+﻿using DiaryApp.Core.Interfaces;
+
+namespace DiaryApp.Core.Models
 {
-    public class TodoItem : ListItemBase
+    public class TodoItem : ListItemBase, IDiaryListItem<TodoList, TodoItem>
     {
         /// <summary>
         /// Is thing is done
