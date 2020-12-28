@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DiaryApp.Core.Models.PageAreas
@@ -34,6 +35,18 @@ namespace DiaryApp.Core.Models.PageAreas
         protected override void Initialize()
         {
             GoalLists.Add(new HabitTracker() { GoalName = GoalNameSTR });
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is GoalsArea area &&
+                   base.Equals(obj) &&
+                   EqualityComparer<List<HabitTracker>>.Default.Equals(GoalLists, area.GoalLists);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), GoalLists);
         }
     }
 }

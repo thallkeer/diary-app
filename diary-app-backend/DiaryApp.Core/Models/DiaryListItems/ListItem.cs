@@ -1,4 +1,6 @@
 ﻿using DiaryApp.Core.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace DiaryApp.Core.Models
 {
@@ -15,5 +17,17 @@ namespace DiaryApp.Core.Models
         { }
 
         public override ListItemBase GetCopy() => new ListItem(this);
+
+        public override bool Equals(object obj)
+        {
+            return obj is ListItem item &&
+                   base.Equals(obj) &&
+                   EqualityComparer<CommonList>.Default.Equals(Owner, item.Owner);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), Owner);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DiaryApp.Core.Extensions;
+using System;
 using System.Collections.Generic;
 
 namespace DiaryApp.Core.Models.PageAreas
@@ -31,6 +32,18 @@ namespace DiaryApp.Core.Models.PageAreas
                 new PurchaseList(Title),
                 new PurchaseList(Title)
             });
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is PurchasesArea area &&
+                   base.Equals(obj) &&
+                   EqualityComparer<List<PurchaseList>>.Default.Equals(PurchasesLists, area.PurchasesLists);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), PurchasesLists);
         }
     }    
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
@@ -38,6 +39,18 @@ namespace DiaryApp.Core.Models.PageAreas
                     new DesiresList(ToWatchSTR),
                     new DesiresList(ToReadSTR)
                 });
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is DesiresArea area &&
+                   base.Equals(obj) &&
+                   EqualityComparer<List<DesiresList>>.Default.Equals(DesiresLists, area.DesiresLists);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), DesiresLists);
         }
     }    
 }

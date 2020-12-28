@@ -39,16 +39,36 @@ namespace DiaryApp.Core.Models
             };
         }
 
-        public bool GetValueForArea(Type pageAreaType)
+        /// <summary>
+        /// For given type of page area returns is it checked in property or not. If given type is not present in properties, throws an exception.
+        /// </summary>
+        /// <param name="pageAreaType">Type of page area</param>
+        /// <returns></returns>
+        public bool GetValueForArea<T>() where T : PageAreaBase<MonthPage>
         {
-            Type transferDataType  = GetType();
+            Type transferDataType = GetType();
+            Type pageAreaType = typeof(T);
             foreach (var property in transferDataType.GetProperties())
-            {                
+            {
                 PageAreaAttribute areaAttribute = property.GetCustomAttribute<PageAreaAttribute>();
                 if (areaAttribute.AreaType == pageAreaType)
-                    return (bool) property.GetValue(this);
+                    return (bool)property.GetValue(this);
             }
             throw new NotSupportedException($"Type {pageAreaType} of page area is not expected at transfer data model!");
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is TransferDataModel model &&
+                   TransferPurchasesArea == model.TransferPurchasesArea &&
+                   TransferDesiresArea == model.TransferDesiresArea &&
+                   TransferGoalsArea == model.TransferGoalsArea &&
+                   TransferIdeasArea == model.TransferIdeasArea;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(TransferPurchasesArea, TransferDesiresArea, TransferGoalsArea, TransferIdeasArea);
         }
     }
 }

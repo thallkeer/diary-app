@@ -1,5 +1,6 @@
 ﻿using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace DiaryApp.Core
         /// <summary>
         /// Habit tracker which this day is belongs to
         /// </summary>
-        public virtual HabitTracker HabitTracker { get; set; }
+        public virtual HabitTracker HabitTracker { get; set; }       
 
         public HabitDay GetCopy()
         {
@@ -39,6 +40,21 @@ namespace DiaryApp.Core
                 Number = Number,
                 Note = Note
             };
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is HabitDay day &&
+                   Id == day.Id &&
+                   Number == day.Number &&
+                   Note == day.Note &&
+                   HabitTrackerId == day.HabitTrackerId &&
+                   EqualityComparer<HabitTracker>.Default.Equals(HabitTracker, day.HabitTracker);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, Number, Note, HabitTrackerId, HabitTracker);
         }
 
         public override string ToString()
@@ -79,6 +95,21 @@ namespace DiaryApp.Core
             var selectedDaysCopy = SelectedDays.Select(sd => sd.GetCopy());
             tracker.SelectedDays = new List<HabitDay>(selectedDaysCopy);
             return tracker;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is HabitTracker tracker &&
+                   Id == tracker.Id &&
+                   GoalName == tracker.GoalName &&
+                   EqualityComparer<List<HabitDay>>.Default.Equals(SelectedDays, tracker.SelectedDays) &&
+                   GoalsAreaID == tracker.GoalsAreaID &&
+                   EqualityComparer<GoalsArea>.Default.Equals(GoalsArea, tracker.GoalsArea);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, GoalName, SelectedDays, GoalsAreaID, GoalsArea);
         }
     }
 }

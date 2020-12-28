@@ -1,4 +1,5 @@
 ﻿using DiaryApp.Core.Models.Pages;
+using System;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
@@ -26,6 +27,18 @@ namespace DiaryApp.Core.Models.PageAreas
         public NotesArea TransferAreaData(WeekPage page)
         {
             throw new System.NotImplementedException();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is NotesArea area &&
+                   base.Equals(obj) &&
+                   Note == area.Note;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), Note);
         }
     }
 }

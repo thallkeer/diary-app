@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
@@ -24,6 +25,19 @@ namespace DiaryApp.Core.Models
         public override string ToString()
         {
             return Title;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is DiaryList<T> list &&
+                   Id == list.Id &&
+                   Title == list.Title &&
+                   EqualityComparer<List<T>>.Default.Equals(Items, list.Items);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, Title, Items);
         }
     }
 }

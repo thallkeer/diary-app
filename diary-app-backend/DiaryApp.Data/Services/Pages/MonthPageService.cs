@@ -54,7 +54,7 @@ namespace DiaryApp.Data.Services
 
         private T TransferAreaData<T>(TransferDataModel transferDataModel, T area, T prevArea) where T : PageAreaBase<MonthPage>, IMonthPageArea<T>
         {
-            bool transfer = transferDataModel.GetValueForArea(typeof(T));
+            bool transfer = transferDataModel.GetValueForArea<T>();
             if (transfer)
             {
                 area.AddFromOtherArea(prevArea);

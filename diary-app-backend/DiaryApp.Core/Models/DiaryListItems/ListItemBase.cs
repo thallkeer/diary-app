@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core.Models
 {
@@ -41,6 +42,20 @@ namespace DiaryApp.Core.Models
         public override string ToString()
         {
             return Subject;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ListItemBase @base &&
+                   Id == @base.Id &&
+                   Url == @base.Url &&
+                   Subject == @base.Subject &&
+                   OwnerID == @base.OwnerID;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, Url, Subject, OwnerID);
         }
     }    
 }

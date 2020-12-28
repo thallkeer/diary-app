@@ -1,4 +1,6 @@
 ﻿using DiaryApp.Core.Models;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -42,6 +44,21 @@ namespace DiaryApp.Core
         public override string ToString()
         {
             return $"{Id} {Year} {Month} {UserID}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is PageBase @base &&
+                   Id == @base.Id &&
+                   Year == @base.Year &&
+                   Month == @base.Month &&
+                   UserID == @base.UserID &&
+                   EqualityComparer<AppUser>.Default.Equals(User, @base.User);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, Year, Month, UserID, User);
         }
     }
 }

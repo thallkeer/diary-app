@@ -1,4 +1,6 @@
 ﻿using DiaryApp.Core.Models.PageAreas;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core
@@ -28,6 +30,21 @@ namespace DiaryApp.Core
             this.GoalsArea = new GoalsArea(this, true);
             this.PurchasesArea = new PurchasesArea(this, true);
             this.IdeasArea = new IdeasArea(this, true);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is MonthPage page &&
+                   base.Equals(obj) &&
+                   EqualityComparer<PurchasesArea>.Default.Equals(PurchasesArea, page.PurchasesArea) &&
+                   EqualityComparer<DesiresArea>.Default.Equals(DesiresArea, page.DesiresArea) &&
+                   EqualityComparer<IdeasArea>.Default.Equals(IdeasArea, page.IdeasArea) &&
+                   EqualityComparer<GoalsArea>.Default.Equals(GoalsArea, page.GoalsArea);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), PurchasesArea, DesiresArea, IdeasArea, GoalsArea);
         }
     }
 }

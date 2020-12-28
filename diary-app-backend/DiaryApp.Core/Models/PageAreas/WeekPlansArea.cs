@@ -33,5 +33,19 @@ namespace DiaryApp.Core.Models.PageAreas
         {
             throw new NotImplementedException();
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is WeekPlansArea area &&
+                   base.Equals(obj) &&
+                   WeekNumber == area.WeekNumber &&
+                   EqualityComparer<WeekPlansList>.Default.Equals(WeekPlansList, area.WeekPlansList) &&
+                   EqualityComparer<List<WeekDay>>.Default.Equals(WeekDays, area.WeekDays);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), WeekNumber, WeekPlansList, WeekDays);
+        }
     }    
 }

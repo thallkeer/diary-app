@@ -1,4 +1,6 @@
 ﻿using DiaryApp.Core.Interfaces;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core.Models.PageAreas
@@ -34,5 +36,19 @@ namespace DiaryApp.Core.Models.PageAreas
         }
 
         protected abstract void Initialize();
+
+        public override bool Equals(object obj)
+        {
+            return obj is PageAreaBase<TPage> @base &&
+                   Id == @base.Id &&
+                   Header == @base.Header &&
+                   PageId == @base.PageId &&
+                   EqualityComparer<TPage>.Default.Equals(Page, @base.Page);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, Header, PageId, Page);
+        }
     }
 }

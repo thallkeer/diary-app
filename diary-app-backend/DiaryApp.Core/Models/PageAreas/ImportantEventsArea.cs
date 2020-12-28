@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
@@ -23,6 +25,19 @@ namespace DiaryApp.Core.Models.PageAreas
         protected override void Initialize()
         {
             ImportantEvents = new EventList(Title);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ImportantEventsArea area &&
+                   base.Equals(obj) &&
+                   ImportantEventsID == area.ImportantEventsID &&
+                   EqualityComparer<EventList>.Default.Equals(ImportantEvents, area.ImportantEvents);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), ImportantEventsID, ImportantEvents);
         }
     }
 }

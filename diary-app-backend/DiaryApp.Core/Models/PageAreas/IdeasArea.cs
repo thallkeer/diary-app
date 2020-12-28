@@ -1,4 +1,7 @@
-﻿namespace DiaryApp.Core.Models.PageAreas
+﻿using System;
+using System.Collections.Generic;
+
+namespace DiaryApp.Core.Models.PageAreas
 {
     public class IdeasArea : PageAreaBase<MonthPage>, IMonthPageArea<IdeasArea>
     {
@@ -27,6 +30,18 @@
         protected override void Initialize()
         {
             IdeasList = new IdeasList(string.Empty);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is IdeasArea area &&
+                   base.Equals(obj) &&
+                   EqualityComparer<IdeasList>.Default.Equals(IdeasList, area.IdeasList);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), IdeasList);
         }
     }   
 }

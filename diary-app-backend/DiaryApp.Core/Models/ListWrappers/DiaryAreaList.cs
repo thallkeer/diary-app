@@ -1,4 +1,5 @@
 ﻿using DiaryApp.Core.Models.PageAreas;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -41,6 +42,22 @@ namespace DiaryApp.Core.Models
         public IEnumerable<TListItem> CopyItems()
         {
             return List.Items.Select(i => (TListItem) i.GetCopy());
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is DiaryAreaList<TList, TListItem, TArea, TPage> list &&
+                   Id == list.Id &&
+                   ListID == list.ListID &&
+                   EqualityComparer<TList>.Default.Equals(List, list.List) &&
+                   AreaOwnerID == list.AreaOwnerID &&
+                   EqualityComparer<TArea>.Default.Equals(AreaOwner, list.AreaOwner) &&
+                   EqualityComparer<List<TListItem>>.Default.Equals(Items, list.Items);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, ListID, List, AreaOwnerID, AreaOwner, Items);
         }
     }
 }
