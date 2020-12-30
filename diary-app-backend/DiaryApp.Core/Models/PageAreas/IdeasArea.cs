@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiaryApp.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace DiaryApp.Core.Models.PageAreas
@@ -7,17 +8,13 @@ namespace DiaryApp.Core.Models.PageAreas
     {
         private const string HeaderSTR = "Идеи этого месяца";
 
-        public virtual IdeasList IdeasList { get; set; }
-
         public IdeasArea()
-        {
-
-        }
+        {}
 
         public IdeasArea(MonthPage page, bool needInit) : base(page, HeaderSTR, needInit)
-        {
+        {}
 
-        }
+        public virtual IdeasList IdeasList { get; set; }
 
         public void AddFromOtherArea(IdeasArea other)
         {
@@ -31,17 +28,5 @@ namespace DiaryApp.Core.Models.PageAreas
         {
             IdeasList = new IdeasList(string.Empty);
         }
-
-        public override bool Equals(object obj)
-        {
-            return obj is IdeasArea area &&
-                   base.Equals(obj) &&
-                   EqualityComparer<IdeasList>.Default.Equals(IdeasList, area.IdeasList);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(base.GetHashCode(), IdeasList);
-        }
-    }   
+    }
 }

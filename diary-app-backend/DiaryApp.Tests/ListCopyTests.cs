@@ -4,7 +4,6 @@ using DiaryApp.Core.Extensions;
 using DiaryApp.Core.Models;
 using Xunit;
 using AutoFixture;
-using DiaryApp.Core.Interfaces;
 using System.Linq;
 using DiaryApp.Tests.Extensions;
 
@@ -79,7 +78,7 @@ namespace DiaryApp.Tests
 
         internal static void TestLists<TList, TItem>(TList original, TList copy, params Action<TItem, TItem>[] itemAdditionalCheck) 
             where TList : DiaryList<TItem>
-            where TItem : ListItemBase
+            where TItem : DiaryListItem
         {
             Assert.NotEqual(original, copy);
             Assert.NotEqual(original.Id, copy.Id);

@@ -7,11 +7,6 @@ namespace DiaryApp.Core
 {
     public class MainPage : PageBase
     {
-        [Required]
-        public virtual ImportantEventsArea ImportantEvents { get; set; }
-        [Required]
-        public virtual ImportantThingsArea ImportantThings { get; set; }
-
         public MainPage() : base()
         {
 
@@ -20,6 +15,11 @@ namespace DiaryApp.Core
         public MainPage(int year, int month, AppUser user) : base(year, month, user)
         {
         }
+
+        [Required]
+        public virtual ImportantEventsArea ImportantEvents { get; set; }
+        [Required]
+        public virtual ImportantThingsArea ImportantThings { get; set; }       
 
         public override void CreateAreas()
         {

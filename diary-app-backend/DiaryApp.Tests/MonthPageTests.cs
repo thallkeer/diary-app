@@ -1,16 +1,9 @@
 ﻿using AutoFixture;
-using AutoFixture.Xunit2;
 using DiaryApp.Core;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
-using DiaryApp.Tests.Customizations;
-using DiaryApp.Tests.Extensions;
 using DiaryApp.Tests.Helpers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace DiaryApp.Tests

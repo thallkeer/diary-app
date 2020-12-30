@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiaryApp.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,16 +10,13 @@ namespace DiaryApp.Core.Models.PageAreas
         private const string HeaderSTR = "Цели на этот месяц";
         public const string GoalNameSTR = "Название цели";
 
-        public virtual List<HabitTracker> GoalLists { get; set; } = new List<HabitTracker>();
-
         public GoalsArea()
-        {
+        {}
 
-        }
         public GoalsArea(MonthPage page, bool needInit) : base(page, HeaderSTR, needInit)
-        {
+        {}
 
-        }
+        public virtual List<HabitTracker> GoalLists { get; set; } = new List<HabitTracker>();
 
         public void AddFromOtherArea(GoalsArea other)
         {
@@ -34,19 +32,10 @@ namespace DiaryApp.Core.Models.PageAreas
 
         protected override void Initialize()
         {
-            GoalLists.Add(new HabitTracker() { GoalName = GoalNameSTR });
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is GoalsArea area &&
-                   base.Equals(obj) &&
-                   EqualityComparer<List<HabitTracker>>.Default.Equals(GoalLists, area.GoalLists);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(base.GetHashCode(), GoalLists);
+            GoalLists = new List<HabitTracker>
+            {
+                new HabitTracker(GoalNameSTR)
+            };
         }
     }
 }

@@ -5,10 +5,7 @@ using DiaryApp.Core;
 using DiaryApp.Data.Services.Users;
 using DiaryApp.Tests.Customizations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Threading.Tasks;
 
 namespace DiaryApp.Tests.Helpers
 {

@@ -4,7 +4,6 @@ using DiaryApp.Core.Interfaces;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Data.DTO;
-using System.Linq;
 
 namespace DiaryApp.Tests.Extensions
 {
@@ -22,8 +21,8 @@ namespace DiaryApp.Tests.Extensions
         public static UserDto CreateUser(this IFixture fixture) => fixture.Build<UserDto>().Without(u => u.Id).Create();
 
         internal static TList CreateList<TList, TItem>(this IFixture fixture)
-            where TList : DiaryList<TItem>, new()
-            where TItem : ListItemBase, IDiaryListItem<TList, TItem>, new()
+            where TList : DiaryList<TItem>
+            where TItem : DiaryListItem
         {
             var list = fixture.Build<TList>()
                                     .Without(l => l.Items)
@@ -40,9 +39,9 @@ namespace DiaryApp.Tests.Extensions
         }
 
         internal static T CreateListWrapper<T, TList, TItem, TArea>(this IFixture fixture, bool withItems)
-            where T : DiaryAreaList<TList, TItem, TArea, MonthPage>, new()
+            where T : DiaryAreaList<TList, TItem, TArea, MonthPage>
             where TList : DiaryList<TItem>, new()
-            where TItem : ListItemBase, IDiaryListItem<TList, TItem>, new()
+            where TItem : DiaryListItem
             where TArea : MonthPageArea
         {
             var list = fixture
@@ -60,7 +59,7 @@ namespace DiaryApp.Tests.Extensions
 
         internal static void CustomizeList<TList, TItem>(this IFixture fixture)
             where TList : DiaryList<TItem>, new()
-            where TItem : ListItemBase, IDiaryListItem<TList, TItem>, new()
+            where TItem : DiaryListItem
         {
             fixture.Customize<TList>(composer => composer.Without(l => l.Items));
             fixture.Customize<TItem>(composer => composer.Without(i => i.Owner));
@@ -69,7 +68,7 @@ namespace DiaryApp.Tests.Extensions
         internal static void CustomizeListWrapper<T, TList, TItem, TArea>(this IFixture fixture)
             where T : DiaryAreaList<TList, TItem, TArea, MonthPage>, new()
             where TList : DiaryList<TItem>, new()
-            where TItem : ListItemBase, IDiaryListItem<TList, TItem>, new()
+            where TItem : DiaryListItem
             where TArea : MonthPageArea
         {
             fixture.Customize<T>(composer =>

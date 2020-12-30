@@ -1,5 +1,4 @@
-﻿using DiaryApp.Data.DTO;
-using DiaryApp.Core.Models;
+﻿using DiaryApp.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

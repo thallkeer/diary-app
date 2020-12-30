@@ -1,4 +1,3 @@
-using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Data.Exceptions;
 using DiaryApp.Data.ServiceInterfaces;

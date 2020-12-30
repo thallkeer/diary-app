@@ -9,15 +9,6 @@ namespace DiaryApp.Core
 {
     public class MonthPage : PageBase
     {
-        [Required]
-        public virtual PurchasesArea PurchasesArea { get; set; }
-        [Required]
-        public virtual DesiresArea DesiresArea { get; set; }
-        [Required]
-        public virtual IdeasArea IdeasArea { get; set; }
-        [Required]
-        public virtual GoalsArea GoalsArea { get; set; }
-
         public MonthPage() : base()
         {
         }
@@ -25,6 +16,15 @@ namespace DiaryApp.Core
         public MonthPage(int year, int month, AppUser user) : base(year, month, user)
         {
         }
+
+        [Required]
+        public virtual PurchasesArea PurchasesArea { get; set; }
+        [Required]
+        public virtual DesiresArea DesiresArea { get; set; }
+        [Required]
+        public virtual IdeasArea IdeasArea { get; set; }
+        [Required]
+        public virtual GoalsArea GoalsArea { get; set; }        
 
         public override void CreateAreas()
         {

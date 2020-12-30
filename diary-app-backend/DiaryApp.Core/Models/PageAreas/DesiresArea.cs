@@ -1,4 +1,4 @@
-﻿using System;
+﻿using DiaryApp.Core.Interfaces;
 using System.Collections.Generic;
 
 namespace DiaryApp.Core.Models.PageAreas
@@ -10,15 +10,13 @@ namespace DiaryApp.Core.Models.PageAreas
         public const string ToWatchSTR = "Посмотреть";
         public const string ToReadSTR = "Прочитать";
 
-        public virtual List<DesiresList> DesiresLists { get; set; } = new List<DesiresList>(3);
-
         public DesiresArea() : base()
-        {
+        { }
 
-        }
         public DesiresArea(MonthPage page, bool withInitialization) : base(page, HeaderSTR, withInitialization)
-        {
-        }      
+        { }
+
+        public virtual List<DesiresList> DesiresLists { get; set; } = new List<DesiresList>(3);
 
         public void AddFromOtherArea(DesiresArea other)
         {
@@ -27,30 +25,18 @@ namespace DiaryApp.Core.Models.PageAreas
             for (int i = 0; i < other.DesiresLists.Count; i++)
             {
                 var otherItemsCopy = other.DesiresLists[i].CopyItems();
-                this.DesiresLists[i].Items.AddRange(otherItemsCopy);
+                DesiresLists[i].Items.AddRange(otherItemsCopy);
             }
         }
 
         protected override void Initialize()
         {
-            DesiresLists.AddRange(new DesiresList[]
-                {
-                    new DesiresList(ToVisitSTR),
-                    new DesiresList(ToWatchSTR),
-                    new DesiresList(ToReadSTR)
-                });
+            DesiresLists = new List<DesiresList>
+            {
+                new DesiresList(ToVisitSTR),
+                new DesiresList(ToWatchSTR),
+                new DesiresList(ToReadSTR)
+            };
         }
-
-        public override bool Equals(object obj)
-        {
-            return obj is DesiresArea area &&
-                   base.Equals(obj) &&
-                   EqualityComparer<List<DesiresList>>.Default.Equals(DesiresLists, area.DesiresLists);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(base.GetHashCode(), DesiresLists);
-        }
-    }    
+    }
 }

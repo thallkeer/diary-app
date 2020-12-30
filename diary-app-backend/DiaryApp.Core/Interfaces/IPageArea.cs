@@ -22,4 +22,8 @@ namespace DiaryApp.Core.Interfaces
         /// <param name="otherArea"></param>
         void AddFromOtherArea(T other);
     }
+
+    public interface IMonthPageArea<T> : IPageArea<T, MonthPage> where T : MonthPageArea
+    {
+    }
 }

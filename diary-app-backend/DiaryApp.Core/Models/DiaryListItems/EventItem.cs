@@ -1,40 +1,24 @@
-﻿using DiaryApp.Core.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace DiaryApp.Core.Models
 {
-    public class EventItem : ListItemBase, IDiaryListItem<EventList, EventItem>
+    public class EventItem : DiaryListItem
     {
-        /// <summary>
-        /// Date of event
-        /// </summary>
-        public DateTime Date { get; set; }
-        public virtual EventList Owner { get; set; }
-
-        public EventItem()
-        {
-
-        }
+        public EventItem() : base()
+        {}
 
         public EventItem(EventItem original) : base(original)
         {
             this.Date = original.Date;
         }
 
-        public override ListItemBase GetCopy() => new EventItem(this);
+        /// <summary>
+        /// Date of event
+        /// </summary>
+        public DateTime Date { get; set; }
 
-        public override bool Equals(object obj)
-        {
-            return obj is EventItem item &&
-                   base.Equals(obj) &&
-                   Date == item.Date &&
-                   EqualityComparer<EventList>.Default.Equals(Owner, item.Owner);
-        }
+        public virtual new EventList Owner { get; set; }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(base.GetHashCode(), Date, Owner);
-        }
+        public override DiaryListItem GetCopy() => new EventItem(this);
     }
 }

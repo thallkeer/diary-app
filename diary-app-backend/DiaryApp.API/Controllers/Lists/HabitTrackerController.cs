@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DiaryApp.Core;
+using DiaryApp.Core.Models;
 using DiaryApp.Data.DTO;
 using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.Extensions.Logging;

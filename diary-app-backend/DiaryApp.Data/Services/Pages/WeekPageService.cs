@@ -4,7 +4,6 @@ using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models.Pages;
 using DiaryApp.Data.ServiceInterfaces;
 using DiaryApp.Data.ServiceInterfaces.ServiceInterfaces;
-using System.Threading.Tasks;
 
 namespace DiaryApp.Data.Services
 {

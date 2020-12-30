@@ -15,7 +15,7 @@ namespace DiaryApp.Core.Extensions
         /// <returns></returns>
         public static TList CreateDeepCopy<TList, TItem>(this TList original)
             where TList : DiaryList<TItem>, new()
-            where TItem : ListItemBase
+            where TItem : DiaryListItem
         {
             var list = new TList()
             {
@@ -33,7 +33,7 @@ namespace DiaryApp.Core.Extensions
         public static List<TWrapper> GetCopy<TWrapper, TList, TItem, TArea, TPage>(this List<TWrapper> source)
             where TWrapper : DiaryAreaList<TList, TItem, TArea, TPage>, new()
             where TList : DiaryList<TItem>, new()
-            where TItem : ListItemBase
+            where TItem : DiaryListItem
             where TArea : PageAreaBase<TPage>
             where TPage : PageBase
         {

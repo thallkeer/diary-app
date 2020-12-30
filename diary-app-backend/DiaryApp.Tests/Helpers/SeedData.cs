@@ -5,7 +5,6 @@ using DiaryApp.Data.ServiceInterfaces;
 using DiaryApp.Tests.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace DiaryApp.Tests.Helpers
 {

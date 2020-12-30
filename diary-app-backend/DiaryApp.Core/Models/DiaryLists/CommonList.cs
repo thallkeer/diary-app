@@ -2,7 +2,7 @@
 {
     public class CommonList : DiaryList<ListItem>
     {
-        public CommonList()
+        public CommonList() : base()
         {
         }
 

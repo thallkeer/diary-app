@@ -1,40 +1,23 @@
-﻿using DiaryApp.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-
+﻿
 namespace DiaryApp.Core.Models
 {
-    public class TodoItem : ListItemBase, IDiaryListItem<TodoList, TodoItem>
+    public class TodoItem : DiaryListItem
     {
-        /// <summary>
-        /// Is thing is done
-        /// </summary>
-        public bool Done { get; set; }
-        public virtual TodoList Owner { get; set; }
-
-        public TodoItem()
-        {
-
-        }
+        public TodoItem() : base()
+        {}
 
         public TodoItem(TodoItem original) : base(original)
         {
             this.Done = original.Done;
         }
 
-        public override ListItemBase GetCopy() => new TodoItem(this);
+        /// <summary>
+        /// Is thing is done
+        /// </summary>
+        public bool Done { get; set; }
 
-        public override bool Equals(object obj)
-        {
-            return obj is TodoItem item &&
-                   base.Equals(obj) &&
-                   Done == item.Done &&
-                   EqualityComparer<TodoList>.Default.Equals(Owner, item.Owner);
-        }
+        public virtual new TodoList Owner { get; set; }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(base.GetHashCode(), Done, Owner);
-        }
+        public override DiaryListItem GetCopy() => new TodoItem(this);
     }
 }

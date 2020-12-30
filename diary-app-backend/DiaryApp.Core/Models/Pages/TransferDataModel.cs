@@ -1,6 +1,5 @@
 ﻿using DiaryApp.Core.Models.PageAreas;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace DiaryApp.Core.Models

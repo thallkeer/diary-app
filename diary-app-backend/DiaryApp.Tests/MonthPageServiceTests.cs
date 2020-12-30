@@ -4,13 +4,12 @@ using Xunit;
 using System.Collections.Generic;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Core;
+using DiaryApp.Core.Interfaces;
 using DiaryApp.Data.DTO;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
 using System.Reflection;
-using DiaryApp.Core.Interfaces;
-using AutoFixture.Xunit2;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiaryApp.Tests

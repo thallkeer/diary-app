@@ -2,7 +2,7 @@
 {
     public class EventList : DiaryList<EventItem>
     {
-        public EventList()
+        public EventList() : base()
         {
 
         }

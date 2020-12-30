@@ -2,7 +2,6 @@
 using DiaryApp.Core;
 using DiaryApp.Data.DTO;
 using DiaryApp.Core.Interfaces;
-using DiaryApp.Data.Exceptions;
 using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;

@@ -1,33 +1,17 @@
 ﻿using DiaryApp.Core.Interfaces;
-using System;
-using System.Collections.Generic;
 
 namespace DiaryApp.Core.Models
 {
-    public class ListItem : ListItemBase, IDiaryListItem<CommonList, ListItem>
+    public class ListItem : DiaryListItem
     {
-        public virtual CommonList Owner { get; set; }
-
-        public ListItem()
-        {
-
-        }
+        public ListItem() : base()
+        {}
 
         public ListItem(ListItem original) : base(original)
         { }
 
-        public override ListItemBase GetCopy() => new ListItem(this);
+        public virtual new CommonList Owner { get; set; }
 
-        public override bool Equals(object obj)
-        {
-            return obj is ListItem item &&
-                   base.Equals(obj) &&
-                   EqualityComparer<CommonList>.Default.Equals(Owner, item.Owner);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(base.GetHashCode(), Owner);
-        }
+        public override DiaryListItem GetCopy() => new ListItem(this);
     }
 }
