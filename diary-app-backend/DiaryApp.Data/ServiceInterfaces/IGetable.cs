@@ -1,23 +1,25 @@
-﻿using DiaryApp.Core.DTO;
+﻿using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DiaryApp.Data.ServiceInterfaces
 {
-    public interface IGetable<TDto, TEntity>
+    public interface IGetable<TEntity>
         where TEntity : BaseEntity
-        where TDto : BaseDto
     {
         /// <summary>
-        /// Returns entities, that match the given criteria
+        /// Returns all entities that match the given filter
         /// </summary>
-        /// <param name="filter">Criteria</param>
         /// <returns></returns>
-        Task<IEnumerable<TDto>> GetAsync(Expression<Func<TEntity, bool>> filter = null);
+        Task<IEnumerable<TEntity>> GetByCriteriaAsync(Expression<Func<TEntity, bool>> filter = null);
+
+        /// <summary>
+        /// Returns first entity that match the given filter
+        /// </summary>
+        /// <returns></returns>
+        Task<TEntity> GetOneByCriteriaOrDefaultAsync(Expression<Func<TEntity, bool>> filter);
     }
 }

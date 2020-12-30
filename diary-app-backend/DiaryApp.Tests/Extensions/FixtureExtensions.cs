@@ -1,10 +1,10 @@
 ﻿using AutoFixture;
-using DiaryApp.Core.DTO;
-using System;
-using System.Collections.Generic;
+using DiaryApp.Core;
+using DiaryApp.Core.Interfaces;
+using DiaryApp.Core.Models;
+using DiaryApp.Core.Models.PageAreas;
+using DiaryApp.Data.DTO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DiaryApp.Tests.Extensions
 {
@@ -20,5 +20,69 @@ namespace DiaryApp.Tests.Extensions
         public static int CreateYear(this IFixture fixture) => fixture.CreateInt(2020, 9999);
 
         public static UserDto CreateUser(this IFixture fixture) => fixture.Build<UserDto>().Without(u => u.Id).Create();
+
+        internal static TList CreateList<TList, TItem>(this IFixture fixture)
+            where TList : DiaryList<TItem>, new()
+            where TItem : ListItemBase, IDiaryListItem<TList, TItem>, new()
+        {
+            var list = fixture.Build<TList>()
+                                    .Without(l => l.Items)
+                                    .Create();
+
+            var items = fixture.Build<TItem>()
+                                    .With(i => i.OwnerID, list.Id)
+                                    .With(i => i.Owner, list)
+                                    .CreateMany();
+
+            list.Items.AddRange(items);
+
+            return list;
+        }
+
+        internal static T CreateListWrapper<T, TList, TItem, TArea>(this IFixture fixture, bool withItems)
+            where T : DiaryAreaList<TList, TItem, TArea, MonthPage>, new()
+            where TList : DiaryList<TItem>, new()
+            where TItem : ListItemBase, IDiaryListItem<TList, TItem>, new()
+            where TArea : MonthPageArea
+        {
+            var list = fixture
+                                    .Build<T>()
+                                    .With(lw => lw.List, fixture.CreateList<TList, TItem>())
+                                    .Without(lw => lw.AreaOwner)
+                                    .Without(lw => lw.Items)
+                                    .Create();
+
+            if (!withItems)
+                list.List.Items.Clear();
+
+            return list;
+        }
+
+        internal static void CustomizeList<TList, TItem>(this IFixture fixture)
+            where TList : DiaryList<TItem>, new()
+            where TItem : ListItemBase, IDiaryListItem<TList, TItem>, new()
+        {
+            fixture.Customize<TList>(composer => composer.Without(l => l.Items));
+            fixture.Customize<TItem>(composer => composer.Without(i => i.Owner));
+        }
+
+        internal static void CustomizeListWrapper<T, TList, TItem, TArea>(this IFixture fixture)
+            where T : DiaryAreaList<TList, TItem, TArea, MonthPage>, new()
+            where TList : DiaryList<TItem>, new()
+            where TItem : ListItemBase, IDiaryListItem<TList, TItem>, new()
+            where TArea : MonthPageArea
+        {
+            fixture.Customize<T>(composer =>
+                    composer
+                            .With(lw => lw.List, fixture.CreateList<TList, TItem>())
+                            .Without(lw => lw.AreaOwner)
+                            .Without(lw => lw.Items));
+        }
+
+        internal static void CustomizePageArea<T>(this IFixture fixture)
+            where T : MonthPageArea
+        {
+            fixture.Customize<T>(composer => composer.Without(pa => pa.Page));
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace DiaryApp.Core
         public int Month { get; set; }
 
         [Required]
-        public int UserID { get; set; }
+        public int UserId { get; set; }
 
         public virtual AppUser User { get; set; }
 
@@ -34,6 +34,7 @@ namespace DiaryApp.Core
             Year = year;
             Month = month;
             User = user;
+            UserId = user?.Id ?? 0;
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace DiaryApp.Core
 
         public override string ToString()
         {
-            return $"{Id} {Year} {Month} {UserID}";
+            return $"{Id} {Year} {Month} {UserId}";
         }
 
         public override bool Equals(object obj)
@@ -52,13 +53,13 @@ namespace DiaryApp.Core
                    Id == @base.Id &&
                    Year == @base.Year &&
                    Month == @base.Month &&
-                   UserID == @base.UserID &&
+                   UserId == @base.UserId &&
                    EqualityComparer<AppUser>.Default.Equals(User, @base.User);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, Year, Month, UserID, User);
+            return HashCode.Combine(Id, Year, Month, UserId, User);
         }
     }
 }

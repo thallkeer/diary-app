@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
-    public class GoalsArea : PageAreaBase<MonthPage>, IMonthPageArea<GoalsArea>
+    public class GoalsArea : MonthPageArea, IMonthPageArea<GoalsArea>
     {
         private const string HeaderSTR = "Цели на этот месяц";
         public const string GoalNameSTR = "Название цели";

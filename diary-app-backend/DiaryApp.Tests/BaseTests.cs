@@ -1,23 +1,28 @@
 ﻿using AutoFixture;
 using AutoMapper;
 using DiaryApp.Core;
+using DiaryApp.Tests.Customizations;
+using DiaryApp.Tests.Extensions;
 using DiaryApp.Tests.Helpers;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DiaryApp.Tests
 {
     public class BaseTests
     {
         protected ApplicationContext _dbContext;
-        protected IConfigurationProvider _mapperProvider;
-        protected IMapper _mapper;
-        protected static IFixture _fixture = new Fixture();
+        protected IMapper _mapper => GetService<IMapper>();
+        internal static IFixture _fixture;
+
+        static BaseTests()
+        {
+            _fixture = Configurations.GetFixture();
+        }
 
         public BaseTests()
         {
-            _dbContext = Configurations.GetDbContext();
-            _mapperProvider = Configurations.GetMapperProvider();
-            _mapper = Configurations.GetMapper();
+            _dbContext = Configurations.GetServiceProvider();
         }
 
         protected T GetService<T>()

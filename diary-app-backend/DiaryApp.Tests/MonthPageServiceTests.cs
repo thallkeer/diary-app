@@ -4,13 +4,14 @@ using Xunit;
 using System.Collections.Generic;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Core;
-using DiaryApp.Core.DTO;
+using DiaryApp.Data.DTO;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
 using System.Reflection;
-using DiaryApp.Data.Extensions;
 using DiaryApp.Core.Interfaces;
+using AutoFixture.Xunit2;
+using Microsoft.EntityFrameworkCore;
 
 namespace DiaryApp.Tests
 {
@@ -18,38 +19,56 @@ namespace DiaryApp.Tests
     {
         private IMonthPageService GetMonthPageService() => GetService<IMonthPageService>();
 
-        [Theory]
-        [InlineData(5, 6)]
-        public async void TransferPageDataToNextMonthShouldCreateNextPageIfNotExists(int userId, int month)
+        [Fact]
+        public async Task TransferPageDataToNextMonthShouldCreateNextPageIfNotExists()
         {
             var service = GetMonthPageService();
-            var prevMonthPage = await service.GetPageAsync(userId, 2020, month);
-            var nextMonthPage = await service.GetPageAsync(userId, 2020, month + 1);
+            var monthPage = await _dbContext.MonthPages.FirstAsync(p => p.Month < 11);
+            await service.CreateAsync(monthPage.UserId, monthPage.Year, monthPage.Month);
+            var nextMonthPage = await service.GetPageAsync(monthPage.UserId, monthPage.Year, monthPage.Month + 1);
             Assert.Null(nextMonthPage);
             var transferModel = TransferDataModel.CreateFullTransferModel();
-            await service.TransferPageDataToNextMonthAsync(prevMonthPage, transferModel);
-            nextMonthPage = await service.GetPageAsync(userId, 2020, month + 1);
+            await service.TransferPageDataToNextMonthAsync(monthPage.Id, transferModel);
+            nextMonthPage = await service.GetPageAsync(monthPage.UserId, monthPage.Year, monthPage.Month + 1);
+            Assert.NotNull(nextMonthPage);
+            Assert.NotEqual(0, nextMonthPage.Id);
+        }
+
+        [Fact]
+        public async Task TransferPageDataToNextMonthShouldCreateNextPageIfNotExists2()
+        {
+            var service = GetMonthPageService();
+            var monthPage = await _dbContext.MonthPages.FirstAsync(p => p.Month < 11);
+            var nextMonthPage = await service.GetPageAsync(monthPage.UserId, monthPage.Year, monthPage.Month + 1);
+            Assert.Null(nextMonthPage);
+            var transferModel = TransferDataModel.CreateFullTransferModel();
+            await service.TransferPageDataToNextMonthAsync(monthPage.Id, transferModel);
+            nextMonthPage = await service.GetPageAsync(monthPage.UserId, monthPage.Year, monthPage.Month + 1);
             Assert.NotNull(nextMonthPage);
             Assert.NotEqual(0, nextMonthPage.Id);
         }
 
         [Theory]
         [MemberData(nameof(TransferDataModels))]
-        public async void TransferPageDataToNextMonthShouldWorkRight(TransferDataModel transferModel, int userId, int month)
+        public async Task TransferPageDataToNextMonthShouldWorkRight(TransferDataModel transferModel, int userId, int month)
         {
             var service = GetMonthPageService();
-            var prevMonthPage = await service.GetPageAsync(userId, 2020, month);
+            var monthPage = await service.GetPageAsync(userId, 2020, month);
+            if (monthPage == null)
+            {
+                await service.CreateAsync(userId, 2020, month);
+                monthPage = await service.GetPageAsync(userId, 2020, month);
+            }
+            Assert.NotNull(monthPage);
+            Assert.NotEqual(0, monthPage.Id);
 
-            ///emulates that next page already exists
-            var nextMonthPage = await service.CreateAsync(userId, 2020, month + 1);
-            Assert.NotNull(nextMonthPage);
-            Assert.NotEqual(0, nextMonthPage.Id);
-            List<PageAreaBase<MonthPage>> pageAreaDtos = await GetPageAreas(service, nextMonthPage);
-            Assert.All(pageAreaDtos, (parea) => Assert.NotNull(parea));
+            List<MonthPageArea> pageAreasBefore = await GetPageAreas(service, monthPage);
+            Assert.All(pageAreasBefore, (parea) => Assert.NotNull(parea));
 
-            await service.TransferPageDataToNextMonthAsync(prevMonthPage, transferModel);
-            nextMonthPage = await service.GetPageAsync(userId, 2020, month + 1);
-            List<PageAreaBase<MonthPage>> pageAreaDtosAfter = await GetPageAreas(service, nextMonthPage);
+            await service.TransferPageDataToNextMonthAsync(monthPage.Id, transferModel);
+
+            //nextMonthPage = await service.GetPageAsync(userId, 2020, month + 1);
+            //List<MonthPageArea> pageAreaDtosAfter = await GetPageAreas(service, nextMonthPage);
 
             //foreach (var paType in transferModel.GetPresentAreaTypes())
             //{
@@ -65,13 +84,13 @@ namespace DiaryApp.Tests
 
         #region Utils
 
-        private async Task<List<PageAreaBase<MonthPage>>> GetPageAreas(IMonthPageService service, MonthPageDto nextMonthPage)
+        private async Task<List<MonthPageArea>> GetPageAreas(IMonthPageService service, MonthPage nextMonthPage)
         {
             var ga = await GetPageArea<GoalsAreaDto, GoalsArea>(nextMonthPage.Id);
             var pa = await GetPageArea<PurchasesAreaDto, PurchasesArea>(nextMonthPage.Id);
             var ia = await GetPageArea<IdeasAreaDto, IdeasArea>(nextMonthPage.Id);
             var da = await GetPageArea<DesiresAreaDto, DesiresArea>(nextMonthPage.Id);
-            List<PageAreaBase<MonthPage>> pageAreas = new List<PageAreaBase<MonthPage>> { ga, pa, ia, da };
+            List<MonthPageArea> pageAreas = new List<MonthPageArea> { ga, pa, ia, da };
             return pageAreas;
         }
 
@@ -80,7 +99,7 @@ namespace DiaryApp.Tests
              where TArea : class, IPageArea
         {
             var service = GetMonthPageService();
-            var dto = await service.GetPageArea<TAreaDto, TArea>(pageId);
+            var dto = await service.GetPageArea<TArea>(pageId);
             return _mapper.Map<TArea>(dto);
         }
 

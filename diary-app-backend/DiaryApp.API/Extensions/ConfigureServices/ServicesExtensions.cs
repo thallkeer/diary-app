@@ -2,7 +2,6 @@
 using DiaryApp.Data.ServiceInterfaces;
 using DiaryApp.Data.ServiceInterfaces.Lists;
 using DiaryApp.Data.Services;
-using DiaryApp.Data.Services.Lists;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DiaryApp.API.Extensions.ConfigureServices

@@ -1,13 +1,10 @@
 ﻿using AutoFixture;
 using DiaryApp.Core;
-using DiaryApp.Core.DTO;
+using DiaryApp.Data.DTO;
 using DiaryApp.Data.ServiceInterfaces;
 using DiaryApp.Tests.Extensions;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DiaryApp.Tests.Helpers
@@ -19,6 +16,9 @@ namespace DiaryApp.Tests.Helpers
             var serviceProvider = services.BuildServiceProvider();
 
             var context = serviceProvider.GetRequiredService<ApplicationContext>();
+
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
 
             var userService = serviceProvider.GetRequiredService<IUserService>();
 

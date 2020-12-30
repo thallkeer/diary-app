@@ -1,5 +1,5 @@
 ﻿using DiaryApp.Core;
-using DiaryApp.Core.DTO;
+using DiaryApp.Data.DTO;
 
 namespace DiaryApp.Data.ServiceInterfaces
 {

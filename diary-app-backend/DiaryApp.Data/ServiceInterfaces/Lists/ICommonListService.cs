@@ -1,4 +1,4 @@
-﻿using DiaryApp.Core.DTO;
+﻿using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models;
 
 namespace DiaryApp.Data.ServiceInterfaces

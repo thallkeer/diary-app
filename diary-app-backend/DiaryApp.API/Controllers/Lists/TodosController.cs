@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DiaryApp.Core.DTO;
+using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models;
 using DiaryApp.Data.ServiceInterfaces.Lists;
 using Microsoft.AspNetCore.Mvc;

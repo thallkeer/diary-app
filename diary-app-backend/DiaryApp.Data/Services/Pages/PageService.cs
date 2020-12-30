@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using DiaryApp.Core;
-using DiaryApp.Core.DTO;
+using DiaryApp.Data.DTO;
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Data.Exceptions;
-using DiaryApp.Data.Extensions;
 using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,46 +10,39 @@ using System.Threading.Tasks;
 
 namespace DiaryApp.Data.Services
 {
-    public abstract class PageService<TPageDto, TPageEntity> : IPageService<TPageDto>
+    public abstract class PageService<TPageDto, TPageEntity> : CrudService<TPageDto, TPageEntity>, IPageService<TPageDto, TPageEntity>
         where TPageDto : PageDto
         where TPageEntity : PageBase, new()
     {
         protected readonly IUserService userService;
-        protected readonly IMapper mapper;
-        protected readonly ApplicationContext context;
-        protected readonly DbSet<TPageEntity> dbSet;
 
-        public PageService(ApplicationContext context, IMapper mapper, IUserService userService)
+        public PageService(ApplicationContext context, IMapper mapper, IUserService userService) : base(context, mapper)
         {
-            this.context = context;
-            this.mapper = mapper;
-            this.dbSet = context.Set<TPageEntity>();
             this.userService = userService;
         }
 
-        public async Task<TPageDto> GetPageAsync(int userID, int year, int month)
+        public async Task<TPageEntity> GetPageAsync(int userID, int year, int month)
         {
-            var page = await dbSet.FirstOrDefaultAsync
-               (mp => mp.UserID == userID && mp.Month == month && mp.Year == year);
-
-            return page.ToDto<TPageEntity, TPageDto>(mapper);
+            return await GetOneByCriteriaOrDefaultAsync(mp => mp.UserId == userID && mp.Month == month && mp.Year == year);
         }
 
         public async Task<TPageDto> CreateAsync(PageDto pageDto, bool initializePageAreas)
         {
-            return await CreateAsync(pageDto.UserId, pageDto.Year, pageDto.Month, initializePageAreas);
+            var createdPage = await CreateAsync(pageDto.UserId, pageDto.Year, pageDto.Month, initializePageAreas);
+            return _mapper.Map<TPageDto>(createdPage);
         }
 
         public async Task<TPageDto> CreateAsync(int userID, int year, int month)
         {
-            return await CreateAsync(userID, year, month, true);
+            var createdPage = await CreateAsync(userID, year, month, true);
+            return _mapper.Map<TPageDto>(createdPage);
         }
 
-        private async Task<TPageDto> CreateAsync(int userID, int year, int month, bool initializePageAreas)
+        protected async Task<TPageEntity> CreateAsync(int userID, int year, int month, bool initializePageAreas)
         {
-            var pageExists = await dbSet.AnyAsync(mp => mp.UserID == userID && mp.Month == month && mp.Year == year);
-            if (pageExists)
-                throw new PageAlreadyExistsException("Page with such parameters already exists");
+            //var pageExists = await _dbSet.AnyAsync(mp => mp.UserId == userID && mp.Month == month && mp.Year == year);
+            //if (pageExists)
+            //    throw new PageAlreadyExistsException("Page with such parameters already exists");
 
             if (month <= 0 || month > 12)
                 throw new ArgumentOutOfRangeException(nameof(month));
@@ -58,12 +50,12 @@ namespace DiaryApp.Data.Services
             if (year < 2020)
                 throw new ArgumentOutOfRangeException(nameof(year));
 
-            if (!await userService.IsUserExists(userID))
-                throw new UserNotExistsException("User with such id is not found");
+            //if (!await userService.IsUserExists(userID))
+            //    throw new UserNotExistsException("User with such id is not found");
 
             var page = new TPageEntity()
             {
-                UserID = userID,
+                UserId = userID,
                 Year = year,
                 Month = month
             };
@@ -71,19 +63,16 @@ namespace DiaryApp.Data.Services
             if (initializePageAreas)
                 page.CreateAreas();
 
-            await dbSet.AddAsync(page);
+            await _dbSet.AddAsync(page);
+            await _context.SaveChangesAsync();
 
-            await context.SaveChangesAsync();
-
-            return page.ToDto<TPageEntity, TPageDto>(mapper);
+            return await GetByIdAsync(page.Id);
         }
 
-        public async Task<TPageAreaDto> GetPageArea<TPageAreaDto, TPageArea>(int pageID)
-            where TPageAreaDto : PageAreaDto
-            where TPageArea : class, IPageArea
+        public async Task<TPageArea> GetPageArea<TPageArea>(int pageID) where TPageArea : class, IPageArea
         {
-            var entity = await context.Set<TPageArea>().FirstOrDefaultAsync(area => area.PageId == pageID);
-            return entity.ToDto<TPageArea, TPageAreaDto>(mapper);
-        }        
+            var entity = await _context.Set<TPageArea>().FirstOrDefaultAsync(area => area.PageId == pageID);
+            return entity;
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
-    public class DesiresArea : PageAreaBase<MonthPage>, IMonthPageArea<DesiresArea>
+    public class DesiresArea : MonthPageArea, IMonthPageArea<DesiresArea>
     {
         private const string HeaderSTR = "В этом месяце я хочу";
         public const string ToVisitSTR = "Посетить";

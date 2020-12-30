@@ -1,5 +1,6 @@
 ﻿using DiaryApp.Core.Models.PageAreas;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace DiaryApp.Core.Models
@@ -44,7 +45,7 @@ namespace DiaryApp.Core.Models
         /// </summary>
         /// <param name="pageAreaType">Type of page area</param>
         /// <returns></returns>
-        public bool GetValueForArea<T>() where T : PageAreaBase<MonthPage>
+        public bool GetValueForArea<T>(T area = null) where T : MonthPageArea
         {
             Type transferDataType = GetType();
             Type pageAreaType = typeof(T);

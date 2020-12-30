@@ -47,7 +47,7 @@ namespace DiaryApp.API
                 options.AddPolicy(DiaryAppPolicy,
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3000");
+                        builder.WithOrigins("http://localhost:5001");
                         builder.WithMethods("GET", "POST", "PUT", "DELETE");
                         builder.AllowAnyHeader();
                         builder.SetPreflightMaxAge(TimeSpan.FromSeconds(2520));

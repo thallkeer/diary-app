@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
-    public class IdeasArea : PageAreaBase<MonthPage>, IMonthPageArea<IdeasArea>
+    public class IdeasArea : MonthPageArea, IMonthPageArea<IdeasArea>
     {
         private const string HeaderSTR = "Идеи этого месяца";
 
@@ -21,7 +21,7 @@ namespace DiaryApp.Core.Models.PageAreas
 
         public void AddFromOtherArea(IdeasArea other)
         {
-            var otherListItemsCopy = other.IdeasList?.CopyItems();
+            var otherListItemsCopy = other.IdeasList.CopyItems();
             if (IdeasList == null)
                 Initialize();
             IdeasList.Items.AddRange(otherListItemsCopy);

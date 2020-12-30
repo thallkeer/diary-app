@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using DiaryApp.Core;
-using DiaryApp.Core.DTO;
+using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
+using DiaryApp.API.Models.Users;
 
 namespace DiaryApp.API
 {
@@ -37,6 +38,8 @@ namespace DiaryApp.API
 
             CreateMap<AppUser, UserDto>().ReverseMap();
             CreateMap<AppUser, UserWithPasswordDto>().ReverseMap();
+            CreateMap<UserDto, UserWithPasswordDto>().ReverseMap();
+            CreateMap<UserDto, UserWithPasswordModel>().ReverseMap();
         }
     }
 }

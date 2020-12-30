@@ -1,24 +1,25 @@
 ﻿using AutoMapper;
 using DiaryApp.API.Exceptions;
 using DiaryApp.API.Models;
-using DiaryApp.Core.DTO;
+using DiaryApp.Core;
+using DiaryApp.Data.DTO;
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Data.Exceptions;
 using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 
 namespace DiaryApp.API.Controllers
 {
-    public class PageController<TPageDto> : AppBaseController<PageController<TPageDto>>
+    public class PageController<TPageDto, TPage> : AppBaseController<PageController<TPageDto, TPage>>
         where TPageDto : PageDto
+        where TPage : PageBase
     {
-        protected readonly IPageService<TPageDto> pageService;
+        protected readonly IPageService<TPageDto, TPage> pageService;
 
-        public PageController(IPageService<TPageDto> pageService, IMapper mapper, ILoggerFactory loggerFactory)
+        public PageController(IPageService<TPageDto, TPage> pageService, IMapper mapper, ILoggerFactory loggerFactory)
             : base(mapper, loggerFactory)
         {
             this.pageService = pageService;
@@ -62,14 +63,14 @@ namespace DiaryApp.API.Controllers
             where TPageArea : class, IPageArea
             where TPageAreaDto : PageAreaDto
         {
-            TPageAreaDto area = await pageService.GetPageArea<TPageAreaDto, TPageArea>(pageID);
+            TPageArea area = await pageService.GetPageArea<TPageArea>(pageID);
             if (area == null)
             {
                 string err = $"Page area {typeof(TPageArea)} not found for pageID {pageID}";
                 logger.LogError(err);
                 return NotFound(err);
             }
-            return Ok();
+            return Ok(mapper.Map<TPageAreaDto>(area));
         }
     }
 }

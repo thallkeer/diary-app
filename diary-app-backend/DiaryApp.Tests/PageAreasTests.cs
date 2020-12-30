@@ -3,6 +3,7 @@ using DiaryApp.Core;
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
+using DiaryApp.Tests.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -91,28 +92,7 @@ namespace DiaryApp.Tests
             }
             else
                 Assert.True(goalsArea.GoalLists.Count == listsCountInputArea - emptyListsCountInputArea + nonEmptyListsCountOtherArea);
-        }
-
-        #region Utils
-        private static T GenerateListWrapper<T, TList, TItem, TArea>(bool withItems)
-            where T : DiaryAreaList<TList, TItem, TArea, MonthPage>, new()
-            where TList : DiaryList<TItem>, new()
-            where TItem : ListItemBase, IDiaryListItem<TList, TItem>, new()
-            where TArea : PageAreaBase<MonthPage>
-        {
-            var list = _fixture
-                                    .Build<T>()
-                                    .With(lw => lw.List, ListCopyTests.CreateList<TList, TItem>())
-                                    .Without(lw => lw.AreaOwner)
-                                    .Without(lw => lw.Items)
-                                    .Create();
-
-            if (!withItems)
-                list.List.Items.Clear();
-
-            return list;
-        }
-        #endregion
+        }       
 
         #region TestData
         public static TheoryData<PurchasesArea> TheoryPurchasesAreas()
@@ -121,7 +101,7 @@ namespace DiaryApp.Tests
 
             for (int i = 0; i < 2; i++)
             {
-                var pa = GenerateListWrapper<PurchaseList, TodoList, TodoItem, PurchasesArea>(i % 2 == 0);
+                var pa = _fixture.CreateListWrapper<PurchaseList, TodoList, TodoItem, PurchasesArea>(i % 2 == 0);
                 paWithCustomLists.PurchasesLists.Add(pa);
             }
             return new TheoryData<PurchasesArea>

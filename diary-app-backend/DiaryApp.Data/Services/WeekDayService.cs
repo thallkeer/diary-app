@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DiaryApp.Core;
-using DiaryApp.Core.DTO;
+using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models;
 using DiaryApp.Data.ServiceInterfaces;
 using DiaryApp.Data.ServiceInterfaces.ServiceInterfaces;

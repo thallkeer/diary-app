@@ -102,7 +102,7 @@ namespace DiaryApp.Core.Migrations
                     b.Property<int>("Month")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<int>("Year")
@@ -110,7 +110,8 @@ namespace DiaryApp.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserId", "Year", "Month")
+                        .IsUnique();
 
                     b.ToTable("MainPages");
                 });
@@ -466,7 +467,7 @@ namespace DiaryApp.Core.Migrations
                     b.Property<int>("Month")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<int>("Year")
@@ -474,7 +475,8 @@ namespace DiaryApp.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserId", "Year", "Month")
+                        .IsUnique();
 
                     b.ToTable("MonthPages");
                 });
@@ -505,7 +507,7 @@ namespace DiaryApp.Core.Migrations
                 {
                     b.HasOne("DiaryApp.Core.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -688,7 +690,7 @@ namespace DiaryApp.Core.Migrations
                 {
                     b.HasOne("DiaryApp.Core.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace DiaryApp.Core.Models
 {
@@ -9,8 +10,26 @@ namespace DiaryApp.Core.Models
     {
         public int Id { get; set; }
 
-        public override string ToString()
+		protected bool Equals(BaseEntity other)
+		{
+			return string.Equals(Id, other.Id);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj is null) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			return obj is BaseEntity @base && Equals(@base);
+		}
+
+		public override int GetHashCode()
+		{
+			return Id.GetHashCode();
+		}
+
+		public override string ToString()
         {
+            return base.ToString();
             return JsonConvert.SerializeObject(this);
         }
     }

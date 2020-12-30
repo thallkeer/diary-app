@@ -6,9 +6,8 @@ using System.ComponentModel.DataAnnotations;
 namespace DiaryApp.Core.Models.PageAreas
 {
     public interface IMonthPageArea<T> : IPageArea<T, MonthPage>     
-        where T : PageAreaBase<MonthPage>
+        where T : MonthPageArea
     {
-
     }
 
     public abstract class PageAreaBase<TPage> : BaseEntity, IPageArea

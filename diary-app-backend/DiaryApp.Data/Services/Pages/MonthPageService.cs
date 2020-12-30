@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.Core;
-using DiaryApp.Core.DTO;
+using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Data.Exceptions;
@@ -16,35 +16,34 @@ namespace DiaryApp.Data.Services
         {
         }
 
-        public async Task TransferPageDataToNextMonthAsync(MonthPageDto prevPageDto, TransferDataModel transferDataModel)
+        public async Task TransferPageDataToNextMonthAsync(int monthPageId, TransferDataModel transferDataModel)
         {
-            PageDto nextPageDto = new PageDto(prevPageDto.UserId, prevPageDto.Year, prevPageDto.Month + 1);
+            if (transferDataModel == null) throw new ArgumentNullException(nameof(transferDataModel));
 
-            MonthPageDto monthPageDto = await GetPageAsync(nextPageDto.UserId, nextPageDto.Year, nextPageDto.Month);
+            MonthPage monthPage = await _dbSet.FindAsync(monthPageId);
+            if (monthPage == null)
+                throw new EntityNotFoundException(nameof(MonthPage));
 
-            //using var transaction = await context.Database.BeginTransactionAsync();
+            int nextMonth = monthPage.Month + 1;
+            MonthPage nextPage = await GetPageAsync(monthPage.UserId, monthPage.Year, nextMonth);
 
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                monthPageDto ??= await CreateAsync(nextPageDto.UserId, nextPageDto.Year, nextPageDto.Month);
+                if (nextPage == null)
+                {
+                    nextPage = monthPage.TransferDataToNextMonth(transferDataModel);
+                    await _dbSet.AddAsync(nextPage);
+                }
+                else
+                {
+                    nextPage.MergePageAreas(transferDataModel, monthPage);
+                    _dbSet.Update(nextPage);
+                }
 
-                var monthPage = await dbSet.FindAsync(monthPageDto.Id);
+                await _context.SaveChangesAsync();
 
-                var prevPage = await dbSet.FindAsync(prevPageDto.Id);
-
-                monthPage.GoalsArea = TransferAreaData(transferDataModel, monthPage.GoalsArea, prevPage.GoalsArea);
-                monthPage.DesiresArea = TransferAreaData(transferDataModel, monthPage.DesiresArea, prevPage.DesiresArea);
-                monthPage.PurchasesArea = TransferAreaData(transferDataModel, monthPage.PurchasesArea, prevPage.PurchasesArea);
-                monthPage.IdeasArea = TransferAreaData(transferDataModel, monthPage.IdeasArea, prevPage.IdeasArea);
-
-                context.Update(monthPage);
-
-                await context.SaveChangesAsync();
-
-                // Commit transaction if all commands succeed, transaction will auto-rollback
-                // when disposed if either commands fails
-
-                //await transaction.CommitAsync();
+                await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -52,13 +51,13 @@ namespace DiaryApp.Data.Services
             }
         }
 
-        private T TransferAreaData<T>(TransferDataModel transferDataModel, T area, T prevArea) where T : PageAreaBase<MonthPage>, IMonthPageArea<T>
+        private T TransferAreaData<T>(TransferDataModel transferDataModel, T area, T prevArea) where T : MonthPageArea, IMonthPageArea<T>
         {
             bool transfer = transferDataModel.GetValueForArea<T>();
             if (transfer)
             {
                 area.AddFromOtherArea(prevArea);
-                context.Set<T>().Update(area);
+                _context.Set<T>().Update(area);
             }
             return area;
         }

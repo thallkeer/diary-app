@@ -1,11 +1,8 @@
 ﻿using DiaryApp.API.Exceptions;
 using DiaryApp.API.Models;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 

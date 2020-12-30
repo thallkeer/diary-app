@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DiaryApp.Core.Models.PageAreas
 {
-    public class PurchasesArea : PageAreaBase<MonthPage>, IMonthPageArea<PurchasesArea>
+    public class PurchasesArea : MonthPageArea, IMonthPageArea<PurchasesArea>
     {
         private const string Title = "Название списка";
         private const string HeaderSTR = "Покупки";

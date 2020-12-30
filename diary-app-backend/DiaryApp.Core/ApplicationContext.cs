@@ -1,4 +1,5 @@
-﻿using DiaryApp.Core.Models;
+﻿using DiaryApp.Core.Configurations;
+using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,8 @@ namespace DiaryApp.Core
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ApplyConfiguration(new MainPageConfiguration());
+            modelBuilder.ApplyConfiguration(new MonthPageConfiguration());
             //modelBuilder.ApplyConfiguration(new HabitTrackerConfiguration());
         }
 

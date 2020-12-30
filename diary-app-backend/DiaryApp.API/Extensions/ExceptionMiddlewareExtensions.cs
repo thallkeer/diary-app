@@ -1,10 +1,5 @@
-﻿using System.Net;
-using DiaryApp.API.Middleware;
-using DiaryApp.API.Models;
+﻿using DiaryApp.API.Middleware;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace DiaryApp.API.Extensions
 {

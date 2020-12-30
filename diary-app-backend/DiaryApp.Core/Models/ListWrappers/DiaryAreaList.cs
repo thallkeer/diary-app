@@ -20,7 +20,7 @@ namespace DiaryApp.Core.Models
         public int AreaOwnerID { get; set; }
         public virtual TArea AreaOwner { get; set; }
         [NotMapped]
-        public List<TListItem> Items { get => List.Items; set => List.Items = value; }
+        public List<TListItem> Items { get => List?.Items; set => List.Items = value; }
 
         public DiaryAreaList()
         {

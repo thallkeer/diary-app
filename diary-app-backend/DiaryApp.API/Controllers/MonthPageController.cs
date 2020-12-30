@@ -1,17 +1,17 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.API.Models;
-using DiaryApp.Core.DTO;
+using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using DiaryApp.Core;
 
 namespace DiaryApp.API.Controllers
 {
-    public class MonthPageController : PageController<MonthPageDto>
+    public class MonthPageController : PageController<MonthPageDto, MonthPage>
     {
         private readonly IMonthPageService _monthPageService;
 
@@ -66,11 +66,13 @@ namespace DiaryApp.API.Controllers
             if (transferDataModel == null)
                 return BadRequest("No transfer information is received, check transfer data model");
 
-            MonthPageDto prevPage = await pageService.GetPageAsync(prevPageParams.UserId, prevPageParams.Year, prevPageParams.Month);
+            MonthPage prevPage = await pageService.GetPageAsync(prevPageParams.UserId, prevPageParams.Year, prevPageParams.Month);
             if (prevPage == null)
                 return BadRequest($"No original page found for {prevPageParams.UserId} {prevPageParams.Year} {prevPageParams.Month}");
 
-            await _monthPageService.TransferPageDataToNextMonthAsync(prevPage, transferDataModel);
+            //TODO: check this method and refactor
+
+            await _monthPageService.TransferPageDataToNextMonthAsync(prevPage.Id, transferDataModel);
             return Ok();
         }
     }

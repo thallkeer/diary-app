@@ -13,4 +13,8 @@
     <ProjectReference Include="..\DiaryApp.Core\DiaryApp.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>

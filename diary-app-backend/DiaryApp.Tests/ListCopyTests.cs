@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using DiaryApp.Core;
 using DiaryApp.Core.Extensions;
 using DiaryApp.Core.Models;
 using Xunit;
 using AutoFixture;
 using DiaryApp.Core.Interfaces;
-using AutoFixture.Xunit2;
+using System.Linq;
+using DiaryApp.Tests.Extensions;
 
 namespace DiaryApp.Tests
 {
@@ -15,7 +15,7 @@ namespace DiaryApp.Tests
         [Fact]
         public void CreateDeepCopyOnTodoListShouldWorkRight()
         {
-            var original = CreateList<TodoList, TodoItem>();
+            var original = _fixture.CreateList<TodoList, TodoItem>();
 
             var copy = original.CreateDeepCopy<TodoList, TodoItem>();
 
@@ -25,7 +25,7 @@ namespace DiaryApp.Tests
         [Fact]
         public void CreateDeepCopyOnEventListShouldWorkRight()
         {
-            var original = CreateList<EventList, EventItem>();
+            var original = _fixture.CreateList<EventList, EventItem>();
 
             var copy = original.CreateDeepCopy<EventList, EventItem>();
 
@@ -35,7 +35,7 @@ namespace DiaryApp.Tests
         [Fact]
         public void CreateDeepCopyOnCommonListShouldWorkRight()
         {
-            var original = CreateList<CommonList, ListItem>();
+            var original = _fixture.CreateList<CommonList, ListItem>();
 
             var copy = original.CreateDeepCopy<CommonList, ListItem>();
 
@@ -63,35 +63,19 @@ namespace DiaryApp.Tests
             Assert.Equal(original.GoalName, copy.GoalName);
             Assert.Equal(original.SelectedDays.Count, copy.SelectedDays.Count);
 
-            for (int i = 0; i < original.SelectedDays.Count; i++)
+            Assert.All(original.SelectedDays.Select((sd,i) => new { day = sd, index = i }), sd =>
             {
-                Assert.NotEqual(original.SelectedDays[i], copy.SelectedDays[i]);
-                Assert.NotEqual(original.SelectedDays[i].Id, copy.SelectedDays[i].Id);
-                Assert.NotEqual(original.SelectedDays[i].HabitTracker, copy.SelectedDays[i].HabitTracker);
-                Assert.NotEqual(original.SelectedDays[i].HabitTrackerId, copy.SelectedDays[i].HabitTrackerId);
+                var day = sd.day;
+                var i = sd.index;
+                Assert.NotEqual(day, copy.SelectedDays[i]);
+                Assert.NotEqual(day.Id, copy.SelectedDays[i].Id);
+                Assert.NotEqual(day.HabitTracker, copy.SelectedDays[i].HabitTracker);
+                Assert.NotEqual(day.HabitTrackerId, copy.SelectedDays[i].HabitTrackerId);
 
-                Assert.Equal(original.SelectedDays[i].Number, copy.SelectedDays[i].Number);
-                Assert.Equal(original.SelectedDays[i].Note, copy.SelectedDays[i].Note);
-            }
-        }
-
-        internal static TList CreateList<TList, TItem>()
-            where TList : DiaryList<TItem>, new()
-            where TItem : ListItemBase, IDiaryListItem<TList, TItem>, new()
-        {
-            var list = _fixture.Build<TList>()
-                                    .Without(l => l.Items)
-                                    .Create();
-
-            var items = _fixture.Build<TItem>()
-                                    .With(i => i.OwnerID, list.Id)
-                                    .With(i => i.Owner, list)
-                                    .CreateMany();
-
-            list.Items.AddRange(items);
-
-            return list;
-        }
+                Assert.Equal(day.Number, copy.SelectedDays[i].Number);
+                Assert.Equal(day.Note, copy.SelectedDays[i].Note);
+            });
+        }        
 
         internal static void TestLists<TList, TItem>(TList original, TList copy, params Action<TItem, TItem>[] itemAdditionalCheck) 
             where TList : DiaryList<TItem>

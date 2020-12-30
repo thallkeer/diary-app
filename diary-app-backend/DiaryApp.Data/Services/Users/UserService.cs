@@ -6,8 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.Core;
-using DiaryApp.Core.DTO;
-using DiaryApp.Data.Extensions;
+using DiaryApp.Data.DTO;
 using DiaryApp.Data.ServiceInterfaces;
 using DiaryApp.Data.Services.Users;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +31,7 @@ namespace DiaryApp.Data.Services
             if (string.IsNullOrEmpty(password))
                 throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
 
-            var user = dbSet.SingleOrDefault(x => x.Username == username);
+            var user = _dbSet.SingleOrDefault(x => x.Username == username);
 
             if (user == null)
                 return null;
@@ -40,7 +39,7 @@ namespace DiaryApp.Data.Services
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
                 return null;
 
-            return user.ToDto<AppUser, UserDto>(mapper);
+            return _mapper.Map<UserDto>(user);
         }
 
         public async Task RegisterAsync(UserDto userDto, string password)
@@ -48,19 +47,21 @@ namespace DiaryApp.Data.Services
             if (string.IsNullOrWhiteSpace(password))
                 throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
 
-            if (await dbSet.AnyAsync(x => x.Username == userDto.Username))
+            if (await _dbSet.AnyAsync(x => x.Username == userDto.Username))
                 throw new Exception($"Username '{userDto.Username}' is already taken");
 
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            var user = userDto.ToEntity<AppUser, UserDto>(mapper);
+            var user = _mapper.Map<AppUser>(userDto);
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            var userWithPassword = user.ToDto<AppUser, UserWithPasswordDto>(mapper);
+            var userWithPassword = _mapper.Map<UserWithPasswordDto>(user);
 
-            await base.CreateAsync(userWithPassword);
+            int userId = await base.CreateAsync(userWithPassword);
+            //TODO: fix
+            userDto.Id = userId;
         }
 
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -94,7 +95,7 @@ namespace DiaryApp.Data.Services
 
         public async Task<bool> IsUserExists(int userId)
         {
-            var res = await dbSet.AnyAsync(u => u.Id == userId);
+            var res = await _dbSet.AnyAsync(u => u.Id == userId);
             return res;
         }
 

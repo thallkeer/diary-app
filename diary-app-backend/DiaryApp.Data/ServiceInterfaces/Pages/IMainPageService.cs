@@ -1,9 +1,9 @@
 ﻿using DiaryApp.Core;
-using DiaryApp.Core.DTO;
+using DiaryApp.Data.DTO;
 
 namespace DiaryApp.Data.ServiceInterfaces
 {
-    public interface IMainPageService : IPageService<MainPageDto>, IGetable<MainPageDto, MainPage>
+    public interface IMainPageService : IPageService<MainPageDto, MainPage>
     {
     }
 }

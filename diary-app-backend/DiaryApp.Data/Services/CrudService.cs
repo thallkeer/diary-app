@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.Core;
-using DiaryApp.Core.DTO;
+using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models;
 using DiaryApp.Data.Exceptions;
-using DiaryApp.Data.Extensions;
 using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,51 +17,60 @@ namespace DiaryApp.Data.Services
         where TDto : BaseDto
         where TEntity : BaseEntity
     {
-        protected readonly IMapper mapper;
-        protected internal ApplicationContext context;
-        protected internal DbSet<TEntity> dbSet;
+        protected readonly IMapper _mapper;
+        protected internal ApplicationContext _context;
+        protected internal DbSet<TEntity> _dbSet;
 
         public CrudService(ApplicationContext context, IMapper mapper)
         {
-            this.context = context;
-            this.mapper = mapper;
-            this.dbSet = context.Set<TEntity>();
+            _context = context;
+            _mapper = mapper;
+            _dbSet = context.Set<TEntity>();
         }
 
         public virtual async Task<int> CreateAsync(TDto dto)
         {
-            var entity = dto.ToEntity<TEntity, TDto>(mapper);
-            await dbSet.AddAsync(entity);
-            await context.SaveChangesAsync();
+            var entity = _mapper.Map<TEntity>(dto);
+            await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
             return entity.Id;
         }
 
         public virtual async Task DeleteAsync(int id)
         {
-            var entity = await dbSet.FindAsync(id);
+            var entity = await _dbSet.FindAsync(id);
             if (entity == null)
                 throw new EntityNotFoundException($"Entity of type {typeof(TEntity)} with such id is not found!");
-            dbSet.Remove(entity);
-            await context.SaveChangesAsync();
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TDto>> GetAllAsync()
+        public async Task<IEnumerable<TEntity>> GetByCriteriaAsync(Expression<Func<TEntity, bool>> filter = null)
         {
-            var entities = await dbSet.AsNoTracking().ToListAsync();
-            return entities.ToDtos<TEntity, TDto>(mapper);
+            var entities = _dbSet.AsNoTracking();
+
+            if (filter != null)
+                entities = entities.Where(filter);
+
+            return await entities.ToListAsync();
         }
 
-        public async Task<TDto> GetByIdAsync(int id)
+        public async Task<TEntity> GetByIdAsync(int id)
         {
-            var entity = await dbSet.FindAsync(id);
-            return entity.ToDto<TEntity, TDto>(mapper);
+            var entity = await _dbSet.FindAsync(id);
+            return entity;
+        }
+
+        public async Task<TEntity> GetOneByCriteriaOrDefaultAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            return await _dbSet.FirstOrDefaultAsync(filter);
         }
 
         public virtual async Task UpdateAsync(TDto dto)
         {
-            var entity = dto.ToEntity<TEntity, TDto>(mapper);
-            context.Update(entity);
-            await context.SaveChangesAsync();
+            var entity = _mapper.Map<TEntity>(dto);
+            _context.Update(entity);
+            await _context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -69,7 +79,7 @@ namespace DiaryApp.Data.Services
         /// <returns></returns>
         protected IQueryable<TEntity> GetAsQueryable()
         {
-            return dbSet.AsNoTracking();
+            return _dbSet.AsNoTracking();
         }
     }
 }
