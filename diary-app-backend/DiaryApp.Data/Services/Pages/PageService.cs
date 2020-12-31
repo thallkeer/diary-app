@@ -6,6 +6,7 @@ using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using DiaryApp.Data.Exceptions;
 
 namespace DiaryApp.Data.Services
 {
@@ -39,18 +40,9 @@ namespace DiaryApp.Data.Services
 
         protected async Task<TPageEntity> CreateAsync(int userID, int year, int month, bool initializePageAreas)
         {
-            //var pageExists = await _dbSet.AnyAsync(mp => mp.UserId == userID && mp.Month == month && mp.Year == year);
-            //if (pageExists)
-            //    throw new PageAlreadyExistsException("Page with such parameters already exists");
-
-            if (month <= 0 || month > 12)
-                throw new ArgumentOutOfRangeException(nameof(month));
-
-            if (year < 2020)
-                throw new ArgumentOutOfRangeException(nameof(year));
-
-            //if (!await userService.IsUserExists(userID))
-            //    throw new UserNotExistsException("User with such id is not found");
+            var pageExists = await _dbSet.AnyAsync(mp => mp.UserId == userID && mp.Month == month && mp.Year == year);
+            if (pageExists)
+                throw new PageAlreadyExistsException("Page with such parameters already exists");
 
             var page = new TPageEntity()
             {

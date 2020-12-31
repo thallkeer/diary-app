@@ -6,6 +6,7 @@ using DiaryApp.Data.Services.Users;
 using DiaryApp.Tests.Customizations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 
 namespace DiaryApp.Tests.Helpers
 {
@@ -13,13 +14,16 @@ namespace DiaryApp.Tests.Helpers
     {
         public static ApplicationContext GetServiceProvider()
         {
+            System.Console.WriteLine("GetServiceProvider", new StackTrace(1, true));
+
             var services = new ServiceCollection();            
 
             services.AddDbContext<ApplicationContext>(options => options
                     .UseLazyLoadingProxies()
                     //.UseInMemoryDatabase(databaseName: $"diaryAppDb-{Guid.NewGuid()}")
                     //.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning)));
-                    .UseSqlServer("Server=DESKTOP-UR40SF3; Database=diaryapptest; Trusted_Connection=True; MultipleActiveResultSets=true"));
+                    .UseSqlServer("Server=DESKTOP-UR40SF3; Database=diaryapptest; Trusted_Connection=True; MultipleActiveResultSets=true")
+                    , ServiceLifetime.Transient);
 
             services.AddSingleton(new JwtTokenConfig
             {
@@ -41,7 +45,9 @@ namespace DiaryApp.Tests.Helpers
         public static IFixture GetFixture()
         {
             var fixture = new Fixture();
-            fixture.Customize(new PageAreaCustomization());
+            fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
+            fixture.Behaviors.Add(new OmitOnRecursionBehavior());
+            //fixture.Customize(new PageAreaCustomization());
             fixture.Customize(new PageCustomization());
             return fixture;
         }

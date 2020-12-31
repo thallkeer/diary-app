@@ -29,14 +29,14 @@ namespace DiaryApp.Tests.Helpers
 
             users.ForEach(u => userService.RegisterAsync(u, password));
 
-            var mainPageService = serviceProvider.GetRequiredService<IMainPageService>();
-            var monthPageService = serviceProvider.GetRequiredService<IMonthPageService>();
+            //var mainPageService = serviceProvider.GetRequiredService<IMainPageService>();
+            //var monthPageService = serviceProvider.GetRequiredService<IMonthPageService>();
 
-            foreach (var user in context.Users)
-            {
-                mainPageService.CreateAsync(user.Id, fixture.CreateYear(), fixture.CreateMonth());
-                monthPageService.CreateAsync(user.Id, fixture.CreateYear(), fixture.CreateMonth());
-            }
+            //foreach (var user in context.users)
+            //{
+            //    mainpageservice.createasync(user.id, fixture.createyear(), fixture.createmonth());
+            //    monthpageservice.createasync(user.id, fixture.createyear(), fixture.createmonth());
+            //}
 
             return context;
         }

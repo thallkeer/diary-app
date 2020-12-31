@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using DiaryApp.Core;
-using DiaryApp.Core.Interfaces;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Data.DTO;
@@ -9,14 +8,13 @@ namespace DiaryApp.Tests.Extensions
 {
     internal static class FixtureExtensions
     {
-        public static int CreateInt(this IFixture fixture, int min, int max)
-        {
-            return fixture.Create<int>() % (max - min + 1) + min;
-        }
+        public static int CreateInt(this IFixture fixture, int min, int max) => fixture.Create<int>() % (max - min + 1) + min;
 
         public static int CreateMonth(this IFixture fixture) => fixture.CreateInt(1, 12);
 
         public static int CreateYear(this IFixture fixture) => fixture.CreateInt(2020, 9999);
+ 
+        public static MonthPage CreateMonthPageForNotLastMonth(this IFixture fixture) => fixture.Build<MonthPage>().With(p => p.Month, fixture.CreateInt(1,11)).Create();
 
         public static UserDto CreateUser(this IFixture fixture) => fixture.Build<UserDto>().Without(u => u.Id).Create();
 

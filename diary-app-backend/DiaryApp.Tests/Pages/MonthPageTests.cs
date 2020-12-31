@@ -2,27 +2,23 @@
 using DiaryApp.Core;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
+using DiaryApp.Tests.Extensions;
 using DiaryApp.Tests.Helpers;
 using System.Collections.Generic;
 using Xunit;
 
 namespace DiaryApp.Tests
 {
-    public class MonthPageTests
+    public class MonthPageTests : BaseLogicTests
     {
-        private IFixture _fixture;
 
-        public MonthPageTests()
-        {
-            _fixture = Configurations.GetFixture();
-        }
-
-        [Theory, MemberData(nameof(WrongMonthAndYearValues))]
+        [Theory, MemberData(nameof(TransferDataModels))]
         public void TransferDataToNextMonth_ShouldWork(TransferDataModel transferDataModel)
         {
-            var monthPage = _fixture.Create<MonthPage>();
+            var monthPage = _fixture.CreateMonthPageForNotLastMonth();
             var nextMonthPage = monthPage.TransferDataToNextMonth(transferDataModel);
             Assert.NotNull(nextMonthPage);
+            Assert.Equal(monthPage.UserId, nextMonthPage.UserId);
             Assert.Equal(monthPage.User, nextMonthPage.User);
             Assert.Equal(monthPage.Year, nextMonthPage.Year);
             Assert.Equal(monthPage.Month + 1, nextMonthPage.Month);
@@ -40,12 +36,13 @@ namespace DiaryApp.Tests
 
             if (!transferDataModel.GetValueForArea(nextMonthPage.GoalsArea))
             {
-                Assert.Equal(emptyMonthPage.GoalsArea.GetHashCode(), nextMonthPage.GoalsArea.GetHashCode());
-                Assert.Equal(emptyMonthPage.GoalsArea, nextMonthPage.GoalsArea);
+                Assert.Equal(emptyMonthPage.GoalsArea.Page, nextMonthPage.GoalsArea.Page);
+                Assert.Equal(emptyMonthPage.GoalsArea.Header, nextMonthPage.GoalsArea.Header);
+                
             }
         }
 
-        public static TheoryData<TransferDataModel> WrongMonthAndYearValues()
+        public static TheoryData<TransferDataModel> TransferDataModels()
         {
             var fixture = new Fixture();
             return new TheoryData<TransferDataModel>

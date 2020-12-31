@@ -7,16 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DiaryApp.Tests
 {
-    public class BaseTests
+    public class BaseTests : BaseLogicTests
     {
         protected ApplicationContext _dbContext;
         protected IMapper _mapper => GetService<IMapper>();
-        internal static IFixture _fixture;
-
-        static BaseTests()
-        {
-            _fixture = Configurations.GetFixture();
-        }
 
         public BaseTests()
         {

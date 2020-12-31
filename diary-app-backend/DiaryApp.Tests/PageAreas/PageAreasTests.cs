@@ -1,5 +1,4 @@
-﻿using DiaryApp.Core;
-using DiaryApp.Core.Models;
+﻿using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Tests.Extensions;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ using Xunit;
 
 namespace DiaryApp.Tests
 {
-    public class PageAreasTests : BaseTests
+    public class PageAreasTests : BaseLogicTests
     {
         [Theory]
         [MemberData(nameof(TheoryPurchasesAreas))]

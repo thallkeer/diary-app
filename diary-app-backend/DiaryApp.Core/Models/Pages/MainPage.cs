@@ -1,6 +1,4 @@
 ﻿using DiaryApp.Core.Models.PageAreas;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core
@@ -17,27 +15,14 @@ namespace DiaryApp.Core
         }
 
         [Required]
-        public virtual ImportantEventsArea ImportantEvents { get; set; }
+        public virtual ImportantEventsArea ImportantEventsArea { get; set; }
         [Required]
-        public virtual ImportantThingsArea ImportantThings { get; set; }       
+        public virtual ImportantThingsArea ImportantThingsArea { get; set; }       
 
         public override void CreateAreas()
         {
-            ImportantEvents = new ImportantEventsArea(this, true);
-            ImportantThings = new ImportantThingsArea(this, true);
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is MainPage page &&
-                   base.Equals(obj) &&
-                   EqualityComparer<ImportantEventsArea>.Default.Equals(ImportantEvents, page.ImportantEvents) &&
-                   EqualityComparer<ImportantThingsArea>.Default.Equals(ImportantThings, page.ImportantThings);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(base.GetHashCode(), ImportantEvents, ImportantThings);
+            ImportantEventsArea = new ImportantEventsArea(this, true);
+            ImportantThingsArea = new ImportantThingsArea(this, true);
         }
     }
 }

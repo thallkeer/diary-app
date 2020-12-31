@@ -14,6 +14,7 @@ namespace DiaryApp.Core.Models.PageAreas
         public PageAreaBase(TPage page, string header, bool withInitialization)
         {
             Page = page;
+            PageId = page?.Id ?? 0;
             Header = header;
 
             if (withInitialization)

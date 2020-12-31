@@ -25,13 +25,39 @@ namespace DiaryApp.Core
             UserId = user?.Id ?? 0;
         }
 
+        private int year;
         [Required]
         [Range(2020, 9999)]
-        public int Year { get; set; }
+        public int Year 
+        {
+            get
+            {
+                return year;
+            }
+            set
+            {
+                if (value < 2020)
+                    throw new ArgumentOutOfRangeException($"{nameof(Year)} value must be more than 2020!");
+                year = value;
+            } 
+        }
 
+        private int month;
         [Required]
         [Range(1, 12)]
-        public int Month { get; set; }
+        public int Month
+        {
+            get
+            {
+                return month;
+            }
+            set
+            {
+                if (value < 1 || value > 12)
+                    throw new ArgumentOutOfRangeException($"{nameof(Month)} value must be between 1 and 12");
+                month = value;
+            }
+        }
 
         [Required]
         public int UserId { get; set; }

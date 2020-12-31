@@ -4,10 +4,8 @@ using AutoMapper;
 using DiaryApp.Core;
 using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models;
-using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Data.Exceptions;
 using DiaryApp.Data.ServiceInterfaces;
-using DiaryApp.Core.Interfaces;
 
 namespace DiaryApp.Data.Services
 {
@@ -50,17 +48,6 @@ namespace DiaryApp.Data.Services
             {
                 throw new PageDataTransferException("Could not transfer page data to the next month, exception is occured.", ex);
             }
-        }
-
-        private T TransferAreaData<T>(TransferDataModel transferDataModel, T area, T prevArea) where T : MonthPageArea, IMonthPageArea<T>
-        {
-            bool transfer = transferDataModel.GetValueForArea<T>();
-            if (transfer)
-            {
-                area.AddFromOtherArea(prevArea);
-                _context.Set<T>().Update(area);
-            }
-            return area;
         }
     }
 }

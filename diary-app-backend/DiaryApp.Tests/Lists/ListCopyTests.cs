@@ -1,15 +1,15 @@
 ﻿using System;
-using DiaryApp.Core;
 using DiaryApp.Core.Extensions;
 using DiaryApp.Core.Models;
 using Xunit;
 using AutoFixture;
 using System.Linq;
 using DiaryApp.Tests.Extensions;
+using DiaryApp.Tests.Helpers;
 
 namespace DiaryApp.Tests
 {
-    public class ListCopyTests : BaseTests
+    public class ListCopyTests : BaseLogicTests
     {
         [Fact]
         public void CreateDeepCopyOnTodoListShouldWorkRight()
