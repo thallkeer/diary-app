@@ -4,6 +4,17 @@ namespace DiaryApp.API.Models
 {
     public class PageRequest
     {
+        public PageRequest()
+        {
+
+        }
+        public PageRequest(int userId, int year, int month)
+        {
+            UserId = userId;
+            Year = year;
+            Month = month;
+        }
+
         [Required]
         public int UserId { get; set; }
 

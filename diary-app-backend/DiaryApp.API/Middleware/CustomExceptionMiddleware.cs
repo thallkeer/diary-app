@@ -25,6 +25,11 @@ namespace DiaryApp.API.Middleware
             {
                 await next(context);
             }
+            //catch (InvalidOperationException ioe)
+            //{
+            //    if (!ioe.Message.StartsWith("The SPA default page middleware could not return the default page"))
+            //        await HandleExceptionAsync(context, ioe);
+            //}
             catch (HttpException ex)
             {
                 await HandleExceptionAsync(context, ex);

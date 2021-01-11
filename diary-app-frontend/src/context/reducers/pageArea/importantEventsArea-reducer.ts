@@ -1,20 +1,15 @@
 import { combineReducers } from "redux";
-import { IEventList, IPageArea, IPageAreaState } from "../../../models";
+import { IImportantEventsArea } from "../../../models/entities";
+import { IImportantEventsAreaState } from "../../../models/states";
 import { ActionsUnion } from "../../actions/action-helpers";
 import { BaseThunkType } from "../../store";
 import { createEventListReducer, eventsActions } from "../list/events";
+import { MainPageName } from "../page/mainPage-reducer";
 import { INITIAL_LOADABLE_STATE } from "../utilities/loading-reducer";
 import {
 	createNamedWrapperPageAreaReducer,
 	loadPageArea,
 } from "./pageArea-reducer";
-
-interface IImportantEventsArea extends IPageArea {
-	importantEvents: IEventList;
-}
-
-export interface IImportantEventsAreaState
-	extends IPageAreaState<IImportantEventsArea> {}
 
 const initialState: IImportantEventsAreaState = {
 	area: null,
@@ -40,7 +35,7 @@ export const loadImportantEventsArea = (pageID: number): ThunkType => async (
 	dispatch(
 		loadPageArea<IImportantEventsArea>(
 			initialState.pageAreaName,
-			"mainPage",
+			MainPageName,
 			pageID,
 			(pageArea) => {
 				dispatch(

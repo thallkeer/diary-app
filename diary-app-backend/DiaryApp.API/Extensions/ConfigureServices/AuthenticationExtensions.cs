@@ -24,12 +24,12 @@ namespace DiaryApp.API.Extensions.ConfigureServices
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtTokenConfig.Secret)),
-                    ValidateIssuer = true,
-                    ValidIssuer = jwtTokenConfig.Issuer,
-                    ValidAudience = jwtTokenConfig.Audience,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.FromMinutes(1)
+                    ValidateIssuer = false,
+                    //ValidIssuer = jwtTokenConfig.Issuer,
+                    ValidateAudience = false,
+                    //ValidAudience = jwtTokenConfig.Audience,
+                    //ValidateLifetime = true,
+                    //ClockSkew = TimeSpan.FromMinutes(1)
                 };
             });
         }

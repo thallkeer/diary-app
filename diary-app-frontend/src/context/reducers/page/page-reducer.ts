@@ -1,25 +1,22 @@
 import { ActionsUnion, createNamedAction } from "../../actions/action-helpers";
-import { IPage, IPageArea, IPageState, IUser } from "../../../models";
+import { IPage, IPageArea, IUser } from "../../../models/entities";
 import axios from "../../../axios/axios";
 import { BaseThunkType } from "../../store";
 import withLoadingStates from "../utilities/loading-reducer";
 import { createNamedWrapperReducer } from "../../../utils";
+import { IPageState } from "../../../models/states";
+import { PageAreaNames, PageNames } from "../../../models/types";
 
-export const LOAD_PAGE_START = "PAGE/LOAD_PAGE_START";
-export const LOAD_PAGE_SUCCESS = "PAGE/LOAD_PAGE_SUCCESS";
-export const LOAD_PAGE_ERROR = "PAGE/LOAD_PAGE_ERROR";
+export const LOAD_PAGE_START = "LOAD_PAGE_START";
+export const LOAD_PAGE_SUCCESS = "LOAD_PAGE_SUCCESS";
+export const LOAD_PAGE_ERROR = "LOAD_PAGE_ERROR";
 
-export function createNamedWrapperPageReducer<TPage extends IPage>(
+export const createNamedWrapperPageReducer = <TPage extends IPage>(
 	initialState: IPageState<TPage>,
-	reducerName: string
-) {
-	return createNamedWrapperReducer(
-		wrappedReducer,
-		initialState,
-		reducerName,
-		(action: PageActions) => action.subjectName
-	);
-}
+	reducerName: PageNames
+) => {
+	return createNamedWrapperReducer(wrappedReducer, initialState, reducerName);
+};
 
 export const wrappedReducer = withLoadingStates({
 	START: LOAD_PAGE_START,
@@ -32,7 +29,7 @@ function pageReducer<TPage extends IPage>(
 	action: PageActions
 ): IPageState<TPage> {
 	switch (action.type) {
-		case "PAGE/LOAD_PAGE_SUCCESS":
+		case LOAD_PAGE_SUCCESS:
 			return { ...state, page: action.payload as TPage };
 
 		default:
@@ -50,7 +47,7 @@ const actions = {
 };
 
 export const loadPage = <TPage extends IPage>(
-	pageName: string,
+	pageName: PageNames,
 	user: IUser,
 	year: number,
 	month: number
@@ -62,7 +59,7 @@ export const loadPage = <TPage extends IPage>(
 
 export const pageAPI = {
 	async getPage<TPage extends IPage>(
-		pageName: string,
+		pageName: PageNames,
 		userId: number,
 		year: number,
 		month: number
@@ -72,7 +69,7 @@ export const pageAPI = {
 		return res.data;
 	},
 	async getPageArea<TArea extends IPageArea>(
-		areaName: string,
+		areaName: PageAreaNames,
 		pageName: string,
 		pageID: number
 	) {

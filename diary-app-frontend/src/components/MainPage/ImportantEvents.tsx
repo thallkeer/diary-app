@@ -19,7 +19,7 @@ const ImportantEventsArea: React.FC = () => {
 	const dispatch = useDispatch();
 	const mainPage = useSelector(getMainPage);
 	const { user, year, month } = useSelector(getAppInfo);
-	const { isLoading, list } = useSelector(getImportantEventsList);
+	const { list } = useSelector(getImportantEventsList);
 
 	useEffect(() => {
 		if (mainPage) {
@@ -27,7 +27,7 @@ const ImportantEventsArea: React.FC = () => {
 		}
 	}, [mainPage, user, year, month]);
 
-	if (isLoading || !mainPage || !list) return <Loader />;
+	if (!mainPage || !list) return <Loader />;
 
 	const eventItemActions: IEventItemActions = {
 		deleteEvent: (eventId) =>

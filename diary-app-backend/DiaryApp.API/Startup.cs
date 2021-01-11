@@ -14,6 +14,8 @@ using DiaryApp.API.Extensions.ConfigureServices;
 using DiaryApp.Core.Bootstrap;
 using DiaryApp.Data.Services.Users;
 using System;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace DiaryApp.API
 {
@@ -37,7 +39,7 @@ namespace DiaryApp.API
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.Lax;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
             services.AddControllers();
@@ -47,8 +49,9 @@ namespace DiaryApp.API
                 options.AddPolicy(DiaryAppPolicy,
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:5001");
+                        builder.WithOrigins("http://localhost:5001", "http://localhost:3000");
                         builder.WithMethods("GET", "POST", "PUT", "DELETE");
+                        builder.WithExposedHeaders("www-authenticate", "Access-Token");
                         builder.AllowAnyHeader();
                         builder.SetPreflightMaxAge(TimeSpan.FromSeconds(2520));
                     });
@@ -121,11 +124,10 @@ namespace DiaryApp.API
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-            //app.UseForwardedHeaders(new ForwardedHeadersOptions
-            //{
-            //    ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All
-            //});
-                       
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseRouting();
             app.UseCors(DiaryAppPolicy);

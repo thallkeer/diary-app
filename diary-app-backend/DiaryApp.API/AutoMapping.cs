@@ -4,6 +4,8 @@ using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models;
 using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.API.Models.Users;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DiaryApp.API
 {
@@ -20,10 +22,16 @@ namespace DiaryApp.API
             CreateMap<ListItem, ListItemDto>().ReverseMap();           
             CreateMap<CommonList, CommonListDto>().ReverseMap();
 
-            CreateMap<PurchaseList, TodoListDto>().ReverseMap();
-            CreateMap<IdeasList, CommonListDto>().ReverseMap();
-            CreateMap<DesiresList, CommonListDto>().ReverseMap();
 
+            CreateMap<PurchaseList, ListWrapperDto>().ReverseMap();
+            CreateMap<PurchaseList, PurchaseListDto>().ReverseMap();
+            CreateMap<IdeasList, ListWrapperDto>().ReverseMap();
+            CreateMap<IdeasList, IdeasListDto>().ReverseMap();
+            CreateMap<DesiresList, ListWrapperDto>().ReverseMap();
+            CreateMap<DesiresList, DesireListDto>().ReverseMap();
+
+            CreateMap<MainPage, PageDto>().ReverseMap();
+            CreateMap<MonthPage, PageDto>().ReverseMap();
             CreateMap<MainPage, MainPageDto>().ReverseMap();
             CreateMap<MonthPage, MonthPageDto>().ReverseMap();            
 
@@ -34,7 +42,10 @@ namespace DiaryApp.API
             CreateMap<DesiresArea, DesiresAreaDto>().ReverseMap();
             CreateMap<IdeasArea, IdeasAreaDto>().ReverseMap();
             CreateMap<GoalsArea, GoalsAreaDto>().ReverseMap();
-            CreateMap<HabitTracker, HabitTrackerDto>().ReverseMap();
+            CreateMap<HabitTracker, HabitTrackerDto>()
+                .ForMember(ht => ht.Items, htdto => htdto.MapFrom(src => src.SelectedDays))
+                .ReverseMap();
+            CreateMap<HabitDay, HabitDayDto>().ReverseMap();
 
             CreateMap<AppUser, UserDto>().ReverseMap();
             CreateMap<AppUser, UserWithPasswordDto>().ReverseMap();

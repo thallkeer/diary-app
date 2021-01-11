@@ -25,17 +25,17 @@ namespace DiaryApp.API.Controllers
             this.pageService = pageService;
         }
 
-        [HttpGet]
+        [HttpGet("{userId}/{year}/{month}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetPageAsync([FromQuery] PageRequest pageRequest)
+        public async Task<IActionResult> GetPageAsync(int userId, int year, int month)
         {
-            var page = await pageService.GetPageAsync(pageRequest.UserId, pageRequest.Year, pageRequest.Month);
+            var page = await pageService.GetPageAsync(userId, year, month);
 
             if (page == null)
-                return await PostPageAsync(pageRequest);
+                return await PostPageAsync(new PageRequest(userId, year, month));
 
-            return Ok(page);
+            return Ok(mapper.Map<PageDto>(page));
         }
 
         [HttpPost]

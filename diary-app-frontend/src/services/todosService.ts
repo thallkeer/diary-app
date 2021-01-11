@@ -1,14 +1,25 @@
-import axios from "../axios/axios";
-import { ITodo, ITodoList } from "../models";
-import { getListService } from "./listService";
+import { ITodo, ITodoList } from "../models/entities";
+import { ListItemUrls, ListUrls } from "../models/types";
+import { CrudService } from "./crudService";
 
-const listService = getListService<ITodoList, ITodo>("todo/");
+class TodoItemService extends CrudService<ITodo> {
+	constructor() {
+		const url: ListItemUrls = "todos";
+		super(url);
+	}
 
-const toggleTodo = async (todoId: number) => {
-	return axios.put(`todo/items/toggle/${todoId}`);
-};
+	toggleTodo(todoId: number) {
+		return this.axios
+			.put(`${this.apiUrl}/toggle/${todoId}`)
+			.then((res) => res.data);
+	}
+}
+
+const listUrl: ListUrls = "todoLists";
+const todoService = new TodoItemService();
+const todoListService = new CrudService<ITodoList>(listUrl);
 
 export const todosService = {
-	...listService,
-	toggleTodo,
+	todoListService,
+	todoService,
 };

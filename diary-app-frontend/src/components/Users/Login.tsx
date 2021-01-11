@@ -6,24 +6,10 @@ import {
 	FormLabel,
 	Container,
 } from "react-bootstrap";
-import { usersService } from "../../services/users";
-import history from "../history";
-import { IUser } from "../../models";
-import axios from "../../axios/axios";
-import { AxiosError } from "axios";
-import { setUser } from "../../context/reducers/app-reducer";
+import { authUser } from "../../context/reducers/app-reducer";
 import { useDispatch } from "react-redux";
 
-type LoginError = {
-	isError: boolean;
-	errorMessage: string;
-};
-
 const Login: React.FC = () => {
-	const [error, setError] = useState<LoginError>({
-		isError: false,
-		errorMessage: "",
-	});
 	const dispatch = useDispatch();
 	const [userName, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -32,40 +18,21 @@ const Login: React.FC = () => {
 		return userName.length > 0 && password.length > 0;
 	}
 
-	const onSubmit = (signIn: boolean) => {
-		return signIn ? usersService.login : usersService.register;
-	};
-
 	async function handleSubmit(
 		e: React.MouseEvent<HTMLElement, MouseEvent>,
 		signIn: boolean
 	) {
 		e.preventDefault();
-		await onSubmit(signIn)({
-			id: 0,
-			username: userName,
-			password,
-		})
-			.then((res) => {
-				const user: IUser = {
-					id: res.id,
-					username: res.username,
-					token: res.token,
-				};
-				dispatch(setUser(user));
-				axios.defaults.headers.common["Authorization"] = "Bearer " + user.token;
-				history.push("/");
-			})
-			.catch((err: AxiosError) => {
-				console.error(err);
-
-				setError({
-					isError: true,
-					errorMessage: err.response
-						? err.response.data
-						: "Unexpected error " + err.name,
-				});
-			});
+		dispatch(
+			authUser(
+				{
+					id: 0,
+					username: userName,
+					password,
+				},
+				signIn
+			)
+		);
 	}
 
 	return (
@@ -114,17 +81,6 @@ const Login: React.FC = () => {
 						Регистрация
 					</Button>
 				</form>
-				{error.isError ? (
-					<div
-						className="alert alert-danger"
-						style={{ marginTop: "1em" }}
-						role="alert"
-					>
-						{error.errorMessage}
-					</div>
-				) : (
-					<></>
-				)}
 			</div>
 		</Container>
 	);

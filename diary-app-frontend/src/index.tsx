@@ -3,6 +3,7 @@ import { render } from "react-dom";
 import * as serviceWorker from "./serviceWorker";
 import "../src/styles/css/styles.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 import App from "./App";
 
 render(<App />, document.getElementById("root"));

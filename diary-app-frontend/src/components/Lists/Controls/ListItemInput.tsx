@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef } from "react";
-import { IListItem } from "../../../models";
+import { IListItem } from "../../../models/entities";
 
 interface ListItemInputPropsBase
 	extends React.HTMLAttributes<HTMLInputElement> {

@@ -1,4 +1,6 @@
 ﻿using DiaryApp.API.Filters;
+using DiaryApp.Core.Models;
+using DiaryApp.Data.DTO;
 using DiaryApp.Data.ServiceInterfaces;
 using DiaryApp.Data.ServiceInterfaces.Lists;
 using DiaryApp.Data.Services;
@@ -22,6 +24,7 @@ namespace DiaryApp.API.Extensions.ConfigureServices
             services.AddScoped<IEventItemService, EventItemService>();
             services.AddScoped<ITodoItemService, TodoItemService>();
             services.AddScoped<ICommonListItemService, CommonListItemService>();
+            services.AddScoped<ICrudService<PurchaseListDto, PurchaseList>, CrudService<PurchaseListDto, PurchaseList>>();
         }
     }
 }

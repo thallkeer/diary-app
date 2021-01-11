@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DiaryApp.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DiaryApp.API.Controllers
 {
@@ -26,7 +27,8 @@ namespace DiaryApp.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetPurchasesAreaAsync(int pageID)
         {
-            return await GetPageArea<PurchasesArea, PurchasesAreaDto>(pageID);
+            var area = await GetPageArea<PurchasesArea, PurchasesAreaDto>(pageID);
+            return area;
         }
 
         [HttpGet("desiresArea/{pageID}")]

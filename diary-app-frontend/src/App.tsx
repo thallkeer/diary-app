@@ -8,6 +8,7 @@ import { PrivateRoute } from "./components/Router/PrivateRoute";
 import Loader from "./components/Loader";
 import { Provider } from "react-redux";
 import store from "./context/store";
+import { ToastContainer } from "react-toastify";
 
 const MainPage = lazy(() => import("./components/MainPage/MainPage"));
 const MonthPage = lazy(() => import("./components/MonthPage/MonthPage"));
@@ -47,6 +48,7 @@ export default function App() {
 							<Route component={NotFound} />
 						</Switch>
 					</Suspense>
+					<ToastContainer position="bottom-right" />
 				</Container>
 			</Provider>
 		</Router>

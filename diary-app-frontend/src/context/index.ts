@@ -1,4 +1,4 @@
-import { IHabitsTracker, IPageAreaState } from "../models/index";
+import { IPageAreaState } from "../models/states";
 
 // export interface IGoalsAreaContext {
 // 	goalsArea: IPageAreaState;

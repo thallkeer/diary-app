@@ -1,20 +1,15 @@
 import { combineReducers } from "redux";
-import { IPageArea, IPageAreaState, ITodoList } from "../../../models";
+import { IImportantThingsArea } from "../../../models/entities";
+import { IImportantThingsAreaState } from "../../../models/states";
 import { ActionsUnion } from "../../actions/action-helpers";
 import { BaseThunkType } from "../../store";
-import { createTodoListReducer, todoActions } from "../list/todos";
+import { createTodoListReducer, todoActionCreators } from "../list/todos";
+import { MainPageName } from "../page/mainPage-reducer";
 import { INITIAL_LOADABLE_STATE } from "../utilities/loading-reducer";
 import {
 	createNamedWrapperPageAreaReducer,
 	loadPageArea,
 } from "./pageArea-reducer";
-
-interface IImportantThingsArea extends IPageArea {
-	importantThings: ITodoList;
-}
-
-export interface IImportantThingsAreaState
-	extends IPageAreaState<IImportantThingsArea> {}
 
 const initialState: IImportantThingsAreaState = {
 	area: null,
@@ -40,11 +35,14 @@ export const loadImportantThingsArea = (pageID: number): ThunkType => async (
 	dispatch(
 		loadPageArea<IImportantThingsArea>(
 			initialState.pageAreaName,
-			"mainPage",
+			MainPageName,
 			pageID,
 			(pageArea) => {
 				dispatch(
-					todoActions.setList(pageArea.importantThings, IMPORTANT_THINGS_LIST)
+					todoActionCreators.setList(
+						pageArea.importantThings,
+						IMPORTANT_THINGS_LIST
+					)
 				);
 			}
 		)

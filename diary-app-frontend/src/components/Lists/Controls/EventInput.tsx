@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from "react";
 import { ListItemInput } from "./ListItemInput";
-import { IEvent } from "../../../models";
+import { IEvent } from "../../../models/entities";
 import { withContextMenu } from "../CommonList/CommonListComponent";
 
 export interface IEventItemActions {

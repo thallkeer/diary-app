@@ -1,4 +1,13 @@
-import { ITodo, IEvent, IListItem, IList, IListState } from "../models/index";
+import { INamedAction } from "../context/actions/action-helpers";
+import {
+	ITodo,
+	IEvent,
+	IListItem,
+	IDiaryList,
+	IListWithItems,
+	IEntity,
+} from "../models/entities";
+import { IDiaryListState, IListState } from "../models/states";
 
 var _getRandomInt = (min: number, max: number) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -61,8 +70,8 @@ export function fillToNumber<T extends IListItem>(
 
 export const updateListInState = <
 	TState extends IListState<TList, TListItem>,
-	TList extends IList<TListItem>,
-	TListItem extends IListItem
+	TList extends IListWithItems<TListItem>,
+	TListItem extends IEntity
 >(
 	state: TState,
 	updateItemsFunc: (listItems: TListItem[]) => TListItem[]
@@ -78,35 +87,21 @@ export const updateListInState = <
 
 const getListItems = <
 	TState extends IListState<TList, TListItem>,
-	TList extends IList<TListItem>,
-	TListItem extends IListItem
+	TList extends IListWithItems<TListItem>,
+	TListItem
 >(
 	state: TState
 ) => state.list?.items ?? [];
 
-export function createNamedWrapperReducer<TState, TAction>(
+export function createNamedWrapperReducer<TState, TAction extends INamedAction>(
 	reducer: (state: TState, action: TAction) => TState,
 	initialState: TState,
-	reducerName: string,
-	actionNameSelector: (action: TAction) => string
+	reducerName: string
 ) {
 	return (state = initialState, action: TAction) => {
-		const subjectName = actionNameSelector(action);
 		const isInitializationCall = state === undefined;
-		// console.log(
-		// 	"calling reducer ",
-		// 	reducerName,
-		// 	"with subject ",
-		// 	subjectName,
-		// 	"action ",
-		// 	action,
-		// 	"state ",
-		// 	state,
-		// 	"reducer func ",
-		// 	reducer
-		// );
 
-		if (reducerName !== subjectName && !isInitializationCall) {
+		if (reducerName !== action.subjectName && !isInitializationCall) {
 			return state;
 		}
 

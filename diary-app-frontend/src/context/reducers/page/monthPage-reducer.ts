@@ -1,4 +1,10 @@
-import { IPage, IPageState, IUser } from "../../../models";
+import { combineReducers } from "redux";
+import { IPage, IUser } from "../../../models/entities";
+import { IPageState } from "../../../models/states";
+import { desiresAreaReducer } from "../pageArea/desiresArea-reducer";
+import { goalsAreaReducer } from "../pageArea/goalsArea-reducer";
+import { ideasAreaReducer } from "../pageArea/ideasArea-reducer";
+import { purchasesAreaReducer } from "../pageArea/purchasesArea-reducer";
 import { INITIAL_LOADABLE_STATE } from "../utilities/loading-reducer";
 import {
 	createNamedWrapperPageReducer,
@@ -10,25 +16,26 @@ export interface IMonthPage extends IPage {}
 
 export interface IMonthPageState extends IPageState<IMonthPage> {}
 
-const MonthPageName: string = "monthPage";
-
 const initialState: IMonthPageState = {
-	pageName: MonthPageName,
+	pageName: "monthPage",
 	page: null,
 	...INITIAL_LOADABLE_STATE,
 };
 
-export const monthPageReducer = createNamedWrapperPageReducer<IMonthPage>(
-	initialState,
-	MonthPageName
-);
+export const monthPageReducer = combineReducers({
+	page: createNamedWrapperPageReducer<IMonthPage>(initialState, "monthPage"),
+	purchasesArea: purchasesAreaReducer,
+	desiresArea: desiresAreaReducer,
+	ideasArea: ideasAreaReducer,
+	goalsArea: goalsAreaReducer,
+});
 
 export const loadMonthPage = (
 	user: IUser,
 	year: number,
 	month: number
 ): PageThunkType => async (dispatch) => {
-	dispatch(loadPage<IMonthPage>(MonthPageName, user, year, month));
+	dispatch(loadPage<IMonthPage>("monthPage", user, year, month));
 };
 
 // export const monthPageReducer = (

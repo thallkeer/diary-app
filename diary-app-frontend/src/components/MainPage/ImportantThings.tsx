@@ -12,14 +12,14 @@ import {
 import Loader from "../Loader";
 import { TodoList } from "../Lists/TodoList/TodoList";
 import { ITodoItemActions } from "../Lists/Controls/TodoInput";
-import { todoActions } from "../../context/reducers/list/todos";
+import { todoActionCreators } from "../../context/reducers/list/todos";
 import { getAppInfo } from "../../selectors/app-selectors";
 
 const ImportantThingsArea: React.FC = () => {
 	const dispatch = useDispatch();
 	const mainPage = useSelector(getMainPage);
 	const { user, year, month } = useSelector(getAppInfo);
-	const { isLoading, list } = useSelector(getImportantThingsList);
+	const { list } = useSelector(getImportantThingsList);
 
 	useEffect(() => {
 		if (mainPage) {
@@ -27,15 +27,19 @@ const ImportantThingsArea: React.FC = () => {
 		}
 	}, [mainPage, user, year, month]);
 
-	if (isLoading || !mainPage || !list) return <Loader />;
+	if (!mainPage || !list) return <Loader />;
 
 	const todoItemActions: ITodoItemActions = {
 		deleteTodo: (todoId) =>
-			dispatch(todoActions.deleteListItem(todoId, IMPORTANT_THINGS_LIST)),
+			dispatch(
+				todoActionCreators.deleteListItem(todoId, IMPORTANT_THINGS_LIST)
+			),
 		toggleTodo: (todoId) =>
-			dispatch(todoActions.toggleTodo(todoId, IMPORTANT_THINGS_LIST)),
+			dispatch(todoActionCreators.toggleTodo(todoId, IMPORTANT_THINGS_LIST)),
 		updateTodo: (todo) =>
-			dispatch(todoActions.addOrUpdateListItem(todo, IMPORTANT_THINGS_LIST)),
+			dispatch(
+				todoActionCreators.addOrUpdateListItem(todo, IMPORTANT_THINGS_LIST)
+			),
 	};
 
 	return (

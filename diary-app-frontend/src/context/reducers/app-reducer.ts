@@ -1,4 +1,8 @@
-import { IUser } from "../../models";
+import { AxiosResponse } from "axios";
+import { toast } from "react-toastify";
+import history from "../../components/history";
+import { IUser } from "../../models/entities";
+import { usersService } from "../../services/users";
 import { ActionsUnion, createAction } from "../actions/action-helpers";
 import { BaseThunkType } from "../store";
 import { IMainPage } from "./page/mainPage-reducer";
@@ -55,8 +59,22 @@ export const setMonth = (month: number): ThunkType => async (dispatch) => {
 	dispatch(actions.setMonth(month));
 };
 
+export const authUser = (
+	userAuthModel: IUser,
+	signIn: boolean
+): ThunkType => async (dispatch) => {
+	const authFunc = signIn ? usersService.login : usersService.register;
+	await authFunc(userAuthModel)
+		.then((user) => {
+			dispatch(setUser(user));
+			history.push("/");
+		})
+		.catch((err: AxiosResponse) => {
+			toast.error(err.data);
+		});
+};
+
 export const setUser = (user: IUser): ThunkType => async (dispatch) => {
-	localStorage.setItem("user", JSON.stringify(user));
 	dispatch(actions.setUser(user));
 };
 

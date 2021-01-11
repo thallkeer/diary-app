@@ -1,22 +1,63 @@
 import axios, { AxiosError } from "axios";
-import { config } from "../utils/config";
+import { config, getHeaders } from "../utils/config";
 import { usersService } from "../services/users";
-const { baseApi, headers } = config;
+import { toast } from "react-toastify";
+import history from "../components/history";
 
 const axiosInstance = axios.create({
-	baseURL: baseApi,
-	headers,
+	baseURL: config.baseApi,
 });
+
+axiosInstance.interceptors.request.use(
+	(config) => {
+		config.headers = getHeaders();
+		return config;
+	},
+	(error) => {
+		return Promise.reject(error);
+	}
+);
 
 axiosInstance.interceptors.response.use(
 	(response) => response,
 	(error: AxiosError) => {
-		console.error("error in interceptor", error);
+		if (error.message === "Network Error" && !error.response) {
+			toast.error("Network error - make sure API is running!");
+		} else if (error.response) {
+			const { status, data, config, headers } = error.response;
+			if (status === 404) {
+				history.push("/notfound");
+			}
 
-		if (error.response?.status === 401) usersService.logoff();
+			if (status === 401 && checkTokenIsExpired(headers)) {
+				usersService.logoff();
+				toast.info("Your session has expired, please login again");
+			}
+			if (
+				status === 400 &&
+				config.method === "get" &&
+				data.errors?.hasOwnProperty("id")
+			) {
+				history.push("/notfound");
+			}
+			if (status === 500) {
+				toast.error("Server error - check the terminal for more info!");
+			}
+		}
 
-		return error;
+		throw error.response;
 	}
 );
+
+const checkTokenIsExpired = (headers) => {
+	let authHeader: string = headers["www-authenticate"];
+
+	return (
+		authHeader !== undefined &&
+		authHeader.includes(
+			'Bearer error="invalid_token", error_description="The token expired at'
+		)
+	);
+};
 
 export default axiosInstance;

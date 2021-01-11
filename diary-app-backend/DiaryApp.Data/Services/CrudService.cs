@@ -57,7 +57,7 @@ namespace DiaryApp.Data.Services
 
         public async Task<TEntity> GetByIdAsync(int id)
         {
-            var entity = await _dbSet.FindAsync(id);
+            var entity = await _dbSet.AsNoTracking().FirstOrDefaultAsync(en => en.Id == id);
             return entity;
         }
 

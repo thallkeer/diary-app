@@ -1,67 +1,84 @@
 import { createSelector } from "reselect";
 import { AppStateType } from "../context/store";
+import {
+	IDesireListsState,
+	IGoalsListsState,
+	IPurchaseListsState,
+} from "../models/states";
 
-const getMainPageSelector = (state: AppStateType) => state.mainPage;
+export const getMainPage = (state: AppStateType) => state.mainPage.page.page;
 
-export const getMainPage = createSelector(
-	getMainPageSelector,
-	(mainPage) => mainPage.page
-);
+export const getMonthPage = (state: AppStateType) => state.monthPage.page.page;
 
-const getMonthPageSelector = (state: AppStateType) => state.monthPage;
+export const getMainPageName = (state: AppStateType) =>
+	state.mainPage.page.pageName;
 
-export const getMonthPage = createSelector(
-	getMonthPageSelector,
-	(monthPage) => monthPage.page
-);
+export const getImportantThingsArea = (state: AppStateType) =>
+	state.mainPage.importantThingsArea;
 
-export const getLoading = createSelector(
-	getMainPageSelector,
-	(mainPage) => mainPage.isLoading
-);
+export const getImportantEventsArea = (state: AppStateType) =>
+	state.mainPage.importantEventsArea;
 
-export const getMainPageName = createSelector(
-	getMainPageSelector,
-	(mainPage) => mainPage.pageName
-);
+export const getImportantThingsList = (state: AppStateType) =>
+	state.mainPage.importantThingsArea.importantThingsList;
 
-const getImportantThingsAreaSelector = (state: AppStateType) =>
-	state.importantThingsArea;
+export const getImportantEventsList = (state: AppStateType) =>
+	state.mainPage.importantEventsArea.importantEventsList;
 
-export const getImportantThingsArea = createSelector(
-	getImportantThingsAreaSelector,
-	(importantThingsArea) => importantThingsArea
-);
+export const getPurchasesArea = (state: AppStateType) =>
+	state.monthPage.purchasesArea.area;
 
-const getImportantThingsListSelector = (state: AppStateType) =>
-	state.importantThingsArea.importantThingsList;
+export const getPurchaseLists = (state: AppStateType) => {
+	return Object.values(state.monthPage.purchasesArea.purchaseLists.byName);
+};
 
-export const getImportantThingsList = createSelector(
-	getImportantThingsListSelector,
-	(importantThings) => {
-		return importantThings;
-	}
-);
+export const getDesiresArea = (state: AppStateType) =>
+	state.monthPage.desiresArea.area;
 
-export const getImportantEventsListSelector = (state: AppStateType) =>
-	state.importantEventsArea.importantEventsList;
+export const getIdeasArea = (state: AppStateType) =>
+	state.monthPage.ideasArea.area;
 
-export const getImportantEventsList = createSelector(
-	getImportantEventsListSelector,
-	(importantEvents) => importantEvents
-);
+export const getGoalsArea = (state: AppStateType) =>
+	state.monthPage.goalsArea.area;
 
-const getImportantEventsAreaSelector = (state: AppStateType) =>
-	state.importantEventsArea;
+export const getGoalsLists = (state: AppStateType) => {
+	return Object.values(state.monthPage.goalsArea.goalsLists.byName);
+};
 
-export const getImportantEventsArea = createSelector(
-	getImportantEventsAreaSelector,
-	(importantEvents) => importantEvents
-);
+export const getIdeasList = (state: AppStateType) => {
+	return state.monthPage.ideasArea.ideasList;
+};
 
-const getPurchasesAreaSelector = (state: AppStateType) => state.purchasesArea;
+export const getDesireLists = (state: AppStateType) => {
+	return Object.values(state.monthPage.desiresArea.desireLists.byName);
+};
 
-export const getPurchasesArea = createSelector(
-	getPurchasesAreaSelector,
-	(purchasesArea) => purchasesArea
-);
+const getPurchaseListsSelector = (state: IPurchaseListsState) => {
+	return state.byName;
+};
+
+export const getPurchaseListByName = (listName: string) =>
+	createSelector(
+		[getPurchaseListsSelector],
+		(listsByName) => listsByName[listName]
+	);
+
+const getDesireListsSelector = (state: IDesireListsState) => {
+	return state.byName;
+};
+
+export const getDesireListByName = (listName: string) =>
+	createSelector(
+		[getDesireListsSelector],
+		(listsByName) => listsByName[listName]
+	);
+
+const getGoalsListsSelector = (state: IGoalsListsState) => {
+	return state.byName;
+};
+
+export const getGoalListByName = (listName: string) =>
+	createSelector(
+		[getGoalsListsSelector],
+		(listsByName) => listsByName[listName]
+	);

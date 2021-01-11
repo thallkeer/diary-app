@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { CheckCircle } from "./CheckCircle";
 import { ListItemInput, UrlInput } from "./ListItemInput";
-import { ITodo } from "../../../models";
+import { ITodo } from "../../../models/entities";
 import { MenuItem } from "react-contextmenu";
 import { withContextMenu } from "../CommonList/CommonListComponent";
 
@@ -13,7 +13,6 @@ export interface ITodoItemActions {
 
 interface ITodoInputProps extends ITodoItemActions {
 	todo: ITodo;
-	
 }
 
 export const TodoInput: FC<ITodoInputProps> = ({

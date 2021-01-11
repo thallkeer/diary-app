@@ -1,34 +1,33 @@
-import { useEffect, Reducer, useReducer } from "react";
-import { IPage, IPageArea } from "../models";
+import { Dispatch, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppStateType } from "../context/store";
+import { IPageArea } from "../models/entities";
+import { IPageAreaState } from "../models/states";
+import { getAppInfo } from "../selectors/app-selectors";
+import { getMonthPage } from "../selectors/page-selectors";
 
-// function usePageArea<T extends IPageArea>(
-// 	page: IPage,
-// 	pageName: string,
-// 	areaName: string
-// ): PageAreaState<T> {
-// 	const [state, setState] = useState<PageAreaState<T>>({
-// 		loading: false,
-// 		area: null,
-// 	});
+export const usePageArea = <
+	TAreaState extends IPageAreaState<TArea>,
+	TArea extends IPageArea
+>(
+	areaSelector: (state: AppStateType) => TAreaState,
+	loadPageArea: (dispatch: Dispatch<any>, pageId: number) => void
+) => {
+	const dispatch = useDispatch();
+	const monthPage = useSelector(getMonthPage);
+	const app = useSelector(getAppInfo);
+	const { user, year, month } = app;
+	const { area, isLoading } = useSelector(areaSelector) as TAreaState;
 
-// 	useEffect(() => {
-// 		let isUnmounting = false;
-// 		const fetchPageArea = async () => {
-// 			if (!isUnmounting) {
-// 				setState((prevState) => {
-// 					return { ...prevState, loading: true };
-// 				});
-// 				const pageArea = await getPageArea<T>(pageName, areaName, page.id);
-// 				setState((prevState) => {
-// 					return { ...prevState, area: pageArea.data, loading: false };
-// 				});
-// 			}
-// 		};
+	useEffect(() => {
+		if (monthPage) {
+			loadPageArea(dispatch, monthPage.id);
+		}
+	}, [monthPage, user, year, month]);
 
-// 		fetchPageArea();
-
-// 		return () => (isUnmounting = true);
-// 	}, [page, areaName]);
-
-// 	return state;
-// }
+	return {
+		monthPage,
+		area,
+		isLoading: !monthPage || isLoading || !area,
+	};
+};

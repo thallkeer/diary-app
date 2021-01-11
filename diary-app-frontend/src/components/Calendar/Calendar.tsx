@@ -1,16 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
-import { getEventsByDay } from "../../selectors";
+import React, { useState } from "react";
+import { getEventsByDay } from "../../selectors/lists-selectors";
 import { AddEventForm } from "../Dialogs/AddEventForm";
-import { IEvent } from "../../models";
+import { IEvent } from "../../models/entities";
 import { Link } from "react-router-dom";
 import strelka from "../../images/right-arrow.png";
 import { useDispatch, useSelector } from "react-redux";
 import { getAppInfo } from "../../selectors/app-selectors";
-import {
-	getImportantEventsArea,
-	getImportantEventsList,
-	getMainPage,
-} from "../../selectors/page-selectors";
+import { getImportantEventsList } from "../../selectors/page-selectors";
 import { setMonth } from "../../context/reducers/app-reducer";
 import { eventsActions } from "../../context/reducers/list/events";
 import { IMPORTANT_EVENTS_LIST } from "../../context/reducers/pageArea/importantEventsArea-reducer";

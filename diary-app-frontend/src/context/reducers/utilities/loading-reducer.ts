@@ -1,4 +1,5 @@
 import { Action } from "redux";
+import { IStateWithLoading } from "../../../models/states";
 
 export const isLoadingReducer = <S extends IStateWithLoading>(state: S): S => ({
 	...state,
@@ -21,11 +22,6 @@ const errorReducer = <S extends IStateWithLoading>(state: S): S => ({
 	success: false,
 });
 
-export interface IStateWithLoading {
-	error: false;
-	isLoading: false;
-	success: false;
-}
 // Initial state of the async flags
 // Can be spread into the initial state object of your base reducer
 export const INITIAL_LOADABLE_STATE: IStateWithLoading = {

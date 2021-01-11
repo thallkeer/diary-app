@@ -4,6 +4,6 @@ namespace DiaryApp.Data.DTO
 {
     public class DesiresAreaDto : PageAreaDto
     {
-        public List<CommonListDto> DesiresLists { get; set; }
+        public List<DesireListDto> DesiresLists { get; set; }
     }
 }

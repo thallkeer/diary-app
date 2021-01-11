@@ -16,6 +16,7 @@
 		"@types/react-router": "^5.1.8",
 		"@types/react-router-dom": "^5.1.5",
 		"@types/react-router-redux": "^5.0.18",
+		"@types/react-toastify": "^4.1.0",
 		"@types/redux-form": "^8.2.6",
 		"axios": "^0.19.2",
 		"bootstrap": "^4.5.2",

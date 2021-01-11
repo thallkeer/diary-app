@@ -1,4 +1,6 @@
-import { IPageAreaState, IPageArea } from "../../../models";
+import { IPageArea } from "../../../models/entities";
+import { IPageAreaState } from "../../../models/states";
+import { PageAreaNames, PageNames } from "../../../models/types";
 import { createNamedWrapperReducer } from "../../../utils";
 import { ActionsUnion, createNamedAction } from "../../actions/action-helpers";
 import { BaseThunkType } from "../../store";
@@ -13,12 +15,7 @@ export function createNamedWrapperPageAreaReducer<
 	TState extends IPageAreaState<TArea>,
 	TArea extends IPageArea
 >(initialState: TState, reducerName: string) {
-	return createNamedWrapperReducer(
-		wrappedReducer,
-		initialState,
-		reducerName,
-		(action: PageAreaActions) => action.subjectName
-	);
+	return createNamedWrapperReducer(wrappedReducer, initialState, reducerName);
 }
 
 export const wrappedReducer = withLoadingStates({
@@ -33,20 +30,20 @@ export function pageAreaReducer<
 >(state: U, action: PageAreaActions): U {
 	switch (action.type) {
 		case LOAD_PAGE_AREA_SUCCESS:
-			return { ...state, area: action.payload as T };
+			return { ...state, area: action.payload };
 
 		default:
 			return state;
 	}
 }
 
-export const getPageAreaActions = <T extends IPageArea>() => {
+export const getPageAreaActions = <T extends IPageArea>(areaName: string) => {
 	const actions = {
-		loadPageAreaStart: (areaName: string) =>
+		loadPageAreaStart: () =>
 			createNamedAction(LOAD_PAGE_AREA_START, areaName, undefined),
-		loadPageAreaSuccess: (area: T, areaName: string) =>
+		loadPageAreaSuccess: (area: T) =>
 			createNamedAction(LOAD_PAGE_AREA_SUCCESS, areaName, area),
-		loadPageAreaError: (area: T, areaName: string) =>
+		loadPageAreaError: (area: T) =>
 			createNamedAction(LOAD_PAGE_AREA_ERROR, areaName, area),
 	};
 	return actions;
@@ -69,15 +66,18 @@ const actions = {
  * @param onAreaLoaded Действие после загрузки данных
  */
 export const loadPageArea = <TArea extends IPageArea>(
-	areaName: string,
-	pageName: string,
+	areaName: PageAreaNames,
+	pageName: PageNames,
 	pageId: number,
 	onAreaLoaded: (pageArea: TArea) => void
 ): PageAreaThunkType => async (dispatch) => {
-	const actions = getPageAreaActions<TArea>();
-	dispatch(actions.loadPageAreaStart(areaName));
+	const actions = getPageAreaActions<TArea>(areaName);
+	dispatch(actions.loadPageAreaStart());
+
 	const response = await pageAPI.getPageArea<TArea>(areaName, pageName, pageId);
-	dispatch(actions.loadPageAreaSuccess(response, areaName));
+
+	dispatch(actions.loadPageAreaSuccess(response));
+
 	onAreaLoaded(response);
 };
 

@@ -12,17 +12,11 @@ import { createBrowserHistory } from "history";
 import { routerMiddleware as createRouterMiddleware } from "connected-react-router";
 import { mainPageReducer } from "./reducers/page/mainPage-reducer";
 import { monthPageReducer } from "./reducers/page/monthPage-reducer";
-import { importantThingsAreaReducer } from "./reducers/pageArea/importantThingsArea-reducer";
-import { importantEventsAreaReducer } from "./reducers/pageArea/importantEventsArea-reducer";
-import { purchasesAreaReducer } from "./reducers/pageArea/purchasesArea-reducer";
 
 let rootReducer = combineReducers({
 	app: appReducer,
 	mainPage: mainPageReducer,
 	monthPage: monthPageReducer,
-	importantThingsArea: importantThingsAreaReducer,
-	importantEventsArea: importantEventsAreaReducer,
-	purchasesArea: purchasesAreaReducer,
 });
 
 type RootReducerType = typeof rootReducer;

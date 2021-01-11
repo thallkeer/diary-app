@@ -7,9 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAppInfo } from "../../selectors/app-selectors";
 import { loadMonthPage } from "../../context/reducers/page/monthPage-reducer";
 const PurchasesArea = lazy(() => import("./PurchasesArea"));
-// const DesiresArea = lazy(() => import("./DesiresArea"));
-// const IdeasArea = lazy(() => import("./IdeasArea"));
-// const GoalsArea = lazy(() => import("./GoalsArea"));
+const DesiresArea = lazy(() => import("./DesiresArea"));
+const IdeasArea = lazy(() => import("./IdeasArea"));
+const GoalsArea = lazy(() => import("./GoalsArea"));
 
 const MonthPage: React.FC = () => {
 	const { user, year, month } = useSelector(getAppInfo);
@@ -27,11 +27,12 @@ const MonthPage: React.FC = () => {
 				<Row>
 					<Col md={6}>
 						<PurchasesArea />
-						{/* 
-							<DesiresArea /> */}
+						<DesiresArea />
 					</Col>
-					<Col md={6}>{/* <IdeasArea />
-							<GoalsArea /> */}</Col>
+					<Col md={6}>
+						<IdeasArea />
+						<GoalsArea />
+					</Col>
 				</Row>
 			</Suspense>
 		</Container>

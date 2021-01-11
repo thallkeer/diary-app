@@ -1,98 +1,66 @@
-import React, { useContext, useEffect } from "react";
-import { ITodo, ITodoList } from "../../models";
+import React from "react";
+import { IPurchasesArea, ITodo, ITodoList } from "../../models/entities";
 import { Row, Col } from "react-bootstrap";
 import { AddListBtn } from "../AddListBtn";
 import Loader from "../Loader";
-import { getSelectedPage } from "../../selectors";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	getMainPage,
-	getMonthPage,
+	getPurchaseLists,
 	getPurchasesArea,
 } from "../../selectors/page-selectors";
-import {
-	addPurchasesList,
-	loadPurchasesArea,
-	PURCHASES_LIST,
-} from "../../context/reducers/pageArea/purchasesArea-reducer";
-import { getAppInfo } from "../../selectors/app-selectors";
+import { loadPurchasesArea } from "../../context/reducers/pageArea/purchasesArea-reducer";
 import { TodoList } from "../Lists/TodoList/TodoList";
-import { todoActions } from "../../context/reducers/list/todos";
+import {
+	getPurchaseListName,
+	purchaseListsActions,
+} from "../../context/reducers/pageAreaLists/purchaseLists-reducer";
+import { IPurchaseListState, IPurchasesAreaState } from "../../models/states";
+import { usePageArea } from "../../hooks/usePageArea";
 
 type ListPair = {
-	list1: ITodoList;
-	list2: ITodoList;
+	list1: IPurchaseListState;
+	list2: IPurchaseListState;
 };
 
 const PurchasesArea = () => {
 	const dispatch = useDispatch();
-	const monthPage = useSelector(getMonthPage);
-	const app = useSelector(getAppInfo);
-	const { user, year, month } = app;
-	const { area, isLoading } = useSelector(getPurchasesArea);
-	const selectedPage = useSelector(getSelectedPage);
+	const { area, isLoading, monthPage } = usePageArea<
+		IPurchasesAreaState,
+		IPurchasesArea
+	>(getPurchasesArea, (dispatch, pageId) => {
+		dispatch(loadPurchasesArea(pageId));
+	});
+	const purchaseLists = useSelector(getPurchaseLists);
 
-	useEffect(() => {
-		console.log("purchases area effect", selectedPage);
-
-		if (monthPage) {
-			console.log("load purchases area");
-			dispatch(loadPurchasesArea(monthPage.id));
-		}
-	}, [monthPage, user, year, month]);
-
-	if (isLoading || !monthPage || !area) return <Loader />;
-
-	const getTodoItemActions = (listId: number) => {
-		const listName = `${PURCHASES_LIST}_${listId}`;
-
-		return {
-			deleteTodo: (todoId: number) =>
-				dispatch(todoActions.deleteListItem(todoId, listName)),
-			toggleTodo: (todoId: number) =>
-				dispatch(todoActions.toggleTodo(todoId, listName)),
-			updateTodo: (todo: ITodo) =>
-				dispatch(todoActions.addOrUpdateListItem(todo, listName)),
-		};
-	};
+	if (isLoading) return <Loader />;
 
 	const getRow = (pair: ListPair) => {
 		return (
-			<Row key={pair.list1.id}>
-				<TodoList
-					className="mt-20 month-lists-header"
-					isDeletable={true}
-					readonlyTitle={false}
-					todoItemActions={getTodoItemActions(pair.list1.id)}
-					todoList={pair.list1}
-				/>
-
-				{pair.list2 && (
-					<TodoList
-						className="mt-20 month-lists-header"
-						isDeletable={true}
-						readonlyTitle={false}
-						todoItemActions={getTodoItemActions(pair.list2.id)}
-						todoList={pair.list2}
-					/>
-				)}
+			<Row key={`${pair.list1.purchaseListId}_${pair.list2?.purchaseListId}`}>
+				<PurchaseList purchaseList={pair.list1} />
+				{pair.list2 && <PurchaseList purchaseList={pair.list2} />}
 			</Row>
 		);
 	};
 
-	const renderLists = (todoLists: ITodoList[]) => {
+	const renderLists = (purchaseLists: IPurchaseListState[]) => {
 		const rows = [];
 
-		if (todoLists.length === 2) {
-			rows.push(getRow({ list1: todoLists[0], list2: todoLists[1] }));
+		if (purchaseLists.length === 2) {
+			rows.push(getRow({ list1: purchaseLists[0], list2: purchaseLists[1] }));
 		} else {
-			for (let i = 0; i < todoLists.length - 1; i += 2) {
-				rows.push(getRow({ list1: todoLists[i], list2: todoLists[i + 1] }));
+			for (let i = 0; i < purchaseLists.length - 1; i += 2) {
+				rows.push(
+					getRow({ list1: purchaseLists[i], list2: purchaseLists[i + 1] })
+				);
 			}
 
-			if (todoLists.length % 2 !== 0) {
+			if (purchaseLists.length % 2 !== 0) {
 				rows.push(
-					getRow({ list1: todoLists[todoLists.length - 1], list2: null })
+					getRow({
+						list1: purchaseLists[purchaseLists.length - 1],
+						list2: null,
+					})
 				);
 			}
 		}
@@ -101,20 +69,25 @@ const PurchasesArea = () => {
 	};
 
 	const addList = () => {
-		//TODO: добавить идентификатор зоны, раньше он сюда передавался
 		const todoList: ITodoList = {
 			id: 0,
 			items: [],
-			pageID: selectedPage.id,
+			pageId: monthPage.id,
 			title: "Список покупок",
 		};
-		dispatch(addPurchasesList(todoList));
+		dispatch(
+			purchaseListsActions.addPurchaseList({
+				id: 0,
+				list: todoList,
+				areaOwnerId: area.id,
+			})
+		);
 	};
 
 	return (
 		<>
 			<h1 className="area-header">{area.header}</h1>
-			{renderLists(area.purchasesLists)}
+			{renderLists(purchaseLists)}
 			<Row>
 				<AddListBtn onClick={addList} />
 			</Row>
@@ -123,3 +96,64 @@ const PurchasesArea = () => {
 };
 
 export default PurchasesArea;
+
+const PurchaseList: React.FC<{ purchaseList: IPurchaseListState }> = ({
+	purchaseList,
+}) => {
+	const { updateTitle, deleteList, todoItemActions } = usePurchaseList(
+		purchaseList
+	);
+
+	return (
+		<Col md={6}>
+			<TodoList
+				className="mt-20 month-lists-header"
+				isDeletable={true}
+				readonlyTitle={false}
+				deleteList={deleteList}
+				updateTitle={updateTitle}
+				todoItemActions={todoItemActions}
+				todoList={purchaseList.listState.list}
+			/>
+		</Col>
+	);
+};
+
+const usePurchaseList = (purchaseList: IPurchaseListState) => {
+	const dispatch = useDispatch();
+	const todoList = purchaseList.listState.list;
+	const listName = getPurchaseListName(purchaseList.purchaseListId);
+
+	const deleteList = () => {
+		dispatch(
+			purchaseListsActions.deletePurchaseList(purchaseList.purchaseListId)
+		);
+	};
+
+	const updateTitle = (title: string) => {
+		dispatch(
+			purchaseListsActions.updateList(
+				{
+					...todoList,
+					title,
+				},
+				listName
+			)
+		);
+	};
+
+	const todoItemActions = {
+		deleteTodo: (todoId: number) =>
+			dispatch(purchaseListsActions.deleteListItem(todoId, listName)),
+		toggleTodo: (todoId: number) =>
+			dispatch(purchaseListsActions.toggleTodo(todoId, listName)),
+		updateTodo: (todo: ITodo) =>
+			dispatch(purchaseListsActions.addOrUpdateListItem(todo, listName)),
+	};
+
+	return {
+		updateTitle,
+		deleteList,
+		todoItemActions,
+	};
+};

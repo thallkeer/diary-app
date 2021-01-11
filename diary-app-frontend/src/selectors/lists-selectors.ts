@@ -1,26 +1,20 @@
 import { createSelector, ParametricSelector } from "reselect";
 import {
 	IEvent,
-	IListState,
 	IListItem,
 	ITodo,
-	IList,
+	IDiaryList,
 	IEventList,
 	ITodoList,
-} from "../models/index";
+} from "../models/entities";
 import { AppState } from "../context/reducers/app-reducer";
 import { ITodoListState } from "../context/reducers/list/todos";
 import { AppStateType } from "../context/store";
 import { IEventListState } from "../context/reducers/list/events";
 import { getImportantEventsList } from "./page-selectors";
+import { IDiaryListState } from "../models/states";
 
-const getSelectedPageFromState = (state: AppState) =>
-	state.selectedPage ? state.selectedPage : null;
-
-export const getSelectedPage = createSelector(
-	[getSelectedPageFromState],
-	(s) => s
-);
+export const getSelectedPage = (state: AppState) => state.selectedPage;
 
 const getEventsState = (state: IEventListState) =>
 	getListState<IEventListState, IEventList, IEvent>(state);
@@ -52,8 +46,8 @@ const getTodosState = (state: ITodoListState) =>
 export const getTodos = createSelector([getTodosState], (s) => s);
 
 function getListState<
-	T extends IListState<TList, TItem>,
-	TList extends IList<TItem>,
+	T extends IDiaryListState<TList, TItem>,
+	TList extends IDiaryList<TItem>,
 	TItem extends IListItem
 >(state: T) {
 	console.log("returning state of list ", state.list);

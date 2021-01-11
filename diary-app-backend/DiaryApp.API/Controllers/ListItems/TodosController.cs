@@ -17,7 +17,7 @@ namespace DiaryApp.API.Controllers.Lists
         }
 
         [HttpPut("toggle/{todoID}")]
-        public async Task<IActionResult> PutToggleTodoAsync(int todoId)
+        public async Task<IActionResult> ToggleTodoAsync(int todoId)
         {
             await _todoItemService.ToggleAsync(todoId);
             return Ok();

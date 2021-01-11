@@ -1,14 +1,16 @@
-import { IEvent, IEventList, IListState } from "../../../models";
+import { IEvent, IEventList } from "../../../models/entities";
+import { IDiaryListState } from "../../../models/states";
 import { createNamedWrapperReducer, updateListInState } from "../../../utils";
 import { ActionsUnion } from "../../actions/action-helpers";
 import {
-	createListActions,
-	getListActions,
-	listReducer,
-} from "../../actions/list-actions";
+	createDiaryListActions,
+	getDiaryListActions,
+} from "../../actions/diaryList-actions";
+import { getListItemActions } from "../../actions/listCrud-actions";
 import { INITIAL_LOADABLE_STATE } from "../utilities/loading-reducer";
+import { diaryListReducer } from "./diaryListReducer";
 
-export interface IEventListState extends IListState<IEventList, IEvent> {
+export interface IEventListState extends IDiaryListState<IEventList, IEvent> {
 	isDeletable: boolean;
 	readonlyHeader: boolean;
 }
@@ -18,16 +20,10 @@ const initialState: IEventListState = {
 	isDeletable: false,
 	readonlyHeader: false,
 	listName: "eventlist",
-	...INITIAL_LOADABLE_STATE,
 };
 
 export const createEventListReducer = (reducerName: string) => {
-	return createNamedWrapperReducer(
-		eventListReducer,
-		initialState,
-		reducerName,
-		(action) => action.subjectName
-	);
+	return createNamedWrapperReducer(eventListReducer, initialState, reducerName);
 };
 
 export const eventListReducer = (
@@ -35,7 +31,7 @@ export const eventListReducer = (
 	action: EventListActions
 ): IEventListState => {
 	switch (action.type) {
-		case "LOAD_LIST_SUCCESS":
+		case "SET_LIST":
 			const newState: IEventListState = {
 				...state,
 				list: action.payload,
@@ -58,16 +54,20 @@ export const eventListReducer = (
 			]);
 
 		default:
-			return listReducer<IEventListState, IEventList, IEvent>(state, action);
+			return diaryListReducer<IEventListState, IEventList, IEvent>(
+				state,
+				action
+			);
 	}
 };
 
 const actions = {
-	...createListActions<IEventList, IEvent>(),
+	...createDiaryListActions<IEventList, IEvent>(),
 };
 
 export const eventsActions = {
-	...getListActions<IEventList, IEvent>("events/", "Event"),
+	...getDiaryListActions<IEventList, IEvent>("eventLists"),
+	...getListItemActions<IEvent>("events"),
 };
 
 type EventListActions = ActionsUnion<typeof actions>;
