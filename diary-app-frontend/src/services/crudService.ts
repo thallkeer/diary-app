@@ -9,6 +9,10 @@ export class CrudService<T> {
 		this.axios = axios;
 	}
 
+	getById(id: number) {
+		return this.axios.get<T>(`${this.apiUrl}/${id}`).then((res) => res.data);
+	}
+
 	create(entity: T) {
 		return this.axios.post<number>(this.apiUrl, entity).then((res) => res.data);
 	}

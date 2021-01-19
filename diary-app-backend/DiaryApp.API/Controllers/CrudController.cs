@@ -31,7 +31,7 @@ namespace DiaryApp.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]        
-        public virtual async Task<IActionResult> PostAsync([FromBody] TDto createModel)
+        public virtual async Task<ActionResult<int>> PostAsync([FromBody] TDto createModel)
         {
             var id = await _crudService.CreateAsync(createModel);
             return Ok(id);

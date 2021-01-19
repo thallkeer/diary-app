@@ -22,12 +22,11 @@ namespace DiaryApp.API
             CreateMap<ListItem, ListItemDto>().ReverseMap();           
             CreateMap<CommonList, CommonListDto>().ReverseMap();
 
-
-            CreateMap<PurchaseList, ListWrapperDto>().ReverseMap();
+            CreateMap<PurchaseList, ListWrapperDto>();
             CreateMap<PurchaseList, PurchaseListDto>().ReverseMap();
-            CreateMap<IdeasList, ListWrapperDto>().ReverseMap();
+            CreateMap<IdeasList, ListWrapperDto>();
             CreateMap<IdeasList, IdeasListDto>().ReverseMap();
-            CreateMap<DesiresList, ListWrapperDto>().ReverseMap();
+            CreateMap<DesiresList, ListWrapperDto>();
             CreateMap<DesiresList, DesireListDto>().ReverseMap();
 
             CreateMap<MainPage, PageDto>().ReverseMap();

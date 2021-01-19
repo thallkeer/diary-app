@@ -22,6 +22,7 @@ export const todoThunks = {
 	toggleTodo: (todoId: number, todoListName: string): ThunkType => async (
 		dispatch
 	) => {
+		if (todoId === 0) return;
 		await todosService.items.toggleTodo(todoId);
 		dispatch(todoActions.toggleTodo(todoListName, todoId));
 	},

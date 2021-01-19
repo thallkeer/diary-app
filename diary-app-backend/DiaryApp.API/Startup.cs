@@ -80,7 +80,7 @@ namespace DiaryApp.API
 
             services.AddApplicationServices();
 
-            services.AddSwagger();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,8 +116,7 @@ namespace DiaryApp.API
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("./swagger/v1/swagger.json", "DiaryApp API V1");
-                c.DocumentTitle = "DiaryApp API";
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DiaryApp API v1");
                 c.RoutePrefix = string.Empty;
             });
 
