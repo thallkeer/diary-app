@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { AppStateType } from "../context/store";
+import { AppStateType } from "store/reducer";
 import { IUser } from "../models/entities";
 
 const getAppSelector = (state: AppStateType) => state.app;

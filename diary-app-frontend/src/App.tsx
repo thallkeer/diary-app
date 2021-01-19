@@ -7,7 +7,7 @@ import history from "./components/history";
 import { PrivateRoute } from "./components/Router/PrivateRoute";
 import Loader from "./components/Loader";
 import { Provider } from "react-redux";
-import store from "./context/store";
+import store from "./store/store";
 import { ToastContainer } from "react-toastify";
 
 const MainPage = lazy(() => import("./components/MainPage/MainPage"));

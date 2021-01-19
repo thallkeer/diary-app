@@ -21,6 +21,7 @@ namespace DiaryApp.API.Extensions.ConfigureServices
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMonthPageService, MonthPageService>();
             services.AddScoped<IHabitTrackerService, HabitTrackerService>();
+            services.AddScoped<ICrudService<HabitDayDto, HabitDay>, CrudService<HabitDayDto, HabitDay>>();
             services.AddScoped<IEventItemService, EventItemService>();
             services.AddScoped<ITodoItemService, TodoItemService>();
             services.AddScoped<ICommonListItemService, CommonListItemService>();

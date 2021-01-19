@@ -6,8 +6,8 @@ import {
 	FormLabel,
 	Container,
 } from "react-bootstrap";
-import { authUser } from "../../context/reducers/app-reducer";
 import { useDispatch } from "react-redux";
+import { AppThunks } from "store/app/app.actions";
 
 const Login: React.FC = () => {
 	const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const Login: React.FC = () => {
 	) {
 		e.preventDefault();
 		dispatch(
-			authUser(
+			AppThunks.authUser(
 				{
 					id: 0,
 					username: userName,

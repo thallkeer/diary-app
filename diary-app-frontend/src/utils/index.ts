@@ -1,25 +1,19 @@
-import { INamedAction } from "../context/actions/action-helpers";
-import {
-	ITodo,
-	IEvent,
-	IListItem,
-	IDiaryList,
-	IListWithItems,
-	IEntity,
-} from "../models/entities";
-import { IDiaryListState, IListState } from "../models/states";
+import { INamedAction } from "../store/actions/action-helpers";
+import { IListState } from "../models/states";
+import { IEvent, IListItem, IListWithItems, ITodo } from "models";
+import { IEntity } from "models/entities";
 
-var _getRandomInt = (min: number, max: number) => {
+const _getRandomInt = (min: number, max: number) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 export const getRandomId = () => {
-	var ts = new Date().getTime().toString();
-	var parts = ts.split("").reverse();
-	var id = "";
+	const ts = new Date().getTime().toString();
+	const parts = ts.split("").reverse();
+	let id = "";
 
-	for (var i = 0; i < 8; ++i) {
-		var index = _getRandomInt(0, parts.length - 1);
+	for (let i = 0; i < 8; ++i) {
+		const index = _getRandomInt(0, parts.length - 1);
 		id += parts[index];
 	}
 	return Number(id);
@@ -56,10 +50,10 @@ export function fillToNumber<T extends IListItem>(
 	fillTo: number,
 	getEmptyItem: () => T
 ): T[] {
-	let length = list.length;
+	const length = list.length;
 	fillTo = length >= fillTo ? length + 1 : fillTo;
 	for (let i = length; i < fillTo; i++) {
-		let emptyItem = getEmptyItem();
+		const emptyItem = getEmptyItem();
 		emptyItem.readonly = true;
 		list.push(emptyItem);
 	}
@@ -93,7 +87,7 @@ const getListItems = <
 	state: TState
 ) => state.list?.items ?? [];
 
-export function createNamedWrapperReducer<TState, TAction extends INamedAction>(
+export function createNamedReducer<TState, TAction extends INamedAction>(
 	reducer: (state: TState, action: TAction) => TState,
 	initialState: TState,
 	reducerName: string

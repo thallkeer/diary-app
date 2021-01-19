@@ -1,20 +1,14 @@
-import axios from "../axios/axios";
-import { IDiaryListWrapper, IPurchaseList } from "../models/entities";
-import { ListWrapperUrls } from "../models/types";
+import { IHabitTracker } from "models";
+import { IPurchaseList } from "../models/entities";
+import { ListUrls, ListWrapperUrls } from "../models/types";
 import { CrudService } from "./crudService";
 
-export const getListWrapperService = <T extends IDiaryListWrapper>(
-	apiUrl: ListWrapperUrls
-) => {
-	const crudService = new CrudService<T>(apiUrl);
+const habitTrackerApi: ListUrls = "habitTrackers";
+export const habitTrackerService = new CrudService<IHabitTracker>(
+	habitTrackerApi
+);
 
-	return {
-		createList: crudService.create,
-		updateList: crudService.update,
-		deleteList: crudService.delete,
-	};
-};
-
-export const purchaseListsService = getListWrapperService<IPurchaseList>(
-	"purchaseLists"
+const purchaseListsApi: ListWrapperUrls = "purchaseLists";
+export const purchaseListsService = new CrudService<IPurchaseList>(
+	purchaseListsApi
 );

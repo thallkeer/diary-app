@@ -6,7 +6,7 @@ import {
 	withContextMenu,
 } from "../CommonList/CommonListComponent";
 import { ListItemInput } from "../Controls/ListItemInput";
-import { ICommonList, IListItem } from "../../../models/entities";
+import { ICommonList, IListItem } from "models";
 import { fillToNumber, getEmptyItem } from "../../../utils";
 
 export interface IListItemActions {

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { IEvent, IEventList } from "../../../models/entities";
+import { IEvent, IEventList } from "models";
 import { getEmptyEvent, fillToNumber } from "../../../utils";
 import { EventInput, IEventItemActions } from "../Controls/EventInput";
 import {

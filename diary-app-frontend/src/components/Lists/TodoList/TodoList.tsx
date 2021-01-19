@@ -6,7 +6,7 @@ import {
 	IListActions,
 	IListOptions,
 } from "../CommonList/CommonListComponent";
-import { ITodo, ITodoList } from "../../../models/entities";
+import { ITodo, ITodoList } from "models";
 
 export interface ITodoListProps extends IListActions, IListOptions {
 	todoList: ITodoList;

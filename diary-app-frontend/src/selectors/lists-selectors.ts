@@ -6,15 +6,12 @@ import {
 	IDiaryList,
 	IEventList,
 	ITodoList,
-} from "../models/entities";
-import { AppState } from "../context/reducers/app-reducer";
-import { ITodoListState } from "../context/reducers/list/todos";
-import { AppStateType } from "../context/store";
-import { IEventListState } from "../context/reducers/list/events";
-import { getImportantEventsList } from "./page-selectors";
-import { IDiaryListState } from "../models/states";
-
-export const getSelectedPage = (state: AppState) => state.selectedPage;
+} from "models";
+import { ITodoListState } from "store/diaryLists";
+import { AppStateType } from "store/reducer";
+import { IEventListState } from "store/diaryLists";
+import { getImportantEventsList } from "../store/pages/pages.selectors";
+import { IDiaryListState } from "models/states";
 
 const getEventsState = (state: IEventListState) =>
 	getListState<IEventListState, IEventList, IEvent>(state);
@@ -24,13 +21,13 @@ export const getEvents = createSelector([getEventsState], (s) => s);
 export const getEventsByDay = createSelector(
 	[getImportantEventsList],
 	(importantEvents) => {
-		let eventsMap = new Map<number, IEvent[]>();
+		const eventsMap = new Map<number, IEvent[]>();
 
 		const events = importantEvents.list?.items ?? [];
 
 		if (events && events.length) {
 			events.forEach((ev) => {
-				let day = ev.date.getDate();
+				const day = ev.date.getDate();
 				if (!eventsMap.has(day)) eventsMap.set(day, []);
 				eventsMap.get(day).push(ev);
 			});

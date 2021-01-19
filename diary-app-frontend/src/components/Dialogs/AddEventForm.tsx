@@ -11,10 +11,10 @@ import {
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
-import { IEvent } from "../../models/entities";
 import { getEmptyEvent } from "../../utils";
 import { useSelector } from "react-redux";
 import { getAppInfo } from "../../selectors/app-selectors";
+import { IEvent } from "models";
 
 interface IFormProps {
 	show: boolean;

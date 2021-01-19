@@ -1,63 +1,55 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { IHabitDay, IHabitTracker } from "../../models/entities";
+import { IHabitDay, IHabitTracker } from "models";
 import { getAppInfo } from "../../selectors/app-selectors";
 import { HabitDayCell } from "./HabitDayCell";
 
 export const HabitTracker: React.FC<{
 	tracker: IHabitTracker;
-	updateHabitTracker: (tracker: IHabitTracker) => void;
-}> = ({ tracker, updateHabitTracker }) => {
+	trackerActions: {
+		updateHabitTracker: (tracker: IHabitTracker) => void;
+		markDay: (day: IHabitDay) => void;
+		unmarkDay: (day: IHabitDay) => void;
+	};
+}> = ({ tracker, trackerActions }) => {
 	const { year, month } = useSelector(getAppInfo);
+	const { updateHabitTracker, markDay, unmarkDay } = trackerActions;
 
 	const onDayClick = (e: React.MouseEvent<HTMLElement>, day: IHabitDay) => {
-		let target = e.target as HTMLElement;
-		let updatedTracker: IHabitTracker;
-		console.log("clicked", tracker);
-
 		if (tracker.items.some((hd) => hd.number === day.number)) {
-			target.classList.remove("marked");
-			updatedTracker = {
-				...tracker,
-				items: tracker.items.filter((sd) => sd.number !== day.number),
-			};
+			unmarkDay(day);
 		} else {
-			target.classList.add("marked");
-			updatedTracker = {
-				...tracker,
-				items: [...tracker.items, day],
-			};
+			markDay(day);
 		}
-		updateHabitTracker(updatedTracker);
 	};
 
 	const getDaysInMonth = () => {
-		let daysInMonth = [];
+		const daysInMonth = [];
 
 		const days = new Date(year, month, 0).getDate();
 
 		const daysInFirstRow = Math.round(days / 2);
 
 		for (let d = 1; d <= days; d++) {
-			let curDay = tracker.items.find((day) => day.number === d);
+			const curDay = tracker.items.find((day) => day.number === d);
 			let cn = `p-2 day-cell ${curDay ? "marked" : ""}`;
 
 			if (d !== 1 && d !== daysInFirstRow + 1) cn += " no-left-border";
 			if (d >= daysInFirstRow + 1) cn += " no-top-border";
+
+			const habitDay = curDay || {
+				id: 0,
+				number: d,
+				note: "",
+				habitTrackerId: tracker.id,
+			};
 
 			const dayCell = (
 				<div className={cn} key={d}>
 					<HabitDayCell
 						tracker={tracker}
 						updateHabitTracker={updateHabitTracker}
-						day={
-							curDay || {
-								number: d,
-								note: "",
-								id: 0,
-								habitTrackerId: tracker.id,
-							}
-						}
+						day={habitDay}
 						isSelected={curDay ? true : false}
 						onDayClick={onDayClick}
 					/>
@@ -80,22 +72,22 @@ export const HabitTracker: React.FC<{
 
 	const renderCalendarRows = () => {
 		var totalSlots = getDaysInMonth();
-		let rows = [];
+		const rows = [];
 		let cells = [];
 
-		let divider = Math.round(totalSlots.length / 2);
+		const divider = Math.round(totalSlots.length / 2);
 
 		totalSlots.forEach((row, i) => {
 			if (i % divider !== 0) {
 				cells.push(row);
 			} else {
-				let insertRow = cells.slice();
+				const insertRow = cells.slice();
 				rows.push(insertRow);
 				cells = [];
 				cells.push(row);
 			}
 			if (i === totalSlots.length - 1) {
-				let insertRow = cells.slice();
+				const insertRow = cells.slice();
 				rows.push(insertRow);
 			}
 		});

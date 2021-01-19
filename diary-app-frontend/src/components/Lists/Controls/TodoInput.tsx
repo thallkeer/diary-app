@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { CheckCircle } from "./CheckCircle";
 import { ListItemInput, UrlInput } from "./ListItemInput";
-import { ITodo } from "../../../models/entities";
+import { ITodo } from "models";
 import { MenuItem } from "react-contextmenu";
 import { withContextMenu } from "../CommonList/CommonListComponent";
 

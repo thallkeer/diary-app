@@ -1,24 +1,20 @@
-import React, { Suspense, lazy, useEffect } from "react";
+import React, { Suspense, lazy } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Loader from "../Loader";
 import { Link } from "react-router-dom";
 import strelka from "../../images/right-arrow.png";
-import { useDispatch, useSelector } from "react-redux";
-import { getAppInfo } from "../../selectors/app-selectors";
-import { loadMonthPage } from "../../context/reducers/page/monthPage-reducer";
-const PurchasesArea = lazy(() => import("./PurchasesArea"));
-const DesiresArea = lazy(() => import("./DesiresArea"));
-const IdeasArea = lazy(() => import("./IdeasArea"));
-const GoalsArea = lazy(() => import("./GoalsArea"));
+import { loadMonthPage } from "store/pages/monthPages.actions";
+import { usePage } from "hooks/usePage";
+import { getMonthPage } from "store/pages";
+const PurchasesArea = lazy(() => import("./PurchasesArea/PurchasesArea"));
+const DesiresArea = lazy(() => import("./DesiresArea/DesiresArea"));
+const IdeasArea = lazy(() => import("./IdeasArea/IdeasArea"));
+const GoalsArea = lazy(() => import("./GoalsArea/GoalsArea"));
 
 const MonthPage: React.FC = () => {
-	const { user, year, month } = useSelector(getAppInfo);
+	const monthPage = usePage(getMonthPage, loadMonthPage);
 
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		dispatch(loadMonthPage(user, year, month));
-	}, [user, year, month]);
+	if (!monthPage) return <Loader />;
 
 	return (
 		<Container fluid className="mt-20 second-page-container text-center">

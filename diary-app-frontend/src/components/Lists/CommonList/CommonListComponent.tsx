@@ -1,5 +1,5 @@
 import React from "react";
-import { IListItem } from "../../../models/entities";
+import { IListItem } from "models";
 import ListHeaderInput from "../Controls/ListHeaderInput";
 import { DeleteBtn } from "../Controls/DeleteBtn";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";

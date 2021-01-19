@@ -44,6 +44,7 @@ namespace DiaryApp.API
             CreateMap<GoalsArea, GoalsAreaDto>().ReverseMap();
             CreateMap<HabitTracker, HabitTrackerDto>()
                 .ForMember(ht => ht.Items, htdto => htdto.MapFrom(src => src.SelectedDays))
+                .ForMember(ht => ht.AreaOwnerId, htdto => htdto.MapFrom(src => src.GoalsAreaID))
                 .ReverseMap();
             CreateMap<HabitDay, HabitDayDto>().ReverseMap();
 

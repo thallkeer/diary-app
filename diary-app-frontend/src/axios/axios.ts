@@ -50,7 +50,7 @@ axiosInstance.interceptors.response.use(
 );
 
 const checkTokenIsExpired = (headers) => {
-	let authHeader: string = headers["www-authenticate"];
+	const authHeader: string = headers["www-authenticate"];
 
 	return (
 		authHeader !== undefined &&

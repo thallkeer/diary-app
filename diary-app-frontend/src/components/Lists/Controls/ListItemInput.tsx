@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef } from "react";
-import { IListItem } from "../../../models/entities";
+import { IListItem } from "models";
 
 interface ListItemInputPropsBase
 	extends React.HTMLAttributes<HTMLInputElement> {
@@ -23,7 +23,7 @@ function useListItemInput(props: useListItemInputProps) {
 	useEffect(() => {}, [validateAndUpdate, inputRef]);
 
 	const handleBlur = () => {
-		let { value } = inputRef.current as HTMLInputElement;
+		const { value } = inputRef.current as HTMLInputElement;
 		if (!value && !value.length) return;
 		validateAndUpdate(value);
 	};
@@ -87,7 +87,7 @@ export const ListItemInput: FC<ListItemInputProps> = ({
 		validateAndUpdate,
 	});
 
-	let inputValue = getItemText ? getItemText(item) : item.subject;
+	const inputValue = getItemText ? getItemText(item) : item.subject;
 
 	const inputControl = (
 		<input

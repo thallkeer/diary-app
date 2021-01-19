@@ -1,4 +1,4 @@
-import { ITodo, ITodoList } from "../models/entities";
+import { ITodo, ITodoList } from "models";
 import { ListItemUrls, ListUrls } from "../models/types";
 import { CrudService } from "./crudService";
 
@@ -20,6 +20,6 @@ const todoService = new TodoItemService();
 const todoListService = new CrudService<ITodoList>(listUrl);
 
 export const todosService = {
-	todoListService,
-	todoService,
+	list: todoListService,
+	items: todoService,
 };

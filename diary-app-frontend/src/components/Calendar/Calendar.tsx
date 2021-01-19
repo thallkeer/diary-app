@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { getEventsByDay } from "../../selectors/lists-selectors";
 import { AddEventForm } from "../Dialogs/AddEventForm";
-import { IEvent } from "../../models/entities";
 import { Link } from "react-router-dom";
 import strelka from "../../images/right-arrow.png";
 import { useDispatch, useSelector } from "react-redux";
 import { getAppInfo } from "../../selectors/app-selectors";
-import { getImportantEventsList } from "../../selectors/page-selectors";
-import { setMonth } from "../../context/reducers/app-reducer";
-import { eventsActions } from "../../context/reducers/list/events";
-import { IMPORTANT_EVENTS_LIST } from "../../context/reducers/pageArea/importantEventsArea-reducer";
+import { getImportantEventsList } from "../../store/pages/pages.selectors";
+import { eventThunks } from "../../store/diaryLists/events.actions";
+import { IEvent } from "models";
+import { AppThunks } from "store/app/app.actions";
+import { IMPORTANT_EVENTS_LIST } from "store/pageAreas/importantEvents/importantEventsArea.actions";
 
 interface ICalendarState {
 	showMonthPopup: boolean;
@@ -34,8 +34,8 @@ export const Calendar: React.FC = () => {
 	const eventsByDay: Map<number, IEvent[]> = useSelector(getEventsByDay);
 
 	const getDaysInMonth = (): number => {
-		let curDate = currentDate();
-		let newDate = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0);
+		const curDate = currentDate();
+		const newDate = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0);
 		return newDate.getDate();
 	};
 
@@ -47,9 +47,9 @@ export const Calendar: React.FC = () => {
 	const currentDay = (): number => new Date().getDate();
 
 	const getFirstDayOfMonth = (): number => {
-		let curDate = currentDate();
+		const curDate = currentDate();
 
-		let fDay = new Date(
+		const fDay = new Date(
 			curDate.getFullYear(),
 			curDate.getMonth() - 1,
 			1
@@ -59,7 +59,7 @@ export const Calendar: React.FC = () => {
 
 	const addEvent = (newEvent: IEvent) => {
 		dispatch(
-			eventsActions.addOrUpdateListItem(
+			eventThunks.addOrUpdateListItem(
 				{
 					...newEvent,
 					ownerID: list.id,
@@ -106,8 +106,8 @@ export const Calendar: React.FC = () => {
 	};
 
 	const getEmptySlots = (): any[] => {
-		let blanks = [];
-		let firstDayOfMonth = getFirstDayOfMonth();
+		const blanks = [];
+		const firstDayOfMonth = getFirstDayOfMonth();
 
 		for (let i = 0; i < firstDayOfMonth - 1; i++)
 			blanks.push(<td key={i * 80} className="empty-slot"></td>);
@@ -116,22 +116,24 @@ export const Calendar: React.FC = () => {
 	};
 
 	const getDays = (): any[] => {
-		let daysInMonth = [];
+		const daysInMonth = [];
 
-		let curDay = currentDay();
+		const curDay = currentDay();
 
-		let isRealCurrentMonth =
+		const isRealCurrentMonth =
 			currentDate().getMonth() === new Date().getMonth() + 1;
 
 		const monthDays = getDaysInMonth();
 
 		for (let d = 1; d <= monthDays; d++) {
-			let className =
+			const className =
 				isRealCurrentMonth && d === curDay ? "day current-day" : "day";
 
-			let curEvents: IEvent[] = eventsByDay.get(d) || [];
+			const curEvents: IEvent[] = eventsByDay.get(d) || [];
 
-			let curEventClass = curEvents.length ? "day-with-event" : "no-events-day";
+			const curEventClass = curEvents.length
+				? "day-with-event"
+				: "no-events-day";
 
 			daysInMonth.push(
 				<td key={d} className={className} onClick={(e) => onDayClick(e, d)}>
@@ -154,20 +156,20 @@ export const Calendar: React.FC = () => {
 
 	const getCalendarRows = (): any[] => {
 		var totalSlots = [...getEmptySlots(), ...getDays()];
-		let rows = [];
+		const rows = [];
 		let cells = [];
 
 		totalSlots.forEach((row, i) => {
 			if (i % 7 !== 0) {
 				cells.push(row);
 			} else {
-				let insertRow = cells.slice();
+				const insertRow = cells.slice();
 				rows.push(insertRow);
 				cells = [];
 				cells.push(row);
 			}
 			if (i === totalSlots.length - 1) {
-				let insertRow = cells.slice();
+				const insertRow = cells.slice();
 				rows.push(insertRow);
 			}
 		});
@@ -191,16 +193,18 @@ export const Calendar: React.FC = () => {
 	};
 
 	const getMonthName = (): string => {
-		let date = new Date(year, month - 1);
-		let stringMonth = date.toLocaleString("ru", { month: "long" });
+		const date = new Date(year, month - 1);
+		const stringMonth = date.toLocaleString("ru", { month: "long" });
 		return stringMonth[0].toUpperCase() + stringMonth.slice(1);
 	};
 
 	const changeMonth = (increment: boolean) => {
-		let newMonth = increment ? Math.min(month + 1, 12) : Math.max(month - 1, 1);
+		const newMonth = increment
+			? Math.min(month + 1, 12)
+			: Math.max(month - 1, 1);
 
 		if (newMonth === month) return;
-		dispatch(setMonth(newMonth));
+		dispatch(AppThunks.setMonth(newMonth));
 	};
 
 	const setNextMonth = () => {

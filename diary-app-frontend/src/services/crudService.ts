@@ -2,8 +2,8 @@ import { AxiosInstance } from "axios";
 import axios from "../axios/axios";
 
 export class CrudService<T> {
-	apiUrl: string;
-	axios: AxiosInstance;
+	protected apiUrl: string;
+	protected axios: AxiosInstance;
 	constructor(apiUrl: string) {
 		this.apiUrl = apiUrl;
 		this.axios = axios;

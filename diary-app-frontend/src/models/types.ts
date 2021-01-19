@@ -8,7 +8,7 @@ export type ListWrapperUrls =
 	| "desireLists"
 	| "ideasLists"
 	| "goalLists";
-export type ListItemUrls = "todos" | "events" | "listItems";
+export type ListItemUrls = "todos" | "events" | "listItems" | "habitDays";
 export type PageNames = "mainPage" | "monthPage";
 export type MainPageAreaNames = "importantEventsArea" | "importantThingsArea";
 export type MonthPageAreaNames =

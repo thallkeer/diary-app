@@ -5,10 +5,10 @@ import axios from "../../axios/axios";
 import { getAppInfo } from "../../selectors/app-selectors";
 
 class TransferDataModel {
-	transferGoalsArea: boolean;
-	transferPurchasesArea: boolean;
-	transferDesiresArea: boolean;
-	transferIdeasArea: boolean;
+	public transferGoalsArea: boolean;
+	public transferPurchasesArea: boolean;
+	public transferDesiresArea: boolean;
+	public transferIdeasArea: boolean;
 
 	/**
 	 *
@@ -62,7 +62,7 @@ export const TransferDataForm: React.FC<{
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		let data: TransferDataRequestParams = {
+		const data: TransferDataRequestParams = {
 			pageParams: {
 				year,
 				month,

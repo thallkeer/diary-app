@@ -1,10 +1,11 @@
+import { IPageArea } from "models/PageAreas/pageAreas";
 import { Dispatch, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppStateType } from "../context/store";
-import { IPageArea } from "../models/entities";
-import { IPageAreaState } from "../models/states";
+import { IPageAreaState } from "store/pageAreas";
+import { AppStateType } from "store/reducer";
+
 import { getAppInfo } from "../selectors/app-selectors";
-import { getMonthPage } from "../selectors/page-selectors";
+import { getMonthPage } from "../store/pages/pages.selectors";
 
 export const usePageArea = <
 	TAreaState extends IPageAreaState<TArea>,

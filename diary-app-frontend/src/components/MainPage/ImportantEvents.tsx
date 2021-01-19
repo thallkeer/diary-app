@@ -4,16 +4,16 @@ import { Row, Col } from "react-bootstrap";
 import {
 	getImportantEventsList,
 	getMainPage,
-} from "../../selectors/page-selectors";
+} from "../../store/pages/pages.selectors";
 import Loader from "../Loader";
 import { EventList } from "../Lists/EventList/EventList";
+import { IEventItemActions } from "../Lists/Controls/EventInput";
+import { eventThunks } from "../../store/diaryLists/events.actions";
+import { getAppInfo } from "../../selectors/app-selectors";
 import {
 	IMPORTANT_EVENTS_LIST,
 	loadImportantEventsArea,
-} from "../../context/reducers/pageArea/importantEventsArea-reducer";
-import { IEventItemActions } from "../Lists/Controls/EventInput";
-import { eventsActions } from "../../context/reducers/list/events";
-import { getAppInfo } from "../../selectors/app-selectors";
+} from "store/pageAreas/importantEvents/importantEventsArea.actions";
 
 const ImportantEventsArea: React.FC = () => {
 	const dispatch = useDispatch();
@@ -31,9 +31,9 @@ const ImportantEventsArea: React.FC = () => {
 
 	const eventItemActions: IEventItemActions = {
 		deleteEvent: (eventId) =>
-			dispatch(eventsActions.deleteListItem(eventId, IMPORTANT_EVENTS_LIST)),
+			dispatch(eventThunks.deleteListItem(eventId, IMPORTANT_EVENTS_LIST)),
 		updateEvent: (event) =>
-			dispatch(eventsActions.addOrUpdateListItem(event, IMPORTANT_EVENTS_LIST)),
+			dispatch(eventThunks.addOrUpdateListItem(event, IMPORTANT_EVENTS_LIST)),
 		getItemText: (event) => `${event.date} ${event.subject}`,
 	};
 

@@ -2,18 +2,18 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col } from "react-bootstrap";
 import {
-	IMPORTANT_THINGS_LIST,
-	loadImportantThingsArea,
-} from "../../context/reducers/pageArea/importantThingsArea-reducer";
-import {
 	getImportantThingsList,
 	getMainPage,
-} from "../../selectors/page-selectors";
+} from "../../store/pages/pages.selectors";
 import Loader from "../Loader";
 import { TodoList } from "../Lists/TodoList/TodoList";
 import { ITodoItemActions } from "../Lists/Controls/TodoInput";
-import { todoActionCreators } from "../../context/reducers/list/todos";
+import { todoThunks } from "../../store/diaryLists/todos.actions";
 import { getAppInfo } from "../../selectors/app-selectors";
+import {
+	IMPORTANT_THINGS_LIST,
+	loadImportantThingsArea,
+} from "store/pageAreas/importantThings/importantThingsArea.actions";
 
 const ImportantThingsArea: React.FC = () => {
 	const dispatch = useDispatch();
@@ -31,15 +31,11 @@ const ImportantThingsArea: React.FC = () => {
 
 	const todoItemActions: ITodoItemActions = {
 		deleteTodo: (todoId) =>
-			dispatch(
-				todoActionCreators.deleteListItem(todoId, IMPORTANT_THINGS_LIST)
-			),
+			dispatch(todoThunks.deleteListItem(todoId, IMPORTANT_THINGS_LIST)),
 		toggleTodo: (todoId) =>
-			dispatch(todoActionCreators.toggleTodo(todoId, IMPORTANT_THINGS_LIST)),
+			dispatch(todoThunks.toggleTodo(todoId, IMPORTANT_THINGS_LIST)),
 		updateTodo: (todo) =>
-			dispatch(
-				todoActionCreators.addOrUpdateListItem(todo, IMPORTANT_THINGS_LIST)
-			),
+			dispatch(todoThunks.addOrUpdateListItem(todo, IMPORTANT_THINGS_LIST)),
 	};
 
 	return (
