@@ -33,12 +33,10 @@ export const purchaseListsThunks = {
 		dispatch
 	) => {
 		const id = await purchaseListsService.create(purchaseList);
-		dispatch(
-			actions.addPurchaseList({
-				id: id,
-				...purchaseList,
-			})
-		);
+		const createdList = await purchaseListsService.getById(id);
+		console.log(createdList);
+
+		dispatch(actions.addPurchaseList(createdList));
 	},
 	deletePurchaseList: (purchaseListId: number): ThunkType => async (
 		dispatch

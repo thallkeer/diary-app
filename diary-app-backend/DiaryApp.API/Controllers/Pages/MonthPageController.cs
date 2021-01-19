@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DiaryApp.Core;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DiaryApp.API.Controllers
 {
@@ -25,7 +24,7 @@ namespace DiaryApp.API.Controllers
         [HttpGet("purchasesArea/{pageID}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetPurchasesAreaAsync(int pageID)
+        public async Task<ActionResult<PurchasesAreaDto>> GetPurchasesAreaAsync(int pageID)
         {
             var area = await GetPageArea<PurchasesArea, PurchasesAreaDto>(pageID);
             return area;
@@ -34,7 +33,7 @@ namespace DiaryApp.API.Controllers
         [HttpGet("desiresArea/{pageID}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetDesiresAreaAsync(int pageID)
+        public async Task<ActionResult<DesiresAreaDto>> GetDesiresAreaAsync(int pageID)
         {
             return await GetPageArea<DesiresArea, DesiresAreaDto>(pageID);
         }
@@ -42,7 +41,7 @@ namespace DiaryApp.API.Controllers
         [HttpGet("ideasArea/{pageID}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetIdeasAreaAsync(int pageID)
+        public async Task<ActionResult<IdeasAreaDto>> GetIdeasAreaAsync(int pageID)
         {
             var model = await GetPageArea<IdeasArea, IdeasAreaDto>(pageID);
             return model;
@@ -51,7 +50,7 @@ namespace DiaryApp.API.Controllers
         [HttpGet("goalsArea/{pageID}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetGoalsAreaAsync(int pageID)
+        public async Task<ActionResult<GoalsAreaDto>> GetGoalsAreaAsync(int pageID)
         {
             return await GetPageArea<GoalsArea, GoalsAreaDto>(pageID);
         }

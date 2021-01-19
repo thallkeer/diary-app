@@ -9,6 +9,7 @@ class TodoItemService extends CrudService<ITodo> {
 	}
 
 	toggleTodo(todoId: number) {
+		if (todoId === 0) throw Error("todoId cannot be zero");
 		return this.axios
 			.put(`${this.apiUrl}/toggle/${todoId}`)
 			.then((res) => res.data);

@@ -5,8 +5,7 @@ using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 
 namespace DiaryApp.API.Controllers.Lists
@@ -16,6 +15,14 @@ namespace DiaryApp.API.Controllers.Lists
         public PurchaseListsController(ICrudService<PurchaseListDto, PurchaseList> purchaseListService, IMapper mapper, ILoggerFactory loggerFactory)
             : base(purchaseListService, mapper, loggerFactory)
         {
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public virtual async Task<ActionResult<PurchaseListDto>> GetAsync(int id)
+        {
+            var purchaseList = await _crudService.GetOneByCriteriaOrDefaultAsync(pl => pl.Id == id);
+            return Ok(mapper.Map<PurchaseListDto>(purchaseList));                     
         }
     }
 }

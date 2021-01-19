@@ -28,20 +28,20 @@ namespace DiaryApp.API.Controllers
         [HttpGet("{userId}/{year}/{month}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetPageAsync(int userId, int year, int month)
+        public async Task<ActionResult<TPageDto>> GetPageAsync(int userId, int year, int month)
         {
             var page = await pageService.GetPageAsync(userId, year, month);
 
             if (page == null)
                 return await PostPageAsync(new PageRequest(userId, year, month));
 
-            return Ok(mapper.Map<PageDto>(page));
+            return Ok(mapper.Map<TPageDto>(page));
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PostPageAsync(PageRequest pageParams)
+        public async Task<ActionResult<TPageDto>> PostPageAsync(PageRequest pageParams)
         {
             TPageDto page;
             try
@@ -59,7 +59,7 @@ namespace DiaryApp.API.Controllers
             return Ok(page);
         }
 
-        protected async Task<IActionResult> GetPageArea<TPageArea, TPageAreaDto>(int pageID)
+        protected async Task<ActionResult<TPageAreaDto>> GetPageArea<TPageArea, TPageAreaDto>(int pageID)
             where TPageArea : class, IPageArea
             where TPageAreaDto : PageAreaDto
         {

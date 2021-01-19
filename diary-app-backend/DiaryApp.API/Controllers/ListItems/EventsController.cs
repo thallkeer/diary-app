@@ -20,7 +20,7 @@ namespace DiaryApp.API.Controllers.Lists
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public override async Task<IActionResult> PostAsync([FromBody] EventItemDto createModel)
+        public override async Task<ActionResult<int>> PostAsync([FromBody] EventItemDto createModel)
         {
             createModel.Date = createModel.Date.ToLocalTime();
             return await base.PostAsync(createModel);

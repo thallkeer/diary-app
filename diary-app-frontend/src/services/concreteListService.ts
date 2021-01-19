@@ -9,6 +9,7 @@ export const habitTrackerService = new CrudService<IHabitTracker>(
 );
 
 const purchaseListsApi: ListWrapperUrls = "purchaseLists";
+
 export const purchaseListsService = new CrudService<IPurchaseList>(
 	purchaseListsApi
 );
