@@ -45,13 +45,12 @@ export const HabitTracker: React.FC<{
 			};
 
 			const dayCell = (
-				<div className={cn} key={d}>
+				<div className={cn} key={d} onClick={(e) => onDayClick(e, habitDay)}>
 					<HabitDayCell
 						tracker={tracker}
 						updateHabitTracker={updateHabitTracker}
 						day={habitDay}
 						isSelected={curDay ? true : false}
-						onDayClick={onDayClick}
 					/>
 				</div>
 			);

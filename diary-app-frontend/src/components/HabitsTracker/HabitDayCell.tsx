@@ -10,10 +10,6 @@ interface IHabitDayProps {
 	updateHabitTracker: (tracker: IHabitTracker) => void;
 	day: IHabitDay;
 	isSelected: boolean;
-	onDayClick: (
-		e: React.MouseEvent<HTMLElement, MouseEvent>,
-		day: IHabitDay
-	) => void;
 }
 
 export const HabitDayCell: React.FC<IHabitDayProps> = ({
@@ -21,16 +17,11 @@ export const HabitDayCell: React.FC<IHabitDayProps> = ({
 	updateHabitTracker,
 	day,
 	isSelected,
-	onDayClick,
 }) => {
 	const { isShowing, toggle } = useModal();
 	const { number, note } = day;
 
-	const dayComponent = (
-		<div id={`day-${tracker.id}-${number}`} onClick={(e) => onDayClick(e, day)}>
-			{number}
-		</div>
-	);
+	const dayComponent = <div id={`day-${tracker.id}-${number}`}>{number}</div>;
 
 	const handleAddNote = (noteText: string) => {
 		const trackerDays = [...tracker.items];

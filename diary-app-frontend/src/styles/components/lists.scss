@@ -42,13 +42,23 @@
 
 .list-item-input {
 	@extend %amatic-bold;
-	cursor: pointer;
 	outline: none;
 	border: none;
 	font-size: 24px;
-	padding-left: 30px;
-	border-bottom: 1px solid black;
+	padding-left: 0.6rem;
+	// border-bottom: 1px solid black;
 	width: 100%;
+}
+
+.item-url {
+	a {
+		:hover {
+			color: $skyblue-color;
+		}
+	}
+	input {
+		cursor: pointer;
+	}
 }
 
 .no-left-padding {
@@ -56,11 +66,11 @@
 }
 
 .check-circle {
-	height: 25px;
-	width: 25px;
+	height: 1.5rem;
+	width: 1.5rem;
 	border-radius: 50%;
 	border: 1px solid black;
-	position: absolute;
+	margin-top: 0.4rem;
 }
 
 .list-item {
