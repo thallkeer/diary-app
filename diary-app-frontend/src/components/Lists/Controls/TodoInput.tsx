@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState } from "react";
 import { CheckCircle } from "./CheckCircle";
 import { ListItemInput, UrlInput } from "./ListItemInput";
 import { ITodo } from "models";
@@ -36,10 +36,13 @@ export const TodoInput: FC<ITodoInputProps> = ({
 		setEditUrlMode(false);
 	};
 
-	useEffect(() => {}, [todo, updateTodo, deleteTodo, toggleTodo, editUrlMode]);
-
 	const todoInput = (
-		<>
+		<span
+			style={{
+				display: "flex",
+				justifyContent: "flex-start",
+			}}
+		>
 			<CheckCircle id={todo.id} done={todo.done} toggleTodo={toggleTodo} />
 			{editUrlMode ? (
 				<UrlInput
@@ -54,7 +57,7 @@ export const TodoInput: FC<ITodoInputProps> = ({
 					readonly={todo.readonly}
 				/>
 			)}
-		</>
+		</span>
 	);
 
 	if (todo.id === 0) return todoInput;

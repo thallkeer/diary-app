@@ -14,7 +14,7 @@ export const usePage = <TPage extends IPage>(
 	const dispatch = useDispatch();
 	useEffect(() => {
 		dispatch(loadPageFunc(user, year, month));
-	}, [user, year, month]);
+	}, [loadPageFunc, user, year, month]);
 
 	return page;
 };

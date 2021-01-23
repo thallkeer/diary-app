@@ -47,7 +47,7 @@ const IdeasArea: React.FC = () => {
 								);
 							},
 						}}
-						className="mt-10 no-list-header"
+						className="mt-20 month-lists-header no-list-header"
 					/>
 				</Col>
 			</Row>

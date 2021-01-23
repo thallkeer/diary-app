@@ -48,7 +48,16 @@ export const CommonListComponent = <T extends IListItem>(
 			</h1>
 			<ul className="todos">
 				{items.map((item: T, i) => (
-					<li key={item.id !== 0 ? item.id : `item-${i}`} className="list-item">
+					<li
+						key={item.id !== 0 ? item.id : `item-${i}`}
+						className="list-item"
+						style={{
+							flex: "1",
+							display: "flex",
+							borderBottom: "1px solid black",
+							justifyContent: "flex-start",
+						}}
+					>
 						{renderItem(item)}
 					</li>
 				))}

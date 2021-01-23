@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useRef } from "react";
 import { IListItem } from "models";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 interface ListItemInputPropsBase
 	extends React.HTMLAttributes<HTMLInputElement> {
@@ -12,11 +13,9 @@ interface ListItemInputProps extends ListItemInputPropsBase {
 	readonly?: boolean;
 }
 
-interface useListItemInputProps {
+function useListItemInput(props: {
 	validateAndUpdate: (text: string) => void;
-}
-
-function useListItemInput(props: useListItemInputProps) {
+}) {
 	const { validateAndUpdate } = props;
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -103,18 +102,41 @@ export const ListItemInput: FC<ListItemInputProps> = ({
 		/>
 	);
 
+	return withOverlayAndAnchor(inputControl, item);
+};
+
+const withOverlayAndAnchor = (component: JSX.Element, item: IListItem) =>
+	withOverlay(withAnchorLink(component, item), item);
+
+const withAnchorLink = (component: JSX.Element, item: IListItem) => {
 	if (item.url && item.url.length) {
 		const url = item.url.includes("http") ? item.url : `https:/${item.url}`;
 		return (
-			<a
-				className="item-url"
-				href={url}
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				{inputControl}
-			</a>
+			<span className="item-url">
+				<a href={url} target="_blank" rel="noopener noreferrer">
+					{component}
+				</a>
+			</span>
 		);
 	}
-	return inputControl;
+	return component;
+};
+
+const withOverlay = (component: JSX.Element, item: IListItem) => {
+	if (item.id === 0 || !item.subject) return component;
+	return (
+		<OverlayTrigger
+			key={item.id}
+			delay={{ show: 400, hide: 400 }}
+			trigger={["hover", "focus"]}
+			placement="bottom"
+			overlay={
+				<Tooltip id={`list-item-input-tooltip-${item.id}`}>
+					{item.subject}
+				</Tooltip>
+			}
+		>
+			{component}
+		</OverlayTrigger>
+	);
 };
