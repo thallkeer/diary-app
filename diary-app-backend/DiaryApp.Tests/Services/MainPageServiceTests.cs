@@ -1,12 +1,9 @@
-using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Data.Exceptions;
 using DiaryApp.Data.ServiceInterfaces;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using DiaryApp.Core;
 using Microsoft.EntityFrameworkCore;
+using DiaryApp.Core.Models;
 
 namespace DiaryApp.Tests
 {

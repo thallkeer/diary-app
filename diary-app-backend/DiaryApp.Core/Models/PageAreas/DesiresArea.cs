@@ -1,7 +1,7 @@
 ﻿using DiaryApp.Core.Interfaces;
 using System.Collections.Generic;
 
-namespace DiaryApp.Core.Models.PageAreas
+namespace DiaryApp.Core.Models
 {
     public class DesiresArea : MonthPageArea, IMonthPageArea<DesiresArea>
     {

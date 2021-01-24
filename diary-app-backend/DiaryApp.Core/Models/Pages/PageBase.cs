@@ -1,9 +1,8 @@
-﻿using DiaryApp.Core.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core
+namespace DiaryApp.Core.Models
 {
     /// <summary>
     /// Represents base page class for diary

@@ -2,8 +2,6 @@
 using DiaryApp.Core.Models;
 using Xunit;
 using System.Collections.Generic;
-using DiaryApp.Core.Models.PageAreas;
-using DiaryApp.Core;
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Data.DTO;
 using System.Threading.Tasks;

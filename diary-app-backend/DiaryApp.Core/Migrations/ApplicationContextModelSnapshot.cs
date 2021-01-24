@@ -244,7 +244,7 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("ListItems");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.DesiresArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.DesiresArea", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -267,7 +267,7 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("DesiresAreas");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.GoalsArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.GoalsArea", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -290,7 +290,7 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("GoalsAreas");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.IdeasArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.IdeasArea", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -313,7 +313,7 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("IdeasAreas");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.ImportantEventsArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.ImportantEventsArea", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -341,7 +341,7 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("ImportantEventsAreas");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.ImportantThingsArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.ImportantThingsArea", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -369,7 +369,7 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("ImportantThingsAreas");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.PurchasesArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.PurchasesArea", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -494,7 +494,7 @@ namespace DiaryApp.Core.Migrations
 
             modelBuilder.Entity("DiaryApp.Core.HabitTracker", b =>
                 {
-                    b.HasOne("DiaryApp.Core.Models.PageAreas.GoalsArea", "GoalsArea")
+                    b.HasOne("DiaryApp.Core.Models.GoalsArea", "GoalsArea")
                         .WithMany("GoalLists")
                         .HasForeignKey("GoalsAreaID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -516,7 +516,7 @@ namespace DiaryApp.Core.Migrations
 
             modelBuilder.Entity("DiaryApp.Core.Models.DesiresList", b =>
                 {
-                    b.HasOne("DiaryApp.Core.Models.PageAreas.DesiresArea", "AreaOwner")
+                    b.HasOne("DiaryApp.Core.Models.DesiresArea", "AreaOwner")
                         .WithMany("DesiresLists")
                         .HasForeignKey("AreaOwnerID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -546,7 +546,7 @@ namespace DiaryApp.Core.Migrations
 
             modelBuilder.Entity("DiaryApp.Core.Models.IdeasList", b =>
                 {
-                    b.HasOne("DiaryApp.Core.Models.PageAreas.IdeasArea", "AreaOwner")
+                    b.HasOne("DiaryApp.Core.Models.IdeasArea", "AreaOwner")
                         .WithOne("IdeasList")
                         .HasForeignKey("DiaryApp.Core.Models.IdeasList", "AreaOwnerID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -574,40 +574,40 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.DesiresArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.DesiresArea", b =>
                 {
                     b.HasOne("DiaryApp.Core.MonthPage", "Page")
                         .WithOne("DesiresArea")
-                        .HasForeignKey("DiaryApp.Core.Models.PageAreas.DesiresArea", "PageId")
+                        .HasForeignKey("DiaryApp.Core.Models.DesiresArea", "PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Page");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.GoalsArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.GoalsArea", b =>
                 {
                     b.HasOne("DiaryApp.Core.MonthPage", "Page")
                         .WithOne("GoalsArea")
-                        .HasForeignKey("DiaryApp.Core.Models.PageAreas.GoalsArea", "PageId")
+                        .HasForeignKey("DiaryApp.Core.Models.GoalsArea", "PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Page");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.IdeasArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.IdeasArea", b =>
                 {
                     b.HasOne("DiaryApp.Core.MonthPage", "Page")
                         .WithOne("IdeasArea")
-                        .HasForeignKey("DiaryApp.Core.Models.PageAreas.IdeasArea", "PageId")
+                        .HasForeignKey("DiaryApp.Core.Models.IdeasArea", "PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Page");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.ImportantEventsArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.ImportantEventsArea", b =>
                 {
                     b.HasOne("DiaryApp.Core.Models.EventList", "ImportantEvents")
                         .WithMany()
@@ -617,7 +617,7 @@ namespace DiaryApp.Core.Migrations
 
                     b.HasOne("DiaryApp.Core.MainPage", "Page")
                         .WithOne("ImportantEvents")
-                        .HasForeignKey("DiaryApp.Core.Models.PageAreas.ImportantEventsArea", "PageId")
+                        .HasForeignKey("DiaryApp.Core.Models.ImportantEventsArea", "PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -626,7 +626,7 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("Page");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.ImportantThingsArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.ImportantThingsArea", b =>
                 {
                     b.HasOne("DiaryApp.Core.Models.TodoList", "ImportantThings")
                         .WithMany()
@@ -636,7 +636,7 @@ namespace DiaryApp.Core.Migrations
 
                     b.HasOne("DiaryApp.Core.MainPage", "Page")
                         .WithOne("ImportantThings")
-                        .HasForeignKey("DiaryApp.Core.Models.PageAreas.ImportantThingsArea", "PageId")
+                        .HasForeignKey("DiaryApp.Core.Models.ImportantThingsArea", "PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -645,11 +645,11 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("Page");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.PurchasesArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.PurchasesArea", b =>
                 {
                     b.HasOne("DiaryApp.Core.MonthPage", "Page")
                         .WithOne("PurchasesArea")
-                        .HasForeignKey("DiaryApp.Core.Models.PageAreas.PurchasesArea", "PageId")
+                        .HasForeignKey("DiaryApp.Core.Models.PurchasesArea", "PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -658,7 +658,7 @@ namespace DiaryApp.Core.Migrations
 
             modelBuilder.Entity("DiaryApp.Core.Models.PurchaseList", b =>
                 {
-                    b.HasOne("DiaryApp.Core.Models.PageAreas.PurchasesArea", "AreaOwner")
+                    b.HasOne("DiaryApp.Core.Models.PurchasesArea", "AreaOwner")
                         .WithMany("PurchasesLists")
                         .HasForeignKey("AreaOwnerID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -721,22 +721,22 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.DesiresArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.DesiresArea", b =>
                 {
                     b.Navigation("DesiresLists");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.GoalsArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.GoalsArea", b =>
                 {
                     b.Navigation("GoalLists");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.IdeasArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.IdeasArea", b =>
                 {
                     b.Navigation("IdeasList");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Models.PageAreas.PurchasesArea", b =>
+            modelBuilder.Entity("DiaryApp.Core.Models.PurchasesArea", b =>
                 {
                     b.Navigation("PurchasesLists");
                 });

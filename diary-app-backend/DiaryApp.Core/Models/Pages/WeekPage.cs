@@ -1,7 +1,6 @@
-﻿using DiaryApp.Core.Models.PageAreas;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core.Models.Pages
+namespace DiaryApp.Core.Models
 {
     public class WeekPage : PageBase
     {

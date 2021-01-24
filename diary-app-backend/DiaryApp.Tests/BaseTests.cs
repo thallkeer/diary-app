@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using AutoMapper;
+﻿using AutoMapper;
 using DiaryApp.Core;
 using DiaryApp.Tests.Helpers;
 using Microsoft.EntityFrameworkCore.Infrastructure;

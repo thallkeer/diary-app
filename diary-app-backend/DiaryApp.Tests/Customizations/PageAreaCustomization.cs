@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using DiaryApp.Core.Models.PageAreas;
+using DiaryApp.Core.Models;
 using DiaryApp.Tests.Extensions;
 
 namespace DiaryApp.Tests.Customizations

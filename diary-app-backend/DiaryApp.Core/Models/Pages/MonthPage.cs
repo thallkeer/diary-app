@@ -1,9 +1,7 @@
 ﻿using DiaryApp.Core.Extensions;
-using DiaryApp.Core.Models;
-using DiaryApp.Core.Models.PageAreas;
 using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core
+namespace DiaryApp.Core.Models
 {
     public class MonthPage : PageBase
     {

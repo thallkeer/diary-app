@@ -2,7 +2,6 @@
 using DiaryApp.Core;
 using DiaryApp.Data.DTO;
 using DiaryApp.Data.ServiceInterfaces;
-using DiaryApp.Tests.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 

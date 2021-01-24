@@ -1,4 +1,4 @@
-﻿using DiaryApp.Core.Models.PageAreas;
+﻿using DiaryApp.Core.Models;
 
 namespace DiaryApp.Core.Interfaces
 {

@@ -1,7 +1,6 @@
-﻿using DiaryApp.Core.Models.Pages;
-using System;
+﻿using System;
 
-namespace DiaryApp.Core.Models.PageAreas
+namespace DiaryApp.Core.Models
 {
     public class NotesArea : PageAreaBase<WeekPage>
     {

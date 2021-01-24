@@ -5,7 +5,6 @@ using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 
 namespace DiaryApp.API.Controllers.Lists

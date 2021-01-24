@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DiaryApp.API.Exceptions;
 using DiaryApp.API.Models;
-using DiaryApp.Core;
 using DiaryApp.Data.DTO;
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Data.Exceptions;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using DiaryApp.Core.Models;
 
 namespace DiaryApp.API.Controllers
 {

@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Data.ServiceInterfaces;
 using DiaryApp.Data.DTO;
 using Microsoft.AspNetCore.Http;
-using DiaryApp.Core;
+using DiaryApp.Core.Models;
 
 namespace DiaryApp.API.Controllers
 {

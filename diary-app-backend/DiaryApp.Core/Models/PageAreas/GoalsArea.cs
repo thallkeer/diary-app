@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DiaryApp.Core.Models.PageAreas
+namespace DiaryApp.Core.Models
 {
     public class GoalsArea : MonthPageArea, IMonthPageArea<GoalsArea>
     {

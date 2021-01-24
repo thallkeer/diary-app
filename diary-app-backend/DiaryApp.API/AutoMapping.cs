@@ -2,10 +2,7 @@
 using DiaryApp.Core;
 using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models;
-using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.API.Models.Users;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DiaryApp.API
 {

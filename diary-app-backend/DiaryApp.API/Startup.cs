@@ -14,7 +14,6 @@ using DiaryApp.API.Extensions.ConfigureServices;
 using DiaryApp.Core.Bootstrap;
 using DiaryApp.Data.Services.Users;
 using System;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.AspNetCore.HttpOverrides;
 
 namespace DiaryApp.API

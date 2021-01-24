@@ -4,9 +4,9 @@ using DiaryApp.Data.DTO;
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading.Tasks;
 using DiaryApp.Data.Exceptions;
+using DiaryApp.Core.Models;
 
 namespace DiaryApp.Data.Services
 {
