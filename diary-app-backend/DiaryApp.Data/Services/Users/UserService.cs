@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.Core;
+using DiaryApp.Core.Models;
 using DiaryApp.Data.DTO;
+using DiaryApp.Data.Exceptions;
 using DiaryApp.Data.ServiceInterfaces;
 using DiaryApp.Data.Services.Users;
 using Microsoft.EntityFrameworkCore;
@@ -109,12 +111,27 @@ namespace DiaryApp.Data.Services
                 {
                     new Claim(ClaimTypes.Name, user.Id.ToString())
                 }),
+                Issuer = tokenConfig.Issuer,
                 Expires = DateTime.UtcNow.AddMinutes(tokenConfig.AccessTokenExpiration),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
             return tokenString;
+        }
+
+        public async Task<UserSettingsDto> GetSettingsAsync(int userId)
+        {
+            AppUser user = await GetUserByIdOrThrow(userId);
+            return _mapper.Map<UserSettingsDto>(user.Settings);
+        }
+
+        private async Task<AppUser> GetUserByIdOrThrow(int userId)
+        {
+            var user = await _dbSet.SingleOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+                throw new UserNotExistsException();
+            return user;
         }
     }
 }

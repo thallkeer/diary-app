@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using DiaryApp.Core.Models;
-using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Tests.Extensions;
 using System.Linq;
 

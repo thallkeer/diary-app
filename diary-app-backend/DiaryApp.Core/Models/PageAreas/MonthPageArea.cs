@@ -1,4 +1,4 @@
-﻿namespace DiaryApp.Core.Models.PageAreas
+﻿namespace DiaryApp.Core.Models
 {
     public abstract class MonthPageArea : PageAreaBase<MonthPage>
     {

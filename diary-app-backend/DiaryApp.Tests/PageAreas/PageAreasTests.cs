@@ -1,5 +1,4 @@
 ﻿using DiaryApp.Core.Models;
-using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Tests.Extensions;
 using System.Collections.Generic;
 using System.Linq;

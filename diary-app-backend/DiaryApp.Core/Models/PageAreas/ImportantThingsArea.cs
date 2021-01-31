@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core.Models.PageAreas
+namespace DiaryApp.Core.Models
 {
     public class ImportantThingsArea : PageAreaBase<MainPage>
     {

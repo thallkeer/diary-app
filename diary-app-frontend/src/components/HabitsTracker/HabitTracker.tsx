@@ -31,13 +31,14 @@ export const HabitTracker: React.FC<{
 		const daysInFirstRow = Math.round(days / 2);
 
 		for (let d = 1; d <= days; d++) {
-			const curDay = tracker.items.find((day) => day.number === d);
-			let cn = `p-2 day-cell ${curDay ? "marked" : ""}`;
+			const markedDay = tracker.items.find((day) => day.number === d);
+			let cn = "p-2 day-cell";
 
+			if (markedDay) cn += " marked";
 			if (d !== 1 && d !== daysInFirstRow + 1) cn += " no-left-border";
 			if (d >= daysInFirstRow + 1) cn += " no-top-border";
 
-			const habitDay = curDay || {
+			const habitDay = markedDay || {
 				id: 0,
 				number: d,
 				note: "",
@@ -45,14 +46,16 @@ export const HabitTracker: React.FC<{
 			};
 
 			const dayCell = (
-				<div className={cn} key={d} onClick={(e) => onDayClick(e, habitDay)}>
+				<button key={d} className={cn} onClick={(e) => onDayClick(e, habitDay)}>
 					<HabitDayCell
+						key={d}
+						className={cn}
 						tracker={tracker}
 						updateHabitTracker={updateHabitTracker}
 						day={habitDay}
-						isSelected={curDay ? true : false}
+						isMarked={markedDay ? true : false}
 					/>
-				</div>
+				</button>
 			);
 
 			daysInMonth.push(dayCell);

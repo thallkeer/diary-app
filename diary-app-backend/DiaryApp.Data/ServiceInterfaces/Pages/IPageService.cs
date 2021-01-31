@@ -1,7 +1,7 @@
-﻿using DiaryApp.Core;
-using DiaryApp.Data.DTO;
+﻿using DiaryApp.Data.DTO;
 using DiaryApp.Core.Interfaces;
 using System.Threading.Tasks;
+using DiaryApp.Core.Models;
 
 namespace DiaryApp.Data.ServiceInterfaces
 {
@@ -18,13 +18,13 @@ namespace DiaryApp.Data.ServiceInterfaces
         /// <returns></returns>
         Task<TPageDto> CreateAsync(int userID, int year, int month);
 
-        /// <summary>
-        /// Creates new page by given parameters if it's not exists. Also initializes page areas, if needed.
-        /// </summary>
-        /// <param name="pageDto">Page dto</param>
-        /// <param name="initializePageAreas">Whether need to initialize page arees</param>
-        /// <returns></returns>
-        Task<TPageDto> CreateAsync(PageDto pageDto, bool initializePageAreas);
+        ///// <summary>
+        ///// Creates new page by given parameters if it's not exists. Also initializes page areas, if needed.
+        ///// </summary>
+        ///// <param name="pageDto">Page dto</param>
+        ///// <param name="initializePageAreas">Whether need to initialize page arees</param>
+        ///// <returns></returns>
+        //Task<TPageDto> CreateAsync(PageDto pageDto, bool initializePageAreas);
 
         /// <summary>
         /// Returns page area of defined type
@@ -42,6 +42,6 @@ namespace DiaryApp.Data.ServiceInterfaces
         /// <param name="year">Year</param>
         /// <param name="month">Month</param>
         /// <returns></returns>
-        Task<TPage> GetPageAsync(int userID, int year, int month);
+        Task<TPageDto> GetPageAsync(int userID, int year, int month);
     }
 }

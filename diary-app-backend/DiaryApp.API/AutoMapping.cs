@@ -2,10 +2,7 @@
 using DiaryApp.Core;
 using DiaryApp.Data.DTO;
 using DiaryApp.Core.Models;
-using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.API.Models.Users;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DiaryApp.API
 {
@@ -51,6 +48,11 @@ namespace DiaryApp.API
             CreateMap<AppUser, UserWithPasswordDto>().ReverseMap();
             CreateMap<UserDto, UserWithPasswordDto>().ReverseMap();
             CreateMap<UserDto, UserWithPasswordModel>().ReverseMap();
+
+            CreateMap<UserSettings, UserSettingsDto>().ReverseMap();
+            CreateMap<PageAreaTransferSettings, PageAreaTransferSettingsDto>()
+               .ForMember(dto => dto.UserId, (en) => en.MapFrom(src => src.UserSettings.UserId))
+               .ReverseMap();
         }
     }
 }

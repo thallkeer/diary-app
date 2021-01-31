@@ -1,6 +1,6 @@
 ﻿using DiaryApp.Core.Interfaces;
 
-namespace DiaryApp.Core.Models.PageAreas
+namespace DiaryApp.Core.Models
 {
     public class IdeasArea : MonthPageArea, IMonthPageArea<IdeasArea>
     {

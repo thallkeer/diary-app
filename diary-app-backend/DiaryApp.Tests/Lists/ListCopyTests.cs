@@ -5,7 +5,6 @@ using Xunit;
 using AutoFixture;
 using System.Linq;
 using DiaryApp.Tests.Extensions;
-using DiaryApp.Tests.Helpers;
 
 namespace DiaryApp.Tests
 {

@@ -25,9 +25,9 @@ axiosInstance.interceptors.response.use(
 			toast.error("Network error - make sure API is running!");
 		} else if (error.response) {
 			const { status, data, config, headers } = error.response;
-			if (status === 404) {
-				history.push("/notfound");
-			}
+			// if (status === 404) {
+			// 	history.push("/notfound");
+			// }
 
 			if (status === 401 && checkTokenIsExpired(headers)) {
 				usersService.logoff();

@@ -1,46 +1,44 @@
 @import "../variables";
 
 .day-cell {
-  border: 1px solid black;
-  text-align: center;
-  font-family: $list-header-font;
-  font-weight: bold;
-  flex: 1;
-  min-width: 25px;
-
-  cursor: pointer;
-  // width: 5em;
-  // height: 5em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	border: 1px solid black;
+	background-color: #fff;
+	text-align: center;
+	font-family: $list-header-font;
+	font-weight: bold;
+	flex: 1;
+	min-width: 25px;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .no-left-border {
-  border-left: none;
+	border-left: none;
 }
 
 .no-top-border {
-  border-top: none;
+	border-top: none;
 }
 
 .marked {
-  background-color: $skyblue-color;
+	background-color: $skyblue-color;
 }
 
 .goal-name {
-  @extend %amatic-bold;
-  border-bottom: 1px solid black;
-  // font-family: $list-input-font;
-  // font-weight: bold;
-  font-size: 24px;
+	@extend %amatic-bold;
+	border-bottom: 1px solid black;
+	// font-family: $list-input-font;
+	// font-weight: bold;
+	font-size: 24px;
 }
 
 .tracker-header {
-  &:hover {
-    span {
-      visibility: visible !important;
-      cursor: pointer;
-    }
-  }
+	&:hover {
+		span {
+			visibility: visible !important;
+			cursor: pointer;
+		}
+	}
 }

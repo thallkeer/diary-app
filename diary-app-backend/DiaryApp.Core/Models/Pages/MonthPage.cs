@@ -1,9 +1,8 @@
 ﻿using DiaryApp.Core.Extensions;
-using DiaryApp.Core.Models;
-using DiaryApp.Core.Models.PageAreas;
+using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core
+namespace DiaryApp.Core.Models
 {
     public class MonthPage : PageBase
     {
@@ -39,6 +38,8 @@ namespace DiaryApp.Core
         /// <returns></returns>
         public MonthPage TransferDataToNextMonth(TransferDataModel transferDataModel)
         {
+            if (transferDataModel == null)
+                throw new ArgumentNullException(nameof(transferDataModel));
             var nextPage = new MonthPage(Year, Month + 1, User);
 
             //initialize only non transferring areas
@@ -59,6 +60,10 @@ namespace DiaryApp.Core
         /// <param name="monthPage">Month page</param>
         public void MergePageAreas(TransferDataModel transferDataModel, MonthPage monthPage)
         {
+            if (transferDataModel == null)
+                throw new ArgumentNullException(nameof(transferDataModel));
+            if (monthPage == null)
+                throw new ArgumentNullException(nameof(monthPage));
             monthPage.TransferAreasIfNeeded(transferDataModel, this);
         }
 

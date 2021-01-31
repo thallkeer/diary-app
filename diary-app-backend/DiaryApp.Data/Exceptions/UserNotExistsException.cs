@@ -4,8 +4,7 @@ namespace DiaryApp.Data.Exceptions
 {
     public class UserNotExistsException : Exception
     {
-        public UserNotExistsException(string message) : base(message)
-        {
-        }
+        public UserNotExistsException() : base("User with such id is not exists!")
+        {}
     }
 }

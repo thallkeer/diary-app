@@ -5,7 +5,6 @@ using DiaryApp.Data.ServiceInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 
 namespace DiaryApp.API.Controllers.Lists
@@ -21,7 +20,7 @@ namespace DiaryApp.API.Controllers.Lists
         [ProducesResponseType(StatusCodes.Status200OK)]
         public virtual async Task<ActionResult<PurchaseListDto>> GetAsync(int id)
         {
-            var purchaseList = await _crudService.GetOneByCriteriaOrDefaultAsync(pl => pl.Id == id);
+            var purchaseList = await _crudService.FirstOrDefaultAsync(pl => pl.Id == id);
             return Ok(mapper.Map<PurchaseListDto>(purchaseList));                     
         }
     }

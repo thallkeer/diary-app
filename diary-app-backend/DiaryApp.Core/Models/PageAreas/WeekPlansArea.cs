@@ -1,8 +1,7 @@
-﻿using DiaryApp.Core.Models.Pages;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core.Models.PageAreas
+namespace DiaryApp.Core.Models
 {
     public class WeekPlansArea : PageAreaBase<WeekPage>
     {

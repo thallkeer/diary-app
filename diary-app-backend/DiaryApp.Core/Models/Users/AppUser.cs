@@ -1,7 +1,7 @@
 ﻿using DiaryApp.Core.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core
+namespace DiaryApp.Core.Models
 {
     public class AppUser : BaseEntity
     {
@@ -9,18 +9,13 @@ namespace DiaryApp.Core
         [MaxLength(50)]
         public string Username { get; set; }
 
-        /// <summary>
-        /// Хеш пароля
-        /// </summary>
         [Required]
         public byte[] PasswordHash { get; set; }
 
-        /// <summary>
-        /// Соль пароля
-        /// </summary>
         [Required]
         public byte[] PasswordSalt { get; set; }
-        public string ProfileImageUrl { get; set; }
+
+        public virtual UserSettings Settings { get; set; }
 
         public override string ToString()
         {

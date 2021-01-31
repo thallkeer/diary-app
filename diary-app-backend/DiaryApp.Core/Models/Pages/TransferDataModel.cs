@@ -1,5 +1,4 @@
-﻿using DiaryApp.Core.Models.PageAreas;
-using System;
+﻿using System;
 using System.Reflection;
 
 namespace DiaryApp.Core.Models
@@ -47,7 +46,7 @@ namespace DiaryApp.Core.Models
         public bool GetValueForArea<T>(T area = null) where T : MonthPageArea
         {
             Type transferDataType = GetType();
-            Type pageAreaType = typeof(T);
+            Type pageAreaType = area?.GetType() ?? typeof(T);
             foreach (var property in transferDataType.GetProperties())
             {
                 PageAreaAttribute areaAttribute = property.GetCustomAttribute<PageAreaAttribute>();

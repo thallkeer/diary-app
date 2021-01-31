@@ -19,6 +19,6 @@ namespace DiaryApp.Data.ServiceInterfaces
         /// Returns first entity that match the given filter
         /// </summary>
         /// <returns></returns>
-        Task<TEntity> GetOneByCriteriaOrDefaultAsync(Expression<Func<TEntity, bool>> filter);
+        Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter);
     }
 }

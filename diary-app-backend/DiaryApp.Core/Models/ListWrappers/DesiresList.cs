@@ -1,6 +1,4 @@
-﻿using DiaryApp.Core.Models.PageAreas;
-
-namespace DiaryApp.Core.Models
+﻿namespace DiaryApp.Core.Models
 {
     public class DesiresList : DiaryAreaList<CommonList, ListItem, DesiresArea, MonthPage>
     {

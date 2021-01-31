@@ -1,7 +1,8 @@
 ﻿using DiaryApp.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 
-namespace DiaryApp.Core.Models.PageAreas
+namespace DiaryApp.Core.Models
 {
     public class DesiresArea : MonthPageArea, IMonthPageArea<DesiresArea>
     {
@@ -20,6 +21,8 @@ namespace DiaryApp.Core.Models.PageAreas
 
         public void AddFromOtherArea(DesiresArea other)
         {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
             if (DesiresLists.Count == 0)
                 Initialize();
             for (int i = 0; i < other.DesiresLists.Count; i++)

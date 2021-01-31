@@ -2,8 +2,6 @@
 using DiaryApp.Core.Models;
 using Xunit;
 using System.Collections.Generic;
-using DiaryApp.Core.Models.PageAreas;
-using DiaryApp.Core;
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Data.DTO;
 using System.Threading.Tasks;
@@ -83,7 +81,7 @@ namespace DiaryApp.Tests
 
         #region Utils
 
-        private async Task<List<MonthPageArea>> GetPageAreas(IMonthPageService service, MonthPage nextMonthPage)
+        private async Task<List<MonthPageArea>> GetPageAreas(IMonthPageService service, MonthPageDto nextMonthPage)
         {
             var ga = await GetPageArea<GoalsAreaDto, GoalsArea>(nextMonthPage.Id);
             var pa = await GetPageArea<PurchasesAreaDto, PurchasesArea>(nextMonthPage.Id);

@@ -1,9 +1,6 @@
 ﻿using AutoFixture;
-using DiaryApp.Core;
 using DiaryApp.Core.Models;
-using DiaryApp.Core.Models.PageAreas;
 using DiaryApp.Tests.Extensions;
-using DiaryApp.Tests.Helpers;
 using System.Collections.Generic;
 using Xunit;
 
