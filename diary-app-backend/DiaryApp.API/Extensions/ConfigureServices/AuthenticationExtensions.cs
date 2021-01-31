@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
 
 namespace DiaryApp.API.Extensions.ConfigureServices
@@ -24,11 +25,11 @@ namespace DiaryApp.API.Extensions.ConfigureServices
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtTokenConfig.Secret)),
                     ValidateIssuer = false,
-                    //ValidIssuer = jwtTokenConfig.Issuer,
+                    ValidIssuer = jwtTokenConfig.Issuer,
                     ValidateAudience = false,
-                    //ValidAudience = jwtTokenConfig.Audience,
-                    //ValidateLifetime = true,
-                    //ClockSkew = TimeSpan.FromMinutes(1)
+                    ValidAudience = jwtTokenConfig.Audience,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(1)                   
                 };
             });
         }

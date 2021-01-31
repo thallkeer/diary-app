@@ -112,6 +112,7 @@ namespace DiaryApp.Data.Services
                     new Claim(ClaimTypes.Name, user.Id.ToString())
                 }),
                 Issuer = tokenConfig.Issuer,
+                Audience = tokenConfig.Audience,
                 Expires = DateTime.UtcNow.AddMinutes(tokenConfig.AccessTokenExpiration),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
