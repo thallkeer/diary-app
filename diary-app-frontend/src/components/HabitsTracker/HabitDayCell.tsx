@@ -7,35 +7,36 @@ import { AddDayNote } from "../Dialogs/AddDayNote";
 
 interface IHabitDayProps {
 	tracker: IHabitTracker;
-	updateHabitTracker: (tracker: IHabitTracker) => void;
 	day: IHabitDay;
-	isSelected: boolean;
+	isMarked: boolean;
+	updateHabitTracker: (tracker: IHabitTracker) => void;
+	className: string;
 }
 
 export const HabitDayCell: React.FC<IHabitDayProps> = ({
 	tracker,
-	updateHabitTracker,
 	day,
-	isSelected,
+	updateHabitTracker,
+	isMarked,
+	className,
 }) => {
 	const { isShowing, toggle } = useModal();
 	const { number, note } = day;
 
 	const dayComponent = <div id={`day-${tracker.id}-${number}`}>{number}</div>;
 
+	if (!isMarked) return dayComponent;
+
 	const handleAddNote = (noteText: string) => {
-		const trackerDays = [...tracker.items];
-		const dayIndex = trackerDays.findIndex((d) => d.number === day.number);
-		if (trackerDays[dayIndex].note !== noteText) {
-			trackerDays[dayIndex].note = noteText;
+		if (note !== noteText) {
 			updateHabitTracker({
 				...tracker,
-				items: trackerDays,
+				items: tracker.items.map((d) =>
+					d.id === day.id ? { ...d, note: noteText } : d
+				),
 			});
 		}
 	};
-
-	if (!isSelected) return dayComponent;
 
 	const overlayComponent = (
 		<Popover id="popover-basic">
@@ -44,22 +45,36 @@ export const HabitDayCell: React.FC<IHabitDayProps> = ({
 		</Popover>
 	);
 
+	const withOverlay = (
+		<OverlayTrigger
+			key={number}
+			trigger={["hover", "focus"]}
+			delay={{ show: 500, hide: 400 }}
+			placement="top"
+			overlay={overlayComponent}
+		>
+			{dayComponent}
+		</OverlayTrigger>
+	);
+	//TODO: fix problem with context menu and clickable day cell
+	return note.length ? withOverlay : dayComponent;
+
+	const menuItemText = `${note.length ? "Изменить" : "Добавить"} заметку`;
+
 	return (
 		<>
 			<ContextMenuTrigger id={`day-context-menu-${number}`}>
-				<OverlayTrigger
-					key={number}
-					trigger={["hover", "focus"]}
-					delay={{ show: 500, hide: 400 }}
-					placement="top"
-					overlay={overlayComponent}
-				>
-					{dayComponent}
-				</OverlayTrigger>
+				{note.length ? withOverlay : dayComponent}
 			</ContextMenuTrigger>
 			<ContextMenu className="menu" id={`day-context-menu-${number}`}>
-				<MenuItem onClick={toggle} className="menuItem">
-					Добавить/Изменить заметку
+				<MenuItem
+					onClick={() => {
+						console.log("TOGGLING ", number);
+						toggle();
+					}}
+					className="menuItem"
+				>
+					{menuItemText}
 				</MenuItem>
 			</ContextMenu>
 			{isShowing && (

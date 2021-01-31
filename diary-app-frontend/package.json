@@ -22,6 +22,7 @@
 		"classnames": "^2.2.6",
 		"connected-react-router": "^6.8.0",
 		"formik": "^2.2.6",
+		"logrocket": "^1.0.14",
 		"node-sass": "^4.14.1",
 		"query-string": "^6.13.8",
 		"rc-tooltip": "^3.7.3",

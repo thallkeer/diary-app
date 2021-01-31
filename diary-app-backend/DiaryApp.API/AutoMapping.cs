@@ -48,6 +48,11 @@ namespace DiaryApp.API
             CreateMap<AppUser, UserWithPasswordDto>().ReverseMap();
             CreateMap<UserDto, UserWithPasswordDto>().ReverseMap();
             CreateMap<UserDto, UserWithPasswordModel>().ReverseMap();
+
+            CreateMap<UserSettings, UserSettingsDto>().ReverseMap();
+            CreateMap<PageAreaTransferSettings, PageAreaTransferSettingsDto>()
+               .ForMember(dto => dto.UserId, (en) => en.MapFrom(src => src.UserSettings.UserId))
+               .ReverseMap();
         }
     }
 }

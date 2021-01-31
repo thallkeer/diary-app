@@ -15,15 +15,19 @@ interface ListItemInputProps extends ListItemInputPropsBase {
 
 function useListItemInput(props: {
 	validateAndUpdate: (text: string) => void;
+	onEmptyValue?: () => void;
 }) {
-	const { validateAndUpdate } = props;
+	const { validateAndUpdate, onEmptyValue } = props;
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {}, [validateAndUpdate, inputRef]);
 
 	const handleBlur = () => {
 		const { value } = inputRef.current as HTMLInputElement;
-		if (!value && !value.length) return;
+		if (!value || !value.length) {
+			if (onEmptyValue) onEmptyValue();
+			return;
+		}
 		validateAndUpdate(value);
 	};
 
@@ -49,6 +53,7 @@ export const UrlInput: FC<ListItemInputPropsBase & { endEdit: () => void }> = ({
 
 	const { inputRef, handleBlur, handleKeyPress } = useListItemInput({
 		validateAndUpdate,
+		onEmptyValue: endEdit,
 	});
 
 	useEffect(() => {

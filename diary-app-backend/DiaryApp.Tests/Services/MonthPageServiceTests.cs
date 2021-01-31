@@ -81,7 +81,7 @@ namespace DiaryApp.Tests
 
         #region Utils
 
-        private async Task<List<MonthPageArea>> GetPageAreas(IMonthPageService service, MonthPage nextMonthPage)
+        private async Task<List<MonthPageArea>> GetPageAreas(IMonthPageService service, MonthPageDto nextMonthPage)
         {
             var ga = await GetPageArea<GoalsAreaDto, GoalsArea>(nextMonthPage.Id);
             var pa = await GetPageArea<PurchasesAreaDto, PurchasesArea>(nextMonthPage.Id);

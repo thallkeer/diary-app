@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using DiaryApp.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DiaryApp.API.Controllers
 {
@@ -27,13 +28,12 @@ namespace DiaryApp.API.Controllers
 
         [HttpGet("{userId}/{year}/{month}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TPageDto>> GetPageAsync(int userId, int year, int month)
         {
             var page = await pageService.GetPageAsync(userId, year, month);
-
             if (page == null)
-                return await PostPageAsync(new PageRequest(userId, year, month));
+                return NotFound();
 
             return Ok(mapper.Map<TPageDto>(page));
         }
@@ -41,7 +41,8 @@ namespace DiaryApp.API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TPageDto>> PostPageAsync(PageRequest pageParams)
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<ActionResult<TPageDto>> CreatePageAsync(PageRequest pageParams)
         {
             TPageDto page;
             try
@@ -50,7 +51,7 @@ namespace DiaryApp.API.Controllers
             }
             catch (PageAlreadyExistsException e)
             {
-                throw new HttpException(System.Net.HttpStatusCode.BadRequest, e.Message);
+                throw new HttpException(System.Net.HttpStatusCode.Conflict, e.Message);
             }
             catch (UserNotExistsException ex)
             {
@@ -66,7 +67,7 @@ namespace DiaryApp.API.Controllers
             TPageArea area = await pageService.GetPageArea<TPageArea>(pageID);
             if (area == null)
             {
-                string err = $"Page area {typeof(TPageArea)} not found for pageID {pageID}";
+                string err = $"{typeof(TPageArea).Name} not found for pageID {pageID}";
                 logger.LogError(err);
                 return NotFound(err);
             }

@@ -26,7 +26,7 @@ export const Thunks = {
 		month: number
 	): PageThunkType => async (dispatch) => {
 		dispatch(actions.loadPageStart(pageName));
-		const response = await pageAPI.getPage<TPage>(
+		const response = await pageAPI.getOrCreatePage<TPage>(
 			pageName,
 			user.id,
 			year,

@@ -6,7 +6,7 @@ namespace DiaryApp.API.Models
     public class TransferDataRequestParams
     {
         [Required]
-        public PageRequest PageParams { get; set; }
+        public int OriginalPageId { get; set; }
         [Required]
         public TransferDataModel TransferDataModel { get; set; }
     }

@@ -20,7 +20,7 @@ namespace DiaryApp.API.Controllers.Lists
         [ProducesResponseType(StatusCodes.Status200OK)]
         public virtual async Task<ActionResult<PurchaseListDto>> GetAsync(int id)
         {
-            var purchaseList = await _crudService.GetOneByCriteriaOrDefaultAsync(pl => pl.Id == id);
+            var purchaseList = await _crudService.FirstOrDefaultAsync(pl => pl.Id == id);
             return Ok(mapper.Map<PurchaseListDto>(purchaseList));                     
         }
     }

@@ -21,24 +21,17 @@ namespace DiaryApp.Data.Services
             this.userService = userService;
         }
 
-        public async Task<TPageEntity> GetPageAsync(int userID, int year, int month)
+        protected async Task<TPageEntity> GetPageEntityAsync(int userID, int year, int month)
         {
-            return await GetOneByCriteriaOrDefaultAsync(mp => mp.UserId == userID && mp.Month == month && mp.Year == year);
+            return await FirstOrDefaultAsync(mp => mp.UserId == userID && mp.Month == month && mp.Year == year);
         }
 
-        public async Task<TPageDto> CreateAsync(PageDto pageDto, bool initializePageAreas)
+        public async Task<TPageDto> GetPageAsync(int userID, int year, int month)
         {
-            var createdPage = await CreateAsync(pageDto.UserId, pageDto.Year, pageDto.Month, initializePageAreas);
-            return _mapper.Map<TPageDto>(createdPage);
+            var page = await GetPageEntityAsync(userID, year, month);
+            return _mapper.Map<TPageDto>(page);
         }
-
-        public async Task<TPageDto> CreateAsync(int userID, int year, int month)
-        {
-            var createdPage = await CreateAsync(userID, year, month, true);
-            return _mapper.Map<TPageDto>(createdPage);
-        }
-
-        protected async Task<TPageEntity> CreateAsync(int userID, int year, int month, bool initializePageAreas)
+        public virtual async Task<TPageDto> CreateAsync(int userID, int year, int month)
         {
             var pageExists = await _dbSet.AnyAsync(mp => mp.UserId == userID && mp.Month == month && mp.Year == year);
             if (pageExists)
@@ -51,13 +44,13 @@ namespace DiaryApp.Data.Services
                 Month = month
             };
 
-            if (initializePageAreas)
-                page.CreateAreas();
+            page.CreateAreas();
 
             await _dbSet.AddAsync(page);
             await _context.SaveChangesAsync();
 
-            return await GetByIdAsync(page.Id);
+            var createdPage = await GetByIdAsync(page.Id);
+            return _mapper.Map<TPageDto>(createdPage);
         }
 
         public async Task<TPageArea> GetPageArea<TPageArea>(int pageID) where TPageArea : class, IPageArea

@@ -28,7 +28,16 @@ namespace DiaryApp.API.Controllers
                 return BadRequest("Username or password is incorrect");
             }
             return SendToken(user);
-        }
+        }        
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterAsync([FromBody] UserWithPasswordModel userWithPasswordModel)
+        {
+            var user = mapper.Map<UserDto>(userWithPasswordModel);
+            await userService.RegisterAsync(user, userWithPasswordModel.Password);
+            return SendToken(user);
+        }        
 
         private IActionResult SendToken(UserDto user)
         {
@@ -40,15 +49,6 @@ namespace DiaryApp.API.Controllers
                 Token = tokenString
             };
             return Ok(userWithToken);
-        }
-
-        [AllowAnonymous]
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserWithPasswordModel userWithPasswordModel)
-        {
-            var user = mapper.Map<UserDto>(userWithPasswordModel);
-            await userService.RegisterAsync(user, userWithPasswordModel.Password);
-            return SendToken(user);
         }
     }
 }

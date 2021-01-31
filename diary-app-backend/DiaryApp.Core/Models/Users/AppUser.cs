@@ -1,7 +1,7 @@
 ﻿using DiaryApp.Core.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core
+namespace DiaryApp.Core.Models
 {
     public class AppUser : BaseEntity
     {
@@ -14,6 +14,8 @@ namespace DiaryApp.Core
 
         [Required]
         public byte[] PasswordSalt { get; set; }
+
+        public virtual UserSettings Settings { get; set; }
 
         public override string ToString()
         {

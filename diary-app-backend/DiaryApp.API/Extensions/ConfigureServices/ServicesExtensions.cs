@@ -26,6 +26,7 @@ namespace DiaryApp.API.Extensions.ConfigureServices
             services.AddScoped<ITodoItemService, TodoItemService>();
             services.AddScoped<ICommonListItemService, CommonListItemService>();
             services.AddScoped<ICrudService<PurchaseListDto, PurchaseList>, CrudService<PurchaseListDto, PurchaseList>>();
+            services.AddScoped<ICrudService<UserSettingsDto, UserSettings>, CrudService<UserSettingsDto, UserSettings>>();
         }
     }
 }

@@ -61,7 +61,7 @@ namespace DiaryApp.Data.Services
             return entity;
         }
 
-        public async Task<TEntity> GetOneByCriteriaOrDefaultAsync(Expression<Func<TEntity, bool>> filter)
+        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter)
         {
             return await _dbSet.FirstOrDefaultAsync(filter);
         }
