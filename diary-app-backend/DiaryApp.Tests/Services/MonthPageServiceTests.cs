@@ -1,9 +1,9 @@
-﻿using DiaryApp.Data.ServiceInterfaces;
-using DiaryApp.Core.Models;
+﻿using DiaryApp.Data.DataInterfaces;
+using DiaryApp.Core.Entities;
 using Xunit;
 using System.Collections.Generic;
 using DiaryApp.Core.Interfaces;
-using DiaryApp.Data.DTO;
+using DiaryApp.Models.DTO;
 using System.Threading.Tasks;
 using System;
 using System.Linq;

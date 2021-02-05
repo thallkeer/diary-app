@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.IO;
 
 namespace DiaryApp.API
@@ -9,10 +12,10 @@ namespace DiaryApp.API
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args)
-             //.UseKestrel()
+             //.UseKestrel()              
              .UseContentRoot(Directory.GetCurrentDirectory())
              .UseIISIntegration()
-             .UseUrls("http://localhost:5001/")
+             //.UseUrls("http://localhost:5001/")
              .Build().Run();
         }
 

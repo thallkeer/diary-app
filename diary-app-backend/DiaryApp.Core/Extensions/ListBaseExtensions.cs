@@ -1,4 +1,4 @@
-﻿using DiaryApp.Core.Models;
+﻿using DiaryApp.Core.Entities;
 using System.Collections.Generic;
 
 namespace DiaryApp.Core.Extensions

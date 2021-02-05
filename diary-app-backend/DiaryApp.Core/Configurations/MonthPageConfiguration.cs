@@ -1,4 +1,4 @@
-﻿using DiaryApp.Core.Models;
+﻿using DiaryApp.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

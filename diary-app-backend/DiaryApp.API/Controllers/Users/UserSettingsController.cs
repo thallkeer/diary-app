@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using DiaryApp.Core.Models;
-using DiaryApp.Data.DTO;
-using DiaryApp.Data.ServiceInterfaces;
+using DiaryApp.Core.Entities;
+using DiaryApp.Models.DTO;
+using DiaryApp.Data.DataInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

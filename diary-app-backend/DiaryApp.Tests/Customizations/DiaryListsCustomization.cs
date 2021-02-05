@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using DiaryApp.Core.Models;
+using DiaryApp.Core.Entities;
 using DiaryApp.Tests.Extensions;
 using System.Linq;
 

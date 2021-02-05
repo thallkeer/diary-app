@@ -5,16 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <None Remove="Extensions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.2" />
+    <PackageReference Include="Octokit" Version="0.48.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DiaryApp.Core\DiaryApp.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Extensions\" />
+    <ProjectReference Include="..\DiaryApp.Models\DiaryApp.Models.csproj" />
   </ItemGroup>
 
 </Project>

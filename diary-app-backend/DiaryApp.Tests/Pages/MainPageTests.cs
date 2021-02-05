@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using DiaryApp.Core.Models;
+using DiaryApp.Core.Entities;
 using Xunit;
 
 namespace DiaryApp.Tests

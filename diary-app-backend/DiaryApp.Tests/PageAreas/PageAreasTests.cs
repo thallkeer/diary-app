@@ -1,4 +1,4 @@
-﻿using DiaryApp.Core.Models;
+﻿using DiaryApp.Core.Entities;
 using DiaryApp.Tests.Extensions;
 using System.Collections.Generic;
 using System.Linq;

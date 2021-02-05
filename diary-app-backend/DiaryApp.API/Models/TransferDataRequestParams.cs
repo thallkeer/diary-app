@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using DiaryApp.Core.Models;
+using DiaryApp.Core.Entities;
 
 namespace DiaryApp.API.Models
 {

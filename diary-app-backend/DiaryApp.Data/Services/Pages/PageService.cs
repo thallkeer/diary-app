@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using DiaryApp.Core;
-using DiaryApp.Data.DTO;
+using DiaryApp.Models.DTO;
 using DiaryApp.Core.Interfaces;
-using DiaryApp.Data.ServiceInterfaces;
+using DiaryApp.Data.DataInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using DiaryApp.Data.Exceptions;
-using DiaryApp.Core.Models;
+using DiaryApp.Core.Entities;
 
 namespace DiaryApp.Data.Services
 {

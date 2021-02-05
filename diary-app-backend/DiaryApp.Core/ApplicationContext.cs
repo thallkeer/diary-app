@@ -1,5 +1,5 @@
 ﻿using DiaryApp.Core.Configurations;
-using DiaryApp.Core.Models;
+using DiaryApp.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiaryApp.Core

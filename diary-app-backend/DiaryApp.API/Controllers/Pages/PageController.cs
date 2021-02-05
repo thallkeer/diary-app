@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
 using DiaryApp.API.Exceptions;
 using DiaryApp.API.Models;
-using DiaryApp.Data.DTO;
+using DiaryApp.Models.DTO;
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Data.Exceptions;
-using DiaryApp.Data.ServiceInterfaces;
+using DiaryApp.Data.DataInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using DiaryApp.Core.Models;
+using DiaryApp.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 
 namespace DiaryApp.API.Controllers

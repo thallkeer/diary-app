@@ -54,6 +54,7 @@ namespace DiaryApp.API.Middleware
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
+            logger.LogError($"Something went wrong: {exception} {exception.StackTrace}");
             string result = new ErrorDetails()
             {
                 Message = exception.Message,

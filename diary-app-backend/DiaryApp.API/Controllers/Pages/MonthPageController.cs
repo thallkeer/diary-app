@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.API.Models;
-using DiaryApp.Core.Models;
-using DiaryApp.Data.DTO;
-using DiaryApp.Data.ServiceInterfaces;
+using DiaryApp.Core.Entities;
+using DiaryApp.Models.DTO;
+using DiaryApp.Data.DataInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

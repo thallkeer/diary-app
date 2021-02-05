@@ -20,13 +20,13 @@ namespace DiaryApp.API
 {
     public class Startup
     {
-        readonly IWebHostEnvironment env;
+        private readonly IWebHostEnvironment env;
         readonly string DiaryAppPolicy = nameof(DiaryAppPolicy);
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
-            this.env = env;
+            env = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
@@ -62,19 +62,13 @@ namespace DiaryApp.API
 
             services.AddAutoMapper(typeof(Startup));
 
-            if (env.IsDevelopment())
-            {
-                services.AddSqlServerContext(Configuration);
-            }
-            else
-            {
-                services.AddPostgresContext(Configuration);
-            }
+            string connectionString = Configuration.GetConnectionString(env.IsDevelopment() ? "DefaultConnection" : "ProdConnection");
+            services.AddPostgresContext(connectionString);
 
             // configure strongly typed settings objects
             var jwtTokenConfig = Configuration.GetSection("jwtTokenConfig").Get<JwtTokenConfig>();
             services.AddSingleton(jwtTokenConfig);
-            
+
             services.ConfigureJwtAuthentication(jwtTokenConfig);
 
             services.AddApplicationServices();
@@ -85,19 +79,10 @@ namespace DiaryApp.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ApplicationContext appContext)
         {
-            appContext.Database.Migrate();
-
             loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "logger.txt"));
             var logger = loggerFactory.CreateLogger<FileLogger>();
 
-            //app.Use(async (ctx, next) =>
-            //{
-            //    await next();
-            //    if (ctx.Response.StatusCode == 204)
-            //    {
-            //        ctx.Response.ContentLength = 0;
-            //    }
-            //});
+            appContext.Database.Migrate();
 
             if (env.IsDevelopment())
             {
@@ -108,16 +93,17 @@ namespace DiaryApp.API
                 app.UseHsts();
             }
 
-            app.ConfigureExceptionHandler();           
+            app.ConfigureExceptionHandler();
 
-            app.UseHttpsRedirection();
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            if (!env.IsProduction())
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DiaryApp API v1");
-                c.RoutePrefix = string.Empty;
-            });
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "DiaryApp API v1");
+                    c.RoutePrefix = "swagger";
+                });
+            }
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
@@ -148,7 +134,7 @@ namespace DiaryApp.API
                 else
                 {
                     spa.Options.SourcePath = Path.Join(env.ContentRootPath, "client");
-                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                    //spa.UseProxyToSpaDevelopmentServer("https://localhost:5001");
                 }
             });
         }

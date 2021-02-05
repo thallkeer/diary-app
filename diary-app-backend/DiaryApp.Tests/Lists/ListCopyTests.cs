@@ -1,6 +1,6 @@
 ﻿using System;
 using DiaryApp.Core.Extensions;
-using DiaryApp.Core.Models;
+using DiaryApp.Core.Entities;
 using Xunit;
 using AutoFixture;
 using System.Linq;

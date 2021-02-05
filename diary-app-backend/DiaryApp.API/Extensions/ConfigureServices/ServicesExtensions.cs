@@ -1,8 +1,8 @@
 ﻿using DiaryApp.API.Filters;
-using DiaryApp.Core.Models;
-using DiaryApp.Data.DTO;
-using DiaryApp.Data.ServiceInterfaces;
-using DiaryApp.Data.ServiceInterfaces.Lists;
+using DiaryApp.Core.Entities;
+using DiaryApp.Models.DTO;
+using DiaryApp.Data.DataInterfaces;
+using DiaryApp.Data.DataInterfaces.Lists;
 using DiaryApp.Data.Services;
 using Microsoft.Extensions.DependencyInjection;
 

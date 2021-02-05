@@ -1,10 +1,10 @@
 using DiaryApp.Data.Exceptions;
-using DiaryApp.Data.ServiceInterfaces;
+using DiaryApp.Data.DataInterfaces;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.EntityFrameworkCore;
-using DiaryApp.Core.Models;
-using DiaryApp.Data.DTO;
+using DiaryApp.Core.Entities;
+using DiaryApp.Models.DTO;
 
 namespace DiaryApp.Tests
 {

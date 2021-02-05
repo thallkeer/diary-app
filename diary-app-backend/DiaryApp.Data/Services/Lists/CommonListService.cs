@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using DiaryApp.Core;
-using DiaryApp.Data.DTO;
-using DiaryApp.Core.Models;
-using DiaryApp.Data.ServiceInterfaces;
+using DiaryApp.Models.DTO;
+using DiaryApp.Core.Entities;
+using DiaryApp.Data.DataInterfaces;
 
 namespace DiaryApp.Data.Services
 {

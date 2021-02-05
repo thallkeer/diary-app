@@ -1,5 +1,5 @@
 ﻿using DiaryApp.Core.Interfaces;
-using DiaryApp.Core.Models;
+using DiaryApp.Core.Entities;
 
 namespace DiaryApp.Core.Extensions
 {
