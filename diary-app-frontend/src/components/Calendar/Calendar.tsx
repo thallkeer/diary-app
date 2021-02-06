@@ -12,19 +12,23 @@ import { AppThunks } from "store/app/app.actions";
 import { IMPORTANT_EVENTS_LIST } from "store/pageAreas/importantEvents/importantEventsArea.actions";
 
 interface ICalendarState {
-	showMonthPopup: boolean;
-	showYearPopup: boolean;
-	showYearNav: boolean;
 	showAddEventForm: boolean;
 	clickedDay?: number;
 	clickedEvent?: IEvent;
 }
 
+const weekdaysShortRussian: string[] = [
+	"Пн",
+	"Вт",
+	"Ср",
+	"Чт",
+	"Пт",
+	"Сб",
+	"Вс",
+];
+
 export const Calendar: React.FC = () => {
 	const [state, setState] = useState<ICalendarState>({
-		showMonthPopup: false,
-		showYearPopup: false,
-		showYearNav: false,
 		showAddEventForm: false,
 	});
 
@@ -34,26 +38,35 @@ export const Calendar: React.FC = () => {
 	const eventsByDay: Map<number, IEvent[]> = useSelector(getEventsByDay);
 
 	const getDaysInMonth = (): number => {
-		const curDate = currentDate();
+		const curDate = getCurrentAppDate();
 		const newDate = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0);
 		return newDate.getDate();
 	};
 
-	const currentDate = () => {
+	/**
+	 * Represents the date set in the app.
+	 */
+	const getCurrentAppDate = () => {
 		const appDate = new Date(year, month - 1);
 		return appDate;
 	};
 
-	const currentDay = (): number => new Date().getDate();
+	/**
+	 * Represents a real time day
+	 */
+	const getPresentDay = (): number => getPresentDate().getDate();
 
+	/**
+	 * Represents a real time date
+	 */
+	const getPresentDate = (): Date => new Date();
+
+	/**
+	 * Returns first day of week of app month
+	 */
 	const getFirstDayOfMonth = (): number => {
-		const curDate = currentDate();
-
-		const fDay = new Date(
-			curDate.getFullYear(),
-			curDate.getMonth() - 1,
-			1
-		).getDay();
+		const curDate = getCurrentAppDate();
+		const fDay = curDate.getDay();
 		return fDay === 0 ? 7 : fDay;
 	};
 
@@ -87,16 +100,6 @@ export const Calendar: React.FC = () => {
 		showModal(day, event);
 	};
 
-	const weekdaysShortRussian: string[] = [
-		"Пн",
-		"Вт",
-		"Ср",
-		"Чт",
-		"Пт",
-		"Сб",
-		"Вс",
-	];
-
 	const getWeekdays = () => {
 		return weekdaysShortRussian.map((day) => (
 			<td key={day} className="week-day">
@@ -105,8 +108,8 @@ export const Calendar: React.FC = () => {
 		));
 	};
 
-	const getEmptySlots = (): any[] => {
-		const blanks = [];
+	const getEmptySlots = (): JSX.Element[] => {
+		const blanks: JSX.Element[] = [];
 		const firstDayOfMonth = getFirstDayOfMonth();
 
 		for (let i = 0; i < firstDayOfMonth - 1; i++)
@@ -115,19 +118,19 @@ export const Calendar: React.FC = () => {
 		return blanks;
 	};
 
-	const getDays = (): any[] => {
-		const daysInMonth = [];
+	const getDays = (): JSX.Element[] => {
+		const daysInMonth: JSX.Element[] = [];
 
-		const curDay = currentDay();
+		const presentDay = getPresentDay();
 
 		const isRealCurrentMonth =
-			currentDate().getMonth() === new Date().getMonth() + 1;
+			getPresentDate().getMonth() === getCurrentAppDate().getMonth();
 
 		const monthDays = getDaysInMonth();
 
 		for (let d = 1; d <= monthDays; d++) {
 			const className =
-				isRealCurrentMonth && d === curDay ? "day current-day" : "day";
+				isRealCurrentMonth && d === presentDay ? "day current-day" : "day";
 
 			const curEvents: IEvent[] = eventsByDay.get(d) || [];
 
@@ -136,25 +139,21 @@ export const Calendar: React.FC = () => {
 				: "no-events-day";
 
 			daysInMonth.push(
-				<td key={d} className={className} onClick={(e) => onDayClick(e, d)}>
-					<div className="day-span">{d}</div>
-					{curEvents.map((event) => (
-						<div
-							key={event.id}
-							className={curEventClass}
-							style={{ marginTop: "5px" }}
-							onClick={(e) => onEventClick(e, d, event)}
-						>
-							{event.subject}
-						</div>
-					))}
-				</td>
+				<CalendarDay
+					key={d}
+					day={d}
+					className={className}
+					curEvents={curEvents}
+					curEventClass={curEventClass}
+					onDayClick={onDayClick}
+					onEventClick={onEventClick}
+				/>
 			);
 		}
 		return daysInMonth;
 	};
 
-	const getCalendarRows = (): any[] => {
+	const getCalendarRows = (): JSX.Element[] => {
 		var totalSlots = [...getEmptySlots(), ...getDays()];
 		const rows = [];
 		let cells = [];
@@ -188,11 +187,11 @@ export const Calendar: React.FC = () => {
 		});
 	};
 
-	const toggle = () => {
+	const onAddEventClosed = () => {
 		setState({ ...state, showAddEventForm: !state.showAddEventForm });
 	};
 
-	const getMonthName = (): string => {
+	const getCurrentMonthName = (): string => {
 		const date = new Date(year, month - 1);
 		const stringMonth = date.toLocaleString("ru", { month: "long" });
 		return stringMonth[0].toUpperCase() + stringMonth.slice(1);
@@ -222,16 +221,14 @@ export const Calendar: React.FC = () => {
 					<img
 						src={strelka}
 						alt="previous month"
-						className="mirrored-arrow"
-						width="30"
-						height="30"
+						className="month-arrow mirrored-arrow"
 					/>
 				</span>
 				<Link className="month-name" to="/month">
-					{getMonthName()}
+					{getCurrentMonthName()}
 				</Link>
 				<span className="month-nav" onClick={setNextMonth}>
-					<img src={strelka} alt="next month" width="30" height="30" />
+					<img src={strelka} alt="next month" className="month-arrow" />
 				</span>
 			</h1>
 			<div className="calendar-container">
@@ -246,7 +243,7 @@ export const Calendar: React.FC = () => {
 				<AddEventForm
 					day={state.clickedDay}
 					show={state.showAddEventForm}
-					handleClose={toggle}
+					handleClose={onAddEventClosed}
 					addEvent={addEvent}
 					event={state.clickedEvent}
 				/>
@@ -254,5 +251,39 @@ export const Calendar: React.FC = () => {
 		</div>
 	);
 };
-
 export default Calendar;
+
+const CalendarDay: React.FC<{
+	day: number;
+	className: string;
+	onDayClick: (e: React.MouseEvent<HTMLElement>, day: number) => void;
+	curEvents: IEvent[];
+	curEventClass: string;
+	onEventClick: (
+		e: React.MouseEvent<HTMLElement>,
+		day: number,
+		event: IEvent
+	) => void;
+}> = ({
+	day,
+	className,
+	onDayClick,
+	curEvents,
+	curEventClass,
+	onEventClick,
+}) => {
+	return (
+		<td className={className} onClick={(e) => onDayClick(e, day)}>
+			<div className="day-span">{day}</div>
+			{curEvents.map((event) => (
+				<div
+					key={event.id}
+					className={curEventClass}
+					onClick={(e) => onEventClick(e, day, event)}
+				>
+					{event.subject}
+				</div>
+			))}
+		</td>
+	);
+};

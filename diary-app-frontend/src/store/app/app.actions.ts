@@ -3,7 +3,7 @@ import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import history from "../../components/history";
 import { IUser } from "../../models/entities";
-import { usersService } from "../../services/users";
+import { userService } from "../../services/users";
 import { ActionsUnion, createAction } from "../actions/action-helpers";
 
 const SET_APP_INFO = "APP/SET_APP_INFO";
@@ -25,7 +25,7 @@ export const AppThunks = {
 	authUser: (userAuthModel: IUser, signIn: boolean): AppThunkType => async (
 		dispatch
 	) => {
-		const authFunc = signIn ? usersService.login : usersService.register;
+		const authFunc = signIn ? userService.login : userService.register;
 		await authFunc(userAuthModel)
 			.then((user) => {
 				dispatch(actions.setUser(user));

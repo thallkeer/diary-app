@@ -16,7 +16,7 @@ export const pageAPI = {
 			.get<TPage>(query)
 			.then((r) => r)
 			.catch(async (err: AxiosResponse) => {
-				if (err.status === 404) {
+				if (err && err.status === 404) {
 					return await axios.post<TPage>(pageName, { userId, year, month });
 				}
 

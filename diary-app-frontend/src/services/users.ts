@@ -10,7 +10,7 @@ interface ILoginResponse {
 	token: string;
 }
 
-export const usersService = {
+export const userService = {
 	logoff() {
 		localStorage.removeItem("user");
 		history.push("/login");

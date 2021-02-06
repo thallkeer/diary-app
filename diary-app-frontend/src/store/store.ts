@@ -21,7 +21,9 @@ const routerMiddleware = createRouterMiddleware(history);
 const development: boolean =
 	!process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
-if (!development) LogRocket.init(process.env.LOG_ROCKET_API_KEY);
+if (!development) {
+	LogRocket.init(process.env.REACT_APP_LOG_ROCKET_API_KEY);
+}
 const loggerMiddleware = development ? logger : LogRocket.reduxMiddleware();
 
 const middlewares = [thunkMiddleware, routerMiddleware, loggerMiddleware];

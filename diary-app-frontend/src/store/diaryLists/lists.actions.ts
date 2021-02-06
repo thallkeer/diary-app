@@ -40,8 +40,6 @@ const actions = {
 export const getListItemActions = <TEntity extends IEntity>(
 	listItemName: ListItemUrls
 ) => {
-	console.log("get list item actions is called", listItemName);
-
 	const crudService = new CrudService<TEntity>(listItemName);
 
 	const addOrUpdateListItem = (
@@ -86,8 +84,6 @@ export const getListActions = <
 >(
 	listUrl: ListUrls
 ) => {
-	console.log("get list actions is called", listUrl);
-
 	const crudService = new CrudService<TList>(listUrl);
 
 	const setList = (list: TList, listName: string): ThunkType => async (

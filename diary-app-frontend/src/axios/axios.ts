@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { config, getHeaders } from "../utils/config";
-import { usersService } from "../services/users";
+import { userService } from "../services/users";
 import { toast } from "react-toastify";
 import history from "../components/history";
 
@@ -30,7 +30,7 @@ axiosInstance.interceptors.response.use(
 			// }
 
 			if (status === 401 && checkTokenIsExpired(headers)) {
-				usersService.logoff();
+				userService.logoff();
 				toast.info("Your session has expired, please login again");
 			}
 			if (
