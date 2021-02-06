@@ -1,15 +1,15 @@
-﻿using DiaryApp.Data.Services.Users;
+﻿using DiaryApp.API.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 
-namespace DiaryApp.API.Extensions.ConfigureServices
+namespace DiaryApp.API.Extensions
 {
     public static class AuthenticationExtensions
     {
-        public static void ConfigureJwtAuthentication(this IServiceCollection services, JwtTokenConfig jwtTokenConfig)
+        public static void AddJwtAuthentication(this IServiceCollection services, JwtTokenConfig jwtTokenConfig)
         {
             services.AddAuthentication(x =>
             {

@@ -10,7 +10,6 @@ using DiaryApp.Core.Entities;
 using DiaryApp.Models.DTO;
 using DiaryApp.Data.Exceptions;
 using DiaryApp.Data.DataInterfaces;
-using DiaryApp.Data.Services.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -18,11 +17,9 @@ namespace DiaryApp.Data.Services
 {
     public class UserService : CrudService<UserDto,AppUser>, IUserService
     {
-        private readonly JwtTokenConfig tokenConfig;
 
-        public UserService(ApplicationContext context, IMapper mapper, JwtTokenConfig tokenConfig) : base(context, mapper)
+        public UserService(ApplicationContext context, IMapper mapper) : base(context, mapper)
         {
-            this.tokenConfig = tokenConfig;
         }
 
         public UserDto Authenticate(string username, string password)
@@ -99,26 +96,6 @@ namespace DiaryApp.Data.Services
         {
             var res = await _dbSet.AnyAsync(u => u.Id == userId);
             return res;
-        }
-
-        public string GenerateToken(UserDto user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(tokenConfig.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
-                }),
-                Issuer = tokenConfig.Issuer,
-                Audience = tokenConfig.Audience,
-                Expires = DateTime.UtcNow.AddMinutes(tokenConfig.AccessTokenExpiration),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-            return tokenString;
         }
 
         public async Task<UserSettingsDto> GetSettingsAsync(int userId)

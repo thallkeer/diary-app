@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DiaryApp.Core.Bootstrap
 {
-    public static class ServiceCollectionExtensions
+    public static class DatabaseConfiguration
     {
         public static void AddPostgresContext(this IServiceCollection services, string connectionString)
         {

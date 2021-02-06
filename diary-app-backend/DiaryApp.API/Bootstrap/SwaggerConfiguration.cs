@@ -4,9 +4,9 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace DiaryApp.API.Extensions.ConfigureServices
+namespace DiaryApp.API.Extensions
 {
-    public static class SwaggerExtensions
+    public static class SwaggerConfiguration
     {
         public static void AddSwagger(this IServiceCollection services)
         {

@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
 using AutoMapper;
-using DiaryApp.API.Extensions.ConfigureServices;
+using DiaryApp.API.Settings;
 using DiaryApp.Core;
-using DiaryApp.Data.Services.Users;
+using DiaryApp.Data.Bootstrap;
 using DiaryApp.Tests.Customizations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

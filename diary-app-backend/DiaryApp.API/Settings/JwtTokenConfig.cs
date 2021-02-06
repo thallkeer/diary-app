@@ -1,4 +1,4 @@
-﻿namespace DiaryApp.Data.Services.Users
+﻿namespace DiaryApp.API.Settings
 {
     public class JwtTokenConfig
     {
