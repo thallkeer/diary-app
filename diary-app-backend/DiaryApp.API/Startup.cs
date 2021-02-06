@@ -17,6 +17,7 @@ using DiaryApp.Data.Bootstrap;
 using DiaryApp.API.Filters;
 using DiaryApp.API.Settings;
 using DiaryApp.API.Bootstrap;
+using DiaryApp.Services.Bootstrap;
 
 namespace DiaryApp.API
 {
@@ -75,6 +76,8 @@ namespace DiaryApp.API
             services.AddPostgresContext(connectionString);
 
             services.AddGithubClient(appSettings);
+
+            services.AddGithubService();
 
             services.AddJwtAuthentication(jwtTokenConfig);
 
