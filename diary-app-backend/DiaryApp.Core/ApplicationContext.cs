@@ -1,5 +1,7 @@
 ﻿using DiaryApp.Core.Configurations;
 using DiaryApp.Core.Entities;
+using DiaryApp.Core.Entities.Notifications;
+using DiaryApp.Core.Entities.Users.Settings;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiaryApp.Core
@@ -45,5 +47,9 @@ namespace DiaryApp.Core
         //public DbSet<NotesArea> NotesAreas { get; set; }
         //public DbSet<WeekDay> WeekDays { get; set; }
         public DbSet<AppUser> Users { get; set; }
+        public DbSet<UserSettings> UserSettings { get; set; }
+        public DbSet<PageAreaTransferSettings> PageAreaTransferSettings { get; set; }
+        public DbSet<NotificationSettings> NotificationSettings { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }

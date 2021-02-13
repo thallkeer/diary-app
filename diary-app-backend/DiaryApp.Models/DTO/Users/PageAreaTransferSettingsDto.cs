@@ -1,8 +1,6 @@
-﻿using DiaryApp.Core.Entities;
-
-namespace DiaryApp.Models.DTO
+﻿namespace DiaryApp.Models.DTO
 {
-    public class PageAreaTransferSettingsDto : BaseEntity
+    public class PageAreaTransferSettingsDto : BaseDto
     {
         public int UserSettingsId { get; set; }
         public int UserId { get; set; }

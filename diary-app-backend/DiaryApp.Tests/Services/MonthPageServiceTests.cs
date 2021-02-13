@@ -1,4 +1,4 @@
-﻿using DiaryApp.Data.DataInterfaces;
+﻿using DiaryApp.Services.DataInterfaces;
 using DiaryApp.Core.Entities;
 using Xunit;
 using System.Collections.Generic;

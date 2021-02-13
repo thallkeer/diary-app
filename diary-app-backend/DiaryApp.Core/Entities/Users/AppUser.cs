@@ -1,9 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DiaryApp.Core.Entities.Users.Settings;
+using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core.Entities
 {
     public class AppUser : BaseEntity
     {
+        /// <summary>
+        /// Telegram user identifier to send notifications
+        /// </summary>
+        public long? TelegramId { get; set; }
+
         [Required]
         [MaxLength(50)]
         public string Username { get; set; }

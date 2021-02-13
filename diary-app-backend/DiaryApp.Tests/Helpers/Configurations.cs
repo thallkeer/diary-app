@@ -2,7 +2,7 @@
 using AutoMapper;
 using DiaryApp.API.Settings;
 using DiaryApp.Core;
-using DiaryApp.Data.Bootstrap;
+using DiaryApp.Services.Bootstrap;
 using DiaryApp.Tests.Customizations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +31,7 @@ namespace DiaryApp.Tests.Helpers
                 AccessTokenExpiration = 30
             });
 
-            services.AddApplicationServices();
+            services.AddDataServices();
 
             services.AddAutoMapper(typeof(API.Startup).Assembly);           
 

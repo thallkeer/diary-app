@@ -2,9 +2,9 @@
 
 namespace DiaryApp.Data.Exceptions
 {
-    public class EntityNotFoundException : Exception
+    public class EntityNotFoundException<T> : Exception where T : class
     {        
-        public EntityNotFoundException(string message) : base(message)
+        public EntityNotFoundException() : base($"Entity of type {typeof(T).Name} with such id is not found!")
         {
         }
     }
