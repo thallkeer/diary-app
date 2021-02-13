@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DiaryApp.Models.DTO;
 using DiaryApp.Core.Entities;
-using DiaryApp.Data.DataInterfaces;
+using DiaryApp.Services.DataInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -31,6 +31,7 @@ namespace DiaryApp.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]        
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public virtual async Task<ActionResult<int>> PostAsync([FromBody] TDto createModel)
         {
             var id = await _crudService.CreateAsync(createModel);

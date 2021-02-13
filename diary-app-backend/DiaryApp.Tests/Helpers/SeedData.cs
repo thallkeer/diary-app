@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using DiaryApp.Core;
 using DiaryApp.Models.DTO;
-using DiaryApp.Data.DataInterfaces;
+using DiaryApp.Services.DataInterfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 

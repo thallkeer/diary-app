@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
-using DiaryApp.Core;
 using DiaryApp.Models.DTO;
 using DiaryApp.Core.Entities;
 using DiaryApp.API.Models.Users;
+using DiaryApp.Core.Entities.Users.Settings;
+using DiaryApp.Models.DTO.Notifications;
+using DiaryApp.Core.Entities.Notifications;
 
 namespace DiaryApp.API
 {
@@ -53,6 +55,8 @@ namespace DiaryApp.API
             CreateMap<PageAreaTransferSettings, PageAreaTransferSettingsDto>()
                .ForMember(dto => dto.UserId, (en) => en.MapFrom(src => src.UserSettings.UserId))
                .ReverseMap();
+
+            CreateMap<Notification, NotificationDto>().ReverseMap();
         }
     }
 }

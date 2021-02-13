@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DiaryApp.Models.DTO;
 using DiaryApp.Core.Entities;
-using DiaryApp.Data.DataInterfaces.Lists;
+using DiaryApp.Services.DataInterfaces.Lists;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -13,17 +13,19 @@ namespace DiaryApp.API.Controllers.Lists
     {
         private readonly IEventItemService _eventItemService;
 
-        public EventsController(IEventItemService eventItemService, IMapper mapper, ILoggerFactory loggerFactory) : base(eventItemService, mapper, loggerFactory)
+        public EventsController(IEventItemService eventItemService, IMapper mapper, ILoggerFactory loggerFactory) 
+            : base(eventItemService, mapper, loggerFactory)
         {
             _eventItemService = eventItemService;
         }
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public override async Task<ActionResult<int>> PostAsync([FromBody] EventItemDto createModel)
+        public async override Task<ActionResult<int>> PostAsync([FromBody] EventItemDto createModel)
         {
-            createModel.Date = createModel.Date.ToLocalTime();
-            return await base.PostAsync(createModel);
+            var userIdString = User.Identity.Name;
+            if (string.IsNullOrEmpty(userIdString))
+                return await base.PostAsync(createModel);
+            var id = await _eventItemService.CreateWithNotificationAsync(createModel, int.Parse(userIdString));
+            return Ok(id);
         }
     }
 }

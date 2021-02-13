@@ -7,7 +7,7 @@ namespace DiaryApp.API
     public class FileLogger : ILogger
     {
         private readonly string filePath;
-        private static readonly object _lock = new object();
+        private static readonly object _lock = new();
         public FileLogger(string path)
         {
             filePath = path;

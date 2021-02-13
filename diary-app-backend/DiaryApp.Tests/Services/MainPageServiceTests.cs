@@ -1,5 +1,5 @@
-using DiaryApp.Data.Exceptions;
-using DiaryApp.Data.DataInterfaces;
+using DiaryApp.Services.Exceptions;
+using DiaryApp.Services.DataInterfaces;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.EntityFrameworkCore;

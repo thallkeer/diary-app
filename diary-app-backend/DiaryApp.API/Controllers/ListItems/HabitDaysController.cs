@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DiaryApp.Core.Entities;
 using DiaryApp.Models.DTO;
-using DiaryApp.Data.DataInterfaces;
+using DiaryApp.Services.DataInterfaces;
 using Microsoft.Extensions.Logging;
 
 namespace DiaryApp.API.Controllers.ListItems

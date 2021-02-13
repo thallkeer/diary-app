@@ -34,6 +34,9 @@ namespace DiaryApp.Core.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
+                    b.Property<long?>("TelegramId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -390,34 +393,28 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("MonthPages");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Entities.PageAreaTransferSettings", b =>
+            modelBuilder.Entity("DiaryApp.Core.Entities.Notifications.Notification", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<bool>("TransferDesiresArea")
-                        .HasColumnType("boolean");
+                    b.Property<DateTime>("NotificationDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool>("TransferGoalsArea")
-                        .HasColumnType("boolean");
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<bool>("TransferIdeasArea")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("TransferPurchasesArea")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("UserSettingsId")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserSettingsId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
-                    b.ToTable("PageAreaTransferSettings");
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("DiaryApp.Core.Entities.PurchaseList", b =>
@@ -508,7 +505,58 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("TodoLists");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Entities.UserSettings", b =>
+            modelBuilder.Entity("DiaryApp.Core.Entities.Users.Settings.NotificationSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<bool>("IsActivated")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("UserSettingsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserSettingsId")
+                        .IsUnique();
+
+                    b.ToTable("NotificationSettings");
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.Entities.Users.Settings.PageAreaTransferSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<bool>("TransferDesiresArea")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("TransferGoalsArea")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("TransferIdeasArea")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("TransferPurchasesArea")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("UserSettingsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserSettingsId")
+                        .IsUnique();
+
+                    b.ToTable("PageAreaTransferSettings");
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.Entities.Users.Settings.UserSettings", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -701,15 +749,15 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Entities.PageAreaTransferSettings", b =>
+            modelBuilder.Entity("DiaryApp.Core.Entities.Notifications.Notification", b =>
                 {
-                    b.HasOne("DiaryApp.Core.Entities.UserSettings", "UserSettings")
-                        .WithOne("PageAreaTransferSettings")
-                        .HasForeignKey("DiaryApp.Core.Entities.PageAreaTransferSettings", "UserSettingsId")
+                    b.HasOne("DiaryApp.Core.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("UserSettings");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DiaryApp.Core.Entities.PurchaseList", b =>
@@ -753,11 +801,33 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Entities.UserSettings", b =>
+            modelBuilder.Entity("DiaryApp.Core.Entities.Users.Settings.NotificationSettings", b =>
+                {
+                    b.HasOne("DiaryApp.Core.Entities.Users.Settings.UserSettings", "UserSettings")
+                        .WithOne("NotificationSettings")
+                        .HasForeignKey("DiaryApp.Core.Entities.Users.Settings.NotificationSettings", "UserSettingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserSettings");
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.Entities.Users.Settings.PageAreaTransferSettings", b =>
+                {
+                    b.HasOne("DiaryApp.Core.Entities.Users.Settings.UserSettings", "UserSettings")
+                        .WithOne("PageAreaTransferSettings")
+                        .HasForeignKey("DiaryApp.Core.Entities.Users.Settings.PageAreaTransferSettings", "UserSettingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserSettings");
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.Entities.Users.Settings.UserSettings", b =>
                 {
                     b.HasOne("DiaryApp.Core.Entities.AppUser", "User")
                         .WithOne("Settings")
-                        .HasForeignKey("DiaryApp.Core.Entities.UserSettings", "UserId")
+                        .HasForeignKey("DiaryApp.Core.Entities.Users.Settings.UserSettings", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -833,8 +903,10 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Entities.UserSettings", b =>
+            modelBuilder.Entity("DiaryApp.Core.Entities.Users.Settings.UserSettings", b =>
                 {
+                    b.Navigation("NotificationSettings");
+
                     b.Navigation("PageAreaTransferSettings");
                 });
 #pragma warning restore 612, 618

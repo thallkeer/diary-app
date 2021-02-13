@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DiaryApp.Core;
+﻿using DiaryApp.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,11 +12,14 @@ using DiaryApp.API.Extensions;
 using DiaryApp.Core.Bootstrap;
 using System;
 using Microsoft.AspNetCore.HttpOverrides;
-using DiaryApp.Data.Bootstrap;
 using DiaryApp.API.Filters;
 using DiaryApp.API.Settings;
 using DiaryApp.API.Bootstrap;
+using DiaryApp.Services.Jobs;
+using DiaryApp.Services.ServiceInterfaces;
+using DiaryApp.API.Infrastructure;
 using DiaryApp.Services.Bootstrap;
+using DiaryApp.Services.Services;
 
 namespace DiaryApp.API
 {
@@ -38,20 +40,7 @@ namespace DiaryApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             var appSettings = Configuration.GetSection("appSettings").Get<AppSettings>();
-            services.AddSingleton(appSettings);
-
-            // configure strongly typed settings objects
             var jwtTokenConfig = Configuration.GetSection("jwtTokenConfig").Get<JwtTokenConfig>();
-            services.AddSingleton(jwtTokenConfig);
-
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
-            services.AddControllers();
 
             services.AddCors(options =>
             {
@@ -66,29 +55,37 @@ namespace DiaryApp.API
                     });
             });
 
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
 
-            services.AddSpaStaticFiles(configuration => configuration.RootPath = "client/build");
-
-            services.AddAutoMapper(typeof(Startup));
+            services.AddControllers();
 
             string connectionString = Configuration.GetConnectionString(env.IsDevelopment() ? "DefaultConnection" : "ProdConnection");
-            services.AddPostgresContext(connectionString);
-
-            services.AddGithubClient(appSettings);
-
-            services.AddGithubService();
 
             services.AddJwtAuthentication(jwtTokenConfig);
 
-            services.AddScoped<ModelValidationAttribute>();
+            services.AddAutoMapper(typeof(Startup))
+                    .AddSingleton(appSettings)
+                    .AddSingleton(jwtTokenConfig)
+                    .AddSingleton<JwtAuthManager>()
+                    .AddScoped<ModelValidationAttribute>()
+                    .AddSwaggerGen()
+                    .AddQuartzScheduler()
+                    .AddPostgresContext(connectionString)
+                    .AddGithubService(appSettings)
+                    .AddDataServices()
+                    .AddTelegramClient(appSettings)
+                    .AddTransient<ISchedulerService, SchedulerService>()        
+                    .AddScoped<INotificationService, TelegramNotificationService>()
+                    .AddMvc(opt => opt.EnableEndpointRouting = false);
 
-            services.AddApplicationServices();
-
-            services.AddSwaggerGen();
+            services.AddSpaStaticFiles(configuration => configuration.RootPath = "client/build");
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ApplicationContext appContext)
         {
             loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "logger.txt"));
@@ -149,6 +146,8 @@ namespace DiaryApp.API
                     //spa.UseProxyToSpaDevelopmentServer("https://localhost:5001");
                 }
             });
+
+            app.UseQuartz();
         }
     }
 }

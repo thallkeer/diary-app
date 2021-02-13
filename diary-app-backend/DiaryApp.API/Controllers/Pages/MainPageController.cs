@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using DiaryApp.Data.DataInterfaces;
+using DiaryApp.Services.DataInterfaces;
 using DiaryApp.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using DiaryApp.Core.Entities;
