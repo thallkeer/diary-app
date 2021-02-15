@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 using DiaryApp.Core.Entities;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 
 namespace DiaryApp.Tests.Extensions
 {

@@ -1,7 +1,7 @@
 ﻿using DiaryApp.Core.Interfaces;
 using System.Threading.Tasks;
 using DiaryApp.Core.Entities;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 
 namespace DiaryApp.Services.DataInterfaces
 {

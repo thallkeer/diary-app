@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Microsoft.EntityFrameworkCore;
 using DiaryApp.Core.Entities;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 
 namespace DiaryApp.Tests
 {

@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using DiaryApp.Core.Entities;
 using DiaryApp.Services.DataInterfaces.Lists;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace DiaryApp.API.Controllers.Lists
@@ -11,12 +10,12 @@ namespace DiaryApp.API.Controllers.Lists
     public class TodosController : CrudController<TodoItemDto, TodoItem>
     {
         private readonly ITodoItemService _todoItemService;
-        public TodosController(ITodoItemService todoItemService,IMapper mapper, ILoggerFactory loggerFactory) : base(todoItemService, mapper, loggerFactory)
+        public TodosController(ITodoItemService todoItemService,IMapper mapper) : base(todoItemService, mapper)
         {
             _todoItemService = todoItemService;
         }
 
-        [HttpPut("toggle/{todoID}")]
+        [HttpPut("toggle/{todoId}")]
         public async Task<IActionResult> ToggleTodoAsync(int todoId)
         {
             await _todoItemService.ToggleAsync(todoId);

@@ -1,18 +1,16 @@
 ﻿using AutoMapper;
-using DiaryApp.Models.Requests;
-using DiaryApp.Services.ServiceInterfaces;
-using Microsoft.AspNetCore.Authorization;
+using DiaryApp.Infrastructure.ServiceInterfaces;
+using DiaryApp.Services.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace DiaryApp.API.Controllers.Infrastructure
 {
-    public class GithubController : AppBaseController<GithubController>
+    public class GithubController : DiaryAppContoller
     {
         private readonly IGithubService _githubService;
-        public GithubController(IGithubService githubService, IMapper mapper, ILoggerFactory loggerFactory) : base(mapper, loggerFactory)
+        public GithubController(IGithubService githubService, IMapper mapper) : base(mapper)
         {
             _githubService = githubService;
         }

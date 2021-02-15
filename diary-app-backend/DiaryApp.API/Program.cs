@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
+using NLog.Web;
 using System.IO;
 
 namespace DiaryApp.API
@@ -11,17 +13,34 @@ namespace DiaryApp.API
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args)
-             //.UseKestrel()              
-             .UseContentRoot(Directory.GetCurrentDirectory())
-             .UseIISIntegration()
-             //.UseUrls("http://localhost:5001/")
-             .Build().Run();
+            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            try
+            {
+                CreateWebHostBuilder(args).UseContentRoot(Directory.GetCurrentDirectory())
+                                          .UseIISIntegration()
+                                          .Build().Run();
+            }
+            catch (Exception exception)
+            {
+                //NLog: catch setup errors
+                logger.Error(exception, "Stopped program because of exception");
+                throw;
+            }
+            finally
+            {
+                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+                NLog.LogManager.Shutdown();
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-               /* .UseDefaultServiceProvider(options => options.ValidateScopes = false)*/;        
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(LogLevel.Trace);
+                })
+                .UseNLog();
     }
 }

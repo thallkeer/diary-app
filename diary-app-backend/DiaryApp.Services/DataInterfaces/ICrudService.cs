@@ -1,4 +1,4 @@
-﻿using DiaryApp.Models.DTO;
+﻿using DiaryApp.Services.DTO;
 using DiaryApp.Core.Entities;
 using System.Threading.Tasks;
 

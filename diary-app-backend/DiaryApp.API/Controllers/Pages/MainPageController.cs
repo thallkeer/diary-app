@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using Microsoft.Extensions.Logging;
 using DiaryApp.Services.DataInterfaces;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using Microsoft.AspNetCore.Http;
 using DiaryApp.Core.Entities;
 
@@ -11,8 +10,8 @@ namespace DiaryApp.API.Controllers
 {
     public class MainPageController : PageController<MainPageDto, MainPage>
     {
-        public MainPageController(IMainPageService mainPageService, IMapper mapper, ILoggerFactory loggerFactory)
-            : base(mainPageService, mapper, loggerFactory)
+        public MainPageController(IMainPageService mainPageService, IMapper mapper)
+            : base(mainPageService, mapper)
         {
         }
 

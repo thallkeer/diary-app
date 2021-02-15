@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using AutoMapper;
-using DiaryApp.API.Settings;
 using DiaryApp.Core;
+using DiaryApp.Infrastructure.Security;
 using DiaryApp.Services.Bootstrap;
 using DiaryApp.Tests.Customizations;
 using Microsoft.EntityFrameworkCore;

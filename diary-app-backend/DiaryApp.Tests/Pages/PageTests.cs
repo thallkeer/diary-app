@@ -1,5 +1,4 @@
 ﻿using AutoFixture.Xunit2;
-using DiaryApp.Core;
 using DiaryApp.Core.Entities;
 using System;
 using Xunit;

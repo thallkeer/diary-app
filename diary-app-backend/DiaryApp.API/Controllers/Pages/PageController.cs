@@ -1,27 +1,24 @@
 ﻿using AutoMapper;
-using DiaryApp.API.Exceptions;
 using DiaryApp.API.Models;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Services.Exceptions;
 using DiaryApp.Services.DataInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using DiaryApp.Core.Entities;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DiaryApp.API.Controllers
 {
-    public class PageController<TPageDto, TPage> : AppBaseController<PageController<TPageDto, TPage>>
+    public class PageController<TPageDto, TPage> : DiaryAppContoller
         where TPageDto : PageDto
         where TPage : PageBase
     {
         protected readonly IPageService<TPageDto, TPage> pageService;
 
-        public PageController(IPageService<TPageDto, TPage> pageService, IMapper mapper, ILoggerFactory loggerFactory)
-            : base(mapper, loggerFactory)
+        public PageController(IPageService<TPageDto, TPage> pageService, IMapper mapper)
+            : base(mapper)
         {
             this.pageService = pageService;
         }
@@ -35,7 +32,7 @@ namespace DiaryApp.API.Controllers
             if (page == null)
                 return NotFound();
 
-            return Ok(mapper.Map<TPageDto>(page));
+            return Ok(_mapper.Map<TPageDto>(page));
         }
 
         [HttpPost]
@@ -68,10 +65,10 @@ namespace DiaryApp.API.Controllers
             if (area == null)
             {
                 string err = $"{typeof(TPageArea).Name} not found for pageID {pageID}";
-                logger.LogError(err);
+                Logger.Error(err);
                 return NotFound(err);
             }
-            return Ok(mapper.Map<TPageAreaDto>(area));
+            return Ok(_mapper.Map<TPageAreaDto>(area));
         }
     }
 }

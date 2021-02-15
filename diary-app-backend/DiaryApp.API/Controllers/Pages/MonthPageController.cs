@@ -2,11 +2,10 @@
 using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core.Entities;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using DiaryApp.Services.DataInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace DiaryApp.API.Controllers
 {
@@ -14,8 +13,8 @@ namespace DiaryApp.API.Controllers
     {
         private readonly IMonthPageService _monthPageService;
 
-        public MonthPageController(IMonthPageService monthPageService, IMapper mapper, ILoggerFactory loggerFactory)
-            : base(monthPageService, mapper, loggerFactory)
+        public MonthPageController(IMonthPageService monthPageService, IMapper mapper)
+            : base(monthPageService, mapper)
         {
             _monthPageService = monthPageService;
         }

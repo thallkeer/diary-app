@@ -32,5 +32,13 @@
             <param name="id">Id of the resource</param>
             <returns></returns>
         </member>
+        <member name="M:DiaryApp.API.Controllers.Lists.EventsController.PostAsync(DiaryApp.Services.DTO.EventItemDto)">
+            <summary>
+            Creates new event at "Important Events" list. And schedules a notification 
+            about this event if it's possible.
+            </summary>
+            <param name="createModel">Event model</param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.Core;
 using DiaryApp.Core.Entities;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using DiaryApp.Services.Exceptions;
 using DiaryApp.Services.DataInterfaces;
 using Microsoft.EntityFrameworkCore;

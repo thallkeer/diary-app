@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using DiaryApp.Core.Entities;
 using DiaryApp.Services.DataInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace DiaryApp.API.Controllers
@@ -14,14 +13,24 @@ namespace DiaryApp.API.Controllers
     /// </summary>
     /// <typeparam name="TDto">Type of dto</typeparam>
     /// <typeparam name="TEntity">Type of entity</typeparam>
-    public class CrudController<TDto, TEntity> : AppBaseController<CrudController<TDto, TEntity>>
+    public class CrudController<TDto, TEntity> : DiaryAppContoller
         where TDto : BaseDto
         where TEntity : BaseEntity
     {
         protected readonly ICrudService<TDto, TEntity> _crudService;
-        public CrudController(ICrudService<TDto, TEntity> crudService, IMapper mapper, ILoggerFactory loggerFactory) : base(mapper, loggerFactory)
+        public CrudController(ICrudService<TDto, TEntity> crudService, IMapper mapper) : base(mapper)
         {
             _crudService = crudService;
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public virtual async Task<ActionResult<TDto>> GetAsync(int id)
+        {
+            var entity = await _crudService.GetByIdAsync(id);
+            return Ok(_mapper.Map<TDto>(entity));
         }
 
         /// <summary>
@@ -30,7 +39,8 @@ namespace DiaryApp.API.Controllers
         /// <param name="createModel">Entity create model</param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]        
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public virtual async Task<ActionResult<int>> PostAsync([FromBody] TDto createModel)
         {
@@ -45,6 +55,8 @@ namespace DiaryApp.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> PutAsync([FromBody] TDto updateModel)
         {
             await _crudService.UpdateAsync(updateModel);
@@ -58,6 +70,8 @@ namespace DiaryApp.API.Controllers
         /// <returns></returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             await _crudService.DeleteAsync(id);

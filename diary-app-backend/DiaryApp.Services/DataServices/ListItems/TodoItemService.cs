@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DiaryApp.Core;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using DiaryApp.Core.Entities;
 using DiaryApp.Services.DataInterfaces.Lists;
 using System.Threading.Tasks;
@@ -17,7 +17,7 @@ namespace DiaryApp.Services.Services
         {
             var todo = await GetByIdAsync(todoId);
             todo.Done = !todo.Done;
-            await UpdateAsync(_mapper.Map<TodoItemDto>(todo));
+            await _context.SaveChangesAsync();
         }
     }
 }

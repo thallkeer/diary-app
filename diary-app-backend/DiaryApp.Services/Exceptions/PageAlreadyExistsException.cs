@@ -1,11 +1,8 @@
-﻿using DiaryApp.Core.Entities;
-using System;
-
-namespace DiaryApp.Services.Exceptions
+﻿namespace DiaryApp.Services.Exceptions
 {
-    public class PageAlreadyExistsException : Exception
+    public class PageAlreadyExistsException : HttpException
     {
-        public PageAlreadyExistsException() : base("Page with such parameters already exists")
+        public PageAlreadyExistsException() : base(System.Net.HttpStatusCode.BadRequest, new { Page = "Page with such parameters already exists" })
         {
         }
     }

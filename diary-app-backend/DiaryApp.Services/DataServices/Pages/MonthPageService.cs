@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using DiaryApp.Core;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using DiaryApp.Core.Entities;
 using DiaryApp.Services.Exceptions;
 using DiaryApp.Services.DataInterfaces;
@@ -71,7 +71,7 @@ namespace DiaryApp.Services.Services
             }
             catch (Exception ex)
             {
-                throw new PageDataTransferException("Could not transfer page data to the next month, exception is occured.", ex);
+                throw new PageDataTransferException(ex);
             }
         }
     }

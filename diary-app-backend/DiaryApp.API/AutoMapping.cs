@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using DiaryApp.Core.Entities;
 using DiaryApp.API.Models.Users;
 using DiaryApp.Core.Entities.Users.Settings;
-using DiaryApp.Models.DTO.Notifications;
+using DiaryApp.Services.DTO.Notifications;
 using DiaryApp.Core.Entities.Notifications;
 
 namespace DiaryApp.API
@@ -49,7 +49,7 @@ namespace DiaryApp.API
             CreateMap<AppUser, UserDto>().ReverseMap();
             CreateMap<AppUser, UserWithPasswordDto>().ReverseMap();
             CreateMap<UserDto, UserWithPasswordDto>().ReverseMap();
-            CreateMap<UserDto, UserWithPasswordModel>().ReverseMap();
+            CreateMap<UserDto, UserAuthRequest>().ReverseMap();
 
             CreateMap<UserSettings, UserSettingsDto>().ReverseMap();
             CreateMap<PageAreaTransferSettings, PageAreaTransferSettingsDto>()

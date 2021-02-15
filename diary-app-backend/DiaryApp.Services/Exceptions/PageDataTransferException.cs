@@ -2,13 +2,12 @@
 
 namespace DiaryApp.Services.Exceptions
 {
-    public class PageDataTransferException : Exception
+    public class PageDataTransferException : HttpException
     {
-        public PageDataTransferException()
-        {
-
-        }
-        public PageDataTransferException(string message, Exception innerException) : base(message, innerException)
+        public PageDataTransferException(Exception innerException) : base(System.Net.HttpStatusCode.InternalServerError, new { 
+            Message = "Could not transfer page data to the next month, exception is occured.",
+            Exception = innerException
+        })
         {
         }
     }

@@ -6,20 +6,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System.IO;
-using DiaryApp.API.Extensions;
 using DiaryApp.Core.Bootstrap;
 using System;
 using Microsoft.AspNetCore.HttpOverrides;
 using DiaryApp.API.Filters;
 using DiaryApp.API.Settings;
-using DiaryApp.API.Bootstrap;
-using DiaryApp.Services.Jobs;
-using DiaryApp.Services.ServiceInterfaces;
-using DiaryApp.API.Infrastructure;
 using DiaryApp.Services.Bootstrap;
+using DiaryApp.API.Middleware;
+using DiaryApp.Services.Security;
+using DiaryApp.Infrastructure.Security;
+using DiaryApp.Infrastructure.ServiceInterfaces;
+using DiaryApp.Services.Jobs;
 using DiaryApp.Services.Services;
+using DiaryApp.Infrastructure.DependencyInjection;
+using Infrastructure.DependencyInjection;
+using System.Reflection;
 
 namespace DiaryApp.API
 {
@@ -66,19 +68,23 @@ namespace DiaryApp.API
 
             string connectionString = Configuration.GetConnectionString(env.IsDevelopment() ? "DefaultConnection" : "ProdConnection");
 
-            services.AddJwtAuthentication(jwtTokenConfig);
+            services.AddSwaggerGen(c =>
+            {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            }).AddJwtAuthentication(jwtTokenConfig);
 
             services.AddAutoMapper(typeof(Startup))
                     .AddSingleton(appSettings)
                     .AddSingleton(jwtTokenConfig)
-                    .AddSingleton<JwtAuthManager>()
+                    .AddScoped<IJwtAuthManager,JwtAuthManager>()
                     .AddScoped<ModelValidationAttribute>()
-                    .AddSwaggerGen()
                     .AddQuartzScheduler()
                     .AddPostgresContext(connectionString)
-                    .AddGithubService(appSettings)
+                    .AddGithubService(appSettings.GithubToken)
                     .AddDataServices()
-                    .AddTelegramClient(appSettings)
+                    .AddTelegramClient(appSettings.TelegramBotToken)
                     .AddTransient<ISchedulerService, SchedulerService>()        
                     .AddScoped<INotificationService, TelegramNotificationService>()
                     .AddMvc(opt => opt.EnableEndpointRouting = false);
@@ -86,11 +92,8 @@ namespace DiaryApp.API
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "client/build");
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ApplicationContext appContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationContext appContext)
         {
-            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "logger.txt"));
-            var logger = loggerFactory.CreateLogger<FileLogger>();
-
             appContext.Database.Migrate();
 
             if (env.IsDevelopment())
@@ -102,7 +105,7 @@ namespace DiaryApp.API
                 app.UseHsts();
             }
 
-            app.ConfigureExceptionHandler();
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             if (!env.IsProduction())
             {
@@ -138,12 +141,10 @@ namespace DiaryApp.API
                 {
                     var spaPathSection = Configuration.GetSection("SpaSourcePath");
                     spa.Options.SourcePath = spaPathSection.Value;
-                    //spa.UseReactDevelopmentServer(npmScript: "start");
                 }
                 else
                 {
                     spa.Options.SourcePath = Path.Join(env.ContentRootPath, "client");
-                    //spa.UseProxyToSpaDevelopmentServer("https://localhost:5001");
                 }
             });
 

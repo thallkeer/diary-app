@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Tests", "DiaryApp.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Services", "DiaryApp.Services\DiaryApp.Services.csproj", "{588D3729-7CCE-4069-80E1-7C3D58267ACD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Models", "DiaryApp.Models\DiaryApp.Models.csproj", "{48CB01AB-C127-4AE3-B2EB-234EBAF5858E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{B1802F9E-5AB5-4B44-95A7-369B692DAB3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{588D3729-7CCE-4069-80E1-7C3D58267ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{588D3729-7CCE-4069-80E1-7C3D58267ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{588D3729-7CCE-4069-80E1-7C3D58267ACD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{48CB01AB-C127-4AE3-B2EB-234EBAF5858E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48CB01AB-C127-4AE3-B2EB-234EBAF5858E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48CB01AB-C127-4AE3-B2EB-234EBAF5858E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48CB01AB-C127-4AE3-B2EB-234EBAF5858E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1802F9E-5AB5-4B44-95A7-369B692DAB3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1802F9E-5AB5-4B44-95A7-369B692DAB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1802F9E-5AB5-4B44-95A7-369B692DAB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1802F9E-5AB5-4B44-95A7-369B692DAB3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

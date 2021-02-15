@@ -1,5 +1,5 @@
 ﻿using DiaryApp.Core.Entities;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using System.Threading.Tasks;
 
 namespace DiaryApp.Services.DataInterfaces

@@ -15,9 +15,6 @@ namespace DiaryApp.Services.Bootstrap
                            .AddScoped<IMonthPageService, MonthPageService>()
                            .AddScoped<IEventItemService, EventItemService>()
                            .AddScoped<ITodoItemService, TodoItemService>();
-            //services.AddScoped<ICrudService<HabitDayDto, HabitDay>, CrudService<HabitDayDto, HabitDay>>();
-            //services.AddScoped<ICrudService<PurchaseListDto, PurchaseList>, CrudService<PurchaseListDto, PurchaseList>>();
-            //services.AddScoped<ICrudService<UserSettingsDto, UserSettings>, CrudService<UserSettingsDto, UserSettings>>();
         }
     }
 }

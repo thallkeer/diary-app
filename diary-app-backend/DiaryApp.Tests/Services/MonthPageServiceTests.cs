@@ -3,7 +3,7 @@ using DiaryApp.Core.Entities;
 using Xunit;
 using System.Collections.Generic;
 using DiaryApp.Core.Interfaces;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using System.Threading.Tasks;
 using System;
 using System.Linq;

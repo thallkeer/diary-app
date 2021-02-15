@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DiaryApp.Core;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Services.DataInterfaces;
 using Microsoft.EntityFrameworkCore;

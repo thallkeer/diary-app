@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using DiaryApp.Core.Entities;
-using DiaryApp.Models.DTO;
+using DiaryApp.Services.DTO;
 using DiaryApp.Services.DataInterfaces;
-using Microsoft.Extensions.Logging;
 
 namespace DiaryApp.API.Controllers.ListItems
 {
@@ -10,7 +9,7 @@ namespace DiaryApp.API.Controllers.ListItems
     {
 
         public HabitDaysController(ICrudService<HabitDayDto, HabitDay> habitDayService
-            , IMapper mapper, ILoggerFactory loggerFactory) : base(habitDayService, mapper, loggerFactory)
+            , IMapper mapper) : base(habitDayService, mapper)
         {
         }
     }
