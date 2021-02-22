@@ -17,11 +17,10 @@ using DiaryApp.API.Middleware;
 using DiaryApp.Services.Security;
 using DiaryApp.Infrastructure.Security;
 using DiaryApp.Infrastructure.ServiceInterfaces;
-using DiaryApp.Services.Jobs;
 using DiaryApp.Services.Services;
 using DiaryApp.Infrastructure.DependencyInjection;
-using Infrastructure.DependencyInjection;
 using System.Reflection;
+using DiaryApp.Infrastructure.Services;
 
 namespace DiaryApp.API
 {

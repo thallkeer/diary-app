@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Security.Claims;
 
-namespace Infrastructure.Security
+namespace DiaryApp.Infrastructure.Security
 {
     public class UserAccessor
     {
