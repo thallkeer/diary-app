@@ -6,7 +6,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
 
-namespace Infrastructure.DependencyInjection
+namespace DiaryApp.Infrastructure.DependencyInjection
 {
     public static class AuthenticationExtensions
     {

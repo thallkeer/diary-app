@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using DiaryApp.Services.DTO.Notifications;
 using DiaryApp.Infrastructure.Quartz.Jobs;
 
-namespace DiaryApp.Services.Jobs
+namespace DiaryApp.Infrastructure.Services
 {
     public class SchedulerService : ISchedulerService
     {

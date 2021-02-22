@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Tests", "DiaryApp.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Services", "DiaryApp.Services\DiaryApp.Services.csproj", "{588D3729-7CCE-4069-80E1-7C3D58267ACD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{B1802F9E-5AB5-4B44-95A7-369B692DAB3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Infrastructure", "Infrastructure\DiaryApp.Infrastructure.csproj", "{B1802F9E-5AB5-4B44-95A7-369B692DAB3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

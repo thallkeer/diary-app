@@ -8,9 +8,9 @@ using DiaryApp.Core.Entities.Notifications;
 
 namespace DiaryApp.API
 {
-    public class AutoMapping : Profile
+    public class MappingProfile : Profile
     {
-        public AutoMapping()
+        public MappingProfile()
         {
             CreateMap<TodoItem, TodoItemDto>().ReverseMap();
             CreateMap<TodoList, TodoListDto>().ReverseMap();
