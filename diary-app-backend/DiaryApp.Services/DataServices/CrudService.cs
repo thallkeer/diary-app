@@ -43,34 +43,43 @@ namespace DiaryApp.Services.Services
                 throw new EntityNotFoundException<TEntity>();
             _dbSet.Remove(entity);
             await _context.SaveChangesAsync();
+        }        
+
+        public async Task<TDto> GetByIdAsync(int id)
+        {
+            var entity = await _dbSet.FirstOrDefaultAsync(en => en.Id == id);
+            return _mapper.Map<TDto>(entity);
+        }        
+
+        public virtual async Task UpdateAsync(TDto dto)
+        {
+            var entity = await _dbSet.FindAsync(dto.Id);
+            var mappedEntity = _mapper.Map(dto, entity);
+            _context.Update(mappedEntity);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetByCriteriaAsync(Expression<Func<TEntity, bool>> filter = null)
+        public async Task<IEnumerable<TCustomDto>> GetByCriteriaAsync<TCustomDto>(Expression<Func<TEntity, bool>> filter = null)
+            where TCustomDto : BaseDto
         {
             var entities = GetAsQueryable();
 
             if (filter != null)
                 entities = entities.Where(filter);
 
-            return await entities.ToListAsync();
+            return await entities.Select(en => _mapper.Map<TCustomDto>(en)).ToListAsync();
         }
 
-        public async Task<TDto> GetByIdAsync(int id)
+        public async Task<TCustomDto> FirstOrDefaultAsync<TCustomDto>(Expression<Func<TEntity, bool>> filter)
+            where TCustomDto : BaseDto
         {
-            var entity = await _dbSet.FirstOrDefaultAsync(en => en.Id == id);
-            return _mapper.Map<TDto>(entity);
+            var entity = await FirstOrDefaultEntityAsync(filter);
+            return _mapper.Map<TCustomDto>(entity);
         }
 
-        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter)
+        protected async Task<TEntity> FirstOrDefaultEntityAsync(Expression<Func<TEntity, bool>> filter)
         {
-            return await GetAsQueryable().FirstOrDefaultAsync(filter);
-        }
-
-        public virtual async Task UpdateAsync(TDto dto)
-        {
-            var entity = _mapper.Map<TEntity>(dto);
-            _context.Update(entity);
-            await _context.SaveChangesAsync();
+            return await _dbSet.FirstOrDefaultAsync(filter);
         }
 
         /// <summary>
@@ -80,6 +89,6 @@ namespace DiaryApp.Services.Services
         protected IQueryable<TEntity> GetAsQueryable()
         {
             return _dbSet.AsNoTracking();
-        }
+        }        
     }
 }

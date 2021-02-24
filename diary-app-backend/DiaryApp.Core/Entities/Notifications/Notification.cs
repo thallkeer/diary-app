@@ -7,7 +7,12 @@ namespace DiaryApp.Core.Entities.Notifications
     {
         [Required]
         public int UserId { get; set; }
+
         public virtual AppUser User { get; set; }
+
+        [Required]
+        public int EventId { get; set; }
+        public virtual EventItem Event { get; set; }
 
         [Required]
         public DateTime NotificationDate { get; set; }

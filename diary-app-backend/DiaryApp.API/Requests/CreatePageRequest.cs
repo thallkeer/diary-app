@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.API.Models
+namespace DiaryApp.API.Requests
 {
-    public class PageRequest
+    public class CreatePageRequest
     {
-        public PageRequest()
+        public CreatePageRequest()
         {}
 
-        public PageRequest(int userId, int year, int month)
+        public CreatePageRequest(int userId, int year, int month)
         {
             UserId = userId;
             Year = year;

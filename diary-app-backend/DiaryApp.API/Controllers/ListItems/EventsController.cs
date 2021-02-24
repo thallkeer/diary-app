@@ -9,6 +9,7 @@ using DiaryApp.Services.DataInterfaces;
 using System;
 using DiaryApp.Services.DTO.Notifications;
 using DiaryApp.Core.Entities.Notifications;
+using System.Threading;
 
 namespace DiaryApp.API.Controllers.Lists
 {
@@ -17,10 +18,10 @@ namespace DiaryApp.API.Controllers.Lists
         private readonly IEventItemService _eventItemService;
         private readonly ISchedulerService _schedulerService;
         private readonly IUserService _userService;
-        private readonly ICrudService<NotificationDto, Notification> _notificationService;
+        private readonly INotificationDataService _notificationService;
 
         public EventsController(IEventItemService eventItemService, ISchedulerService schedulerService, 
-            IUserService userService, ICrudService<NotificationDto, Notification> notificationService,
+            IUserService userService, INotificationDataService notificationService,
             IMapper mapper) 
             : base(eventItemService, mapper)
         {
@@ -36,41 +37,22 @@ namespace DiaryApp.API.Controllers.Lists
         /// about this event if it's possible.
         /// </summary>
         /// <param name="createModel">Event model</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async override Task<ActionResult<int>> PostAsync([FromBody] EventItemDto createModel)
+        public async override Task<ActionResult<int>> PostAsync([FromBody] EventItemDto createModel, CancellationToken cancellationToken = default)
         {
             var userIdString = User.Identity.Name;
             if (string.IsNullOrEmpty(userIdString))
                 return await base.PostAsync(createModel);
             var userId = int.Parse(userIdString);
-            var eventId = await _eventItemService.CreateAsync(createModel);
-            var createdEvent = await _eventItemService.GetByIdAsync(eventId);
-            var user = await _userService.FirstOrDefaultAsync(u => u.Id == userId);
-
-            ///TODO: move to service
-            if (user.TelegramId.HasValue)
+            var eventId = await _eventItemService.CreateAsync(createModel);           
+            Response.OnCompleted(async () =>
             {
-                var notificationSettings = user.Settings?.NotificationSettings;
-                if (notificationSettings != null && notificationSettings.IsActivated)
-                {
-                    var dateToNotify = createdEvent.Date.Date.AddDays(-1);
-                    if (dateToNotify != DateTime.Today)
-                    {
-                        dateToNotify = new DateTime(dateToNotify.Year, dateToNotify.Month, dateToNotify.Day, 10, 0, 0);
-
-                        var notification = new NotificationDto
-                        {
-                            Subject = createdEvent.Subject,
-                            NotificationDate = dateToNotify,
-                            UserId = user.Id
-                        };
-                        var notificationId = await _notificationService.CreateAsync(notification);
-                        var createdNotification = await _notificationService.GetByIdAsync(notificationId);
-
-                        await _schedulerService.ScheduleMessageAsync(createdNotification);
-                    }
-                }
-            }
+                //TODO: execute as JOB
+                var createdNotification = await _notificationService.TryCreateNotificationAsync(userId, eventId);
+                if (createdNotification != null)
+                    await _schedulerService.ScheduleMessageAsync(createdNotification, cancellationToken);
+            });
             return Ok(eventId);
         }
     }

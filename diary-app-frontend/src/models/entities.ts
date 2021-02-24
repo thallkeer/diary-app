@@ -9,6 +9,27 @@ export interface IUser extends IEntity {
 	username: string;
 	password?: string;
 	token?: string;
+	telegramId?: string;
+}
+
+export interface PageAreaTransferSettings {
+	id?: number;
+	transferGoalsArea?: boolean;
+	transferPurchasesArea?: boolean;
+	transferDesiresArea?: boolean;
+	transferIdeasArea?: boolean;
+}
+
+export interface NotificationsSettings {
+	id: number;
+	isActivated: boolean;
+}
+
+export interface IUserSettings {
+	id: number;
+	userId: number;
+	pageAreaTransferSettings: PageAreaTransferSettings;
+	notificationSettings: NotificationsSettings;
 }
 
 export interface IDiaryListWrapper extends IEntity {

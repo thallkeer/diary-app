@@ -7,15 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using DiaryApp.Services.Security;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using DiaryApp.Core.Entities;
 
 namespace DiaryApp.API.Controllers
 {
-    public class UsersController : DiaryAppContoller
+    public class UsersController : CrudController<UserDto, AppUser>
     {
         private readonly IUserService _userService;
         private readonly IJwtAuthManager _jwtAuthManager;
 
-        public UsersController(IUserService userService, IJwtAuthManager jwtAuthManager, IMapper mapper) : base(mapper)
+        public UsersController(IUserService userService, IJwtAuthManager jwtAuthManager, IMapper mapper) 
+            : base(userService, mapper)
         {
             _userService = userService;
             _jwtAuthManager = jwtAuthManager;
@@ -40,6 +43,19 @@ namespace DiaryApp.API.Controllers
             var user = _mapper.Map<UserDto>(userWithPasswordModel);
             await _userService.RegisterAsync(user, userWithPasswordModel.Password);
             return SendToken(user);
+        }
+
+        [HttpGet("{userId}/settings")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserWithSettingsResponse>> GetUserSettingsAsync(int userId)
+        {
+            var settings = await _userService.GetSettingsAsync(userId);
+            var user = await _userService.GetByIdAsync(userId);
+            if (user == null)
+                return NotFound();
+            var response = new UserWithSettingsResponse(user, settings);
+            return Ok(response);
         }
 
         private IActionResult SendToken(UserDto user)

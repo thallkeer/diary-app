@@ -5,6 +5,7 @@ using DiaryApp.Services.DataInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace DiaryApp.API.Controllers
 {
@@ -23,11 +24,17 @@ namespace DiaryApp.API.Controllers
             _crudService = crudService;
         }
 
+        /// <summary>
+        /// Returns resource with given id if exists.
+        /// </summary>
+        /// <param name="id">Identifier</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public virtual async Task<ActionResult<TDto>> GetAsync(int id)
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]       
+        public virtual async Task<ActionResult<TDto>> GetAsync(int id, CancellationToken cancellationToken = default)
         {
             var entity = await _crudService.GetByIdAsync(id);
             return Ok(_mapper.Map<TDto>(entity));
@@ -37,27 +44,29 @@ namespace DiaryApp.API.Controllers
         /// Creates resource from given model.
         /// </summary>
         /// <param name="createModel">Entity create model</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public virtual async Task<ActionResult<int>> PostAsync([FromBody] TDto createModel)
+        public virtual async Task<ActionResult<int>> PostAsync([FromBody] TDto createModel, CancellationToken cancellationToken = default)
         {
             var id = await _crudService.CreateAsync(createModel);
             return Ok(id);
         }
-        
+
         /// <summary>
         /// Updates resource from given model.
         /// </summary>
         /// <param name="updateModel">Entity update model</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> PutAsync([FromBody] TDto updateModel)
+        public async Task<IActionResult> PutAsync([FromBody] TDto updateModel, CancellationToken cancellationToken = default)
         {
             await _crudService.UpdateAsync(updateModel);
             return Ok();
@@ -67,12 +76,13 @@ namespace DiaryApp.API.Controllers
         /// Deletes resource with given id.
         /// </summary>
         /// <param name="id">Id of the resource</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
             await _crudService.DeleteAsync(id);
             return NoContent();   

@@ -5,6 +5,7 @@ using DiaryApp.API.Models.Users;
 using DiaryApp.Core.Entities.Users.Settings;
 using DiaryApp.Services.DTO.Notifications;
 using DiaryApp.Core.Entities.Notifications;
+using DiaryApp.Services.DTO.Users;
 
 namespace DiaryApp.API
 {
@@ -48,12 +49,14 @@ namespace DiaryApp.API
 
             CreateMap<AppUser, UserDto>().ReverseMap();
             CreateMap<AppUser, UserWithPasswordDto>().ReverseMap();
+            CreateMap<AppUser, UserWithSettingsDto>().ReverseMap();
             CreateMap<UserDto, UserWithPasswordDto>().ReverseMap();
             CreateMap<UserDto, UserAuthRequest>().ReverseMap();
 
             CreateMap<UserSettings, UserSettingsDto>().ReverseMap();
             CreateMap<PageAreaTransferSettings, PageAreaTransferSettingsDto>()
-               .ForMember(dto => dto.UserId, (en) => en.MapFrom(src => src.UserSettings.UserId))
+               .ReverseMap();
+            CreateMap<NotificationsSettingsDto, NotificationSettings>()
                .ReverseMap();
 
             CreateMap<Notification, NotificationDto>().ReverseMap();

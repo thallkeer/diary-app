@@ -9,6 +9,8 @@ namespace DiaryApp.Services.DTO.Notifications
         public int UserId { get; set; }
         public UserDto User { get; set; }
         [Required]
+        public int EventId { get; set; }
+        [Required]
         public DateTime NotificationDate { get; set; }        
         public string Subject { get; set; }
     }

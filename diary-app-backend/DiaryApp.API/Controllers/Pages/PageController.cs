@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using DiaryApp.Core.Entities;
+using DiaryApp.API.Requests;
 
 namespace DiaryApp.API.Controllers
 {
@@ -39,7 +40,7 @@ namespace DiaryApp.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult<TPageDto>> CreatePageAsync(PageRequest pageParams)
+        public async Task<ActionResult<TPageDto>> CreatePageAsync(CreatePageRequest pageParams)
         {
             TPageDto page;
             try

@@ -3,7 +3,7 @@ using DiaryApp.Core.Entities;
 
 namespace DiaryApp.API.Models
 {
-    public class TransferDataRequestParams
+    public class TransferDataRequest
     {
         [Required]
         public int OriginalPageId { get; set; }

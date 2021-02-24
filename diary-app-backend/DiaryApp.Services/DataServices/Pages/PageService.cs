@@ -23,7 +23,7 @@ namespace DiaryApp.Services.Services
 
         protected async Task<TPageEntity> GetPageEntityAsync(int userID, int year, int month)
         {
-            return await FirstOrDefaultAsync(mp => mp.UserId == userID && mp.Month == month && mp.Year == year);
+            return await FirstOrDefaultEntityAsync(mp => mp.UserId == userID && mp.Month == month && mp.Year == year);
         }
 
         public async Task<TPageDto> GetPageAsync(int userID, int year, int month)

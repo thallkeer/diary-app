@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DiaryApp.Services.DTO.Users;
+using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Services.DTO
 {
@@ -9,5 +10,8 @@ namespace DiaryApp.Services.DTO
 
         [Required]
         public PageAreaTransferSettingsDto PageAreaTransferSettings { get; set; }
+
+        [Required]
+        public NotificationsSettingsDto NotificationSettings { get; set; }
     }
 }

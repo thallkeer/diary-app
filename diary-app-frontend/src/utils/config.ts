@@ -12,6 +12,5 @@ export const getHeaders = () => {
 };
 
 export const config = {
-	baseApi: process.env.REACT_APP_API_URL + "/api/",
-	headers: getHeaders(),
+	baseApi: `${process.env.REACT_APP_API_URL}/api/`,
 };

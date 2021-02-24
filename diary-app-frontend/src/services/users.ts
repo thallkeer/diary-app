@@ -1,13 +1,16 @@
-import { IUser } from "../models/entities";
-import { config } from "../utils/config";
+import { IUser, IUserSettings } from "../models/entities";
 import history from "../components/history";
 import axios from "../axios/axios";
 
-const { baseApi } = config;
 interface ILoginResponse {
 	id: number;
 	username: string;
 	token: string;
+}
+
+interface UserSettingsModel {
+	user: IUser;
+	settings: IUserSettings;
 }
 
 export const userService = {
@@ -18,7 +21,7 @@ export const userService = {
 
 	async login(user: IUser) {
 		const result = await axios
-			.post<ILoginResponse>(`${baseApi}users/authenticate`, user)
+			.post<ILoginResponse>(`users/authenticate`, user)
 			.then((res) => res.data);
 
 		return processLoginResponse(result);
@@ -26,10 +29,24 @@ export const userService = {
 
 	async register(user: IUser) {
 		const result = await axios
-			.post<ILoginResponse>(`${baseApi}users/register`, user)
+			.post<ILoginResponse>(`users/register`, user)
 			.then((res) => res.data);
 
 		return processLoginResponse(result);
+	},
+
+	async getUserSettings(userId: number) {
+		return axios
+			.get<UserSettingsModel>(`users/${userId}/settings`)
+			.then((res) => res.data);
+	},
+
+	async updateUser(user: IUser) {
+		return axios.put(`users`, user);
+	},
+
+	async updateUserSettings(settings: IUserSettings) {
+		return axios.put(`userSettings`, settings);
 	},
 };
 

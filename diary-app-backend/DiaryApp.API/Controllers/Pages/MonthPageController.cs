@@ -56,7 +56,7 @@ namespace DiaryApp.API.Controllers
         [HttpPost("transferData")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PostTransferPageDataAsync(TransferDataRequestParams transferDataRequestParams)
+        public async Task<IActionResult> PostTransferPageDataAsync(TransferDataRequest transferDataRequestParams)
         {
             await _monthPageService.TransferPageDataToNextMonthAsync(
                 transferDataRequestParams.OriginalPageId, transferDataRequestParams.TransferDataModel);

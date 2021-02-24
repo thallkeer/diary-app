@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Services.Requests
+namespace DiaryApp.API.Requests
 {
     public class CreateIssueRequest
     {

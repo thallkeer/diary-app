@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using DiaryApp.API.Requests;
 using DiaryApp.Infrastructure.ServiceInterfaces;
-using DiaryApp.Services.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

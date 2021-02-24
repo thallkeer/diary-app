@@ -1,29 +1,14 @@
+import { prepareTransferData } from "components/Users/UserSettings";
+import { PageAreaTransferSettings } from "models/entities";
 import React, { useState, useRef } from "react";
 import { Button, Modal, Row, Form, FormGroup, Overlay } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import axios from "../../axios/axios";
 import { getAppInfo } from "../../selectors/app-selectors";
 
-class TransferDataModel {
-	public transferGoalsArea: boolean;
-	public transferPurchasesArea: boolean;
-	public transferDesiresArea: boolean;
-	public transferIdeasArea: boolean;
-
-	/**
-	 *
-	 */
-	constructor() {
-		this.transferDesiresArea = false;
-		this.transferGoalsArea = false;
-		this.transferIdeasArea = false;
-		this.transferPurchasesArea = false;
-	}
-}
-
 interface IState {
 	show: boolean;
-	transferDataModel: TransferDataModel;
+	transferDataModel: PageAreaTransferSettings;
 	error: string;
 }
 
@@ -35,7 +20,7 @@ type PageParams = {
 
 type TransferDataRequestParams = {
 	pageParams: PageParams;
-	transferDataModel: TransferDataModel;
+	transferDataModel: PageAreaTransferSettings;
 };
 
 export const TransferDataForm: React.FC<{
@@ -44,7 +29,7 @@ export const TransferDataForm: React.FC<{
 }> = ({ show, onHide }) => {
 	const [state, setState] = useState<IState>({
 		show,
-		transferDataModel: new TransferDataModel(),
+		transferDataModel: {},
 		error: null,
 	});
 	const target = useRef(null);
@@ -52,13 +37,6 @@ export const TransferDataForm: React.FC<{
 	const { year, month, user } = useSelector(getAppInfo);
 
 	const { transferDataModel } = state;
-
-	const {
-		transferDesiresArea,
-		transferGoalsArea,
-		transferIdeasArea,
-		transferPurchasesArea,
-	} = transferDataModel;
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -95,28 +73,7 @@ export const TransferDataForm: React.FC<{
 		});
 	};
 
-	const checkBoxes = [
-		{
-			name: "transferPurchasesArea",
-			checkedState: transferPurchasesArea,
-			text: "Списки покупок",
-		},
-		{
-			name: "transferDesiresArea",
-			checkedState: transferDesiresArea,
-			text: "Списки желаний",
-		},
-		{
-			name: "transferIdeasArea",
-			checkedState: transferIdeasArea,
-			text: "Списки идеи",
-		},
-		{
-			name: "transferGoalsArea",
-			checkedState: transferGoalsArea,
-			text: "Трекеры привычек",
-		},
-	];
+	const checkBoxes = prepareTransferData(transferDataModel);
 
 	return (
 		<Modal
