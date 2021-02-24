@@ -14,10 +14,6 @@ namespace DiaryApp.Infrastructure.DependencyInjection
         {
             services.AddSwaggerGen(c =>
             {
-                //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                //c.IncludeXmlComments(xmlPath);
-
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DiaryApp", Version = "v1" });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

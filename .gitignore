@@ -65,3 +65,4 @@ msbuild.wrn
 /diary-app-frontend/debug.log
 appsettings.json
 logger.txt
+/publish

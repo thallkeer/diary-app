@@ -41,7 +41,11 @@ namespace DiaryApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             var appSettings = Configuration.GetSection("appSettings").Get<AppSettings>();
+            if (appSettings == null)
+                throw new ArgumentNullException(nameof(appSettings), "Application settings configuration is not provided!");
             var jwtTokenConfig = Configuration.GetSection("jwtTokenConfig").Get<JwtTokenConfig>();
+            if (jwtTokenConfig == null)
+                throw new ArgumentNullException(nameof(jwtTokenConfig), "JWT token configuration is not provided!");
 
             services.AddCors(options =>
             {
