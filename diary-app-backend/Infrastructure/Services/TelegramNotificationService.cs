@@ -25,26 +25,25 @@ namespace DiaryApp.Services.Services
             _botClient = botClient;
             _eventNotificationService = eventNotificationService;
             _logger = logger;
-        }        
+        }
 
         public async Task NotifyAsync(int notificationId, CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"Sending scheduled Message ID {notificationId}");
-
             var notification = await _eventNotificationService.GetByIdAsync(notificationId);
             if (notification == null)
             {
-                _logger.LogDebug($"Scheduled notification with Id {notificationId} is not found in database");
+                _logger.LogError($"Scheduled notification with Id {notificationId} is not found in database");
                 return;
             }
-
 
             try
             {
                 var chatId = new ChatId(notification.User.TelegramId.Value);
-                var msg = await _botClient.SendTextMessageAsync(chatId, notification.Subject, cancellationToken: cancellationToken);                
+                var msg = await _botClient.SendTextMessageAsync(chatId, notification.Subject, cancellationToken: cancellationToken);
                 _logger.LogDebug($"Sended scheduled notification {notificationId}");
+
                 await _eventNotificationService.DeleteAsync(notificationId);
+                _logger.LogDebug($"Sended scheduled notification {notificationId}");
             }
             catch (Exception ex)
             {

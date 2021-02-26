@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DiaryApp.Core.Entities.Notifications
 {
@@ -7,7 +8,6 @@ namespace DiaryApp.Core.Entities.Notifications
     {
         [Required]
         public int UserId { get; set; }
-
         public virtual AppUser User { get; set; }
 
         [Required]
@@ -15,6 +15,7 @@ namespace DiaryApp.Core.Entities.Notifications
         public virtual EventItem Event { get; set; }
 
         [Required]
+        [Column(TypeName = "date")]
         public DateTime NotificationDate { get; set; }
 
         [Required]

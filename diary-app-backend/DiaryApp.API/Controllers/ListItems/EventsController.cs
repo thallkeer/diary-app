@@ -6,9 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using DiaryApp.Infrastructure.ServiceInterfaces;
 using DiaryApp.Services.DataInterfaces;
-using System;
-using DiaryApp.Services.DTO.Notifications;
-using DiaryApp.Core.Entities.Notifications;
 using System.Threading;
 
 namespace DiaryApp.API.Controllers.Lists
@@ -20,9 +17,9 @@ namespace DiaryApp.API.Controllers.Lists
         private readonly IUserService _userService;
         private readonly INotificationDataService _notificationService;
 
-        public EventsController(IEventItemService eventItemService, ISchedulerService schedulerService, 
+        public EventsController(IEventItemService eventItemService, ISchedulerService schedulerService,
             IUserService userService, INotificationDataService notificationService,
-            IMapper mapper) 
+            IMapper mapper)
             : base(eventItemService, mapper)
         {
             _eventItemService = eventItemService;
@@ -30,7 +27,6 @@ namespace DiaryApp.API.Controllers.Lists
             _userService = userService;
             _notificationService = notificationService;
         }
-
 
         /// <summary>
         /// Creates new event at "Important Events" list. And schedules a notification 
@@ -41,18 +37,17 @@ namespace DiaryApp.API.Controllers.Lists
         /// <returns></returns>
         public async override Task<ActionResult<int>> PostAsync([FromBody] EventItemDto createModel, CancellationToken cancellationToken = default)
         {
-            var userIdString = User.Identity.Name;
-            if (string.IsNullOrEmpty(userIdString))
-                return await base.PostAsync(createModel);
-            var userId = int.Parse(userIdString);
-            var eventId = await _eventItemService.CreateAsync(createModel);           
+            var eventId = await _eventItemService.CreateAsync(createModel);
+
             Response.OnCompleted(async () =>
             {
+                var userId = int.Parse(User.Identity.Name);
                 //TODO: execute as JOB
-                var createdNotification = await _notificationService.TryCreateNotificationAsync(userId, eventId);
-                if (createdNotification != null)
-                    await _schedulerService.ScheduleMessageAsync(createdNotification, cancellationToken);
+                var createdNotifications = await _notificationService.CreateNotificationsIfNecessary(userId, eventId);
+                createdNotifications.ForEach(async (notification) =>
+                        await _schedulerService.ScheduleMessageAsync(notification, cancellationToken));
             });
+
             return Ok(eventId);
         }
     }

@@ -7,6 +7,7 @@ using DiaryApp.Services.DTO;
 using DiaryApp.Services.DTO.Notifications;
 using DiaryApp.Services.Services;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DiaryApp.Services.DataServices.Notifications
@@ -16,44 +17,69 @@ namespace DiaryApp.Services.DataServices.Notifications
         private readonly IUserService _userService;
         private readonly IEventItemService _eventItemService;
 
-        public NotificationDataService(ApplicationContext context, IMapper mapper, 
-            IUserService userService, IEventItemService eventItemService) 
+        public NotificationDataService(ApplicationContext context, IMapper mapper,
+            IUserService userService, IEventItemService eventItemService)
             : base(context, mapper)
         {
             _userService = userService;
             _eventItemService = eventItemService;
         }
 
-        public async Task<NotificationDto> TryCreateNotificationAsync(int userId, int eventId)
+        public async Task<List<NotificationDto>> CreateNotificationsIfNecessary(int userId, int eventId)
         {
             var createdEvent = await _eventItemService.GetByIdAsync(eventId);
             var user = await _userService.FirstOrDefaultAsync<UserWithSettingsDto>(u => u.Id == userId);
+
+            List<NotificationDto> createdNotifications = new();
 
             if (user.TelegramId.HasValue)
             {
                 var notificationSettings = user.Settings?.NotificationSettings;
                 if (notificationSettings != null && notificationSettings.IsActivated)
                 {
-                    var eventDate = createdEvent.Date.Date;
-                    var dateToNotify = eventDate.AddDays(-1);
-                    if (dateToNotify != DateTime.Today)
+                    async void TryCreateAndAddToResultList(DateTime dateToNotify, bool forDayBefore)
                     {
-                        dateToNotify = new DateTime(dateToNotify.Year, dateToNotify.Month, dateToNotify.Day, 10, 0, 0);
-
-                        var notification = new NotificationDto
-                        {
-                            Subject = $"Напоминание: завтра \"{eventDate}\" {createdEvent.Subject}",
-                            NotificationDate = dateToNotify,
-                            UserId = user.Id,
-                            EventId = createdEvent.Id
-                        };
-
-                        var notificationId = await CreateAsync(notification);
-                        return await GetByIdAsync(notificationId);
+                        var notification = await CreateNotificationAsync(dateToNotify, notificationSettings.NotifyAt, user.Id, createdEvent, forDayBefore);
+                        if (notification != null)
+                            createdNotifications.Add(notification);
                     }
+
+                    var eventDate = createdEvent.Date.Date;
+                    if (notificationSettings.NotifyDayBefore)
+                    {
+                        TryCreateAndAddToResultList(eventDate.AddDays(-1), true);
+                    }
+                    TryCreateAndAddToResultList(eventDate, false);
                 }
             }
+            return createdNotifications;
+        }
 
+        private async Task<NotificationDto> CreateNotificationAsync(
+            DateTime dateToNotify, TimeSpan timeToNotify,
+            int userId, EventItemDto eventItem,
+            bool forDayBefore)
+        {
+            if (dateToNotify > DateTime.Today)
+            {
+                dateToNotify = new DateTime(dateToNotify.Year, dateToNotify.Month, dateToNotify.Day,
+                                            timeToNotify.Hours, timeToNotify.Minutes, timeToNotify.Seconds);
+
+                var eventDate = eventItem.Date.Date;
+
+                string day = forDayBefore ? "завтра" : "сегодня";
+
+                var notification = new NotificationDto
+                {
+                    Subject = $"Напоминание: {day} {eventDate} {eventItem.Subject}",
+                    NotificationDate = dateToNotify,
+                    UserId = userId,
+                    EventId = eventItem.Id
+                };
+
+                var notificationId = await CreateAsync(notification);
+                return await GetByIdAsync(notificationId);
+            }
             return null;
         }
     }
