@@ -63,29 +63,6 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("CommonLists");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Entities.DesiresArea", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Header")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int>("PageId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PageId")
-                        .IsUnique();
-
-                    b.ToTable("DesiresAreas");
-                });
-
             modelBuilder.Entity("DiaryApp.Core.Entities.DesiresList", b =>
                 {
                     b.Property<int>("Id")
@@ -404,7 +381,7 @@ namespace DiaryApp.Core.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("NotificationDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("date");
 
                     b.Property<string>("Subject")
                         .IsRequired()
@@ -420,6 +397,29 @@ namespace DiaryApp.Core.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.Entities.PageAreas.DesiresArea", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Header")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("PageId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PageId")
+                        .IsUnique();
+
+                    b.ToTable("DesiresAreas");
                 });
 
             modelBuilder.Entity("DiaryApp.Core.Entities.PurchaseList", b =>
@@ -520,6 +520,14 @@ namespace DiaryApp.Core.Migrations
                     b.Property<bool>("IsActivated")
                         .HasColumnType("boolean");
 
+                    b.Property<TimeSpan>("NotifyAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("interval")
+                        .HasDefaultValue(new TimeSpan(0, 10, 0, 0, 0));
+
+                    b.Property<bool>("NotifyDayBefore")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("UserSettingsId")
                         .HasColumnType("integer");
 
@@ -579,20 +587,9 @@ namespace DiaryApp.Core.Migrations
                     b.ToTable("UserSettings");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Entities.DesiresArea", b =>
-                {
-                    b.HasOne("DiaryApp.Core.Entities.MonthPage", "Page")
-                        .WithOne("DesiresArea")
-                        .HasForeignKey("DiaryApp.Core.Entities.DesiresArea", "PageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Page");
-                });
-
             modelBuilder.Entity("DiaryApp.Core.Entities.DesiresList", b =>
                 {
-                    b.HasOne("DiaryApp.Core.Entities.DesiresArea", "AreaOwner")
+                    b.HasOne("DiaryApp.Core.Entities.PageAreas.DesiresArea", "AreaOwner")
                         .WithMany("DesiresLists")
                         .HasForeignKey("AreaOwnerID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -773,6 +770,17 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DiaryApp.Core.Entities.PageAreas.DesiresArea", b =>
+                {
+                    b.HasOne("DiaryApp.Core.Entities.MonthPage", "Page")
+                        .WithOne("DesiresArea")
+                        .HasForeignKey("DiaryApp.Core.Entities.PageAreas.DesiresArea", "PageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Page");
+                });
+
             modelBuilder.Entity("DiaryApp.Core.Entities.PurchaseList", b =>
                 {
                     b.HasOne("DiaryApp.Core.Entities.PurchasesArea", "AreaOwner")
@@ -857,11 +865,6 @@ namespace DiaryApp.Core.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("DiaryApp.Core.Entities.DesiresArea", b =>
-                {
-                    b.Navigation("DesiresLists");
-                });
-
             modelBuilder.Entity("DiaryApp.Core.Entities.EventList", b =>
                 {
                     b.Navigation("Items");
@@ -904,6 +907,11 @@ namespace DiaryApp.Core.Migrations
 
                     b.Navigation("PurchasesArea")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DiaryApp.Core.Entities.PageAreas.DesiresArea", b =>
+                {
+                    b.Navigation("DesiresLists");
                 });
 
             modelBuilder.Entity("DiaryApp.Core.Entities.PurchasesArea", b =>

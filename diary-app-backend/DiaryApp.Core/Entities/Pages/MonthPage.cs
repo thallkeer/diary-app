@@ -1,6 +1,7 @@
 ﻿using DiaryApp.Core.Extensions;
 using System;
 using System.ComponentModel.DataAnnotations;
+using DiaryApp.Core.Entities.PageAreas;
 
 namespace DiaryApp.Core.Entities
 {
@@ -48,7 +49,7 @@ namespace DiaryApp.Core.Entities
             nextPage.PurchasesArea = new PurchasesArea(nextPage, !transferDataModel.TransferPurchasesArea);
             nextPage.IdeasArea = new IdeasArea(nextPage, !transferDataModel.TransferIdeasArea);
 
-            TransferAreasIfNeeded(transferDataModel, nextPage);
+            TransferAreasIfNecessary(transferDataModel, nextPage);
 
             return nextPage;
         }
@@ -64,10 +65,10 @@ namespace DiaryApp.Core.Entities
                 throw new ArgumentNullException(nameof(transferDataModel));
             if (monthPage == null)
                 throw new ArgumentNullException(nameof(monthPage));
-            monthPage.TransferAreasIfNeeded(transferDataModel, this);
+            monthPage.TransferAreasIfNecessary(transferDataModel, this);
         }
 
-        private void TransferAreasIfNeeded(TransferDataModel transferDataModel, MonthPage nextPage)
+        private void TransferAreasIfNecessary(TransferDataModel transferDataModel, MonthPage nextPage)
         {
             nextPage.GoalsArea.TransferAreaDataIfNeeded(transferDataModel, GoalsArea);
             nextPage.DesiresArea.TransferAreaDataIfNeeded(transferDataModel, DesiresArea);

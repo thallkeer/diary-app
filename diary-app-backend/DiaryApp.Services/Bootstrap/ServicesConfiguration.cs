@@ -1,8 +1,8 @@
 ﻿using DiaryApp.Services.DataInterfaces;
-using DiaryApp.Services.DataInterfaces.Lists;
 using DiaryApp.Services.DataServices.Notifications;
-using DiaryApp.Services.Services;
+using DiaryApp.Services.DataServices;
 using Microsoft.Extensions.DependencyInjection;
+using DiaryApp.Services.DataInterfaces.ListItems;
 
 namespace DiaryApp.Services.Bootstrap
 {
@@ -16,7 +16,7 @@ namespace DiaryApp.Services.Bootstrap
                            .AddScoped<IMonthPageService, MonthPageService>()
                            .AddScoped<IEventItemService, EventItemService>()
                            .AddScoped<ITodoItemService, TodoItemService>()
-                           .AddScoped<INotificationDataService, NotificationDataService>();
+                           .AddScoped<IEventNotificationService, EventNotificationService>();
         }
     }
 }

@@ -1,56 +1,56 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using DiaryApp.API.Models;
 using DiaryApp.Core.Entities;
-using DiaryApp.Services.DTO;
+using DiaryApp.Core.Entities.PageAreas;
 using DiaryApp.Services.DataInterfaces;
+using DiaryApp.Services.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DiaryApp.API.Controllers
+namespace DiaryApp.API.Controllers.Pages
 {
     public class MonthPageController : PageController<MonthPageDto, MonthPage>
     {
         private readonly IMonthPageService _monthPageService;
 
-        public MonthPageController(IMonthPageService monthPageService, IMapper mapper)
-            : base(monthPageService, mapper)
+        public MonthPageController(IMonthPageService monthPageService)
+            : base(monthPageService)
         {
             _monthPageService = monthPageService;
         }
 
-        [HttpGet("purchasesArea/{pageID}")]
+        [HttpGet("purchasesArea/{pageId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PurchasesAreaDto>> GetPurchasesAreaAsync(int pageID)
+        public async Task<ActionResult<PurchasesAreaDto>> GetPurchasesAreaAsync(int pageId)
         {
-            var area = await GetPageArea<PurchasesArea, PurchasesAreaDto>(pageID);
+            var area = await GetPageArea<PurchasesArea, PurchasesAreaDto>(pageId);
             return area;
         }
 
-        [HttpGet("desiresArea/{pageID}")]
+        [HttpGet("desiresArea/{pageId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<DesiresAreaDto>> GetDesiresAreaAsync(int pageID)
+        public async Task<ActionResult<DesiresAreaDto>> GetDesiresAreaAsync(int pageId)
         {
-            return await GetPageArea<DesiresArea, DesiresAreaDto>(pageID);
+            return await GetPageArea<DesiresArea, DesiresAreaDto>(pageId);
         }
 
-        [HttpGet("ideasArea/{pageID}")]
+        [HttpGet("ideasArea/{pageId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IdeasAreaDto>> GetIdeasAreaAsync(int pageID)
+        public async Task<ActionResult<IdeasAreaDto>> GetIdeasAreaAsync(int pageId)
         {
-            var model = await GetPageArea<IdeasArea, IdeasAreaDto>(pageID);
+            var model = await GetPageArea<IdeasArea, IdeasAreaDto>(pageId);
             return model;
         }
 
-        [HttpGet("goalsArea/{pageID}")]
+        [HttpGet("goalsArea/{pageId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<GoalsAreaDto>> GetGoalsAreaAsync(int pageID)
+        public async Task<ActionResult<GoalsAreaDto>> GetGoalsAreaAsync(int pageId)
         {
-            return await GetPageArea<GoalsArea, GoalsAreaDto>(pageID);
+            return await GetPageArea<GoalsArea, GoalsAreaDto>(pageId);
         }
 
         [HttpPost("transferData")]

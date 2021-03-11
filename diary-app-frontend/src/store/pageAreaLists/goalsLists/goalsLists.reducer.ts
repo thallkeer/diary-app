@@ -1,14 +1,15 @@
-import { IHabitDay, IHabitTracker } from "models";
 import { IGoalList } from "models/entities";
-import { IDiaryListWrapperCollectionState } from "models/states";
-import { ListWrapperUrls } from "models/types";
+import { ListsStateByName } from "models/states";
 import {
 	createHabitTrackerReducer,
 	habitTrackerInitialState,
-	habitTrackerReducer,
+	HabitTrackerReducerType,
 	IHabitTrackerState,
 } from "store/diaryLists/habitTrackers.reducer";
-import { ListCollectionHandler } from "../listCollectionHandler";
+import {
+	ListCollectionHandler,
+	ReducerCollection,
+} from "../listCollectionHandler";
 import { GoalsListsActions } from "./goalsLists.actions";
 
 export interface IGoalsListState {
@@ -17,32 +18,18 @@ export interface IGoalsListState {
 	listState: IHabitTrackerState;
 }
 
-export interface IGoalsListsState
-	extends IDiaryListWrapperCollectionState<IGoalsListState> {}
-
-const initialState: IGoalsListsState = {
-	byName: {},
-};
-const GOAL_LIST: ListWrapperUrls = "goalLists";
-
-type HabitTrackerReducerType = typeof habitTrackerReducer;
-
-class GoalsListsCollectionHandler extends ListCollectionHandler<
-	IGoalsListsState,
-	IGoalsListState,
+class GoalsListsReducerCollection extends ReducerCollection<
+	HabitTrackerReducerType,
 	IGoalList,
-	IHabitTrackerState,
-	IHabitTracker,
-	IHabitDay,
-	HabitTrackerReducerType
+	IGoalsListState
 > {
-	listNamePrefix = GOAL_LIST;
+	reducerNamePrefix = "goalLists";
 
-	createListReducer(listName: string) {
+	createReducer(listName: string) {
 		return createHabitTrackerReducer(listName);
 	}
 
-	listStateCreator(goalList: IGoalList) {
+	createState(goalList: IGoalList) {
 		const goalsListState: IGoalsListState = {
 			goalListId: goalList.id,
 			goalsAreaId: goalList.areaOwnerId,
@@ -56,12 +43,17 @@ class GoalsListsCollectionHandler extends ListCollectionHandler<
 	}
 }
 
-export const goalsListsHandler = new GoalsListsCollectionHandler();
+export const goalsListsHandler = new ListCollectionHandler<
+	IGoalsListState,
+	IGoalList,
+	IHabitTrackerState,
+	HabitTrackerReducerType
+>(new GoalsListsReducerCollection());
 
 export const goalsListsReducer = (
-	state = initialState,
+	state = {} as ListsStateByName<IGoalsListState>,
 	action: GoalsListsActions
-): IGoalsListsState => {
+): ListsStateByName<IGoalsListState> => {
 	switch (action.type) {
 		case "SET_GOALS_LIST":
 			return goalsListsHandler.handleSetLists(action.payload);

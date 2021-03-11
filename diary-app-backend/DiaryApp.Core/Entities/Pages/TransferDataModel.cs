@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using DiaryApp.Core.Entities.PageAreas;
 
 namespace DiaryApp.Core.Entities
 {

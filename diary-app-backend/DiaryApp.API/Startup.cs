@@ -17,7 +17,6 @@ using DiaryApp.API.Middleware;
 using DiaryApp.Services.Security;
 using DiaryApp.Infrastructure.Security;
 using DiaryApp.Infrastructure.ServiceInterfaces;
-using DiaryApp.Services.Services;
 using DiaryApp.Infrastructure.DependencyInjection;
 using System.Reflection;
 using DiaryApp.Infrastructure.Services;
@@ -26,13 +25,13 @@ namespace DiaryApp.API
 {
     public class Startup
     {
-        private readonly IWebHostEnvironment env;
+        private readonly IWebHostEnvironment _env;
         readonly string DiaryAppPolicy = nameof(DiaryAppPolicy);
 
         public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
-            env = webHostEnvironment;
+            _env = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
@@ -69,7 +68,7 @@ namespace DiaryApp.API
 
             services.AddControllers();
 
-            string connectionString = Configuration.GetConnectionString(env.IsDevelopment() ? "DefaultConnection" : "ProdConnection");
+            var connectionString = Configuration.GetConnectionString(_env.IsDevelopment() ? "DefaultConnection" : "ProdConnection");
 
             services.AddSwaggerGen(c =>
             {

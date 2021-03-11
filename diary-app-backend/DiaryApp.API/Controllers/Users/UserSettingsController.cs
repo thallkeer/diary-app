@@ -5,17 +5,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using DiaryApp.Core.Entities.Users.Settings;
-using DiaryApp.API.Models.Users;
 
 namespace DiaryApp.API.Controllers.Users
 {
-    public class UserSettingsController : DiaryAppContoller
+    public class UserSettingsController : DiaryAppController
     {
         private readonly ICrudService<UserSettingsDto, UserSettings> _settingsService;
 
         public UserSettingsController(
             ICrudService<UserSettingsDto, UserSettings> settingsService,
-            IMapper mapper) : base(mapper)
+            IMapper mapper) 
         {
             _settingsService = settingsService;
         }

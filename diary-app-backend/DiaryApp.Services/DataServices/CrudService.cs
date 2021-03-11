@@ -11,7 +11,7 @@ using DiaryApp.Services.Exceptions;
 using DiaryApp.Services.DataInterfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace DiaryApp.Services.Services
+namespace DiaryApp.Services.DataServices
 {
     public class CrudService<TDto, TEntity> : ICrudService<TDto, TEntity>
         where TDto : BaseDto
@@ -60,7 +60,7 @@ namespace DiaryApp.Services.Services
         }
 
         public async Task<IEnumerable<TCustomDto>> GetByCriteriaAsync<TCustomDto>(Expression<Func<TEntity, bool>> filter = null)
-            where TCustomDto : BaseDto
+            where TCustomDto : TDto
         {
             var entities = GetAsQueryable();
 
@@ -71,15 +71,10 @@ namespace DiaryApp.Services.Services
         }
 
         public async Task<TCustomDto> FirstOrDefaultAsync<TCustomDto>(Expression<Func<TEntity, bool>> filter)
-            where TCustomDto : BaseDto
+            where TCustomDto : TDto
         {
-            var entity = await FirstOrDefaultEntityAsync(filter);
+            var entity = await _dbSet.FirstOrDefaultAsync(filter);
             return _mapper.Map<TCustomDto>(entity);
-        }
-
-        protected async Task<TEntity> FirstOrDefaultEntityAsync(Expression<Func<TEntity, bool>> filter)
-        {
-            return await _dbSet.FirstOrDefaultAsync(filter);
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using DiaryApp.Core.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using DiaryApp.Core.Entities.PageAreas;
 
 namespace DiaryApp.Core.Entities
 {
@@ -17,7 +18,7 @@ namespace DiaryApp.Core.Entities
 
         public virtual List<HabitTracker> GoalLists { get; set; } = new List<HabitTracker>();
 
-        public void AddFromOtherArea(GoalsArea other)
+        public void AddDataFromOtherArea(GoalsArea other)
         {
             GoalLists.RemoveAll(gl => gl.SelectedDays.Count == 0 && gl.GoalName == GoalNameSTR);
 

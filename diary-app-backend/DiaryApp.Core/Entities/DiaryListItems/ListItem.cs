@@ -8,7 +8,7 @@
         public ListItem(ListItem original) : base(original)
         { }
 
-        public virtual new CommonList Owner { get; set; }
+        public virtual CommonList Owner { get; set; }
 
         public override DiaryListItem GetCopy() => new ListItem(this);
     }

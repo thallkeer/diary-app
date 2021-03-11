@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace DiaryApp.Services.DataInterfaces
 {
-    public interface ICrudService<TDto, TEntity> : IGetable<TEntity>
+    public interface ICrudService<TDto, TEntity> : IGetable<TDto, TEntity>
         where TEntity : BaseEntity
         where TDto : BaseDto
     {
@@ -13,7 +13,7 @@ namespace DiaryApp.Services.DataInterfaces
         /// </summary>
         /// <param name="entity">Dto</param>
         /// <returns></returns>
-        Task<int> CreateAsync(TDto entity);        
+        Task<int> CreateAsync(TDto entity);
 
         /// <summary>
         /// Returns entity by given id or null if it's not exists

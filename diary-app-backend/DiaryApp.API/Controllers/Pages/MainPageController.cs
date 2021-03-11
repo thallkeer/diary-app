@@ -1,35 +1,34 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
+using DiaryApp.Core.Entities;
 using DiaryApp.Services.DataInterfaces;
 using DiaryApp.Services.DTO;
 using Microsoft.AspNetCore.Http;
-using DiaryApp.Core.Entities;
+using Microsoft.AspNetCore.Mvc;
 
-namespace DiaryApp.API.Controllers
+namespace DiaryApp.API.Controllers.Pages
 {
     public class MainPageController : PageController<MainPageDto, MainPage>
     {
-        public MainPageController(IMainPageService mainPageService, IMapper mapper)
-            : base(mainPageService, mapper)
+        public MainPageController(IMainPageService mainPageService)
+            : base(mainPageService)
         {
         }
 
-        [HttpGet("importantThingsArea/{pageID}")]
+        [HttpGet("importantThingsArea/{pageId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ImportantThingsAreaDto>> GetImportantThingsAreaAsync(int pageID)
+        public async Task<ActionResult<ImportantThingsAreaDto>> GetImportantThingsAreaAsync(int pageId)
         {
-            var model = await GetPageArea<ImportantThingsArea, ImportantThingsAreaDto>(pageID);
+            var model = await GetPageArea<ImportantThingsArea, ImportantThingsAreaDto>(pageId);
             return model;
         }
 
-        [HttpGet("importantEventsArea/{pageID}")]
+        [HttpGet("importantEventsArea/{pageId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ImportantEventsAreaDto>> GetImportantEventsAreaAsync(int pageID)
+        public async Task<ActionResult<ImportantEventsAreaDto>> GetImportantEventsAreaAsync(int pageId)
         {
-            return await GetPageArea<ImportantEventsArea, ImportantEventsAreaDto>(pageID);
+            return await GetPageArea<ImportantEventsArea, ImportantEventsAreaDto>(pageId);
         }
     }
 }

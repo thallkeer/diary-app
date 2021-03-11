@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DiaryApp.Core.Entities;
+﻿using DiaryApp.Core.Entities;
 using DiaryApp.Services.DTO;
 using DiaryApp.Services.DataInterfaces;
 
@@ -9,7 +8,7 @@ namespace DiaryApp.API.Controllers.ListItems
     {
 
         public HabitDaysController(ICrudService<HabitDayDto, HabitDay> habitDayService
-            , IMapper mapper) : base(habitDayService, mapper)
+            ) : base(habitDayService)
         {
         }
     }

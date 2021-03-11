@@ -1,4 +1,4 @@
-import { IDiaryListWrapper, IEntity } from "models/entities";
+import { IMonthAreaList, IEntity } from "models/entities";
 import { IListWithItems } from "./lists";
 
 export interface IHabitDay extends IEntity {
@@ -7,8 +7,6 @@ export interface IHabitDay extends IEntity {
 	habitTrackerId: number;
 }
 
-export interface IHabitTracker
-	extends IDiaryListWrapper,
-		IListWithItems<IHabitDay> {
+export interface IHabitTracker extends IListWithItems<IHabitDay> {
 	goalName: string;
 }

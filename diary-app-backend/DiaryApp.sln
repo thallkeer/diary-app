@@ -3,15 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29209.62
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Core", "DiaryApp.Core\DiaryApp.Core.csproj", "{C9888D10-CFA7-47CC-AFAF-DE9766C231E3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{73072311-2DD2-4C48-A65F-5EC08E0FB6F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.API", "DiaryApp.API\DiaryApp.API.csproj", "{551F71B3-7172-4361-A163-DA9EFD82E17D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.IntegrationTests", "tests\DiaryApp.IntegrationTests\DiaryApp.IntegrationTests.csproj", "{5612A954-1313-426B-8A24-47FD6AF2A661}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Tests", "DiaryApp.Tests\DiaryApp.Tests.csproj", "{383BB263-467B-44CE-8614-7A17BF19BC75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.UnitTests", "tests\DiaryApp.UnitTests\DiaryApp.UnitTests.csproj", "{583C214E-E345-4639-82FC-FF2FCCA93C4F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Services", "DiaryApp.Services\DiaryApp.Services.csproj", "{588D3729-7CCE-4069-80E1-7C3D58267ACD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.API", "DiaryApp.API\DiaryApp.API.csproj", "{42E72365-101C-4B87-9A96-8F8092AA75AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Infrastructure", "Infrastructure\DiaryApp.Infrastructure.csproj", "{B1802F9E-5AB5-4B44-95A7-369B692DAB3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Core", "DiaryApp.Core\DiaryApp.Core.csproj", "{396DAC4D-BFFA-42AF-8BF2-872F51730CC4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Infrastructure", "DiaryApp.Infrastructure\DiaryApp.Infrastructure.csproj", "{CD30A0AA-FD76-467D-8773-EC9FFFC0441D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Services", "DiaryApp.Services\DiaryApp.Services.csproj", "{AB438C31-17CC-4F2C-91B4-B688F22EEE15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,29 +23,37 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C9888D10-CFA7-47CC-AFAF-DE9766C231E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9888D10-CFA7-47CC-AFAF-DE9766C231E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9888D10-CFA7-47CC-AFAF-DE9766C231E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9888D10-CFA7-47CC-AFAF-DE9766C231E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{551F71B3-7172-4361-A163-DA9EFD82E17D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{551F71B3-7172-4361-A163-DA9EFD82E17D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{551F71B3-7172-4361-A163-DA9EFD82E17D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{551F71B3-7172-4361-A163-DA9EFD82E17D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{383BB263-467B-44CE-8614-7A17BF19BC75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{383BB263-467B-44CE-8614-7A17BF19BC75}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{383BB263-467B-44CE-8614-7A17BF19BC75}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{383BB263-467B-44CE-8614-7A17BF19BC75}.Release|Any CPU.Build.0 = Release|Any CPU
-		{588D3729-7CCE-4069-80E1-7C3D58267ACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{588D3729-7CCE-4069-80E1-7C3D58267ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{588D3729-7CCE-4069-80E1-7C3D58267ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{588D3729-7CCE-4069-80E1-7C3D58267ACD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1802F9E-5AB5-4B44-95A7-369B692DAB3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1802F9E-5AB5-4B44-95A7-369B692DAB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1802F9E-5AB5-4B44-95A7-369B692DAB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1802F9E-5AB5-4B44-95A7-369B692DAB3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5612A954-1313-426B-8A24-47FD6AF2A661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5612A954-1313-426B-8A24-47FD6AF2A661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5612A954-1313-426B-8A24-47FD6AF2A661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5612A954-1313-426B-8A24-47FD6AF2A661}.Release|Any CPU.Build.0 = Release|Any CPU
+		{583C214E-E345-4639-82FC-FF2FCCA93C4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{583C214E-E345-4639-82FC-FF2FCCA93C4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{583C214E-E345-4639-82FC-FF2FCCA93C4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{583C214E-E345-4639-82FC-FF2FCCA93C4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42E72365-101C-4B87-9A96-8F8092AA75AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42E72365-101C-4B87-9A96-8F8092AA75AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42E72365-101C-4B87-9A96-8F8092AA75AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42E72365-101C-4B87-9A96-8F8092AA75AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{396DAC4D-BFFA-42AF-8BF2-872F51730CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{396DAC4D-BFFA-42AF-8BF2-872F51730CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{396DAC4D-BFFA-42AF-8BF2-872F51730CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{396DAC4D-BFFA-42AF-8BF2-872F51730CC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD30A0AA-FD76-467D-8773-EC9FFFC0441D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD30A0AA-FD76-467D-8773-EC9FFFC0441D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD30A0AA-FD76-467D-8773-EC9FFFC0441D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD30A0AA-FD76-467D-8773-EC9FFFC0441D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB438C31-17CC-4F2C-91B4-B688F22EEE15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB438C31-17CC-4F2C-91B4-B688F22EEE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB438C31-17CC-4F2C-91B4-B688F22EEE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB438C31-17CC-4F2C-91B4-B688F22EEE15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5612A954-1313-426B-8A24-47FD6AF2A661} = {73072311-2DD2-4C48-A65F-5EC08E0FB6F7}
+		{583C214E-E345-4639-82FC-FF2FCCA93C4F} = {73072311-2DD2-4C48-A65F-5EC08E0FB6F7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D2794FC6-24C6-42EF-A130-37DEB66396F1}

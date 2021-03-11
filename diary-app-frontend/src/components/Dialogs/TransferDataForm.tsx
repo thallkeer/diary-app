@@ -3,8 +3,8 @@ import { PageAreaTransferSettings } from "models/entities";
 import React, { useState, useRef } from "react";
 import { Button, Modal, Row, Form, FormGroup, Overlay } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { getMonthPage } from "store/pages";
 import axios from "../../axios/axios";
-import { getAppInfo } from "../../selectors/app-selectors";
 
 interface IState {
 	show: boolean;
@@ -12,14 +12,8 @@ interface IState {
 	error: string;
 }
 
-type PageParams = {
-	userId: number;
-	year: number;
-	month: number;
-};
-
 type TransferDataRequestParams = {
-	pageParams: PageParams;
+	originalPageId: number;
 	transferDataModel: PageAreaTransferSettings;
 };
 
@@ -34,18 +28,14 @@ export const TransferDataForm: React.FC<{
 	});
 	const target = useRef(null);
 
-	const { year, month, user } = useSelector(getAppInfo);
+	const monthPage = useSelector(getMonthPage);
 
 	const { transferDataModel } = state;
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const data: TransferDataRequestParams = {
-			pageParams: {
-				year,
-				month,
-				userId: user.id,
-			},
+			originalPageId: monthPage.id,
 			transferDataModel,
 		};
 
@@ -56,7 +46,6 @@ export const TransferDataForm: React.FC<{
 				onHide();
 			})
 			.catch((err) => {
-				console.log(err);
 				setState({ ...state, error: "Error!!!" });
 			});
 	};

@@ -23,6 +23,8 @@ export interface PageAreaTransferSettings {
 export interface NotificationsSettings {
 	id: number;
 	isActivated: boolean;
+	notifyDayBefore: boolean;
+	notifyAt: string;
 }
 
 export interface IUserSettings {
@@ -32,22 +34,15 @@ export interface IUserSettings {
 	notificationSettings: NotificationsSettings;
 }
 
-export interface IDiaryListWrapper extends IEntity {
+export interface IMonthAreaList<TList> extends IEntity {
 	areaOwnerId: number;
+	list: TList;
 }
 
-export interface IPurchaseList extends IDiaryListWrapper {
-	list: ITodoList;
-}
+export interface IPurchaseList extends IMonthAreaList<ITodoList> {}
 
-export interface IDesireList extends IDiaryListWrapper {
-	list: ICommonList;
-}
+export interface IDesireList extends IMonthAreaList<ICommonList> {}
 
-export interface IIdeasList extends IDiaryListWrapper {
-	list: ICommonList;
-}
+export interface IIdeasList extends IMonthAreaList<ICommonList> {}
 
-export interface IGoalList extends IDiaryListWrapper {
-	list: IHabitTracker;
-}
+export interface IGoalList extends IMonthAreaList<IHabitTracker> {}

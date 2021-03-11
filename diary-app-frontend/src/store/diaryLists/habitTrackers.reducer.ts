@@ -17,6 +17,8 @@ export const habitTrackerReducer = (
 	action: HabitTrackerActions
 ) => listReducer<IHabitTrackerState, IHabitTracker, IHabitDay>(state, action);
 
+export type HabitTrackerReducerType = typeof habitTrackerReducer;
+
 export const createHabitTrackerReducer = (reducerName: string) => {
 	return createNamedReducer(
 		habitTrackerReducer,

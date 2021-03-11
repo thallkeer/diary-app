@@ -1,65 +1,96 @@
-import { IListWithItems } from "models";
-import { IDiaryListWrapper, IEntity } from "../../models/entities";
-import {
-	IDiaryListWrapperCollectionState,
-	IListState,
-	ListsStateByName,
-} from "../../models/states";
-import { getListsCollectionSelector } from "../pages/pages.selectors";
+import { IEntity, IMonthAreaList } from "../../models/entities";
+import { ListsStateByName } from "../../models/states";
 
-export abstract class ListCollectionHandler<
-	TListCollectionState extends IDiaryListWrapperCollectionState<TListWrapperState>,
-	TListWrapperState,
-	TListWrapper extends IDiaryListWrapper,
-	TListState extends IListState<TList, TItem>,
-	TList extends IListWithItems<TItem>,
-	TItem extends IEntity,
-	TReducer
-> {
+export abstract class ReducerCollection<TReducer, TEntity, TState> {
 	private reducers: Map<string, TReducer>;
-	protected abstract listNamePrefix: string;
+	protected abstract reducerNamePrefix: string;
 
 	constructor() {
 		this.reducers = new Map<string, TReducer>();
 	}
 
-	protected abstract createListReducer(listName: string): TReducer;
+	protected abstract createReducer(reducerName: string): TReducer;
 
-	protected abstract listStateCreator(list: TListWrapper): TListWrapperState;
-
-	/**
-	 * Generates name for list to identify it in reducer
-	 * @param listId List unique identifier
-	 */
-	public getListName = (listId: number) => this.listNamePrefix + "_" + listId;
+	protected abstract createState(entity: TEntity): TState;
 
 	/**
-	 * Creates new reducer and state for given list wrapper
+	 * Creates new reducer and state for given entity
 	 * @param list List wrapper entity
 	 */
-	public createListState = (list: TListWrapper): TListWrapperState => {
-		const listName = this.getListName(list.id);
-		const reducer = this.createListReducer(listName);
+	public add = (entityKey: number, entity: TEntity): TState => {
+		const listName = this.getReducerName(entityKey);
+		const reducer = this.createReducer(listName);
 		this.reducers.set(listName, reducer);
-		const listState = this.listStateCreator(list);
-		return listState;
+		return this.createState(entity);
 	};
+
+	/**
+	 * Returns reducer by given name
+	 * @param reducerName name of reducer
+	 * @returns
+	 */
+	public get(reducerName: string) {
+		return this.reducers.get(reducerName);
+	}
+
+	/**
+	 * Removes all reducer from collection
+	 */
+	public clear() {
+		this.reducers.clear();
+	}
+
+	/**
+	 * Generates name for entity to identify it in reducer
+	 * @param entityKey Entity unique identifier
+	 */
+	public getReducerName = (entityKey: number) =>
+		this.reducerNamePrefix + "_" + entityKey;
+}
+
+export class ListCollectionHandler<
+	TListWrapperState,
+	TListWrapper extends IEntity,
+	TListState,
+	TReducer
+> {
+	private reducers: ReducerCollection<
+		TReducer,
+		TListWrapper,
+		TListWrapperState
+	>;
+
+	constructor(
+		reducers: ReducerCollection<TReducer, TListWrapper, TListWrapperState>
+	) {
+		this.reducers = reducers;
+	}
+
+	/**
+	 * Returns name of reducer for list with given id
+	 * @param listId id of list
+	 * @returns
+	 */
+	public getListName(listId: number): string {
+		return this.reducers.getReducerName(listId);
+	}
 
 	/**
 	 * Handles set action. Initializes state with given lists.
 	 * @param lists Lists collection
 	 */
-	public handleSetLists = (lists: TListWrapper[]): TListCollectionState => {
+	public handleSetLists = (
+		lists: TListWrapper[]
+	): ListsStateByName<TListWrapperState> => {
 		this.reducers.clear();
 		const newState: ListsStateByName<TListWrapperState> = {};
 
 		lists.forEach((list) => {
-			const listName = this.getListName(list.id);
-			newState[listName] = this.createListState(list);
+			const listName = this.reducers.getReducerName(list.id);
+			newState[listName] = this.reducers.add(list.id, list);
 		});
-		return {
-			byName: newState,
-		} as TListCollectionState;
+
+		return newState;
 	};
 
 	/**
@@ -68,63 +99,54 @@ export abstract class ListCollectionHandler<
 	 * @param list
 	 */
 	public handleAddList = (
-		currentState: TListCollectionState,
+		currentState: ListsStateByName<TListWrapperState>,
 		list: TListWrapper
-	): TListCollectionState => {
-		const addedState = this.createListState(list);
-		const plName = this.getListName(list.id);
+	): ListsStateByName<TListWrapperState> => {
+		const addedState = this.reducers.add(list.id, list);
+		const plName = this.reducers.getReducerName(list.id);
+
 		return {
 			...currentState,
-			byName: {
-				...currentState.byName,
-				[plName]: addedState,
-			},
+			[plName]: addedState,
 		};
 	};
 
 	/**
-	 * Deletes list from state.
+	 * Deletes list reducer from state.
 	 * @param currentState
 	 * @param listId
 	 */
 	handleDeleteList = (
-		currentState: TListCollectionState,
+		currentState: ListsStateByName<TListWrapperState>,
 		listId: number
-	): TListCollectionState => {
-		const listName = this.getListName(listId);
+	): ListsStateByName<TListWrapperState> => {
+		const listName = this.reducers.getReducerName(listId);
 		const stateAfterDelete = { ...currentState };
 		delete stateAfterDelete.byName[listName];
 		return stateAfterDelete;
 	};
 
 	/**
-	 * Handles list crud actions.
+	 * Handles concrete list crud actions.
 	 * @param currentState
 	 * @param listKey
 	 * @param reduce
 	 */
 	handleListAction = (
-		currentState: TListCollectionState,
+		currentState: ListsStateByName<TListWrapperState>,
 		listKey: string,
 		reduce: (reducer: TReducer, list: TListWrapperState) => TListState
-	): TListCollectionState => {
+	): ListsStateByName<TListWrapperState> => {
 		const reducer = this.reducers.get(listKey);
 		if (!reducer) return currentState;
-		const listsByName = getListsCollectionSelector<
-			TListCollectionState,
-			TListWrapperState
-		>(currentState);
-		const list = listsByName[listKey];
 
+		const list = currentState[listKey];
 		const newListState = reduce(reducer, list);
 		return {
 			...currentState,
-			byName: {
-				...currentState.byName,
-				[listKey]: {
-					...list,
-					listState: newListState,
-				},
+			[listKey]: {
+				...list,
+				listState: newListState,
 			},
 		};
 	};

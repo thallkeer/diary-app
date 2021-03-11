@@ -1,5 +1,6 @@
 ﻿using DiaryApp.Core.Interfaces;
 using DiaryApp.Core.Entities;
+using DiaryApp.Core.Entities.PageAreas;
 
 namespace DiaryApp.Core.Extensions
 {
@@ -16,7 +17,7 @@ namespace DiaryApp.Core.Extensions
         {
             bool transfer = transferDataModel.GetValueForArea<T>();
             if (transfer)
-                pageAreaReceiver.AddFromOtherArea(pageAreaSource);
+                pageAreaReceiver.AddDataFromOtherArea(pageAreaSource);
         }
     }
 }

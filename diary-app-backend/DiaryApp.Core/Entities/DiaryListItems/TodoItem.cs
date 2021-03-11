@@ -8,7 +8,7 @@ namespace DiaryApp.Core.Entities
 
         public TodoItem(TodoItem original) : base(original)
         {
-            this.Done = original.Done;
+            Done = original.Done;
         }
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace DiaryApp.Core.Entities
         /// </summary>
         public bool Done { get; set; }
 
-        public virtual new TodoList Owner { get; set; }
+        public virtual TodoList Owner { get; set; }
 
         public override DiaryListItem GetCopy() => new TodoItem(this);
     }

@@ -1,6 +1,7 @@
-﻿using DiaryApp.Core.Extensions;
-using DiaryApp.Core.Interfaces;
+﻿using DiaryApp.Core.Interfaces;
 using System.Collections.Generic;
+using DiaryApp.Core.Entities.PageAreas;
+using System.Linq;
 
 namespace DiaryApp.Core.Entities
 {
@@ -17,10 +18,27 @@ namespace DiaryApp.Core.Entities
 
         public virtual List<PurchaseList> PurchasesLists { get; set; } = new List<PurchaseList>();
 
-        public void AddFromOtherArea(PurchasesArea other)
+        public void AddDataFromOtherArea(PurchasesArea other)
         {
-            PurchasesLists.RemoveAll(pl => pl.Items.Count == 0);
-            PurchasesLists.AddRange(other.PurchasesLists.CopyPurchaseLists());
+            if (Id == 0)
+            {
+                PurchasesLists.RemoveAll(pl => pl.Items.Count == 0);
+            }
+
+            var copiedLists = other.PurchasesLists.Select(pl =>
+            {
+                var listCopy = new PurchaseList(pl.List.Title)
+                {
+                    AreaOwner = this,
+                    AreaOwnerID = Id
+                };
+
+                listCopy.List.Items.AddRange(pl.CopyItems());
+
+                return listCopy;
+            });
+
+            PurchasesLists.AddRange(copiedLists);
         }
 
         protected override void Initialize()

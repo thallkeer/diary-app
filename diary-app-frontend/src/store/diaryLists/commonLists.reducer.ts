@@ -30,3 +30,5 @@ export const commonListReducer = (
 	action: CommonListActions
 ): ICommonListState =>
 	diaryListReducer<ICommonListState, ICommonList, IListItem>(state, action);
+
+export type CommonListReducerType = typeof commonListReducer;

@@ -31,7 +31,6 @@ const GoalsArea: React.FC = () => {
 		const tracker: IHabitTracker = {
 			id: 0,
 			goalName: "Цель на месяц",
-			areaOwnerId: area.id,
 			items: [],
 			pageId: monthPage.id,
 		};

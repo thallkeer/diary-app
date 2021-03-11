@@ -36,3 +36,5 @@ export const todosReducer = (
 			return diaryListReducer<ITodoListState, ITodoList, ITodo>(state, action);
 	}
 };
+
+export type TodoReducerType = typeof todosReducer;

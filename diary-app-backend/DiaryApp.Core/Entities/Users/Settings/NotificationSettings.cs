@@ -4,6 +4,8 @@ namespace DiaryApp.Core.Entities.Users.Settings
 {
     public class NotificationSettings : AppSettings
     {
+        public static readonly TimeSpan DefaultNotificationTime = new(10, 0, 0);
+
         /// <summary>
         /// Is notifications allowed
         /// </summary>
@@ -17,6 +19,6 @@ namespace DiaryApp.Core.Entities.Users.Settings
         /// <summary>
         /// Time of day when notification should be triggered
         /// </summary>
-        public TimeSpan NotifyAt { get; set; } = new TimeSpan(10, 0, 0);
+        public TimeSpan NotifyAt { get; set; } = DefaultNotificationTime;
     }
 }

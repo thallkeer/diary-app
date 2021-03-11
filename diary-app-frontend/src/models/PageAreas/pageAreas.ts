@@ -1,6 +1,7 @@
 import {
 	IDesireList,
 	IEntity,
+	IGoalList,
 	IIdeasList,
 	IPurchaseList,
 } from "models/entities";
@@ -31,5 +32,5 @@ export interface IIdeasArea extends IPageArea {
 }
 
 export interface IGoalsArea extends IPageArea {
-	goalLists: IHabitTracker[];
+	goalLists: IGoalList[];
 }

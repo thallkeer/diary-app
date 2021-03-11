@@ -1,25 +1,22 @@
-﻿using AutoMapper;
-using DiaryApp.API.Models;
-using DiaryApp.Services.DTO;
+﻿using System.Threading.Tasks;
+using DiaryApp.API.Requests;
+using DiaryApp.Core.Entities;
 using DiaryApp.Core.Interfaces;
-using DiaryApp.Services.Exceptions;
 using DiaryApp.Services.DataInterfaces;
+using DiaryApp.Services.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using DiaryApp.Core.Entities;
-using DiaryApp.API.Requests;
 
-namespace DiaryApp.API.Controllers
+namespace DiaryApp.API.Controllers.Pages
 {
-    public class PageController<TPageDto, TPage> : DiaryAppContoller
+    public class PageController<TPageDto, TPage> : DiaryAppController
         where TPageDto : PageDto
         where TPage : PageBase
     {
         protected readonly IPageService<TPageDto, TPage> pageService;
 
-        public PageController(IPageService<TPageDto, TPage> pageService, IMapper mapper)
-            : base(mapper)
+        public PageController(IPageService<TPageDto, TPage> pageService)
+            
         {
             this.pageService = pageService;
         }
@@ -33,7 +30,7 @@ namespace DiaryApp.API.Controllers
             if (page == null)
                 return NotFound();
 
-            return Ok(_mapper.Map<TPageDto>(page));
+            return Ok(Mapper.Map<TPageDto>(page));
         }
 
         [HttpPost]
@@ -42,19 +39,7 @@ namespace DiaryApp.API.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult<TPageDto>> CreatePageAsync(CreatePageRequest pageParams)
         {
-            TPageDto page;
-            try
-            {
-                page = await pageService.CreateAsync(pageParams.UserId, pageParams.Year, pageParams.Month);
-            }
-            catch (PageAlreadyExistsException e)
-            {
-                throw new HttpException(System.Net.HttpStatusCode.Conflict, e.Message);
-            }
-            catch (UserNotExistsException ex)
-            {
-                throw new HttpException(System.Net.HttpStatusCode.BadRequest, ex.Message);
-            }
+            var page = await pageService.CreateAsync(pageParams.UserId, pageParams.Year, pageParams.Month);
             return Ok(page);
         }
 
@@ -62,14 +47,8 @@ namespace DiaryApp.API.Controllers
             where TPageArea : class, IPageArea
             where TPageAreaDto : PageAreaDto
         {
-            TPageArea area = await pageService.GetPageArea<TPageArea>(pageID);
-            if (area == null)
-            {
-                string err = $"{typeof(TPageArea).Name} not found for pageID {pageID}";
-                Logger.Error(err);
-                return NotFound(err);
-            }
-            return Ok(_mapper.Map<TPageAreaDto>(area));
+            var area = await pageService.GetPageAreaOrThrowAsync<TPageArea>(pageID);
+            return Ok(Mapper.Map<TPageAreaDto>(area));
         }
     }
 }

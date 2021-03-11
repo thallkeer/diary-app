@@ -5,7 +5,9 @@ using DiaryApp.API.Models.Users;
 using DiaryApp.Core.Entities.Users.Settings;
 using DiaryApp.Services.DTO.Notifications;
 using DiaryApp.Core.Entities.Notifications;
+using DiaryApp.Core.Entities.PageAreas;
 using DiaryApp.Services.DTO.Users;
+using DiaryApp.Services.DTO.Lists;
 
 namespace DiaryApp.API
 {
@@ -23,11 +25,15 @@ namespace DiaryApp.API
             CreateMap<CommonList, CommonListDto>().ReverseMap();
 
             CreateMap<PurchaseList, ListWrapperDto>();
-            CreateMap<PurchaseList, PurchaseListDto>().ReverseMap();
+            CreateMap<PurchaseList, PurchasesListDto>().ReverseMap();
             CreateMap<IdeasList, ListWrapperDto>();
             CreateMap<IdeasList, IdeasListDto>().ReverseMap();
             CreateMap<DesiresList, ListWrapperDto>();
-            CreateMap<DesiresList, DesireListDto>().ReverseMap();
+            CreateMap<DesiresList, DesiresListDto>().ReverseMap();
+            CreateMap<HabitTracker, GoalsListDto>()
+                .ForMember(gl => gl.List, htdto => htdto.MapFrom(src => src))
+                .ForMember(gl => gl.AreaOwnerId, htdto => htdto.MapFrom(src => src.GoalsAreaID))
+                .ReverseMap();
 
             CreateMap<MainPage, PageDto>().ReverseMap();
             CreateMap<MonthPage, PageDto>().ReverseMap();
@@ -42,8 +48,7 @@ namespace DiaryApp.API
             CreateMap<IdeasArea, IdeasAreaDto>().ReverseMap();
             CreateMap<GoalsArea, GoalsAreaDto>().ReverseMap();
             CreateMap<HabitTracker, HabitTrackerDto>()
-                .ForMember(ht => ht.Items, htdto => htdto.MapFrom(src => src.SelectedDays))
-                .ForMember(ht => ht.AreaOwnerId, htdto => htdto.MapFrom(src => src.GoalsAreaID))
+                .ForMember(ht => ht.Items, htdto => htdto.MapFrom(src => src.SelectedDays))           
                 .ReverseMap();
             CreateMap<HabitDay, HabitDayDto>().ReverseMap();
 
@@ -59,7 +64,9 @@ namespace DiaryApp.API
             CreateMap<NotificationsSettingsDto, NotificationSettings>()
                .ReverseMap();
 
-            CreateMap<Notification, NotificationDto>().ReverseMap();
+            CreateMap<Notification, NotificationDto>()
+                .ForMember(n => n.UserTelegramId, dto => dto.MapFrom(src => src.User.TelegramId))
+                .ReverseMap();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DiaryApp.Services.DTO;
+﻿using DiaryApp.Services.DTO;
 using DiaryApp.Core.Entities;
 using DiaryApp.Services.DataInterfaces;
 using Microsoft.AspNetCore.Http;
@@ -14,12 +13,12 @@ namespace DiaryApp.API.Controllers
     /// </summary>
     /// <typeparam name="TDto">Type of dto</typeparam>
     /// <typeparam name="TEntity">Type of entity</typeparam>
-    public class CrudController<TDto, TEntity> : DiaryAppContoller
+    public class CrudController<TDto, TEntity> : DiaryAppController
         where TDto : BaseDto
         where TEntity : BaseEntity
     {
         protected readonly ICrudService<TDto, TEntity> _crudService;
-        public CrudController(ICrudService<TDto, TEntity> crudService, IMapper mapper) : base(mapper)
+        public CrudController(ICrudService<TDto, TEntity> crudService)
         {
             _crudService = crudService;
         }
@@ -33,11 +32,12 @@ namespace DiaryApp.API.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]       
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public virtual async Task<ActionResult<TDto>> GetAsync(int id, CancellationToken cancellationToken = default)
         {
             var entity = await _crudService.GetByIdAsync(id);
-            return Ok(_mapper.Map<TDto>(entity));
+            return entity == null ? (ActionResult<TDto>) NotFound() : Ok(Mapper.Map<TDto>(entity));
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace DiaryApp.API.Controllers
         public async Task<IActionResult> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
             await _crudService.DeleteAsync(id);
-            return NoContent();   
+            return NoContent();
         }
     }
 }

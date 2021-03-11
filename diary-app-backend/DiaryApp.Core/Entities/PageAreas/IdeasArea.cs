@@ -1,4 +1,5 @@
-﻿using DiaryApp.Core.Interfaces;
+﻿using DiaryApp.Core.Entities.PageAreas;
+using DiaryApp.Core.Interfaces;
 
 namespace DiaryApp.Core.Entities
 {
@@ -14,11 +15,11 @@ namespace DiaryApp.Core.Entities
 
         public virtual IdeasList IdeasList { get; set; }
 
-        public void AddFromOtherArea(IdeasArea other)
+        public void AddDataFromOtherArea(IdeasArea other)
         {
-            var otherListItemsCopy = other.IdeasList.CopyItems();
             if (IdeasList == null)
                 Initialize();
+            var otherListItemsCopy = other.IdeasList.CopyItems();
             IdeasList.Items.AddRange(otherListItemsCopy);
         }
 

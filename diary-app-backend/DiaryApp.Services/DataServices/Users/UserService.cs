@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,7 +9,7 @@ using DiaryApp.Services.Exceptions;
 using DiaryApp.Services.DataInterfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace DiaryApp.Services.Services
+namespace DiaryApp.Services.DataServices
 {
     public class UserService : CrudService<UserDto,AppUser>, IUserService
     {
@@ -19,7 +18,7 @@ namespace DiaryApp.Services.Services
         {
         }
 
-        public UserDto Authenticate(string username, string password)
+        public async Task<UserDto> AuthenticateAsync(string username, string password)
         {
             if (string.IsNullOrEmpty(username))
                 throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(username));
@@ -27,42 +26,54 @@ namespace DiaryApp.Services.Services
             if (string.IsNullOrEmpty(password))
                 throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
 
-            var user = _dbSet.SingleOrDefault(x => x.Username == username);
+            var user = await _dbSet.SingleOrDefaultAsync(x => x.Username == username);
 
             if (user == null)
-                return null;
+                throw new HttpException(System.Net.HttpStatusCode.BadRequest, new { UserName = "Username is incorrect!" });
 
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
-                return null;
+                throw new HttpException(System.Net.HttpStatusCode.BadRequest, new { Password = "Password is incorrect!" });
 
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task RegisterAsync(UserDto userDto, string password)
+        public async Task<UserDto> RegisterAsync(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(password))
                 throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
 
-            if (await _dbSet.AnyAsync(x => x.Username == userDto.Username))
-                throw new Exception($"Username '{userDto.Username}' is already taken");
+            if (await _dbSet.AnyAsync(x => x.Username == username))
+                throw new HttpException(System.Net.HttpStatusCode.BadRequest, new { UserName = $"Username '{username}' is already taken!" });
 
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            var user = _mapper.Map<AppUser>(userDto);
+            var user = new AppUser
+            {
+                Username = username,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            };
 
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+            await _dbSet.AddAsync(user);
+            await _context.SaveChangesAsync();
 
-            var userWithPassword = _mapper.Map<UserWithPasswordDto>(user);
+            return _mapper.Map<UserDto>(user);
+        }       
 
-            int userId = await base.CreateAsync(userWithPassword);
-            //TODO: fix
-            userDto.Id = userId;
+        public async Task<bool> IsUserExists(int userId)
+        {
+            var res = await _dbSet.AnyAsync(u => u.Id == userId);
+            return res;
+        }
+
+        public async Task<UserSettingsDto> GetSettingsAsync(int userId)
+        {
+            AppUser user = await GetUserByIdOrThrow(userId);
+            return _mapper.Map<UserSettingsDto>(user.Settings);
         }
 
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            if (password == null) throw new ArgumentNullException(nameof(password));
             if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
 
             using var hmac = new System.Security.Cryptography.HMACSHA512();
@@ -72,7 +83,6 @@ namespace DiaryApp.Services.Services
 
         private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
         {
-            if (password == null) throw new ArgumentNullException(nameof(password));
             if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
             if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", nameof(storedHash));
             if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", nameof(storedSalt));
@@ -87,18 +97,6 @@ namespace DiaryApp.Services.Services
             }
 
             return true;
-        }
-
-        public async Task<bool> IsUserExists(int userId)
-        {
-            var res = await _dbSet.AnyAsync(u => u.Id == userId);
-            return res;
-        }
-
-        public async Task<UserSettingsDto> GetSettingsAsync(int userId)
-        {
-            AppUser user = await GetUserByIdOrThrow(userId);
-            return _mapper.Map<UserSettingsDto>(user.Settings);
         }
 
         private async Task<AppUser> GetUserByIdOrThrow(int userId)

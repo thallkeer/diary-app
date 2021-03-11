@@ -1,31 +1,31 @@
-﻿using DiaryApp.Core.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using DiaryApp.Core.Interfaces;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.PageAreas
 {
     public class DesiresArea : MonthPageArea, IMonthPageArea<DesiresArea>
     {
-        private const string HeaderSTR = "В этом месяце я хочу";
-        public const string ToVisitSTR = "Посетить";
-        public const string ToWatchSTR = "Посмотреть";
-        public const string ToReadSTR = "Прочитать";
+        private const string HeaderStr = "В этом месяце я хочу";
+        public const string ToVisitStr = "Посетить";
+        public const string ToWatchStr = "Посмотреть";
+        public const string ToReadStr = "Прочитать";
 
         public DesiresArea() : base()
         { }
 
-        public DesiresArea(MonthPage page, bool withInitialization) : base(page, HeaderSTR, withInitialization)
+        public DesiresArea(MonthPage page, bool withInitialization) : base(page, HeaderStr, withInitialization)
         { }
 
-        public virtual List<DesiresList> DesiresLists { get; set; } = new List<DesiresList>(3);
+        public virtual List<DesiresList> DesiresLists { get; set; } = new(3);
 
-        public void AddFromOtherArea(DesiresArea other)
+        public void AddDataFromOtherArea(DesiresArea other)
         {
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
             if (DesiresLists.Count == 0)
                 Initialize();
-            for (int i = 0; i < other.DesiresLists.Count; i++)
+            for (var i = 0; i < other.DesiresLists.Count; i++)
             {
                 var otherItemsCopy = other.DesiresLists[i].CopyItems();
                 DesiresLists[i].Items.AddRange(otherItemsCopy);
@@ -36,9 +36,9 @@ namespace DiaryApp.Core.Entities
         {
             DesiresLists = new List<DesiresList>
             {
-                new DesiresList(ToVisitSTR),
-                new DesiresList(ToWatchSTR),
-                new DesiresList(ToReadSTR)
+                new(ToVisitStr),
+                new(ToWatchStr),
+                new(ToReadStr)
             };
         }
     }

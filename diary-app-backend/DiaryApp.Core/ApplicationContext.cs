@@ -1,6 +1,7 @@
 ﻿using DiaryApp.Core.Configurations;
 using DiaryApp.Core.Entities;
 using DiaryApp.Core.Entities.Notifications;
+using DiaryApp.Core.Entities.PageAreas;
 using DiaryApp.Core.Entities.Users.Settings;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ namespace DiaryApp.Core
 
             modelBuilder.ApplyConfiguration(new MainPageConfiguration());
             modelBuilder.ApplyConfiguration(new MonthPageConfiguration());
-            //modelBuilder.ApplyConfiguration(new HabitTrackerConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationSettingsConfiguration());
         }
 
         public DbSet<EventList> EventLists { get; set; }

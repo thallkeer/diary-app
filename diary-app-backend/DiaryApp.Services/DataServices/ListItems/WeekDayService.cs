@@ -2,12 +2,12 @@
 using DiaryApp.Core;
 using DiaryApp.Services.DTO;
 using DiaryApp.Core.Entities;
-using DiaryApp.Services.DataInterfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using DiaryApp.Services.DataInterfaces.ListItems;
 
-namespace DiaryApp.Services.Services
+namespace DiaryApp.Services.DataServices
 {
     public class WeekDayService : CrudService<WeekDayDto, WeekDay>, IWeekDayService
     {

@@ -4,7 +4,7 @@ using DiaryApp.Core.Entities;
 using DiaryApp.Services.DTO;
 using DiaryApp.Services.DataInterfaces;
 
-namespace DiaryApp.Services.Services
+namespace DiaryApp.Services.DataServices
 {
     public class MainPageService : PageService<MainPageDto, MainPage>, IMainPageService
     {

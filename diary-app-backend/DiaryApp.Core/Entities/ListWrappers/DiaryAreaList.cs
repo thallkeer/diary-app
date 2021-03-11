@@ -5,20 +5,24 @@ using System.Linq;
 
 namespace DiaryApp.Core.Entities
 {
-    public class DiaryAreaList<TList, TListItem, TArea, TPage> : BaseEntity
+    public abstract class DiaryAreaList<TList, TListItem, TArea, TPage> : BaseEntity
         where TList : DiaryList<TListItem>, new()
         where TListItem : DiaryListItem
         where TArea : PageAreaBase<TPage>
         where TPage : PageBase
     {
         public DiaryAreaList()
-        {}
+        { }
 
-        public DiaryAreaList(string title)
+        /// <summary>
+        /// Creates new instance of diary area list and initialize wrapped diary list
+        /// </summary>
+        /// <param name="diaryListTitle"></param>
+        public DiaryAreaList(string diaryListTitle)
         {
             List = new TList
             {
-                Title = title
+                Title = diaryListTitle
             };
         }
 
@@ -33,7 +37,7 @@ namespace DiaryApp.Core.Entities
         public virtual TArea AreaOwner { get; set; }
 
         [NotMapped]
-        public List<TListItem> Items { get => List?.Items; set => List.Items = value; }
+        public List<TListItem> Items => List?.Items ?? new();
 
         /// <summary>
         /// Creates deep copy of wrapped list items.
@@ -41,7 +45,7 @@ namespace DiaryApp.Core.Entities
         /// <returns></returns>
         public IEnumerable<TListItem> CopyItems()
         {
-            return List?.Items?.Select(i => (TListItem) i.GetCopy()) ?? new List<TListItem>();
+            return Items.Select(i => (TListItem) i.GetCopy());
         }
     }
 }

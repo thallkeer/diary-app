@@ -43,7 +43,7 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:DiaryApp.API.Controllers.Lists.EventsController.PostAsync(DiaryApp.Services.DTO.EventItemDto,System.Threading.CancellationToken)">
+        <member name="M:DiaryApp.API.Controllers.ListItems.EventsController.PostAsync(DiaryApp.Services.DTO.EventItemDto,System.Threading.CancellationToken)">
             <summary>
             Creates new event at "Important Events" list. And schedules a notification 
             about this event if it's possible.

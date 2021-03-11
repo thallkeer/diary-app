@@ -7,7 +7,7 @@ namespace DiaryApp.Services.DTO.Notifications
     {
         [Required]
         public int UserId { get; set; }
-        public UserDto User { get; set; }
+        public long UserTelegramId { get; set; }
         [Required]
         public int EventId { get; set; }
         [Required]

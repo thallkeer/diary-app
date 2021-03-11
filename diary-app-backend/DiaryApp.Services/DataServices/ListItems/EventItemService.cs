@@ -2,13 +2,10 @@
 using DiaryApp.Core;
 using DiaryApp.Services.DTO;
 using DiaryApp.Core.Entities;
-using DiaryApp.Services.DataInterfaces.Lists;
+using DiaryApp.Services.DataInterfaces.ListItems;
 using System.Threading.Tasks;
-using DiaryApp.Services.DataInterfaces;
-using DiaryApp.Services.DTO.Notifications;
-using DiaryApp.Core.Entities.Notifications;
 
-namespace DiaryApp.Services.Services
+namespace DiaryApp.Services.DataServices
 {
     public class EventItemService : CrudService<EventItemDto, EventItem>, IEventItemService
     {

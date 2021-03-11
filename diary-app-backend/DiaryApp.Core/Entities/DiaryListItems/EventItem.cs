@@ -9,7 +9,7 @@ namespace DiaryApp.Core.Entities
 
         public EventItem(EventItem original) : base(original)
         {
-            this.Date = original.Date;
+            Date = original.Date;
         }
 
         /// <summary>
@@ -17,7 +17,7 @@ namespace DiaryApp.Core.Entities
         /// </summary>
         public DateTime Date { get; set; }
 
-        public virtual new EventList Owner { get; set; }
+        public virtual EventList Owner { get; set; }
 
         public override DiaryListItem GetCopy() => new EventItem(this);
     }

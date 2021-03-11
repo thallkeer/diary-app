@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core.Entities
 {
-    public class DiaryList<T> : BaseEntity  where T : DiaryListItem
+    public class DiaryList<T> : BaseEntity where T : DiaryListItem
     {
         [MaxLength(50)]
         public string Title { get; set; } = string.Empty;
@@ -17,6 +17,22 @@ namespace DiaryApp.Core.Entities
         public DiaryList(string title)
         {
             Title = title;
+        }
+
+        public TList GetListCopy<TList>()
+            where TList : DiaryList<T>, new()
+        {
+            var list = new TList()
+            {
+                Title = Title,
+                Items = new List<T>(Items.Count)
+            };
+
+            Items.ForEach(item =>
+            {
+                list.Items.Add((T)item.GetCopy());
+            });
+            return list;
         }
 
         public override string ToString()

@@ -1,4 +1,5 @@
 ﻿using DiaryApp.Core.Entities;
+using DiaryApp.Core.Entities.PageAreas;
 
 namespace DiaryApp.Core.Interfaces
 {
@@ -20,7 +21,7 @@ namespace DiaryApp.Core.Interfaces
         /// Copy content from other area
         /// </summary>
         /// <param name="otherArea"></param>
-        void AddFromOtherArea(T other);
+        void AddDataFromOtherArea(T other);
     }
 
     public interface IMonthPageArea<T> : IPageArea<T, MonthPage> where T : MonthPageArea

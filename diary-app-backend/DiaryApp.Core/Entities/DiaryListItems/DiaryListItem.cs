@@ -37,11 +37,6 @@ namespace DiaryApp.Core.Entities
         public int OwnerID { get; set; }
 
         /// <summary>
-        /// List which contains item
-        /// </summary>
-        public object Owner { get; set; }
-
-        /// <summary>
         /// Creates new item as copy of this, but without owner
         /// </summary>
         /// <returns></returns>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core.Entities
@@ -36,7 +35,7 @@ namespace DiaryApp.Core.Entities
             set
             {
                 if (value < 2020)
-                    throw new ArgumentOutOfRangeException($"{nameof(Year)} value must be more than 2020!");
+                    throw new ArgumentOutOfRangeException($"{nameof(value)} value must be more than 2020!");
                 year = value;
             } 
         }
@@ -53,7 +52,7 @@ namespace DiaryApp.Core.Entities
             set
             {
                 if (value < 1 || value > 12)
-                    throw new ArgumentOutOfRangeException($"{nameof(Month)} value must be between 1 and 12");
+                    throw new ArgumentOutOfRangeException($"{nameof(value)} value must be between 1 and 12");
                 month = value;
             }
         }
@@ -71,21 +70,6 @@ namespace DiaryApp.Core.Entities
         public override string ToString()
         {
             return $"{Id} {Year} {Month} | {UserId}";
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is PageBase @base &&
-                   Id == @base.Id &&
-                   Year == @base.Year &&
-                   Month == @base.Month &&
-                   UserId == @base.UserId &&
-                   EqualityComparer<AppUser>.Default.Equals(User, @base.User);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Id, Year, Month, UserId, User);
         }
     }
 }

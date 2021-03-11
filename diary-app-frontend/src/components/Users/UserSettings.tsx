@@ -53,6 +53,28 @@ const useUserSettings = (userId: number) => {
 	const [userTelegramId, setUserTelegramId] = useState("");
 	const [settings, setSettings] = useState<IUserSettings>(null);
 
+	const updateNotificationSettings = (propName: string, propValue: any) => {
+		const { notificationSettings } = settings;
+		setSettings({
+			...settings,
+			notificationSettings: {
+				...notificationSettings,
+				[propName]: propValue,
+			},
+		});
+	};
+
+	const updateTransferSettings = (propName: string, propValue: any) => {
+		const { pageAreaTransferSettings } = settings;
+		setSettings({
+			...settings,
+			pageAreaTransferSettings: {
+				...pageAreaTransferSettings,
+				[propName]: propValue,
+			},
+		});
+	};
+
 	useEffect(() => {
 		let mounted = true;
 		userService.getUserSettings(userId).then((resp) => {
@@ -64,6 +86,8 @@ const useUserSettings = (userId: number) => {
 					notificationSettings: {
 						id: 0,
 						isActivated: false,
+						notifyAt: "10:00:00",
+						notifyDayBefore: false,
 					},
 					pageAreaTransferSettings: {
 						id: 0,
@@ -75,34 +99,40 @@ const useUserSettings = (userId: number) => {
 		return () => (mounted = false);
 	}, [userId]);
 
-	return { settings, setSettings, userTelegramId, setUserTelegramId };
+	return {
+		settings,
+		updateNotificationSettings,
+		updateTransferSettings,
+		userTelegramId,
+		setUserTelegramId,
+	};
 };
 
 export const UserSettings = () => {
 	const { user } = useSelector(getAppInfo);
 	const {
 		settings,
-		setSettings,
+		updateNotificationSettings,
+		updateTransferSettings,
 		userTelegramId,
 		setUserTelegramId,
 	} = useUserSettings(user.id);
 
 	if (!settings) return <Loader />;
 
-	const { isActivated } = settings.notificationSettings;
+	const {
+		isActivated,
+		notifyAt,
+		notifyDayBefore,
+	} = settings.notificationSettings;
+
 	const transferSettings = settings.pageAreaTransferSettings;
 	const checkBoxes = prepareTransferData(transferSettings);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name } = e.currentTarget;
 
-		setSettings({
-			...settings,
-			pageAreaTransferSettings: {
-				...transferSettings,
-				[name]: !transferSettings[name],
-			},
-		});
+		updateTransferSettings(name, !transferSettings[name]);
 	};
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -116,14 +146,64 @@ export const UserSettings = () => {
 		history.push("/main");
 	};
 
+	const TransferSettingsCard = (
+		<Card style={{ marginTop: "2em", marginBottom: "2em" }}>
+			<Card.Header as="h6">
+				Настройки автоматического переноса зон списков
+			</Card.Header>
+			<Card.Body>
+				{checkBoxes.map((cb) => (
+					<FormGroup as={Row} key={cb.name}>
+						<Col sm={5}>
+							<Form.Check
+								custom
+								type="checkbox"
+								name={cb.name}
+								id={cb.name}
+								label={cb.text}
+								checked={transferSettings[cb.name]}
+								onChange={handleChange}
+							/>
+						</Col>
+					</FormGroup>
+				))}
+			</Card.Body>
+		</Card>
+	);
+
+	const CustomCheckboxRow: React.FC<{
+		propName: string;
+		propValue: boolean;
+		label: string;
+		disabled?: boolean;
+	}> = ({ propName, propValue, label, disabled = false }) => {
+		return (
+			<FormGroup as={Row}>
+				<Col sm={5}>
+					<Form.Check
+						custom
+						type="checkbox"
+						name={propName}
+						id={propName}
+						checked={!disabled && propValue}
+						disabled={disabled}
+						label={label}
+						onChange={(e) =>
+							updateNotificationSettings(propName, e.target.checked)
+						}
+					/>
+				</Col>
+			</FormGroup>
+		);
+	};
 	return (
 		<Container>
 			<Form style={{ marginTop: "2em" }} onSubmit={handleSubmit}>
-				<FormGroup as={Row}>
-					<Form.Label column sm="4">
+				<FormGroup as={Row} className="ml-2">
+					<Form.Label column sm="3">
 						Идентификатор Telegram
 					</Form.Label>
-					<Col sm="8">
+					<Col sm="2">
 						<FormControl
 							autoFocus={true}
 							type="text"
@@ -142,48 +222,35 @@ export const UserSettings = () => {
 				<Card style={{ marginTop: "2em" }}>
 					<Card.Header as="h6">Настройки уведомлений</Card.Header>
 					<Card.Body>
-						<FormGroup as={Row} className="ml-2">
-							<Form.Check
-								custom
-								type="checkbox"
-								name="isActivated"
-								id="isActivated"
-								checked={isActivated}
-								label="Получать уведомления о предстоящих событиях"
-								onChange={(e) =>
-									setSettings({
-										...settings,
-										notificationSettings: {
-											...settings.notificationSettings,
-											isActivated: e.target.checked,
-										},
-									})
-								}
-							/>
+						<CustomCheckboxRow
+							propName="isActivated"
+							propValue={isActivated}
+							label="Получать уведомления о предстоящих событиях"
+						/>
+						<CustomCheckboxRow
+							propName="notifyDayBefore"
+							propValue={notifyDayBefore}
+							label="Уведомлять за день до события"
+							disabled={!isActivated}
+						/>
+						<FormGroup as={Row}>
+							<Form.Label column sm="3">
+								Время получения уведомления
+							</Form.Label>
+							<Col sm={2}>
+								<FormControl
+									type="time"
+									value={notifyAt}
+									disabled={!isActivated}
+									onChange={(e) => {
+										updateNotificationSettings("notifyAt", e.target.value);
+									}}
+								/>
+							</Col>
 						</FormGroup>
 					</Card.Body>
 				</Card>
-				<Card style={{ marginTop: "2em", marginBottom: "2em" }}>
-					<Card.Header as="h6">
-						Настройки автоматического переноса зон списков
-					</Card.Header>
-					<Card.Body>
-						<FormGroup>
-							{checkBoxes.map((cb) => (
-								<FormGroup key={cb.name} as={Row} className="ml-2">
-									<Form.Check
-										custom
-										type="checkbox"
-										name={cb.name}
-										id={cb.name}
-										label={cb.text}
-										onChange={handleChange}
-									/>
-								</FormGroup>
-							))}
-						</FormGroup>
-					</Card.Body>
-				</Card>
+				{TransferSettingsCard}
 				<Button variant="primary" type="submit">
 					Сохранить
 				</Button>

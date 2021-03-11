@@ -7,7 +7,7 @@ using DiaryApp.Core.Entities;
 using DiaryApp.Services.Exceptions;
 using DiaryApp.Services.DataInterfaces;
 
-namespace DiaryApp.Services.Services
+namespace DiaryApp.Services.DataServices
 {
     public class MonthPageService : PageService<MonthPageDto, MonthPage>, IMonthPageService
     {

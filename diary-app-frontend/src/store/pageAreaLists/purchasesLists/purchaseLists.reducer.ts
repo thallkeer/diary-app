@@ -1,17 +1,16 @@
-import { ITodo, ITodoList } from "models";
 import {
 	createTodoListReducer,
 	ITodoListState,
 	todoListInitialState,
-	todosReducer,
+	TodoReducerType,
 } from "store/diaryLists";
 import { IPurchaseList } from "models/entities";
-import { IDiaryListWrapperCollectionState } from "models/states";
-import { ListWrapperUrls } from "models/types";
-import { ListCollectionHandler } from "../listCollectionHandler";
+import {
+	ListCollectionHandler,
+	ReducerCollection,
+} from "../listCollectionHandler";
 import { PurchaseListsActions } from "./purchaseLists.actions";
-
-const PURCHASE_LIST: ListWrapperUrls = "purchaseLists";
+import { ListsStateByName } from "models/states";
 
 export interface IPurchaseListState {
 	purchaseListId: number;
@@ -19,30 +18,18 @@ export interface IPurchaseListState {
 	listState: ITodoListState;
 }
 
-export interface IPurchaseListsState
-	extends IDiaryListWrapperCollectionState<IPurchaseListState> {}
-
-const initialState: IPurchaseListsState = {
-	byName: {},
-};
-
-type TodoReducerType = typeof todosReducer;
-class PurchaseListsCollectionHandler extends ListCollectionHandler<
-	IPurchaseListsState,
-	IPurchaseListState,
+class PurchaseListsReducerCollection extends ReducerCollection<
+	TodoReducerType,
 	IPurchaseList,
-	ITodoListState,
-	ITodoList,
-	ITodo,
-	TodoReducerType
+	IPurchaseListState
 > {
-	listNamePrefix = PURCHASE_LIST;
+	reducerNamePrefix = "purchaseLists";
 
-	createListReducer(listName: string) {
+	createReducer(listName: string) {
 		return createTodoListReducer(listName);
 	}
 
-	listStateCreator(purchaseList: IPurchaseList): IPurchaseListState {
+	createState(purchaseList: IPurchaseList): IPurchaseListState {
 		const purchaseListState: IPurchaseListState = {
 			purchaseListId: purchaseList.id,
 			purchaseAreaId: purchaseList.areaOwnerId,
@@ -56,12 +43,17 @@ class PurchaseListsCollectionHandler extends ListCollectionHandler<
 	}
 }
 
-export const purchaseListsHandler = new PurchaseListsCollectionHandler();
+export const purchaseListsHandler = new ListCollectionHandler<
+	IPurchaseListState,
+	IPurchaseList,
+	ITodoListState,
+	TodoReducerType
+>(new PurchaseListsReducerCollection());
 
 export const purchaseListsReducer = (
-	state = initialState,
+	state = {} as ListsStateByName<IPurchaseListState>,
 	action: PurchaseListsActions
-): IPurchaseListsState => {
+): ListsStateByName<IPurchaseListState> => {
 	switch (action.type) {
 		case "SET_PURCHASE_LISTS":
 			return purchaseListsHandler.handleSetLists(action.payload);

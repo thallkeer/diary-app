@@ -1,43 +1,35 @@
-import { ICommonList, IListItem } from "models";
 import { IDesireList } from "models/entities";
-import { IDiaryListWrapperCollectionState } from "models/states";
-import { ListWrapperUrls } from "models/types";
+import { ListsStateByName } from "models/states";
 import {
 	commonListInitialState,
-	commonListReducer,
+	CommonListReducerType,
 	createCommonListReducer,
 	ICommonListState,
 } from "store/diaryLists/commonLists.reducer";
-import { ListCollectionHandler } from "../listCollectionHandler";
+import {
+	ListCollectionHandler,
+	ReducerCollection,
+} from "../listCollectionHandler";
 import { DesireListsActions } from "./desireLists.actions";
-
-const DESIRE_LIST: ListWrapperUrls = "desireLists";
 
 export interface IDesireListState {
 	desireListId: number;
 	desireAreaId: number;
 	listState: ICommonListState;
 }
-export interface IDesireListsState
-	extends IDiaryListWrapperCollectionState<IDesireListState> {}
 
-type CommonListReducerType = typeof commonListReducer;
-class DesireListsCollectionHandler extends ListCollectionHandler<
-	IDesireListsState,
-	IDesireListState,
+class DesireListsReducerCollection extends ReducerCollection<
+	CommonListReducerType,
 	IDesireList,
-	ICommonListState,
-	ICommonList,
-	IListItem,
-	CommonListReducerType
+	IDesireListState
 > {
-	listNamePrefix = DESIRE_LIST;
+	reducerNamePrefix = "desireLists";
 
-	createListReducer(listName: string) {
+	createReducer(listName: string) {
 		return createCommonListReducer(listName);
 	}
 
-	listStateCreator(desireList: IDesireList) {
+	createState(desireList: IDesireList) {
 		const purchaseListState: IDesireListState = {
 			desireListId: desireList.id,
 			desireAreaId: desireList.areaOwnerId,
@@ -51,16 +43,17 @@ class DesireListsCollectionHandler extends ListCollectionHandler<
 	}
 }
 
-export const desireListsHandler = new DesireListsCollectionHandler();
-
-const initialState: IDesireListsState = {
-	byName: {},
-};
+export const desireListsHandler = new ListCollectionHandler<
+	IDesireListState,
+	IDesireList,
+	ICommonListState,
+	CommonListReducerType
+>(new DesireListsReducerCollection());
 
 export const desireListsReducer = (
-	state = initialState,
+	state = {} as ListsStateByName<IDesireListState>,
 	action: DesireListsActions
-): IDesireListsState => {
+): ListsStateByName<IDesireListState> => {
 	switch (action.type) {
 		case "SET_DESIRE_LISTS":
 			return desireListsHandler.handleSetLists(action.payload);

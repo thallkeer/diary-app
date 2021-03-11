@@ -14,9 +14,7 @@ const Login: React.FC = () => {
 	const [userName, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
-	function validateForm() {
-		return userName.length > 0 && password.length > 0;
-	}
+	const validateForm = () => userName.length > 0 && password.length > 0;
 
 	async function handleSubmit(
 		e: React.MouseEvent<HTMLElement, MouseEvent>,
@@ -34,6 +32,26 @@ const Login: React.FC = () => {
 			)
 		);
 	}
+
+	const SignInBtn: React.FC<{ text: string; isSignIn: boolean }> = ({
+		text,
+		isSignIn,
+	}) => {
+		return (
+			<Button
+				className={`btn ${isSignIn ? "btn-primary" : "btn-success"}`}
+				block
+				size="lg"
+				disabled={!validateForm()}
+				type="submit"
+				onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) =>
+					handleSubmit(e, isSignIn)
+				}
+			>
+				{text}
+			</Button>
+		);
+	};
 
 	return (
 		<Container>
@@ -56,30 +74,8 @@ const Login: React.FC = () => {
 							type="password"
 						/>
 					</FormGroup>
-					<Button
-						onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) =>
-							handleSubmit(e, true)
-						}
-						className="btn btn-primary"
-						block
-						size="lg"
-						disabled={!validateForm()}
-						type="submit"
-					>
-						Войти
-					</Button>
-					<Button
-						onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) =>
-							handleSubmit(e, false)
-						}
-						className="btn btn-success"
-						block
-						size="lg"
-						disabled={!validateForm()}
-						type="submit"
-					>
-						Регистрация
-					</Button>
+					<SignInBtn text="Войти" isSignIn={true} />
+					<SignInBtn text="Регистрация" isSignIn={false} />
 				</form>
 			</div>
 		</Container>

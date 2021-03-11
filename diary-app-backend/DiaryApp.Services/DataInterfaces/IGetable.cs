@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 
 namespace DiaryApp.Services.DataInterfaces
 {
-    public interface IGetable<TEntity>
+    public interface IGetable<TDto, TEntity>
+        where TDto : BaseDto
         where TEntity : BaseEntity
     {
         /// <summary>
         /// Returns all entities that match the given filter
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<TDto>> GetByCriteriaAsync<TDto>(Expression<Func<TEntity, bool>> filter = null) where TDto : BaseDto;
+        Task<IEnumerable<TCustomDto>> GetByCriteriaAsync<TCustomDto>(Expression<Func<TEntity, bool>> filter = null) where TCustomDto : TDto;
 
         /// <summary>
         /// Returns first entity that match the given filter
         /// </summary>
         /// <returns></returns>
-        Task<TDto> FirstOrDefaultAsync<TDto>(Expression<Func<TEntity, bool>> filter) where TDto : BaseDto;
+        Task<TCustomDto> FirstOrDefaultAsync<TCustomDto>(Expression<Func<TEntity, bool>> filter) where TCustomDto : TDto;
     }
 }
