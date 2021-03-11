@@ -28,6 +28,11 @@ namespace DiaryApp.Core.Migrations
                 nullable: false,
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp without time zone");
+
+            migrationBuilder.Sql(@"
+UPDATE public.""GoalsAreas""
+SET ""Header""='Трекеры привычек'
+WHERE ""Header"" <> 'Трекеры привычек';");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

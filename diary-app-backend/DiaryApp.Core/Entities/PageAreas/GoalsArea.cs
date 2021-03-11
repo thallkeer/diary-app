@@ -7,7 +7,7 @@ namespace DiaryApp.Core.Entities
 {
     public class GoalsArea : MonthPageArea, IMonthPageArea<GoalsArea>
     {
-        private const string HeaderSTR = "Цели на этот месяц";
+        private const string HeaderSTR = "Трекеры привычек";
         public const string GoalNameSTR = "Название цели";
 
         public GoalsArea()
