@@ -9,6 +9,8 @@ using DiaryApp.Services.Exceptions;
 using DiaryApp.Core.Entities;
 using System;
 using System.Linq.Expressions;
+using DiaryApp.Core.Entities.Pages;
+using DiaryApp.Services.DataInterfaces.Users;
 
 namespace DiaryApp.Services.DataServices
 {

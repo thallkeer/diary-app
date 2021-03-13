@@ -1,7 +1,7 @@
-﻿using DiaryApp.Core.Entities.Users.Settings;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using DiaryApp.Core.Entities.Users.Settings;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.Users
 {
     public class AppUser : BaseEntity
     {

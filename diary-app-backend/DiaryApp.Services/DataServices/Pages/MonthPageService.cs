@@ -1,59 +1,53 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Ardalis.GuardClauses;
 using AutoMapper;
 using DiaryApp.Core;
-using DiaryApp.Services.DTO;
-using DiaryApp.Core.Entities;
-using DiaryApp.Services.Exceptions;
+using DiaryApp.Core.Entities.Pages;
+using DiaryApp.Core.Entities.Users.Settings;
 using DiaryApp.Services.DataInterfaces;
+using DiaryApp.Services.DataInterfaces.Users;
+using DiaryApp.Services.DTO;
+using DiaryApp.Services.Exceptions;
 
-namespace DiaryApp.Services.DataServices
+namespace DiaryApp.Services.DataServices.Pages
 {
     public class MonthPageService : PageService<MonthPageDto, MonthPage>, IMonthPageService
     {
         public MonthPageService(ApplicationContext context, IMapper mapper, IUserService userService) : base(context, mapper, userService)
         {}
 
-        //TODO: write tests
         public override async Task<MonthPageDto> CreateAsync(int userId, int year, int month)
         {
             var settings = await userService.GetSettingsAsync(userId);
-            if (settings == null || settings.PageAreaTransferSettings == null)
+            if (settings?.PageAreaTransferSettings == null)
                 return await base.CreateAsync(userId, year, month);
 
-            int prevMonth = month - 1;
+            var prevMonth = month - 1;
             var prevPage = await GetPageAsync(userId, year, prevMonth);
             if (prevPage == null)
                 return await base.CreateAsync(userId, year, month);
 
-            var transferSettings = settings.PageAreaTransferSettings;
-            var transferModel = new TransferDataModel
-            {
-                TransferPurchasesArea = transferSettings.TransferPurchasesArea,
-                TransferDesiresArea = transferSettings.TransferDesiresArea,
-                TransferIdeasArea = transferSettings.TransferIdeasArea,
-                TransferGoalsArea = transferSettings.TransferGoalsArea
-            };
-
-            await TransferPageDataToNextMonthAsync(prevPage.Id, transferModel);
+            await TransferPageDataToNextMonthAsync(prevPage.Id, settings.PageAreaTransferSettings);
             //TODO catch and handle PageDataTransferException
             return await GetPageAsync(userId, year, month);
         }
 
-        public async Task TransferPageDataToNextMonthAsync(int monthPageId, TransferDataModel transferDataModel)
+        public async Task TransferPageDataToNextMonthAsync(int monthPageId, PageAreaTransferSettingsDto transferSettings)
         {
-            if (transferDataModel == null) throw new ArgumentNullException(nameof(transferDataModel));
+            Guard.Against.Null(transferSettings, nameof(transferSettings));
 
-            MonthPage monthPage = await _dbSet.FindAsync(monthPageId);
+            var monthPage = await _dbSet.FindAsync(monthPageId);
             if (monthPage == null)
                 throw new EntityNotFoundException<MonthPage>();
 
-            int nextMonth = monthPage.Month + 1;
-            MonthPage nextPage = await GetPageEntityAsync(monthPage.UserId, monthPage.Year, nextMonth);
+            var nextMonth = monthPage.Month + 1;
+            var nextPage = await GetPageEntityAsync(monthPage.UserId, monthPage.Year, nextMonth);
 
-            using var transaction = await _context.Database.BeginTransactionAsync();
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
+                var transferDataModel = _mapper.Map<PageAreaTransferSettings>(transferSettings);
                 if (nextPage == null)
                 {
                     nextPage = monthPage.TransferDataToNextMonth(transferDataModel);

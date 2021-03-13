@@ -1,22 +1,23 @@
-﻿using DiaryApp.Core.Interfaces;
-using System.Collections.Generic;
-using DiaryApp.Core.Entities.PageAreas;
+﻿using System.Collections.Generic;
 using System.Linq;
+using DiaryApp.Core.Entities.ListWrappers;
+using DiaryApp.Core.Entities.Pages;
+using DiaryApp.Core.Interfaces;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.PageAreas
 {
     public class PurchasesArea : MonthPageArea, IMonthPageArea<PurchasesArea>
     {
         private const string Title = "Название списка";
-        private const string HeaderSTR = "Покупки";
+        private const string HeaderStr = "Покупки";
 
         public PurchasesArea() : base()
         { }
 
-        public PurchasesArea(MonthPage page, bool needInit) : base(page, HeaderSTR, needInit)
+        public PurchasesArea(MonthPage page, bool needInit) : base(page, HeaderStr, needInit)
         { }
 
-        public virtual List<PurchaseList> PurchasesLists { get; set; } = new List<PurchaseList>();
+        public virtual List<PurchaseList> PurchasesLists { get; set; } = new();
 
         public void AddDataFromOtherArea(PurchasesArea other)
         {
@@ -30,7 +31,7 @@ namespace DiaryApp.Core.Entities
                 var listCopy = new PurchaseList(pl.List.Title)
                 {
                     AreaOwner = this,
-                    AreaOwnerID = Id
+                    AreaOwnerId = Id
                 };
 
                 listCopy.List.Items.AddRange(pl.CopyItems());
@@ -45,8 +46,8 @@ namespace DiaryApp.Core.Entities
         {
             PurchasesLists = new List<PurchaseList>
             {
-                new PurchaseList(Title),
-                new PurchaseList(Title)
+                new(Title),
+                new(Title)
             };
         }
     }

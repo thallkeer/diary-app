@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DiaryApp.Core.Entities
 {
@@ -15,7 +16,13 @@ namespace DiaryApp.Core.Entities
         /// <summary>
         /// Date of event
         /// </summary>
+        [Required]
         public DateTime Date { get; set; }
+
+        /// <summary>
+        /// Location of event
+        /// </summary>
+        public string Location { get; set; }
 
         public virtual EventList Owner { get; set; }
 

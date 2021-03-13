@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.PageAreas
 {
     public class ImportantEventsArea : PageAreaBase<MainPage>
     {
@@ -13,7 +13,7 @@ namespace DiaryApp.Core.Entities
         {}
 
         [Required]
-        public int ImportantEventsID { get; set; }
+        public int ImportantEventsId { get; set; }
         public virtual EventList ImportantEvents { get; set; }        
 
         protected override void Initialize()

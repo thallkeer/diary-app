@@ -1,6 +1,8 @@
 ﻿using AutoFixture;
 using DiaryApp.Core.Entities;
 using System.Linq;
+using DiaryApp.Core.Entities.DiaryLists;
+using DiaryApp.Core.Entities.ListWrappers;
 using DiaryApp.Core.Entities.PageAreas;
 using DiaryApp.UnitTests.Extensions;
 

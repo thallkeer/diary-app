@@ -1,6 +1,9 @@
 ﻿using AutoFixture;
 using DiaryApp.Core.Entities;
+using DiaryApp.Core.Entities.DiaryLists;
+using DiaryApp.Core.Entities.ListWrappers;
 using DiaryApp.Core.Entities.PageAreas;
+using DiaryApp.Core.Entities.Pages;
 
 namespace DiaryApp.UnitTests.Extensions
 {

@@ -15,8 +15,19 @@ namespace DiaryApp.Services.DataServices
 
         public async override Task<int> CreateAsync(EventItemDto dto)
         {
-            dto.Date = dto.Date.ToLocalTime();
+            CorrectDate(dto);
             return await base.CreateAsync(dto);
+        }
+
+        public async override Task UpdateAsync(EventItemDto dto)
+        {
+            CorrectDate(dto);
+            await base.UpdateAsync(dto);
+        }
+
+        private void CorrectDate(EventItemDto dto)
+        {
+            dto.Date = dto.Date.ToLocalTime();
         }
     }
 }

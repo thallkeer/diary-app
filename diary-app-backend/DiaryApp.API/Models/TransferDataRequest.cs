@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using DiaryApp.Core.Entities;
+using DiaryApp.Services.DTO;
 
 namespace DiaryApp.API.Models
 {
@@ -8,6 +9,6 @@ namespace DiaryApp.API.Models
         [Required]
         public int OriginalPageId { get; set; }
         [Required]
-        public TransferDataModel TransferDataModel { get; set; }
+        public PageAreaTransferSettingsDto TransferDataModel { get; set; }
     }
 }

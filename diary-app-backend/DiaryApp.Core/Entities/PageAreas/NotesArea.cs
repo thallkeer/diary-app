@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.PageAreas
 {
     public class NotesArea : PageAreaBase<WeekPage>
     {

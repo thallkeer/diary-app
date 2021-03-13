@@ -241,7 +241,7 @@ export const UserSettings = () => {
 								<FormControl
 									type="time"
 									value={notifyAt}
-									disabled={!isActivated}
+									disabled={!isActivated || !notifyDayBefore}
 									onChange={(e) => {
 										updateNotificationSettings("notifyAt", e.target.value);
 									}}

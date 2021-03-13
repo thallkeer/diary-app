@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DiaryApp.Core.Entities.DiaryLists;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.ListWrappers
 {
     public class WeekPlansList : BaseEntity
     {

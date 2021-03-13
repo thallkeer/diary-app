@@ -3,6 +3,8 @@ using DiaryApp.Services.DataServices.Notifications;
 using DiaryApp.Services.DataServices;
 using Microsoft.Extensions.DependencyInjection;
 using DiaryApp.Services.DataInterfaces.ListItems;
+using DiaryApp.Services.DataInterfaces.Users;
+using DiaryApp.Services.DataServices.Pages;
 
 namespace DiaryApp.Services.Bootstrap
 {

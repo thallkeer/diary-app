@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using DiaryApp.Core.Entities.PageAreas;
+using DiaryApp.Core.Entities.Users.Settings;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiaryApp.IntegrationTests
@@ -25,7 +26,7 @@ namespace DiaryApp.IntegrationTests
             await service.CreateAsync(monthPage.UserId, monthPage.Year, monthPage.Month);
             var nextMonthPage = await service.GetPageAsync(monthPage.UserId, monthPage.Year, monthPage.Month + 1);
             Assert.Null(nextMonthPage);
-            var transferModel = TransferDataModel.CreateFullTransferModel();
+            var transferModel = CreateFullTransferModel();
             await service.TransferPageDataToNextMonthAsync(monthPage.Id, transferModel);
             nextMonthPage = await service.GetPageAsync(monthPage.UserId, monthPage.Year, monthPage.Month + 1);
             Assert.NotNull(nextMonthPage);
@@ -39,7 +40,7 @@ namespace DiaryApp.IntegrationTests
             var monthPage = await _dbContext.MonthPages.FirstAsync(p => p.Month < 11);
             var nextMonthPage = await service.GetPageAsync(monthPage.UserId, monthPage.Year, monthPage.Month + 1);
             Assert.Null(nextMonthPage);
-            var transferModel = TransferDataModel.CreateFullTransferModel();
+            var transferModel = CreateFullTransferModel();
             await service.TransferPageDataToNextMonthAsync(monthPage.Id, transferModel);
             nextMonthPage = await service.GetPageAsync(monthPage.UserId, monthPage.Year, monthPage.Month + 1);
             Assert.NotNull(nextMonthPage);
@@ -47,8 +48,8 @@ namespace DiaryApp.IntegrationTests
         }
 
         [Theory]
-        [MemberData(nameof(TransferDataModels))]
-        public async Task TransferPageDataToNextMonthShouldWorkRight(TransferDataModel transferModel, int userId, int month)
+        [MemberData(nameof(PageAreaTransferSettings))]
+        public async Task TransferPageDataToNextMonthShouldWorkRight(PageAreaTransferSettingsDto transferModel, int userId, int month)
         {
             var service = GetMonthPageService();
             var monthPage = await service.GetPageAsync(userId, 2020, month);
@@ -60,8 +61,8 @@ namespace DiaryApp.IntegrationTests
             Assert.NotNull(monthPage);
             Assert.NotEqual(0, monthPage.Id);
 
-            List<MonthPageArea> pageAreasBefore = await GetPageAreas(service, monthPage);
-            Assert.All(pageAreasBefore, (parea) => Assert.NotNull(parea));
+            var pageAreasBefore = await GetPageAreas(service, monthPage);
+            Assert.All(pageAreasBefore, Assert.NotNull);
 
             await service.TransferPageDataToNextMonthAsync(monthPage.Id, transferModel);
 
@@ -104,32 +105,31 @@ namespace DiaryApp.IntegrationTests
         #endregion
 
         #region TestData
-        public static TheoryData<TransferDataModel, int, int> TransferDataModels()
+        public static TheoryData<PageAreaTransferSettingsDto, int, int> PageAreaTransferSettings()
         {
-            var td = new TheoryData<TransferDataModel, int, int>
+            var td = new TheoryData<PageAreaTransferSettingsDto, int, int>
             {
-                { TransferDataModel.CreateFullTransferModel(), 6, 6 },
-                { new TransferDataModel { TransferPurchasesArea = true }, 6, 7 },
-                { new TransferDataModel { TransferDesiresArea = true }, 6, 8 },
-                { new TransferDataModel { TransferGoalsArea = true }, 6, 9 },
-                { new TransferDataModel { TransferIdeasArea = true }, 6, 10 },
-                { new TransferDataModel { TransferIdeasArea = true, TransferPurchasesArea = true }, 6, 11 },
-                { new TransferDataModel(), 3, 4 }
+                { CreateFullTransferModel(), 6, 6 },
+                { new PageAreaTransferSettingsDto { TransferPurchasesArea = true }, 6, 7 },
+                { new PageAreaTransferSettingsDto { TransferDesiresArea = true }, 6, 8 },
+                { new PageAreaTransferSettingsDto { TransferGoalsArea = true }, 6, 9 },
+                { new PageAreaTransferSettingsDto { TransferIdeasArea = true }, 6, 10 },
+                { new PageAreaTransferSettingsDto { TransferIdeasArea = true, TransferPurchasesArea = true }, 6, 11 },
+                { new PageAreaTransferSettingsDto(), 3, 4 }
             };
             return td;
         }
-        #endregion
-    }
-}
 
-public static class TransferDataModelExtensions
-{
-    public static IEnumerable<Type> GetPresentAreaTypes(this TransferDataModel transferDataModel)
-    {
-        return transferDataModel
-            .GetType()
-            .GetProperties()
-            .Select(p => p.GetCustomAttribute<PageAreaAttribute>())
-            .Select(a => a.AreaType);
+        public static PageAreaTransferSettingsDto CreateFullTransferModel()
+        {
+            return new()
+            {
+                TransferDesiresArea = true,
+                TransferGoalsArea = true,
+                TransferIdeasArea = true,
+                TransferPurchasesArea = true
+            };
+        }
+        #endregion
     }
 }

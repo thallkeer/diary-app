@@ -4,6 +4,8 @@ using FluentAssertions;
 using FluentAssertions.Common;
 using System.Collections.Generic;
 using System.Linq;
+using DiaryApp.Core.Entities.DiaryLists;
+using DiaryApp.Core.Entities.ListWrappers;
 using DiaryApp.Core.Entities.PageAreas;
 using Xunit;
 
@@ -76,10 +78,10 @@ namespace DiaryApp.UnitTests
             var otherArea = new GoalsArea(null, true);
 
             var listsCountInputArea = originalArea.GoalLists.Count;
-            var emptyListsCountInputArea = originalArea.GoalLists.Where(gl => gl.SelectedDays.Count == 0 && gl.GoalName == GoalsArea.GoalNameSTR).Count();
+            var emptyListsCountInputArea = originalArea.GoalLists.Where(gl => gl.SelectedDays.Count == 0 && gl.GoalName == GoalsArea.GoalNameStr).Count();
 
             var listsCountOtherArea = otherArea.GoalLists.Count;
-            var nonEmptyListsCountOtherArea = otherArea.GoalLists.Where(gl => gl.GoalName != GoalsArea.GoalNameSTR).Count();
+            var nonEmptyListsCountOtherArea = otherArea.GoalLists.Where(gl => gl.GoalName != GoalsArea.GoalNameStr).Count();
 
             var selectedDaysInputAreaCount = originalArea.GoalLists.Count(gl => gl.SelectedDays.Count != 0);
             var selectedDaysOtherAreaCount = otherArea.GoalLists.Count(gl => gl.SelectedDays.Count != 0);
@@ -153,7 +155,7 @@ namespace DiaryApp.UnitTests
             var paWithCustomLists = new GoalsArea(null, false);
             var pa = new HabitTracker
             {
-                GoalName = GoalsArea.GoalNameSTR,
+                GoalName = GoalsArea.GoalNameStr,
                 SelectedDays = new List<HabitDay>()
             };
             pa.SelectedDays.Add(new HabitDay());

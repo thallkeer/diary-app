@@ -1,5 +1,4 @@
-﻿using System;
-using DiaryApp.Core.Entities.Users.Settings;
+﻿using DiaryApp.Core.Entities.Users.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,7 +1,8 @@
-﻿using DiaryApp.Core.Interfaces;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using DiaryApp.Core.Entities.Pages;
+using DiaryApp.Core.Interfaces;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.PageAreas
 {
     public abstract class PageAreaBase<TPage> : BaseEntity, IPageArea
         where TPage : PageBase

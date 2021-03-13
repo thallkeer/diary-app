@@ -1,22 +1,26 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Ardalis.GuardClauses;
+using DiaryApp.Core.Entities.Users;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.Pages
 {
     /// <summary>
     /// Represents base page class for diary
     /// </summary>
     public abstract class PageBase : BaseEntity
     {
+        private const int MinimumYear = 2020;
+        private const int MaximumYear = 9999;
+        private const int MinimumMonth = 1;
+        private const int MaximumMonth = 12;
+        
         public PageBase()
         {}
 
         public PageBase(int year, int month, AppUser user)
         {
-            if (year < 2020)
-                throw new ArgumentOutOfRangeException(nameof(year));
-            if (month <= 0 && month > 12)
-                throw new ArgumentOutOfRangeException(nameof(month));
+            Guard.Against.OutOfRange(year, nameof(year), MinimumYear, MaximumYear);
+            Guard.Against.OutOfRange(month, nameof(month), MinimumMonth ,MaximumMonth);
             Year = year;
             Month = month;
             User = user;
@@ -25,7 +29,7 @@ namespace DiaryApp.Core.Entities
 
         private int year;
         [Required]
-        [Range(2020, 9999)]
+        [Range(MinimumYear, MaximumYear)]
         public int Year 
         {
             get
@@ -34,15 +38,14 @@ namespace DiaryApp.Core.Entities
             }
             set
             {
-                if (value < 2020)
-                    throw new ArgumentOutOfRangeException($"{nameof(value)} value must be more than 2020!");
+                Guard.Against.OutOfRange(value, nameof(value), MinimumYear, MaximumYear);
                 year = value;
             } 
         }
 
         private int month;
         [Required]
-        [Range(1, 12)]
+        [Range(MinimumMonth, MaximumMonth)]
         public int Month
         {
             get
@@ -51,8 +54,7 @@ namespace DiaryApp.Core.Entities
             }
             set
             {
-                if (value < 1 || value > 12)
-                    throw new ArgumentOutOfRangeException($"{nameof(value)} value must be between 1 and 12");
+                Guard.Against.OutOfRange(month, nameof(month), MinimumMonth ,MaximumMonth);
                 month = value;
             }
         }

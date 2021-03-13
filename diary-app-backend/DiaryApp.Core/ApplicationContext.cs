@@ -1,7 +1,11 @@
 ﻿using DiaryApp.Core.Configurations;
 using DiaryApp.Core.Entities;
+using DiaryApp.Core.Entities.DiaryLists;
+using DiaryApp.Core.Entities.ListWrappers;
 using DiaryApp.Core.Entities.Notifications;
 using DiaryApp.Core.Entities.PageAreas;
+using DiaryApp.Core.Entities.Pages;
+using DiaryApp.Core.Entities.Users;
 using DiaryApp.Core.Entities.Users.Settings;
 using Microsoft.EntityFrameworkCore;
 

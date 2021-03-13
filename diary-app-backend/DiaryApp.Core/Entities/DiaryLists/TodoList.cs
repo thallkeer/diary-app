@@ -1,5 +1,5 @@
 ﻿
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.DiaryLists
 {
     public class TodoList : DiaryList<TodoItem>
     {

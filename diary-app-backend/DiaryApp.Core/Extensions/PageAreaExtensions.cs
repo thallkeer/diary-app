@@ -1,6 +1,7 @@
 ﻿using DiaryApp.Core.Interfaces;
 using DiaryApp.Core.Entities;
 using DiaryApp.Core.Entities.PageAreas;
+using DiaryApp.Core.Entities.Users.Settings;
 
 namespace DiaryApp.Core.Extensions
 {
@@ -13,7 +14,7 @@ namespace DiaryApp.Core.Extensions
         /// <param name="pageAreaReceiver">Page area that will receive data</param>
         /// <param name="transferDataModel">Transfer model</param>
         /// <param name="pageAreaSource">Page area source of data</param>
-        public static void TransferAreaDataIfNeeded<T>(this T pageAreaReceiver, TransferDataModel transferDataModel, T pageAreaSource) where T : MonthPageArea, IMonthPageArea<T>
+        public static void TransferAreaDataIfNeeded<T>(this T pageAreaReceiver, PageAreaTransferSettings transferDataModel, T pageAreaSource) where T : MonthPageArea, IMonthPageArea<T>
         {
             bool transfer = transferDataModel.GetValueForArea<T>();
             if (transfer)

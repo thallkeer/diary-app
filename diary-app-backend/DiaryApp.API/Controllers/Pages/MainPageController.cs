@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using DiaryApp.Core.Entities;
+using DiaryApp.Core.Entities.PageAreas;
 using DiaryApp.Services.DataInterfaces;
 using DiaryApp.Services.DTO;
 using Microsoft.AspNetCore.Http;

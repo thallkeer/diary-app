@@ -11,7 +11,7 @@ namespace DiaryApp.Core.Entities
 
 		protected bool Equals(BaseEntity other)
 		{
-			return string.Equals(Id, other.Id);
+			return Equals(Id, other.Id);
 		}
 
 		public override bool Equals(object obj)

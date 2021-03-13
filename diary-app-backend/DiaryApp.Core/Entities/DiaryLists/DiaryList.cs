@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.DiaryLists
 {
-    public class DiaryList<T> : BaseEntity where T : DiaryListItem
+    public abstract class DiaryList<T> : BaseEntity where T : DiaryListItem
     {
         [MaxLength(50)]
         public string Title { get; set; } = string.Empty;
 
-        public virtual List<T> Items { get; set; } = new List<T>();
+        public virtual List<T> Items { get; set; } = new();
 
         public DiaryList()
         {

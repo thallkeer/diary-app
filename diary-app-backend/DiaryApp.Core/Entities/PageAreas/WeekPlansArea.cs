@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using DiaryApp.Core.Entities.ListWrappers;
+using DiaryApp.Core.Entities.PageAreas;
 
 namespace DiaryApp.Core.Entities
 {

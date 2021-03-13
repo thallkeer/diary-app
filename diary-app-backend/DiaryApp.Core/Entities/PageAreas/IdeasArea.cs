@@ -1,16 +1,17 @@
-﻿using DiaryApp.Core.Entities.PageAreas;
+﻿using DiaryApp.Core.Entities.ListWrappers;
+using DiaryApp.Core.Entities.Pages;
 using DiaryApp.Core.Interfaces;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.PageAreas
 {
     public class IdeasArea : MonthPageArea, IMonthPageArea<IdeasArea>
     {
-        private const string HeaderSTR = "Идеи этого месяца";
+        private const string HeaderStr = "Идеи этого месяца";
 
         public IdeasArea()
         {}
 
-        public IdeasArea(MonthPage page, bool needInit) : base(page, HeaderSTR, needInit)
+        public IdeasArea(MonthPage page, bool needInit) : base(page, HeaderStr, needInit)
         {}
 
         public virtual IdeasList IdeasList { get; set; }

@@ -29,4 +29,5 @@ export interface ITodo extends IListItem {
 
 export interface IEvent extends IListItem {
 	date: Date;
+	location: string;
 }

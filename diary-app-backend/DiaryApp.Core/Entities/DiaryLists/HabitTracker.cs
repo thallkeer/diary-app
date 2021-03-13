@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using DiaryApp.Core.Entities.PageAreas;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.DiaryLists
 {
     /// <summary>
     /// Tracks user habit along month
@@ -23,10 +24,10 @@ namespace DiaryApp.Core.Entities
         /// <summary>
         /// Days of habit. Contains only days user has marked.
         /// </summary>
-        public virtual List<HabitDay> SelectedDays { get; set; } = new List<HabitDay>();
+        public virtual List<HabitDay> SelectedDays { get; set; } = new();
 
         [Required]
-        public int GoalsAreaID { get; set; }
+        public int GoalsAreaId { get; set; }
 
         public virtual GoalsArea GoalsArea { get; set; }        
 

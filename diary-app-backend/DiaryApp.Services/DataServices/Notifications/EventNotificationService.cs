@@ -8,6 +8,12 @@ using DiaryApp.Services.DTO.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DiaryApp.Services.DataInterfaces.Users;
+using System.Text;
+using DiaryApp.Core.Entities;
+using Ardalis.GuardClauses;
+using DiaryApp.Services.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace DiaryApp.Services.DataServices.Notifications
 {
@@ -27,17 +33,22 @@ namespace DiaryApp.Services.DataServices.Notifications
         public async Task<List<NotificationDto>> CreateNotificationsIfNecessary(int userId, int eventId)
         {
             var user = await _userService.FirstOrDefaultAsync<UserWithSettingsDto>(u => u.Id == userId);
+            if (user == null)
+                throw new UserNotExistsException();
 
             List<NotificationDto> createdNotifications = new();
 
             if (!IsUserAllowsNotifications(user)) return createdNotifications;
-            
-            var notificationSettings = user.Settings.NotificationSettings;
-            var createdEvent = await _eventItemService.GetByIdAsync(eventId);
 
-            async void TryCreateAndAddToResultList(DateTime dateToNotify, bool forDayBefore)
+            var notificationSettings = user.Settings.NotificationSettings;
+            var eventDto = await _eventItemService.GetByIdAsync(eventId);
+            if (eventDto == null)
+                throw new EntityNotFoundException<EventItem>();
+            var createdEvent = _mapper.Map<EventItem>(eventDto);
+
+            async Task TryCreateAndAddToResultList(DateTime dateToNotify, TimeSpan notifyAt, bool forDayBefore)
             {
-                var dateWithTimeToNotify = CombineDateAndTimeToNotify(dateToNotify, notificationSettings.NotifyAt);
+                var dateWithTimeToNotify = CombineDateAndTimeToNotify(dateToNotify, notifyAt);
                 var notification = await CreateNotificationAsync(createdEvent, user, dateWithTimeToNotify, forDayBefore);
                 if (notification != null)
                     createdNotifications.Add(notification);
@@ -46,31 +57,33 @@ namespace DiaryApp.Services.DataServices.Notifications
             var eventDate = createdEvent.Date.Date;
             if (notificationSettings.NotifyDayBefore)
             {
-                TryCreateAndAddToResultList(eventDate.AddDays(-1), true);
+                await TryCreateAndAddToResultList(eventDate.AddDays(-1), notificationSettings.NotifyAt, true);
             }
-            TryCreateAndAddToResultList(eventDate, false);
+            await TryCreateAndAddToResultList(eventDate, createdEvent.Date.AddHours(-1).TimeOfDay, false);
 
             return createdNotifications;
         }
 
-        private async Task<NotificationDto> CreateNotificationAsync(EventItemDto eventItem, UserDto user, DateTime dateToNotify, bool forDayBefore)
+        private async Task<NotificationDto> CreateNotificationAsync(EventItem eventItem, UserDto user, DateTime dateToNotify, bool forDayBefore)
         {
-            if (dateToNotify <= DateTime.Today || !user.TelegramId.HasValue) return null;
-            var eventDate = eventItem.Date.Date;
+            var today = DateTime.Today.Add(dateToNotify.TimeOfDay);
+            if (dateToNotify <= today)
+                return null;
 
-            var day = forDayBefore ? "завтра" : "сегодня";
+            string subject = Notification.GetSubjectForEvent(eventItem, forDayBefore);
 
-            var notification = new NotificationDto
+            Notification notification = new()
             {
-                Subject = $"Напоминание: {day} {eventDate} {eventItem.Subject}",
+                Subject = subject,
                 NotificationDate = dateToNotify,
                 UserId = user.Id,
-                UserTelegramId = user.TelegramId.Value,
-                EventId = eventItem.Id
+                EventId = eventItem.Id             
             };
 
-            var notificationId = await CreateAsync(notification);
-            return await GetByIdAsync(notificationId);
+            await _dbSet.AddAsync(notification);
+            await _context.SaveChangesAsync();
+
+            return await GetByIdAsync(notification.Id);
         }
 
         private static bool IsUserAllowsNotifications(UserWithSettingsDto user)
@@ -82,5 +95,5 @@ namespace DiaryApp.Services.DataServices.Notifications
 
         private static DateTime CombineDateAndTimeToNotify(DateTime dateToNotify, TimeSpan timeToNotify) =>
             new(dateToNotify.Year, dateToNotify.Month, dateToNotify.Day, timeToNotify.Hours, timeToNotify.Minutes, timeToNotify.Seconds);
-    }
+    }    
 }

@@ -1,6 +1,7 @@
 ﻿using DiaryApp.Services.DTO;
 using DiaryApp.Core.Entities;
 using System.Threading.Tasks;
+using DiaryApp.Core.Entities.Pages;
 
 namespace DiaryApp.Services.DataInterfaces
 {
@@ -10,8 +11,8 @@ namespace DiaryApp.Services.DataInterfaces
         /// Transfer lists and areas of given page to the next month according to the transfer model.
         /// </summary>
         /// <param name="monthPageId"></param>
-        /// <param name="transferDataModel"></param>
+        /// <param name="transferDataSettings"></param>
         /// <returns></returns>
-        Task TransferPageDataToNextMonthAsync(int monthPageId, TransferDataModel transferDataModel);
+        Task TransferPageDataToNextMonthAsync(int monthPageId, PageAreaTransferSettingsDto transferDataSettings);
     }
 }
