@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
+using DiaryApp.Core.Entities.Users;
 
 namespace DiaryApp.Core.Entities.Notifications
 {
@@ -20,5 +22,15 @@ namespace DiaryApp.Core.Entities.Notifications
 
         [Required]
         public string Subject { get; set; }
+
+        public static string GetSubjectForEvent(EventItem eventItem, bool forDayBefore)
+        {
+            StringBuilder subject = new("Напоминание: ");
+            subject.Append(forDayBefore ? "завтра" : "сегодня");
+            subject.AppendLine($" {eventItem.Date.ToShortDateString()} в {eventItem.Date.ToShortTimeString()} состоится {eventItem.Subject}.");
+            if (!string.IsNullOrEmpty(eventItem.Location))
+                subject.Append($"Место: {eventItem.Location}.");
+            return subject.ToString();
+        }
     }
 }

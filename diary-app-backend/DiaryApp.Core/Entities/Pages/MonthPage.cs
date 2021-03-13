@@ -1,13 +1,16 @@
-﻿using DiaryApp.Core.Extensions;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using DiaryApp.Core.Entities.PageAreas;
+using DiaryApp.Core.Entities.Users.Settings;
+using DiaryApp.Core.Extensions;
+using Ardalis.GuardClauses;
+using DiaryApp.Core.Entities.Users;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.Pages
 {
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class MonthPage : PageBase
     {
-        public MonthPage() : base()
+        public MonthPage()
         {
         }
 
@@ -36,11 +39,10 @@ namespace DiaryApp.Core.Entities
         /// Creates new month page for next month
         /// </summary>
         /// <param name="transferDataModel">Model that represents which page areas need to be transferred</param>
-        /// <returns></returns>
-        public MonthPage TransferDataToNextMonth(TransferDataModel transferDataModel)
+        public MonthPage TransferDataToNextMonth(PageAreaTransferSettings transferDataModel)
         {
-            if (transferDataModel == null)
-                throw new ArgumentNullException(nameof(transferDataModel));
+            Guard.Against.Null(transferDataModel, nameof(transferDataModel));
+            
             var nextPage = new MonthPage(Year, Month + 1, User);
 
             //initialize only non transferring areas
@@ -59,16 +61,15 @@ namespace DiaryApp.Core.Entities
         /// </summary>
         /// <param name="transferDataModel">Transfer data model</param>
         /// <param name="monthPage">Month page</param>
-        public void MergePageAreas(TransferDataModel transferDataModel, MonthPage monthPage)
+        public void MergePageAreas(PageAreaTransferSettings transferDataModel, MonthPage monthPage)
         {
-            if (transferDataModel == null)
-                throw new ArgumentNullException(nameof(transferDataModel));
-            if (monthPage == null)
-                throw new ArgumentNullException(nameof(monthPage));
+            Guard.Against.Null(transferDataModel, nameof(transferDataModel));
+            Guard.Against.Null(monthPage, nameof(monthPage));
+            
             monthPage.TransferAreasIfNecessary(transferDataModel, this);
         }
 
-        private void TransferAreasIfNecessary(TransferDataModel transferDataModel, MonthPage nextPage)
+        private void TransferAreasIfNecessary(PageAreaTransferSettings transferDataModel, MonthPage nextPage)
         {
             nextPage.GoalsArea.TransferAreaDataIfNeeded(transferDataModel, GoalsArea);
             nextPage.DesiresArea.TransferAreaDataIfNeeded(transferDataModel, DesiresArea);

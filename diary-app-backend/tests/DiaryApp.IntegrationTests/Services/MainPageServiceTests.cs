@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Microsoft.EntityFrameworkCore;
 using DiaryApp.Core.Entities;
+using DiaryApp.Core.Entities.PageAreas;
 using DiaryApp.Services.DTO;
 
 namespace DiaryApp.IntegrationTests

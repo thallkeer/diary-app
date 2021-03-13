@@ -8,6 +8,7 @@ using DiaryApp.Services.Security;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using System.Threading;
+using DiaryApp.Services.DataInterfaces.Users;
 
 namespace DiaryApp.API.Controllers
 {

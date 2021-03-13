@@ -2,6 +2,9 @@
 using AutoFixture;
 using DiaryApp.Core.Entities;
 using DiaryApp.Core.Entities.PageAreas;
+using DiaryApp.Core.Entities.Pages;
+using DiaryApp.Core.Entities.Users;
+using DiaryApp.Core.Entities.Users.Settings;
 using DiaryApp.UnitTests.Extensions;
 using DiaryApp.UnitTests.Helpers;
 using FluentAssertions;
@@ -35,11 +38,11 @@ namespace DiaryApp.UnitTests.Pages
 
         }
 
-        [Theory, MemberData(nameof(TransferDataModels))]
-        public void TransferDataToNextMonth_ShouldCreateNextMonthPage(TransferDataModel transferDataModel)
+        [Theory, MemberData(nameof(PageAreaTransferSettings))]
+        public void TransferDataToNextMonth_ShouldCreateNextMonthPage(PageAreaTransferSettings pageAreaTransferSettings)
         {
             var monthPage = _fixture.CreateMonthPageWithNon12Month();
-            var nextMonthPage = monthPage.TransferDataToNextMonth(transferDataModel);
+            var nextMonthPage = monthPage.TransferDataToNextMonth(pageAreaTransferSettings);
 
             nextMonthPage.Should().NotBeNull();
             nextMonthPage.User.Should().Be(monthPage.User);
@@ -47,11 +50,11 @@ namespace DiaryApp.UnitTests.Pages
             nextMonthPage.Month.Should().Be(monthPage.Month + 1);
         }
 
-        [Theory, MemberData(nameof(TransferDataModels))]
-        public void TransferDataToNextMonth_ShouldCreateInitializedAreaIfItWasNotTransferred(TransferDataModel transferDataModel)
+        [Theory, MemberData(nameof(PageAreaTransferSettings))]
+        public void TransferDataToNextMonth_ShouldCreateInitializedAreaIfItWasNotTransferred(PageAreaTransferSettings pageAreaTransferSettings)
         {
             var monthPage = _fixture.CreateMonthPageWithNon12Month();
-            var nextMonthPage = monthPage.TransferDataToNextMonth(transferDataModel);
+            var nextMonthPage = monthPage.TransferDataToNextMonth(pageAreaTransferSettings);
 
             new List<MonthPageArea>
             {
@@ -61,21 +64,27 @@ namespace DiaryApp.UnitTests.Pages
                 nextMonthPage.IdeasArea
             }.ForEach(pa =>
             {
-                if (!transferDataModel.GetValueForArea(pa))
+                if (!pageAreaTransferSettings.GetValueForArea(pa))
                 {
                     pa.Should().NotBeNull();
                 }
             });
         }
 
-        public static TheoryData<TransferDataModel> TransferDataModels()
+        public static TheoryData<PageAreaTransferSettings> PageAreaTransferSettings()
         {
             var fixture = new Fixture();
-            return new TheoryData<TransferDataModel>
+            return new TheoryData<PageAreaTransferSettings>
             {
-                fixture.Create<TransferDataModel>(),
-                TransferDataModel.CreateFullTransferModel(),
-                new TransferDataModel()
+                fixture.Create<PageAreaTransferSettings>(),
+                new PageAreaTransferSettings
+                {
+                    TransferDesiresArea = true,
+                    TransferGoalsArea = true,
+                    TransferIdeasArea = true,
+                    TransferPurchasesArea = true
+                },
+                new PageAreaTransferSettings()
             };
         }
 

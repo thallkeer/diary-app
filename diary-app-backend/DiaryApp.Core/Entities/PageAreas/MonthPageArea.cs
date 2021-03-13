@@ -1,8 +1,10 @@
-﻿namespace DiaryApp.Core.Entities.PageAreas
+﻿using DiaryApp.Core.Entities.Pages;
+
+namespace DiaryApp.Core.Entities.PageAreas
 {
     public abstract class MonthPageArea : PageAreaBase<MonthPage>
     {
-        public MonthPageArea() : base()
+        public MonthPageArea()
         {
         }
 

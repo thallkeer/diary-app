@@ -2,8 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using DiaryApp.Core.Entities.DiaryLists;
+using DiaryApp.Core.Entities.PageAreas;
+using DiaryApp.Core.Entities.Pages;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.ListWrappers
 {
     public abstract class DiaryAreaList<TList, TListItem, TArea, TPage> : BaseEntity
         where TList : DiaryList<TListItem>, new()
@@ -32,12 +35,12 @@ namespace DiaryApp.Core.Entities
         public virtual TList List { get; set; }
 
         [Required]
-        public int AreaOwnerID { get; set; }
+        public int AreaOwnerId { get; set; }
 
         public virtual TArea AreaOwner { get; set; }
 
         [NotMapped]
-        public List<TListItem> Items => List?.Items ?? new();
+        public List<TListItem> Items => List?.Items ?? new List<TListItem>();
 
         /// <summary>
         /// Creates deep copy of wrapped list items.

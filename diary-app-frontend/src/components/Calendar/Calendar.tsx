@@ -275,15 +275,21 @@ const CalendarDay: React.FC<{
 	return (
 		<td className={className} onClick={(e) => onDayClick(e, day)}>
 			<div className="day-span">{day}</div>
-			{curEvents.map((event) => (
-				<div
-					key={event.id}
-					className={curEventClass}
-					onClick={(e) => onEventClick(e, day, event)}
-				>
-					{event.subject}
-				</div>
-			))}
+			{[...curEvents]
+				.sort((e1, e2) => e1.date.getTime() - e2.date.getTime())
+				.map((event) => (
+					<div
+						key={event.id}
+						className={curEventClass}
+						onClick={(e) => onEventClick(e, day, event)}
+					>
+						{event.date.toLocaleTimeString("ru", {
+							hour: "2-digit",
+							minute: "2-digit",
+						})}{" "}
+						{event.subject}
+					</div>
+				))}
 		</td>
 	);
 };

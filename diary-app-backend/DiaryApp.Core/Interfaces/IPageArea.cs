@@ -1,5 +1,6 @@
 ﻿using DiaryApp.Core.Entities;
 using DiaryApp.Core.Entities.PageAreas;
+using DiaryApp.Core.Entities.Pages;
 
 namespace DiaryApp.Core.Interfaces
 {
@@ -8,23 +9,12 @@ namespace DiaryApp.Core.Interfaces
         int PageId { get; set; }
     }
 
-    public interface IPageArea<T, TPage> : IPageArea
-        where T : PageAreaBase<TPage>
-        where TPage : PageBase
+    public interface IMonthPageArea<in T> where T : MonthPageArea
     {
-        /// <summary>
-        /// Page
-        /// </summary>
-        TPage Page { get; set; }
-
         /// <summary>
         /// Copy content from other area
         /// </summary>
-        /// <param name="otherArea"></param>
+        /// <param name="other"></param>
         void AddDataFromOtherArea(T other);
-    }
-
-    public interface IMonthPageArea<T> : IPageArea<T, MonthPage> where T : MonthPageArea
-    {
     }
 }

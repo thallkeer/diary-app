@@ -1,4 +1,6 @@
-﻿namespace DiaryApp.Core.Entities
+﻿using DiaryApp.Core.Entities.DiaryLists;
+
+namespace DiaryApp.Core.Entities
 {
     public class CommonList : DiaryList<ListItem>
     {

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using DiaryApp.Core.Entities.ListWrappers;
+using DiaryApp.Core.Entities.Pages;
 using DiaryApp.Core.Interfaces;
 
 namespace DiaryApp.Core.Entities.PageAreas
@@ -11,7 +13,7 @@ namespace DiaryApp.Core.Entities.PageAreas
         public const string ToWatchStr = "Посмотреть";
         public const string ToReadStr = "Прочитать";
 
-        public DesiresArea() : base()
+        public DesiresArea()
         { }
 
         public DesiresArea(MonthPage page, bool withInitialization) : base(page, HeaderStr, withInitialization)

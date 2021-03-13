@@ -1,4 +1,6 @@
 ﻿
+using DiaryApp.Core.Entities.DiaryLists;
+
 namespace DiaryApp.Core.Entities
 {
     public class TodoItem : DiaryListItem

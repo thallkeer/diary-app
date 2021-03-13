@@ -35,7 +35,11 @@ export const getEmptyTodo = (ownerId: number) => {
 };
 
 export const getEmptyEvent = (ownerId: number) => {
-	const event: IEvent = { ...getEmptyItem(ownerId), date: new Date() };
+	const event: IEvent = {
+		...getEmptyItem(ownerId),
+		date: new Date(),
+		location: "",
+	};
 	return event;
 };
 

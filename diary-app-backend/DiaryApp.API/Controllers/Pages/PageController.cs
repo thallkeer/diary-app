@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using DiaryApp.API.Requests;
 using DiaryApp.Core.Entities;
+using DiaryApp.Core.Entities.Pages;
 using DiaryApp.Core.Interfaces;
 using DiaryApp.Services.DataInterfaces;
 using DiaryApp.Services.DTO;

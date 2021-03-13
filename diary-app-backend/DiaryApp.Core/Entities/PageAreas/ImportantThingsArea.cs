@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DiaryApp.Core.Entities.DiaryLists;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.PageAreas
 {
     public class ImportantThingsArea : PageAreaBase<MainPage>
     {

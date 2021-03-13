@@ -2,10 +2,14 @@
 using DiaryApp.Services.DTO;
 using DiaryApp.Core.Entities;
 using DiaryApp.API.Models.Users;
+using DiaryApp.Core.Entities.DiaryLists;
+using DiaryApp.Core.Entities.ListWrappers;
 using DiaryApp.Core.Entities.Users.Settings;
 using DiaryApp.Services.DTO.Notifications;
 using DiaryApp.Core.Entities.Notifications;
 using DiaryApp.Core.Entities.PageAreas;
+using DiaryApp.Core.Entities.Pages;
+using DiaryApp.Core.Entities.Users;
 using DiaryApp.Services.DTO.Users;
 using DiaryApp.Services.DTO.Lists;
 
@@ -32,7 +36,7 @@ namespace DiaryApp.API
             CreateMap<DesiresList, DesiresListDto>().ReverseMap();
             CreateMap<HabitTracker, GoalsListDto>()
                 .ForMember(gl => gl.List, htdto => htdto.MapFrom(src => src))
-                .ForMember(gl => gl.AreaOwnerId, htdto => htdto.MapFrom(src => src.GoalsAreaID))
+                .ForMember(gl => gl.AreaOwnerId, htdto => htdto.MapFrom(src => src.GoalsAreaId))
                 .ReverseMap();
 
             CreateMap<MainPage, PageDto>().ReverseMap();
@@ -65,8 +69,9 @@ namespace DiaryApp.API
                .ReverseMap();
 
             CreateMap<Notification, NotificationDto>()
-                .ForMember(n => n.UserTelegramId, dto => dto.MapFrom(src => src.User.TelegramId))
-                .ReverseMap();
+                .ForMember(n => n.UserTelegramId, dto => dto.MapFrom(src => src.User.TelegramId));
+            //not using reverse map because mapping userTelegramId creates new empty user
+            CreateMap<NotificationDto, Notification>();
         }
     }
 }

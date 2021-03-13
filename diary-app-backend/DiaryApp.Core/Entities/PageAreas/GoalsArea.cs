@@ -1,28 +1,29 @@
-﻿using DiaryApp.Core.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using DiaryApp.Core.Entities.PageAreas;
+using DiaryApp.Core.Entities.DiaryLists;
+using DiaryApp.Core.Entities.Pages;
+using DiaryApp.Core.Interfaces;
 
-namespace DiaryApp.Core.Entities
+namespace DiaryApp.Core.Entities.PageAreas
 {
     public class GoalsArea : MonthPageArea, IMonthPageArea<GoalsArea>
     {
-        private const string HeaderSTR = "Трекеры привычек";
-        public const string GoalNameSTR = "Название цели";
+        private const string HeaderStr = "Трекеры привычек";
+        public const string GoalNameStr = "Название цели";
 
         public GoalsArea()
         {}
 
-        public GoalsArea(MonthPage page, bool needInit) : base(page, HeaderSTR, needInit)
+        public GoalsArea(MonthPage page, bool needInit) : base(page, HeaderStr, needInit)
         {}
 
-        public virtual List<HabitTracker> GoalLists { get; set; } = new List<HabitTracker>();
+        public virtual List<HabitTracker> GoalLists { get; set; } = new();
 
         public void AddDataFromOtherArea(GoalsArea other)
         {
-            GoalLists.RemoveAll(gl => gl.SelectedDays.Count == 0 && gl.GoalName == GoalNameSTR);
+            GoalLists.RemoveAll(gl => gl.SelectedDays.Count == 0 && gl.GoalName == GoalNameStr);
 
-            var otherLists = other.GoalLists.Where(gl => gl.GoalName != GoalNameSTR).Select(gl => gl.GetCopy());
+            var otherLists = other.GoalLists.Where(gl => gl.GoalName != GoalNameStr).Select(gl => gl.GetCopy());
 
             GoalLists.AddRange(otherLists);
 
@@ -34,7 +35,7 @@ namespace DiaryApp.Core.Entities
         {
             GoalLists = new List<HabitTracker>
             {
-                new HabitTracker(GoalNameSTR)
+                new(GoalNameStr)
             };
         }
     }

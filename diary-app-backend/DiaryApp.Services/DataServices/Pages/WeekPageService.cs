@@ -4,6 +4,7 @@ using DiaryApp.Core.Entities;
 using DiaryApp.Services.DTO;
 using DiaryApp.Services.DataInterfaces;
 using DiaryApp.Services.DataInterfaces.ListItems;
+using DiaryApp.Services.DataInterfaces.Users;
 
 namespace DiaryApp.Services.DataServices
 {

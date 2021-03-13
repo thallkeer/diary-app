@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using DiaryApp.Core.Entities;
+using DiaryApp.Core.Entities.Users;
 using DiaryApp.UnitTests.Helpers;
 using DiaryApp.UnitTests.Pages;
 using FluentAssertions;

@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DiaryApp.Core.Entities.PageAreas;
+using DiaryApp.Core.Entities.Pages;
+using DiaryApp.Core.Entities.Users;
 
 namespace DiaryApp.Core.Entities
 {
