@@ -15,8 +15,6 @@ export const CheckCircle: React.FC<IProps> = ({ id, done, toggleTodo }) => {
 			className="check-circle"
 			style={{
 				backgroundColor: done ? "lightblue" : "white",
-				// outline: "1px solid red",
-				// position: "absolute",
 			}}
 		/>
 	);

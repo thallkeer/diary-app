@@ -48,16 +48,7 @@ export const CommonListComponent = <T extends IListItem>(
 			</h1>
 			<ul className="todos">
 				{items.map((item: T, i) => (
-					<li
-						key={item.id !== 0 ? item.id : `item-${i}`}
-						className="list-item"
-						style={{
-							flex: "1",
-							display: "flex",
-							borderBottom: "1px solid black",
-							justifyContent: "flex-start",
-						}}
-					>
+					<li key={item.id !== 0 ? item.id : `item-${i}`} className="list-item">
 						{renderItem(item)}
 					</li>
 				))}
@@ -66,20 +57,20 @@ export const CommonListComponent = <T extends IListItem>(
 	);
 };
 
-export const withContextMenu = (
+export const withItemContextMenu = (
 	component: JSX.Element,
-	itemID: number,
+	itemId: number,
 	onDelete: () => void,
 	menuItems?: JSX.Element[]
 ) => {
-	if (itemID === 0) return component;
-	const uniqueID = getRandomId(); //items can have equal ids
+	if (itemId === 0) return component;
+	const uniqueId = getRandomId(); //items can have equal ids
 	return (
 		<>
-			<ContextMenuTrigger id={`context-menu-${uniqueID}`}>
+			<ContextMenuTrigger id={`context-menu-${uniqueId}`}>
 				{component}
 			</ContextMenuTrigger>
-			<ContextMenu className="menu" id={`context-menu-${uniqueID}`}>
+			<ContextMenu className="menu" id={`context-menu-${uniqueId}`}>
 				{menuItems}
 				<MenuItem onClick={onDelete} className="menuItem">
 					Удалить запись

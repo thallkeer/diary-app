@@ -1,7 +1,6 @@
-﻿using DiaryApp.Core.Entities;
-using DiaryApp.Core.Entities.DiaryLists;
+﻿using DiaryApp.Core.Entities.DiaryLists;
 using DiaryApp.Services.DataInterfaces;
-using DiaryApp.Services.DTO;
+using DiaryApp.Services.DTO.Lists;
 
 namespace DiaryApp.API.Controllers
 {

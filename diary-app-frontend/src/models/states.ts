@@ -1,4 +1,8 @@
-import { IDiaryList, IListItem, IListWithItems } from "./Lists/lists";
+import { IEntity } from "./entities";
+import { IList } from "./Lists/lists";
+import { IPageArea } from "./PageAreas/pageAreas";
+import { IPage } from "./Pages/pages";
+import { PageAreaUrls, PageUrls } from "./types";
 
 export interface IStateWithLoading {
 	error: false;
@@ -6,15 +10,19 @@ export interface IStateWithLoading {
 	success: false;
 }
 
-export interface IListState<TList extends IListWithItems<TItem>, TItem> {
+export interface IListState<TList extends IList<TItem>, TItem extends IEntity> {
 	list: TList;
-	listName: string;
 }
 
-export interface IDiaryListState<
-	TList extends IDiaryList<TItem>,
-	TItem extends IListItem
-> extends IListState<TList, TItem> {}
+export interface IPageState<T extends IPage> extends IStateWithLoading {
+	page: T;
+	pageName: PageUrls;
+}
+
+export interface IPageAreaState<T extends IPageArea> extends IStateWithLoading {
+	area: T;
+	pageAreaName: PageAreaUrls;
+}
 
 export interface ListsStateByName<T> {
 	[listName: string]: T;

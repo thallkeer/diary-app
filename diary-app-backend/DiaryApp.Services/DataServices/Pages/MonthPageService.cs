@@ -19,7 +19,7 @@ namespace DiaryApp.Services.DataServices.Pages
 
         public override async Task<MonthPageDto> CreateAsync(int userId, int year, int month)
         {
-            var settings = await userService.GetSettingsAsync(userId);
+            var settings = await UserService.GetSettingsAsync(userId);
             if (settings?.PageAreaTransferSettings == null)
                 return await base.CreateAsync(userId, year, month);
 

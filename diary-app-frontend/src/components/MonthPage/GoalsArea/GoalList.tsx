@@ -3,34 +3,35 @@ import React from "react";
 import { Col, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import {
-	goalsListsHandler,
-	IGoalsListState,
-} from "store/pageAreaLists/goalsLists/goalsLists.reducer";
+	habitTrackerComponent,
+	IHabitTrackerState,
+} from "store/diaryLists/habitTrackers.reducer";
+import { goalsListsHandler } from "store/pageAreaLists/goalsLists/goalsLists.reducer";
 import { goalsListsThunks } from "../../../store/pageAreaLists/goalsLists/goalsLists.actions";
 import { HabitTracker } from "../../HabitsTracker/HabitTracker";
 import { DeleteBtn } from "../../Lists/Controls/DeleteBtn";
 import ListHeaderInput from "../../Lists/Controls/ListHeaderInput";
 
-const useGoalList = (goalList: IGoalsListState) => {
+const useGoalList = (goalList: IHabitTrackerState) => {
 	const dispatch = useDispatch();
-	const { goalListId, listState } = goalList;
-	const tracker = listState.list;
-	const listName = goalsListsHandler.getListName(goalListId);
+	const { list: tracker } = goalList;
+	const listName = goalsListsHandler.getListName(tracker.id);
+	const listThunks = habitTrackerComponent.getThunks(listName);
 
 	const updateHabitTracker = (tracker: IHabitTracker) => {
-		dispatch(goalsListsThunks.updateList(tracker, listName));
+		dispatch(listThunks.updateList(tracker));
 	};
 
 	const deleteHabitTracker = () => {
-		dispatch(goalsListsThunks.deleteGoalsList(goalListId));
+		dispatch(goalsListsThunks.deleteGoalsList(tracker.id));
 	};
 
 	const markDay = (day: IHabitDay) => {
-		dispatch(goalsListsThunks.addOrUpdateListItem(day, listName));
+		dispatch(listThunks.addOrUpdateListItem(day));
 	};
 
 	const unmarkDay = (day: IHabitDay) => {
-		dispatch(goalsListsThunks.deleteListItem(day.id, listName));
+		dispatch(listThunks.deleteListItem(day.id));
 	};
 
 	return {
@@ -43,7 +44,7 @@ const useGoalList = (goalList: IGoalsListState) => {
 };
 
 export const GoalList: React.FC<{
-	goalList: IGoalsListState;
+	goalList: IHabitTrackerState;
 	reversed: boolean;
 }> = ({ goalList, reversed }) => {
 	const {
@@ -60,13 +61,13 @@ export const GoalList: React.FC<{
 	};
 
 	const components = [
-		<Col key={"header_" + goalList.goalListId} md={4}>
+		<Col key={"header_" + tracker.id} md={4}>
 			<h3 className="tracker-header" style={{ marginTop: "15px" }}>
 				<ListHeaderInput value={tracker.goalName} handleBlur={handleBlur} />
 				<DeleteBtn onDelete={deleteHabitTracker} />
 			</h3>
 		</Col>,
-		<Col key={"goalList_" + goalList.goalListId} md={8}>
+		<Col key={"goalList_" + tracker.id} md={8}>
 			<HabitTracker
 				tracker={tracker}
 				trackerActions={{

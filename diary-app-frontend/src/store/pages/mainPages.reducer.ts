@@ -1,9 +1,12 @@
 import { combineReducers } from "redux";
-import { importantEventsAreaReducer } from "../pageAreas/importantEvents/importantEventsArea.reducer";
-import { importantThingsAreaReducer } from "../pageAreas/importantThings/importantThingsArea.reducer";
+import { importantEventsAreaReducer } from "../pageAreas/importantEventsArea.reducer";
+import { importantThingsAreaReducer } from "../pageAreas/importantThingsArea.reducer";
 import { INITIAL_LOADABLE_STATE } from "../utilities/loading-reducer";
-import { createPageReducer, IPageState } from "./pages.reducer";
 import { IMainPage } from "models/Pages/pages";
+import { PageComponent } from "./pages.reducer";
+import { IPageState } from "models/states";
+
+class MainPageComponent extends PageComponent<IMainPage> {}
 
 export interface IMainPageState extends IPageState<IMainPage> {}
 
@@ -13,8 +16,10 @@ const initialState: IMainPageState = {
 	...INITIAL_LOADABLE_STATE,
 };
 
+export const mainPageComponent = new MainPageComponent("mainPage");
+
 export const mainPageReducer = combineReducers({
-	pageState: createPageReducer<IMainPage>(initialState, "mainPage"),
-	importantThingsAreaState: importantThingsAreaReducer,
-	importantEventsAreaState: importantEventsAreaReducer,
+	pageState: mainPageComponent.getReducer(initialState),
+	importantThingsArea: importantThingsAreaReducer,
+	importantEventsArea: importantEventsAreaReducer,
 });

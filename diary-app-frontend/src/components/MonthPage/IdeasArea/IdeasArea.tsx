@@ -7,26 +7,21 @@ import {
 	getIdeasList,
 } from "../../../store/pages/pages.selectors";
 import { CommonList } from "../../Lists/CommonList/CommonList";
-import { usePageArea } from "../../../hooks/usePageArea";
-import { IIdeasArea } from "models/PageAreas/pageAreas";
-import { IIdeasAreaState } from "store/pageAreas/ideas/ideasArea.reducer";
+import { useMonthPageArea } from "../../../hooks/usePageArea";
 import {
-	IDEAS_LIST,
-	loadIdeasArea,
-} from "store/pageAreas/ideas/ideasArea.actions";
-import { commonListThunks } from "store/diaryLists/commonLists.actions";
+	ideasAreaComponent,
+	ideasListThunks,
+} from "store/pageAreas/ideasArea.reducer";
 
 const IdeasArea: React.FC = () => {
 	const dispatch = useDispatch();
-	const { area, isLoading } = usePageArea<IIdeasAreaState, IIdeasArea>(
+	const { area, isLoading } = useMonthPageArea(
 		getIdeasArea,
-		(dispatch, pageId) => {
-			dispatch(loadIdeasArea(pageId));
-		}
+		ideasAreaComponent
 	);
 	const ideasList = useSelector(getIdeasList);
 
-	if (isLoading || !ideasList || !ideasList.list) return <Loader />;
+	if (isLoading || !ideasList.list) return <Loader />;
 
 	return (
 		<>
@@ -39,12 +34,10 @@ const IdeasArea: React.FC = () => {
 						readonlyTitle={true}
 						listItemActions={{
 							deleteItem: (itemId) => {
-								dispatch(commonListThunks.deleteListItem(itemId, IDEAS_LIST));
+								dispatch(ideasListThunks.deleteListItem(itemId));
 							},
 							updateItem: (item) => {
-								dispatch(
-									commonListThunks.addOrUpdateListItem(item, IDEAS_LIST)
-								);
+								dispatch(ideasListThunks.addOrUpdateListItem(item));
 							},
 						}}
 						className="mt-20 month-lists-header no-list-header"
@@ -55,4 +48,4 @@ const IdeasArea: React.FC = () => {
 	);
 };
 
-export default IdeasArea;
+export { IdeasArea };

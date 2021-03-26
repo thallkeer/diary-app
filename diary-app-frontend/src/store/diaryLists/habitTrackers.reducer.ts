@@ -1,27 +1,37 @@
 import { IHabitDay, IHabitTracker } from "models";
 import { IListState } from "models/states";
-import { createNamedReducer } from "utils";
-import { HabitTrackerActions } from "./habitTrackers.actions";
-import { listReducer } from "./lists.reducer";
+import { ActionsUnion } from "store/actions/action-helpers";
+import { DiaryListComponent } from "./lists.reducer";
+
+class HabitTrackerComponent extends DiaryListComponent<
+	IHabitTracker,
+	IHabitDay
+> {}
+
+export const habitTrackerComponent = new HabitTrackerComponent(
+	"habitTrackers",
+	"habitDays"
+);
+
+const habitTrackerActions = habitTrackerComponent.getActions("habitTracker");
+export type HabitTrackerActions = ActionsUnion<typeof habitTrackerActions>;
 
 export interface IHabitTrackerState
 	extends IListState<IHabitTracker, IHabitDay> {}
 
 export const habitTrackerInitialState: IHabitTrackerState = {
 	list: null,
-	listName: "habitTracker",
 };
 
-export const habitTrackerReducer = (
-	state = habitTrackerInitialState,
-	action: HabitTrackerActions
-) => listReducer<IHabitTrackerState, IHabitTracker, IHabitDay>(state, action);
+export const habitTrackerReducer = habitTrackerComponent.getReducer(
+	habitTrackerInitialState,
+	"habitTrackers"
+);
 
 export type HabitTrackerReducerType = typeof habitTrackerReducer;
 
 export const createHabitTrackerReducer = (reducerName: string) => {
-	return createNamedReducer(
-		habitTrackerReducer,
+	return habitTrackerComponent.getReducer(
 		habitTrackerInitialState,
 		reducerName
 	);

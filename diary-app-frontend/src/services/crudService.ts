@@ -9,11 +9,11 @@ export class CrudService<T> {
 		this.axios = axios;
 	}
 
-	getById(id: number) {
+	getById(id: number): Promise<T> {
 		return this.axios.get<T>(`${this.apiUrl}/${id}`).then((res) => res.data);
 	}
 
-	create(entity: T) {
+	create(entity: T): Promise<number> {
 		return this.axios.post<number>(this.apiUrl, entity).then((res) => res.data);
 	}
 

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 
-interface ListHeaderProps extends React.HTMLAttributes<HTMLInputElement> {
+interface ListHeaderProps {
 	value: string;
 	handleBlur: (title: string) => void;
 	readonly?: boolean;
@@ -31,7 +31,7 @@ export const ListHeaderInput: React.FC<ListHeaderProps> = ({
 			maxLength={50}
 			onBlur={onBlur}
 			onKeyPress={handleKeyPress}
-			autoComplete={"off"}
+			autoComplete="off"
 			readOnly={readonly}
 		/>
 	);

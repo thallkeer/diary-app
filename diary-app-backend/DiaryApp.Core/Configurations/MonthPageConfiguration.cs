@@ -1,5 +1,4 @@
-﻿using DiaryApp.Core.Entities;
-using DiaryApp.Core.Entities.Pages;
+﻿using DiaryApp.Core.Entities.Pages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

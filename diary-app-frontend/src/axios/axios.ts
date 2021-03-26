@@ -49,7 +49,7 @@ axiosInstance.interceptors.response.use(
 	}
 );
 
-const checkTokenIsExpired = (headers) => {
+const checkTokenIsExpired = (headers: any) => {
 	const authHeader: string = headers["www-authenticate"];
 
 	return (

@@ -1,6 +1,6 @@
 import history from "components/history";
 import Loader from "components/Loader";
-import { IUserSettings, PageAreaTransferSettings } from "models/entities";
+import { IUserSettings, IPageAreaTransferSettings } from "models/entities";
 import React, { useState, useEffect } from "react";
 import {
 	Button,
@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import { getAppInfo } from "selectors/app-selectors";
 import { userService } from "services/users";
 
-export const prepareTransferData = (settings: PageAreaTransferSettings) => {
+export const prepareTransferData = (settings: IPageAreaTransferSettings) => {
 	const {
 		transferPurchasesArea,
 		transferDesiresArea,

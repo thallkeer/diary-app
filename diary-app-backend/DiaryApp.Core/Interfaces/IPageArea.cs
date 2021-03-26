@@ -1,6 +1,4 @@
-﻿using DiaryApp.Core.Entities;
-using DiaryApp.Core.Entities.PageAreas;
-using DiaryApp.Core.Entities.Pages;
+﻿using DiaryApp.Core.Entities.PageAreas;
 
 namespace DiaryApp.Core.Interfaces
 {

@@ -7,22 +7,15 @@ import {
 	getDesiresArea,
 } from "../../../store/pages/pages.selectors";
 import { CommonList } from "../../Lists/CommonList/CommonList";
-import { IDesiresAreaState } from "store/pageAreas/desires/desiresArea.reducer";
-import { IDesiresArea } from "models/PageAreas/pageAreas";
-import { loadDesiresArea } from "store/pageAreas/desires/desiresArea.actions";
-import { usePageArea } from "hooks/usePageArea";
-import { desireListsThunks } from "store/pageAreaLists/desiresLists/desireLists.actions";
-import {
-	desireListsHandler,
-	IDesireListState,
-} from "store/pageAreaLists/desiresLists/desireLists.reducer";
+import { desiresAreaComponent } from "store/pageAreas/desiresArea.reducer";
+import { useMonthPageArea } from "hooks/usePageArea";
+import { desireListsHandler } from "store/pageAreaLists/desiresLists/desireLists.reducer";
+import { commonListComponent, ICommonListState } from "store/diaryLists";
 
 const DesiresArea: React.FC = () => {
-	const { area, isLoading } = usePageArea<IDesiresAreaState, IDesiresArea>(
+	const { area, isLoading } = useMonthPageArea(
 		getDesiresArea,
-		(dispatch, pageId) => {
-			dispatch(loadDesiresArea(pageId));
-		}
+		desiresAreaComponent
 	);
 	const desireLists = useSelector(getDesireLists);
 	if (isLoading) return <Loader />;
@@ -32,31 +25,31 @@ const DesiresArea: React.FC = () => {
 			<h1 className="mt-40 area-header">{area.header}</h1>
 			<Row>
 				{desireLists.map((dl) => (
-					<DesireList key={dl.desireListId} desireListState={dl} />
+					<DesireList key={dl.list.id} desireListState={dl} />
 				))}
 			</Row>
 		</>
 	);
 };
 
-export default DesiresArea;
-const DesireList: React.FC<{ desireListState: IDesireListState }> = ({
+const DesireList: React.FC<{ desireListState: ICommonListState }> = ({
 	desireListState,
 }) => {
-	const listName = desireListsHandler.getListName(desireListState.desireListId);
+	const listName = desireListsHandler.getListName(desireListState.list.id);
+	const commonListThunks = commonListComponent.getThunks(listName);
 	const dispatch = useDispatch();
 
 	return (
 		<Col md={4}>
 			<CommonList
-				commonList={desireListState.listState.list}
+				commonList={desireListState.list}
 				isDeletable={false}
 				listItemActions={{
 					deleteItem: (itemId) => {
-						dispatch(desireListsThunks.deleteListItem(itemId, listName));
+						dispatch(commonListThunks.deleteListItem(itemId));
 					},
 					updateItem: (item) => {
-						dispatch(desireListsThunks.addOrUpdateListItem(item, listName));
+						dispatch(commonListThunks.addOrUpdateListItem(item));
 					},
 				}}
 				readonlyTitle={true}
@@ -65,3 +58,5 @@ const DesireList: React.FC<{ desireListState: IDesireListState }> = ({
 		</Col>
 	);
 };
+
+export { DesiresArea };

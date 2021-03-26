@@ -6,10 +6,9 @@ import strelka from "../../images/right-arrow.png";
 import { useDispatch, useSelector } from "react-redux";
 import { getAppInfo } from "../../selectors/app-selectors";
 import { getImportantEventsList } from "../../store/pages/pages.selectors";
-import { eventThunks } from "../../store/diaryLists/events.actions";
 import { IEvent } from "models";
 import { AppThunks } from "store/app/app.actions";
-import { IMPORTANT_EVENTS_LIST } from "store/pageAreas/importantEvents/importantEventsArea.actions";
+import { importantEventsThunks } from "store/pageAreas";
 
 interface ICalendarState {
 	showAddEventForm: boolean;
@@ -72,13 +71,10 @@ export const Calendar: React.FC = () => {
 
 	const addEvent = (newEvent: IEvent) => {
 		dispatch(
-			eventThunks.addOrUpdateListItem(
-				{
-					...newEvent,
-					ownerID: list.id,
-				},
-				IMPORTANT_EVENTS_LIST
-			)
+			importantEventsThunks.addOrUpdateListItem({
+				...newEvent,
+				ownerId: list.id,
+			})
 		);
 	};
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using AutoFixture;
 using AutoFixture.Xunit2;
-using DiaryApp.Core.Entities;
 using DiaryApp.Core.Entities.Pages;
 using DiaryApp.Core.Entities.Users;
 using Xunit;

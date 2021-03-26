@@ -1,6 +1,5 @@
 ﻿using DiaryApp.API.Models.Users;
 using DiaryApp.Services.DTO;
-using DiaryApp.Services.DataInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

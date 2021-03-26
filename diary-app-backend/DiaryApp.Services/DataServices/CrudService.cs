@@ -18,13 +18,13 @@ namespace DiaryApp.Services.DataServices
         where TEntity : BaseEntity
     {
         protected readonly IMapper _mapper;
-        protected internal ApplicationContext _context;
-        protected internal DbSet<TEntity> _dbSet;
+        protected readonly ApplicationContext _context;
+        protected readonly DbSet<TEntity> _dbSet;
 
         public CrudService(ApplicationContext context, IMapper mapper)
         {
-            _context = context;
-            _mapper = mapper;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _dbSet = context.Set<TEntity>();
         }
 

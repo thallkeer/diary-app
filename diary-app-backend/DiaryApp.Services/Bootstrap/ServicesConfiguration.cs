@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using DiaryApp.Services.DataInterfaces.ListItems;
 using DiaryApp.Services.DataInterfaces.Users;
 using DiaryApp.Services.DataServices.Pages;
+using DiaryApp.Services.DataInterfaces.Lists;
+using DiaryApp.Services.DataServices.Lists;
 
 namespace DiaryApp.Services.Bootstrap
 {
@@ -18,6 +20,7 @@ namespace DiaryApp.Services.Bootstrap
                            .AddScoped<IMonthPageService, MonthPageService>()
                            .AddScoped<IEventItemService, EventItemService>()
                            .AddScoped<ITodoItemService, TodoItemService>()
+                           .AddScoped<IPurchaseListService, PurchaseListService>()
                            .AddScoped<IEventNotificationService, EventNotificationService>();
         }
     }

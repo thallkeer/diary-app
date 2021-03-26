@@ -37,7 +37,7 @@ namespace DiaryApp.API.Controllers
         public virtual async Task<ActionResult<TDto>> GetAsync(int id, CancellationToken cancellationToken = default)
         {
             var entity = await _crudService.GetByIdAsync(id);
-            return entity == null ? (ActionResult<TDto>) NotFound() : Ok(Mapper.Map<TDto>(entity));
+            return entity == null ? NotFound() : Ok(Mapper.Map<TDto>(entity));
         }
 
         /// <summary>

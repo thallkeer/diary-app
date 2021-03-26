@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using DiaryApp.Core.Entities;
 using DiaryApp.Core.Entities.PageAreas;
 using DiaryApp.UnitTests.Extensions;
 

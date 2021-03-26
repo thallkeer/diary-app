@@ -1,12 +1,10 @@
+import { IEntity } from "models/entities";
 import {
-	IDesireList,
-	IEntity,
-	IGoalList,
-	IIdeasList,
-	IPurchaseList,
-} from "models/entities";
-import { IHabitTracker } from "models/Lists/habitTracker";
-import { IEventList, ITodoList } from "models/Lists/lists";
+	ICommonList,
+	IEventList,
+	IHabitTracker,
+	ITodoList,
+} from "models/Lists/lists";
 
 export interface IPageArea extends IEntity {
 	header: string;
@@ -20,17 +18,17 @@ export interface IImportantThingsArea extends IPageArea {
 	importantThings: ITodoList;
 }
 export interface IPurchasesArea extends IPageArea {
-	purchasesLists: IPurchaseList[];
+	purchasesLists: ITodoList[];
 }
 
 export interface IDesiresArea extends IPageArea {
-	desiresLists: IDesireList[];
+	desiresLists: ICommonList[];
 }
 
 export interface IIdeasArea extends IPageArea {
-	ideasList: IIdeasList;
+	ideasList: ICommonList;
 }
 
 export interface IGoalsArea extends IPageArea {
-	goalLists: IGoalList[];
+	goalLists: IHabitTracker[];
 }

@@ -3,11 +3,12 @@ import {
 	CommonListComponent,
 	IListOptions,
 	IListActions,
-	withContextMenu,
+	withItemContextMenu,
 } from "../CommonList/CommonListComponent";
 import { ListItemInput } from "../Controls/ListItemInput";
 import { ICommonList, IListItem } from "models";
 import { fillToNumber, getEmptyItem } from "../../../utils";
+import { useUrlInput } from "hooks/useInputs";
 
 export interface IListItemActions {
 	updateItem: (item: IListItem) => void;
@@ -42,18 +43,40 @@ export const CommonList: React.FC<ICommonListProps> = ({
 			updateTitle={updateTitle}
 			isDeletable={isDeletable}
 			deleteList={deleteList}
-			renderItem={(item) =>
-				withContextMenu(
-					<ListItemInput
-						item={item}
-						updateItem={listItemActions.updateItem}
-						readonly={item.readonly}
-						className="no-left-padding"
-					/>,
-					item.id,
-					() => listItemActions.deleteItem(item.id)
-				)
-			}
+			renderItem={(item) => (
+				<ListItemInputWithUrlEdit
+					item={item}
+					listItemActions={listItemActions}
+				/>
+			)}
 		/>
+	);
+};
+
+const ListItemInputWithUrlEdit: React.FC<{
+	item: IListItem;
+	listItemActions: IListItemActions;
+}> = ({ item, listItemActions }) => {
+	const { editUrlMode, urlInput, menuItem } = useUrlInput({
+		item,
+		updateItem: listItemActions.updateItem,
+	});
+
+	const input = editUrlMode ? (
+		urlInput
+	) : (
+		<ListItemInput
+			item={item}
+			updateItem={listItemActions.updateItem}
+			readonly={item.readonly}
+			className="no-left-padding"
+		/>
+	);
+
+	return withItemContextMenu(
+		input,
+		item.id,
+		() => listItemActions.deleteItem(item.id),
+		[menuItem]
 	);
 };

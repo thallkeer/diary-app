@@ -9,11 +9,11 @@ export type ListWrapperUrls =
 	| "ideasLists"
 	| "goalLists";
 export type ListItemUrls = "todos" | "events" | "listItems" | "habitDays";
-export type PageNames = "mainPage" | "monthPage";
-export type MainPageAreaNames = "importantEventsArea" | "importantThingsArea";
-export type MonthPageAreaNames =
+export type PageUrls = "mainPage" | "monthPage";
+export type MainPageAreaUrls = "importantEventsArea" | "importantThingsArea";
+export type MonthPageAreaUrls =
 	| "purchasesArea"
 	| "desiresArea"
 	| "ideasArea"
 	| "goalsArea";
-export type PageAreaNames = MainPageAreaNames | MonthPageAreaNames;
+export type PageAreaUrls = MainPageAreaUrls | MonthPageAreaUrls;

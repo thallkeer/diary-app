@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DiaryApp.Services.DTO
+namespace DiaryApp.Services.DTO.PageAreas
 {
     public class PageAreaDto : BaseDto
     {

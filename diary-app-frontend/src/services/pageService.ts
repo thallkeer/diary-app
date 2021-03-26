@@ -1,36 +1,43 @@
-import { AxiosError, AxiosResponse } from "axios";
-import axios from "axios/axios";
+import { AxiosInstance, AxiosResponse } from "axios";
+import axios from "../axios/axios";
 import { IPageArea } from "models/PageAreas/pageAreas";
 import { IPage } from "models/Pages/pages";
-import { PageAreaNames, PageNames } from "models/types";
+import { PageAreaUrls } from "models/types";
 
-export const pageAPI = {
-	async getOrCreatePage<TPage extends IPage>(
-		pageName: PageNames,
+export class PageService<TPage extends IPage> {
+	protected apiUrl: string;
+	protected axios: AxiosInstance;
+	constructor(apiUrl: string) {
+		this.apiUrl = apiUrl;
+		this.axios = axios;
+	}
+
+	async getOrCreatePage(
 		userId: number,
 		year: number,
 		month: number
-	) {
-		const query = `${pageName}/${userId}/${year}/${month}`;
+	): Promise<TPage> {
+		const query = `${this.apiUrl}/${userId}/${year}/${month}`;
 		const res = await axios
 			.get<TPage>(query)
-			.then((r) => r)
 			.catch(async (err: AxiosResponse) => {
 				if (err && err.status === 404) {
-					return await axios.post<TPage>(pageName, { userId, year, month });
+					return await axios.post<TPage>(this.apiUrl, { userId, year, month });
 				}
 
 				throw err;
 			});
 
 		return res.data;
-	},
+	}
+
 	async getPageArea<TArea extends IPageArea>(
-		areaName: PageAreaNames,
-		pageName: string,
-		pageID: number
-	) {
-		const res = await axios.get<TArea>(`${pageName}/${areaName}/${pageID}`);
-		return res.data;
-	},
-};
+		areaName: PageAreaUrls,
+		pageId: number
+	): Promise<TArea> {
+		const response = await axios.get<TArea>(
+			`${this.apiUrl}/${areaName}/${pageId}`
+		);
+		return response.data;
+	}
+}

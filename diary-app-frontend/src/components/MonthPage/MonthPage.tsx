@@ -1,18 +1,17 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Loader from "../Loader";
 import { Link } from "react-router-dom";
 import strelka from "../../images/right-arrow.png";
-import { loadMonthPage } from "store/pages/monthPages.actions";
 import { usePage } from "hooks/usePage";
-import { getMonthPage } from "store/pages";
-const PurchasesArea = lazy(() => import("./PurchasesArea/PurchasesArea"));
-const DesiresArea = lazy(() => import("./DesiresArea/DesiresArea"));
-const IdeasArea = lazy(() => import("./IdeasArea/IdeasArea"));
-const GoalsArea = lazy(() => import("./GoalsArea/GoalsArea"));
+import { getMonthPage, monthPageComponent } from "store/pages";
+import { PurchasesArea } from "./PurchasesArea/PurchasesArea";
+import { DesiresArea } from "./DesiresArea/DesiresArea";
+import { IdeasArea } from "./IdeasArea/IdeasArea";
+import { GoalsArea } from "./GoalsArea/GoalsArea";
 
 const MonthPage: React.FC = () => {
-	const monthPage = usePage(getMonthPage, loadMonthPage);
+	const monthPage = usePage(getMonthPage, monthPageComponent);
 
 	if (!monthPage) return <Loader />;
 
@@ -58,4 +57,4 @@ const ReturnToCalendarLink = () => (
 	</Link>
 );
 
-export default MonthPage;
+export { MonthPage };

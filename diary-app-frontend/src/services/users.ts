@@ -8,7 +8,7 @@ interface ILoginResponse {
 	token: string;
 }
 
-interface UserSettingsModel {
+interface IUserSettingsModel {
 	user: IUser;
 	settings: IUserSettings;
 }
@@ -37,7 +37,7 @@ export const userService = {
 
 	async getUserSettings(userId: number) {
 		return axios
-			.get<UserSettingsModel>(`users/${userId}/settings`)
+			.get<IUserSettingsModel>(`users/${userId}/settings`)
 			.then((res) => res.data);
 	},
 

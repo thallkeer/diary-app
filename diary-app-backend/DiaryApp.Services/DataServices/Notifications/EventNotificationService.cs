@@ -9,11 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DiaryApp.Services.DataInterfaces.Users;
-using System.Text;
 using DiaryApp.Core.Entities;
-using Ardalis.GuardClauses;
 using DiaryApp.Services.Exceptions;
-using Microsoft.Extensions.Logging;
 
 namespace DiaryApp.Services.DataServices.Notifications
 {

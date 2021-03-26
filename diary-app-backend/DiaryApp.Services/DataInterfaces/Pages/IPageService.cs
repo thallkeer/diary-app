@@ -1,10 +1,10 @@
-﻿using DiaryApp.Core.Interfaces;
-using System.Threading.Tasks;
-using DiaryApp.Core.Entities;
+﻿using System.Threading.Tasks;
+using DiaryApp.Core.Entities.PageAreas;
 using DiaryApp.Core.Entities.Pages;
 using DiaryApp.Services.DTO;
+using DiaryApp.Services.DTO.PageAreas;
 
-namespace DiaryApp.Services.DataInterfaces
+namespace DiaryApp.Services.DataInterfaces.Pages
 {
     public interface IPageService<TPageDto, TPage> : IGetable<TPageDto, TPage>
         where TPageDto : PageDto
@@ -16,16 +16,17 @@ namespace DiaryApp.Services.DataInterfaces
         /// <param name="userId">User id</param>
         /// <param name="year">Year</param>
         /// <param name="month">Month</param>
-        /// <returns></returns>
         Task<TPageDto> CreateAsync(int userId, int year, int month);
 
         /// <summary>
         /// Returns page area of defined type or throws an exception if area is not exists
         /// </summary>
         /// <typeparam name="TPageArea">Page area type</typeparam>
+        /// <typeparam name="TPageAreaDto">Page area dto type</typeparam>
         /// <param name="pageId">Page identifier</param>
-        /// <returns></returns>
-        Task<TPageArea> GetPageAreaOrThrowAsync<TPageArea>(int pageId) where TPageArea : class, IPageArea;
+        Task<TPageAreaDto> GetPageAreaOrThrowAsync<TPageArea, TPageAreaDto>(int pageId) 
+            where TPageArea : PageAreaBase<TPage>
+            where TPageAreaDto : PageAreaDto;
 
         /// <summary>
         /// Returns page by given page params or null if it's not exists.
@@ -33,7 +34,6 @@ namespace DiaryApp.Services.DataInterfaces
         /// <param name="userId">User id</param>
         /// <param name="year">Year</param>
         /// <param name="month">Month</param>
-        /// <returns></returns>
         Task<TPageDto> GetPageAsync(int userId, int year, int month);
     }
 }

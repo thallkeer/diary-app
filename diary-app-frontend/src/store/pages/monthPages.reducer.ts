@@ -1,10 +1,15 @@
 import { IMonthPage } from "models/Pages/pages";
+import { IPageState } from "models/states";
 import { combineReducers } from "redux";
-import { desiresAreaReducer } from "store/pageAreas/desires/desiresArea.reducer";
-import { ideasAreaReducer } from "store/pageAreas/ideas/ideasArea.reducer";
-import { purchasesAreaReducer } from "store/pageAreas/purchases/purchasesArea.reducer";
+import { goalsAreaReducer } from "store/pageAreas";
+import { desiresAreaReducer } from "store/pageAreas/desiresArea.reducer";
+import { ideasAreaReducer } from "store/pageAreas/ideasArea.reducer";
+import { purchasesAreaReducer } from "store/pageAreas/purchasesArea.reducer";
 import { INITIAL_LOADABLE_STATE } from "store/utilities/loading-reducer";
-import { createPageReducer, IPageState } from "./pages.reducer";
+import { PageComponent } from "./pages.reducer";
+
+class MonthPageComponent extends PageComponent<IMonthPage> {}
+export const monthPageComponent = new MonthPageComponent("monthPage");
 
 export interface IMonthPageState extends IPageState<IMonthPage> {}
 
@@ -15,8 +20,9 @@ const initialState: IMonthPageState = {
 };
 
 export const monthPageReducer = combineReducers({
-	page: createPageReducer<IMonthPage>(initialState, "monthPage"),
+	pageState: monthPageComponent.getReducer(initialState),
 	purchasesArea: purchasesAreaReducer,
 	desiresArea: desiresAreaReducer,
 	ideasArea: ideasAreaReducer,
+	goalsArea: goalsAreaReducer,
 });

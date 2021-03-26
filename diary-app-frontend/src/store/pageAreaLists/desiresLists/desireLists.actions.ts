@@ -1,23 +1,17 @@
 import { ActionsUnion, createAction } from "../../actions/action-helpers";
-import { IDesireList } from "models/entities";
-import {
-	CommonListActions,
-	commonListActions,
-	commonListThunks,
-} from "store/diaryLists/commonLists.actions";
 import { BaseThunkType } from "store/state.types";
+import { ICommonList } from "models";
+import { CommonListActions } from "store/diaryLists";
 
 const SET_DESIRE_LISTS = "SET_DESIRE_LISTS";
 
 const actions = {
-	setLists: (desireLists: IDesireList[]) =>
+	setLists: (desireLists: ICommonList[]) =>
 		createAction(SET_DESIRE_LISTS, desireLists),
-	...commonListActions,
 };
 
 export const desireListsThunks = {
-	...commonListThunks,
-	setDesireLists: (desireLists: IDesireList[]): ThunkType => async (
+	setDesireLists: (desireLists: ICommonList[]): ThunkType => async (
 		dispatch
 	) => {
 		dispatch(actions.setLists(desireLists));

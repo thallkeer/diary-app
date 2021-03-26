@@ -1,6 +1,6 @@
 import { INamedAction } from "../store/actions/action-helpers";
 import { IListState } from "../models/states";
-import { IEvent, IListItem, IListWithItems, ITodo } from "models";
+import { IEvent, IList, IListItem, ITodo } from "models";
 import { IEntity } from "models/entities";
 
 const _getRandomInt = (min: number, max: number) => {
@@ -25,7 +25,7 @@ export const getRandomId = () => {
  * @param ownerId id of list that empty item will belongs
  */
 export const getEmptyItem = (ownerId: number) => {
-	const item: IListItem = { id: 0, subject: "", url: "", ownerID: ownerId };
+	const item: IListItem = { id: 0, subject: "", url: "", ownerId: ownerId };
 	return item;
 };
 
@@ -63,12 +63,13 @@ export function fillToNumber<T extends IListItem>(
 	}
 
 	list[length].readonly = false;
+
 	return list;
 }
 
 export const updateListInState = <
 	TState extends IListState<TList, TListItem>,
-	TList extends IListWithItems<TListItem>,
+	TList extends IList<TListItem>,
 	TListItem extends IEntity
 >(
 	state: TState,
@@ -85,8 +86,8 @@ export const updateListInState = <
 
 const getListItems = <
 	TState extends IListState<TList, TListItem>,
-	TList extends IListWithItems<TListItem>,
-	TListItem
+	TList extends IList<TListItem>,
+	TListItem extends IEntity
 >(
 	state: TState
 ) => state.list?.items ?? [];

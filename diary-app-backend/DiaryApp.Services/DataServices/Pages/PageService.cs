@@ -1,28 +1,28 @@
-﻿using AutoMapper;
-using DiaryApp.Core;
-using DiaryApp.Services.DTO;
-using DiaryApp.Core.Interfaces;
-using DiaryApp.Services.DataInterfaces;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using DiaryApp.Services.Exceptions;
-using DiaryApp.Core.Entities;
-using System;
+﻿using System;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
+using AutoMapper;
+using DiaryApp.Core;
+using DiaryApp.Core.Entities.PageAreas;
 using DiaryApp.Core.Entities.Pages;
+using DiaryApp.Services.DataInterfaces.Pages;
 using DiaryApp.Services.DataInterfaces.Users;
+using DiaryApp.Services.DTO;
+using DiaryApp.Services.DTO.PageAreas;
+using DiaryApp.Services.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
-namespace DiaryApp.Services.DataServices
+namespace DiaryApp.Services.DataServices.Pages
 {
     public abstract class PageService<TPageDto, TPageEntity> : CrudService<TPageDto, TPageEntity>, IPageService<TPageDto, TPageEntity>
         where TPageDto : PageDto
         where TPageEntity : PageBase, new()
     {
-        protected readonly IUserService userService;
+        protected readonly IUserService UserService;
 
         public PageService(ApplicationContext context, IMapper mapper, IUserService userService) : base(context, mapper)
         {
-            this.userService = userService;
+            UserService = userService;
         }
 
         public async Task<TPageDto> GetPageAsync(int userId, int year, int month)
@@ -52,12 +52,14 @@ namespace DiaryApp.Services.DataServices
             return _mapper.Map<TPageDto>(createdPage);
         }
 
-        public async Task<TPageArea> GetPageAreaOrThrowAsync<TPageArea>(int pageID) where TPageArea : class, IPageArea
+        public async Task<TPageAreaDto> GetPageAreaOrThrowAsync<TPageArea, TPageAreaDto>(int pageId) 
+            where TPageArea : PageAreaBase<TPageEntity>
+            where TPageAreaDto : PageAreaDto
         {
-            var entity = await _context.Set<TPageArea>().FirstOrDefaultAsync(area => area.PageId == pageID);
+            var entity = await _context.Set<TPageArea>().FirstOrDefaultAsync(area => area.PageId == pageId);
             if (entity == null)
                 throw new EntityNotFoundException<TPageArea>();
-            return entity;
+            return _mapper.Map<TPageAreaDto>(entity);
         }
 
         protected Expression<Func<TPageEntity, bool>> BuildGetPageExpression(int userId, int year, int month)

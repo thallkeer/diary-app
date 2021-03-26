@@ -1,5 +1,4 @@
 ﻿using DiaryApp.Core.Interfaces;
-using DiaryApp.Core.Entities;
 using DiaryApp.Core.Entities.PageAreas;
 using DiaryApp.Core.Entities.Users.Settings;
 

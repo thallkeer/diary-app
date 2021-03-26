@@ -1,9 +1,7 @@
-import { IGoalList } from "models/entities";
 import { ListsStateByName } from "models/states";
 import {
 	createHabitTrackerReducer,
 	habitTrackerInitialState,
-	HabitTrackerReducerType,
 	IHabitTrackerState,
 } from "store/diaryLists/habitTrackers.reducer";
 import {
@@ -12,48 +10,18 @@ import {
 } from "../listCollectionHandler";
 import { GoalsListsActions } from "./goalsLists.actions";
 
-export interface IGoalsListState {
-	goalListId: number;
-	goalsAreaId: number;
-	listState: IHabitTrackerState;
-}
-
-class GoalsListsReducerCollection extends ReducerCollection<
-	HabitTrackerReducerType,
-	IGoalList,
-	IGoalsListState
-> {
-	reducerNamePrefix = "goalLists";
-
-	createReducer(listName: string) {
-		return createHabitTrackerReducer(listName);
-	}
-
-	createState(goalList: IGoalList) {
-		const goalsListState: IGoalsListState = {
-			goalListId: goalList.id,
-			goalsAreaId: goalList.areaOwnerId,
-			listState: {
-				...habitTrackerInitialState,
-				list: goalList.list,
-				listName: "habitTracker_" + goalList.list.id,
-			},
-		};
-		return goalsListState;
-	}
-}
-
-export const goalsListsHandler = new ListCollectionHandler<
-	IGoalsListState,
-	IGoalList,
-	IHabitTrackerState,
-	HabitTrackerReducerType
->(new GoalsListsReducerCollection());
+export const goalsListsHandler = new ListCollectionHandler(
+	new ReducerCollection(
+		habitTrackerInitialState,
+		createHabitTrackerReducer,
+		"goalLists"
+	)
+);
 
 export const goalsListsReducer = (
-	state = {} as ListsStateByName<IGoalsListState>,
+	state = {} as ListsStateByName<IHabitTrackerState>,
 	action: GoalsListsActions
-): ListsStateByName<IGoalsListState> => {
+): ListsStateByName<IHabitTrackerState> => {
 	switch (action.type) {
 		case "SET_GOALS_LIST":
 			return goalsListsHandler.handleSetLists(action.payload);
@@ -68,7 +36,7 @@ export const goalsListsReducer = (
 			return goalsListsHandler.handleListAction(
 				state,
 				action.subjectName,
-				(reducer, goalListState) => reducer(goalListState.listState, action)
+				(reducer, goalListState) => reducer(goalListState, action)
 			);
 	}
 };

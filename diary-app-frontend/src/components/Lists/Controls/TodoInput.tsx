@@ -1,9 +1,9 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { CheckCircle } from "./CheckCircle";
-import { ListItemInput, UrlInput } from "./ListItemInput";
+import { ListItemInput } from "./ListItemInput";
 import { ITodo } from "models";
-import { MenuItem } from "react-contextmenu";
-import { withContextMenu } from "../CommonList/CommonListComponent";
+import { withItemContextMenu } from "../CommonList/CommonListComponent";
+import { useUrlInput } from "hooks/useInputs";
 
 export interface ITodoItemActions {
 	toggleTodo: (todoId: number) => void;
@@ -21,50 +21,29 @@ export const TodoInput: FC<ITodoInputProps> = ({
 	deleteTodo,
 	todo,
 }) => {
-	const [editUrlMode, setEditUrlMode] = useState(false);
-
-	const handleAddClick = () => {
-		setEditUrlMode(true);
-	};
+	const { editUrlMode, urlInput, menuItem } = useUrlInput({
+		item: todo,
+		updateItem: updateTodo,
+	});
 
 	const handleDeleteClick = () => {
 		deleteTodo(todo.id);
 	};
 
-	const updateTodoItem = (todoItem: ITodo) => {
-		updateTodo(todoItem);
-		setEditUrlMode(false);
-	};
-
 	const todoInput = (
-		<span
-			style={{
-				display: "flex",
-				justifyContent: "flex-start",
-			}}
-		>
+		<span className="todo-input">
 			<CheckCircle id={todo.id} done={todo.done} toggleTodo={toggleTodo} />
 			{editUrlMode ? (
-				<UrlInput
-					item={todo}
-					updateItem={updateTodoItem}
-					endEdit={() => setEditUrlMode(false)}
-				/>
+				urlInput
 			) : (
 				<ListItemInput
 					item={todo}
-					updateItem={updateTodoItem}
+					updateItem={updateTodo}
 					readonly={todo.readonly}
 				/>
 			)}
 		</span>
 	);
 
-	if (todo.id === 0) return todoInput;
-
-	return withContextMenu(todoInput, todo.id, handleDeleteClick, [
-		<MenuItem key="menu-item-add" onClick={handleAddClick} className="menuItem">
-			Добавить/Изменить гиперссылку
-		</MenuItem>,
-	]);
+	return withItemContextMenu(todoInput, todo.id, handleDeleteClick, [menuItem]);
 };

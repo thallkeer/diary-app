@@ -2,8 +2,7 @@ import { usePage } from "hooks/usePage";
 import React, { Suspense, lazy, FC } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
-import { getMainPage } from "store/pages";
-import { loadMainPage } from "store/pages/mainPages.actions";
+import { getMainPage, mainPageComponent } from "store/pages";
 
 import Loader from "../Loader";
 
@@ -12,7 +11,7 @@ const ImportantEvents = lazy(() => import("./ImportantEvents"));
 const Calendar = lazy(() => import("../Calendar/Calendar"));
 
 const MainPage: FC = () => {
-	const mainPage = usePage(getMainPage, loadMainPage);
+	const mainPage = usePage(getMainPage, mainPageComponent);
 
 	if (!mainPage) return <Loader />;
 
@@ -33,4 +32,4 @@ const MainPage: FC = () => {
 	);
 };
 
-export default MainPage;
+export { MainPage };

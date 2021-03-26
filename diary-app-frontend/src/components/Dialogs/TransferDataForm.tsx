@@ -1,5 +1,5 @@
 import { prepareTransferData } from "components/Users/UserSettings";
-import { PageAreaTransferSettings } from "models/entities";
+import { IPageAreaTransferSettings } from "models/entities";
 import React, { useState, useRef } from "react";
 import { Button, Modal, Row, Form, FormGroup, Overlay } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -8,13 +8,13 @@ import axios from "../../axios/axios";
 
 interface IState {
 	show: boolean;
-	transferDataModel: PageAreaTransferSettings;
+	transferDataModel: IPageAreaTransferSettings;
 	error: string;
 }
 
 type TransferDataRequestParams = {
 	originalPageId: number;
-	transferDataModel: PageAreaTransferSettings;
+	transferDataModel: IPageAreaTransferSettings;
 };
 
 export const TransferDataForm: React.FC<{

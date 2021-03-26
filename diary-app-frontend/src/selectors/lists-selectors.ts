@@ -11,7 +11,7 @@ import { ITodoListState } from "store/diaryLists";
 import { AppStateType } from "store/reducer";
 import { IEventListState } from "store/diaryLists";
 import { getImportantEventsList } from "../store/pages/pages.selectors";
-import { IDiaryListState } from "models/states";
+import { IListState } from "models/states";
 
 const getEventsState = (state: IEventListState) =>
 	getListState<IEventListState, IEventList, IEvent>(state);
@@ -43,12 +43,10 @@ const getTodosState = (state: ITodoListState) =>
 export const getTodos = createSelector([getTodosState], (s) => s);
 
 function getListState<
-	T extends IDiaryListState<TList, TItem>,
+	T extends IListState<TList, TItem>,
 	TList extends IDiaryList<TItem>,
 	TItem extends IListItem
 >(state: T) {
-	console.log("returning state of list ", state.list);
-
 	return state.list?.items ?? [];
 }
 

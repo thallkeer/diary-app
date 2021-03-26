@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DiaryApp.Services.DTO
+namespace DiaryApp.Services.DTO.Lists
 {
     public class ListDto<T> : BaseDto where T : ListItemDto
     {

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using DiaryApp.Core.Entities;
 using DiaryApp.Services.DTO;
 
 namespace DiaryApp.API.Models

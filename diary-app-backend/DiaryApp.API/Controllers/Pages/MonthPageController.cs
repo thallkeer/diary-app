@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using DiaryApp.API.Models;
-using DiaryApp.Core.Entities;
 using DiaryApp.Core.Entities.PageAreas;
 using DiaryApp.Core.Entities.Pages;
 using DiaryApp.Services.DataInterfaces;
 using DiaryApp.Services.DTO;
+using DiaryApp.Services.DTO.PageAreas;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,8 +25,7 @@ namespace DiaryApp.API.Controllers.Pages
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<PurchasesAreaDto>> GetPurchasesAreaAsync(int pageId)
         {
-            var area = await GetPageArea<PurchasesArea, PurchasesAreaDto>(pageId);
-            return area;
+            return await PageService.GetPageAreaOrThrowAsync<PurchasesArea, PurchasesAreaDto>(pageId);
         }
 
         [HttpGet("desiresArea/{pageId}")]
@@ -34,7 +33,7 @@ namespace DiaryApp.API.Controllers.Pages
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<DesiresAreaDto>> GetDesiresAreaAsync(int pageId)
         {
-            return await GetPageArea<DesiresArea, DesiresAreaDto>(pageId);
+            return await PageService.GetPageAreaOrThrowAsync<DesiresArea, DesiresAreaDto>(pageId);
         }
 
         [HttpGet("ideasArea/{pageId}")]
@@ -42,8 +41,7 @@ namespace DiaryApp.API.Controllers.Pages
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IdeasAreaDto>> GetIdeasAreaAsync(int pageId)
         {
-            var model = await GetPageArea<IdeasArea, IdeasAreaDto>(pageId);
-            return model;
+            return await PageService.GetPageAreaOrThrowAsync<IdeasArea, IdeasAreaDto>(pageId);
         }
 
         [HttpGet("goalsArea/{pageId}")]
@@ -51,7 +49,7 @@ namespace DiaryApp.API.Controllers.Pages
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GoalsAreaDto>> GetGoalsAreaAsync(int pageId)
         {
-            return await GetPageArea<GoalsArea, GoalsAreaDto>(pageId);
+            return await PageService.GetPageAreaOrThrowAsync<GoalsArea, GoalsAreaDto>(pageId);
         }
 
         [HttpPost("transferData")]

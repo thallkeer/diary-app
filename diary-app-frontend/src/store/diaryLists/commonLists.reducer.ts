@@ -1,11 +1,19 @@
 import { ICommonList, IListItem } from "models";
-import { IDiaryListState } from "models/states";
-import { createNamedReducer } from "utils";
-import { CommonListActions } from "./commonLists.actions";
-import { diaryListReducer } from "./diaryLists.reducer";
+import { IListState } from "models/states";
+import { ActionsUnion } from "store/actions/action-helpers";
+import { DiaryListComponent } from "./lists.reducer";
 
-export interface ICommonListState
-	extends IDiaryListState<ICommonList, IListItem> {
+class CommonListComponent extends DiaryListComponent<ICommonList, IListItem> {}
+
+export const commonListComponent = new CommonListComponent(
+	"commonLists",
+	"listItems"
+);
+
+const commonListActions = commonListComponent.getActions("commonList");
+export type CommonListActions = ActionsUnion<typeof commonListActions>;
+
+export interface ICommonListState extends IListState<ICommonList, IListItem> {
 	isDeletable: boolean;
 	readonlyHeader: boolean;
 }
@@ -14,21 +22,8 @@ export const commonListInitialState: ICommonListState = {
 	list: null,
 	isDeletable: false,
 	readonlyHeader: true,
-	listName: "commonList",
 };
 
 export const createCommonListReducer = (reducerName: string) => {
-	return createNamedReducer(
-		commonListReducer,
-		commonListInitialState,
-		reducerName
-	);
+	return commonListComponent.getReducer(commonListInitialState, reducerName);
 };
-
-export const commonListReducer = (
-	state = commonListInitialState,
-	action: CommonListActions
-): ICommonListState =>
-	diaryListReducer<ICommonListState, ICommonList, IListItem>(state, action);
-
-export type CommonListReducerType = typeof commonListReducer;

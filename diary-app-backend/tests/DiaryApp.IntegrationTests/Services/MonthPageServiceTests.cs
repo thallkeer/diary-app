@@ -1,15 +1,7 @@
 ﻿using DiaryApp.Services.DataInterfaces;
-using DiaryApp.Core.Entities;
 using Xunit;
-using System.Collections.Generic;
-using DiaryApp.Core.Interfaces;
 using DiaryApp.Services.DTO;
 using System.Threading.Tasks;
-using System;
-using System.Linq;
-using System.Reflection;
-using DiaryApp.Core.Entities.PageAreas;
-using DiaryApp.Core.Entities.Users.Settings;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiaryApp.IntegrationTests
@@ -61,8 +53,8 @@ namespace DiaryApp.IntegrationTests
             Assert.NotNull(monthPage);
             Assert.NotEqual(0, monthPage.Id);
 
-            var pageAreasBefore = await GetPageAreas(service, monthPage);
-            Assert.All(pageAreasBefore, Assert.NotNull);
+            //var pageAreasBefore = await GetPageAreas(service, monthPage);
+            //Assert.All(pageAreasBefore, Assert.NotNull);
 
             await service.TransferPageDataToNextMonthAsync(monthPage.Id, transferModel);
 
@@ -83,24 +75,23 @@ namespace DiaryApp.IntegrationTests
 
         #region Utils
 
-        private async Task<List<MonthPageArea>> GetPageAreas(IMonthPageService service, MonthPageDto nextMonthPage)
-        {
-            var ga = await GetPageArea<GoalsAreaDto, GoalsArea>(nextMonthPage.Id);
-            var pa = await GetPageArea<PurchasesAreaDto, PurchasesArea>(nextMonthPage.Id);
-            var ia = await GetPageArea<IdeasAreaDto, IdeasArea>(nextMonthPage.Id);
-            var da = await GetPageArea<DesiresAreaDto, DesiresArea>(nextMonthPage.Id);
-            List<MonthPageArea> pageAreas = new List<MonthPageArea> { ga, pa, ia, da };
-            return pageAreas;
-        }
-
-        private async Task<TArea> GetPageArea<TAreaDto, TArea>(int pageId)
-             where TAreaDto : PageAreaDto
-             where TArea : class, IPageArea
-        {
-            var service = GetMonthPageService();
-            var dto = await service.GetPageAreaOrThrowAsync<TArea>(pageId);
-            return _mapper.Map<TArea>(dto);
-        }
+        // private async Task<List<MonthPageArea>> GetPageAreas(IMonthPageService service, MonthPageDto nextMonthPage)
+        // {
+        //     var ga = await GetPageArea<GoalsAreaDto, GoalsArea>(nextMonthPage.Id);
+        //     var pa = await GetPageArea<PurchasesAreaDto, PurchasesArea>(nextMonthPage.Id);
+        //     var ia = await GetPageArea<IdeasAreaDto, IdeasArea>(nextMonthPage.Id);
+        //     var da = await GetPageArea<DesiresAreaDto, DesiresArea>(nextMonthPage.Id);
+        //     List<MonthPageArea> pageAreas = new List<MonthPageArea> { ga, pa, ia, da };
+        //     return pageAreas;
+        // }
+        //
+        // private async Task<TArea> GetPageArea<TAreaDto, TArea>(int pageId)
+        //      where TAreaDto : PageAreaDto
+        //      where TArea : MonthPageArea
+        // {
+        //     var service = GetMonthPageService();
+        //     return await service.GetPageAreaOrThrowAsync<TArea, TAreaDto>(pageId);
+        // }
 
         #endregion
 

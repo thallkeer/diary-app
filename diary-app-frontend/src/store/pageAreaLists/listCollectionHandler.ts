@@ -1,27 +1,45 @@
-import { IEntity, IMonthAreaList } from "../../models/entities";
-import { ListsStateByName } from "../../models/states";
+import { IList } from "models";
+import { IEntity } from "../../models/entities";
+import { IListState, ListsStateByName } from "../../models/states";
 
-export abstract class ReducerCollection<TReducer, TEntity, TState> {
+export class ReducerCollection<
+	TReducer,
+	TListState extends IListState<TList, TItem>,
+	TList extends IList<TItem>,
+	TItem extends IEntity
+> {
 	private reducers: Map<string, TReducer>;
-	protected abstract reducerNamePrefix: string;
+	private initialState: TListState;
+	private createReducer: (reducerName: string) => TReducer;
+	private reducerNamePrefix: string;
 
-	constructor() {
+	constructor(
+		initialState: TListState,
+		createReducer: (reducerName: string) => TReducer,
+		reducerNamePrefix: string
+	) {
+		this.initialState = initialState;
+		this.createReducer = createReducer;
+		this.reducerNamePrefix = reducerNamePrefix;
 		this.reducers = new Map<string, TReducer>();
 	}
 
-	protected abstract createReducer(reducerName: string): TReducer;
-
-	protected abstract createState(entity: TEntity): TState;
-
 	/**
 	 * Creates new reducer and state for given entity
-	 * @param list List wrapper entity
+	 * @param entityKey
+	 * @param entity
+	 * @returns
 	 */
-	public add = (entityKey: number, entity: TEntity): TState => {
-		const listName = this.getReducerName(entityKey);
-		const reducer = this.createReducer(listName);
-		this.reducers.set(listName, reducer);
-		return this.createState(entity);
+	public add = (entityKey: number, entity: TList): TListState => {
+		const reducerName = this.getReducerName(entityKey);
+		const reducer = this.createReducer(reducerName);
+
+		this.reducers.set(reducerName, reducer);
+
+		return {
+			...this.initialState,
+			list: entity,
+		};
 	};
 
 	/**
@@ -34,7 +52,7 @@ export abstract class ReducerCollection<TReducer, TEntity, TState> {
 	}
 
 	/**
-	 * Removes all reducer from collection
+	 * Removes all reducers from collection
 	 */
 	public clear() {
 		this.reducers.clear();
@@ -49,20 +67,14 @@ export abstract class ReducerCollection<TReducer, TEntity, TState> {
 }
 
 export class ListCollectionHandler<
-	TListWrapperState,
-	TListWrapper extends IEntity,
-	TListState,
+	TListState extends IListState<TList, TItem>,
+	TList extends IList<TItem>,
+	TItem extends IEntity,
 	TReducer
 > {
-	private reducers: ReducerCollection<
-		TReducer,
-		TListWrapper,
-		TListWrapperState
-	>;
+	private reducers: ReducerCollection<TReducer, TListState, TList, TItem>;
 
-	constructor(
-		reducers: ReducerCollection<TReducer, TListWrapper, TListWrapperState>
-	) {
+	constructor(reducers: ReducerCollection<TReducer, TListState, TList, TItem>) {
 		this.reducers = reducers;
 	}
 
@@ -79,11 +91,9 @@ export class ListCollectionHandler<
 	 * Handles set action. Initializes state with given lists.
 	 * @param lists Lists collection
 	 */
-	public handleSetLists = (
-		lists: TListWrapper[]
-	): ListsStateByName<TListWrapperState> => {
+	public handleSetLists = (lists: TList[]): ListsStateByName<TListState> => {
 		this.reducers.clear();
-		const newState: ListsStateByName<TListWrapperState> = {};
+		const newState: ListsStateByName<TListState> = {};
 
 		lists.forEach((list) => {
 			const listName = this.reducers.getReducerName(list.id);
@@ -99,9 +109,9 @@ export class ListCollectionHandler<
 	 * @param list
 	 */
 	public handleAddList = (
-		currentState: ListsStateByName<TListWrapperState>,
-		list: TListWrapper
-	): ListsStateByName<TListWrapperState> => {
+		currentState: ListsStateByName<TListState>,
+		list: TList
+	): ListsStateByName<TListState> => {
 		const addedState = this.reducers.add(list.id, list);
 		const plName = this.reducers.getReducerName(list.id);
 
@@ -117,12 +127,12 @@ export class ListCollectionHandler<
 	 * @param listId
 	 */
 	handleDeleteList = (
-		currentState: ListsStateByName<TListWrapperState>,
+		currentState: ListsStateByName<TListState>,
 		listId: number
-	): ListsStateByName<TListWrapperState> => {
+	): ListsStateByName<TListState> => {
 		const listName = this.reducers.getReducerName(listId);
 		const stateAfterDelete = { ...currentState };
-		delete stateAfterDelete.byName[listName];
+		delete stateAfterDelete[listName];
 		return stateAfterDelete;
 	};
 
@@ -133,21 +143,19 @@ export class ListCollectionHandler<
 	 * @param reduce
 	 */
 	handleListAction = (
-		currentState: ListsStateByName<TListWrapperState>,
+		currentState: ListsStateByName<TListState>,
 		listKey: string,
-		reduce: (reducer: TReducer, list: TListWrapperState) => TListState
-	): ListsStateByName<TListWrapperState> => {
+		reduce: (reducer: TReducer, listState: TListState) => TListState
+	): ListsStateByName<TListState> => {
 		const reducer = this.reducers.get(listKey);
+
 		if (!reducer) return currentState;
 
-		const list = currentState[listKey];
-		const newListState = reduce(reducer, list);
+		const listState = currentState[listKey];
+		const newListState = reduce(reducer, listState);
 		return {
 			...currentState,
-			[listKey]: {
-				...list,
-				listState: newListState,
-			},
+			[listKey]: newListState,
 		};
 	};
 }

@@ -1,34 +1,76 @@
+import { IMainPage, IMonthPage, IPage } from "models";
 import { IPageArea } from "models/PageAreas/pageAreas";
-import { Dispatch, useEffect } from "react";
+import { IPageAreaState } from "models/states";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IPageAreaState } from "store/pageAreas";
+import { PageAreaComponent } from "store/pageAreas";
 import { AppStateType } from "store/reducer";
 
 import { getAppInfo } from "../selectors/app-selectors";
-import { getMonthPage } from "../store/pages/pages.selectors";
+import { getMainPage, getMonthPage } from "../store/pages/pages.selectors";
 
-export const usePageArea = <
+export const useMonthPageArea = <
 	TAreaState extends IPageAreaState<TArea>,
 	TArea extends IPageArea
 >(
 	areaSelector: (state: AppStateType) => TAreaState,
-	loadPageArea: (dispatch: Dispatch<any>, pageId: number) => void
+	pageAreaComponent: PageAreaComponent<IMonthPage, TArea>
+) => {
+	const { page, area, isLoading } = usePageArea(
+		getMonthPage,
+		areaSelector,
+		pageAreaComponent
+	);
+	return {
+		monthPage: page,
+		area,
+		isLoading,
+	};
+};
+
+export const useMainPageArea = <
+	TAreaState extends IPageAreaState<TArea>,
+	TArea extends IPageArea
+>(
+	areaSelector: (state: AppStateType) => TAreaState,
+	pageAreaComponent: PageAreaComponent<IMainPage, TArea>
+) => {
+	const { page, area, isLoading } = usePageArea(
+		getMainPage,
+		areaSelector,
+		pageAreaComponent
+	);
+	return {
+		mainPage: page,
+		area,
+		isLoading,
+	};
+};
+
+export const usePageArea = <
+	TPage extends IPage,
+	TAreaState extends IPageAreaState<TArea>,
+	TArea extends IPageArea
+>(
+	pageSelector: (state: AppStateType) => TPage,
+	areaSelector: (state: AppStateType) => TAreaState,
+	pageAreaComponent: PageAreaComponent<TPage, TArea>
 ) => {
 	const dispatch = useDispatch();
-	const monthPage = useSelector(getMonthPage);
+	const page = useSelector(pageSelector);
 	const app = useSelector(getAppInfo);
 	const { user, year, month } = app;
 	const { area, isLoading } = useSelector(areaSelector) as TAreaState;
 
 	useEffect(() => {
-		if (monthPage) {
-			loadPageArea(dispatch, monthPage.id);
+		if (page) {
+			dispatch(pageAreaComponent.loadPageArea(page.id));
 		}
-	}, [monthPage, user, year, month]);
+	}, [pageAreaComponent, page, user, year, month]);
 
 	return {
-		monthPage,
+		page,
 		area,
-		isLoading: !monthPage || isLoading || !area,
+		isLoading: !page || isLoading || !area,
 	};
 };

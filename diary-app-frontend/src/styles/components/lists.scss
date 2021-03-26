@@ -74,6 +74,10 @@
 }
 
 .list-item {
+	flex: 1;
+	display: "flex";
+	border-bottom: 1px solid black;
+	justify-content: "flex-start";
 	&:hover {
 		span,
 		a {
@@ -81,6 +85,11 @@
 		}
 		cursor: pointer;
 	}
+}
+
+.todo-input {
+	display: flex;
+	justify-content: flex-start;
 }
 
 .list-item-link {

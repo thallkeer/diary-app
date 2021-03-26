@@ -1,5 +1,4 @@
-﻿using DiaryApp.Core.Entities;
-using DiaryApp.Core.Entities.Users;
+﻿using DiaryApp.Core.Entities.Users;
 
 namespace DiaryApp.Services.Exceptions
 {

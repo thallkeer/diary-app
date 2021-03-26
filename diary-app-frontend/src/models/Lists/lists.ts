@@ -1,27 +1,19 @@
 import { IEntity } from "models/entities";
 
-export interface IList extends IEntity {
-	pageId: number;
-}
-
-export interface IListWithItems<TItem> extends IList {
-	items: TItem[];
-}
-
 export interface IListItem extends IEntity {
 	subject: string;
 	url: string;
-	ownerID?: number;
+	ownerId: number;
 	readonly?: boolean;
 }
 
-export interface IDiaryList<T extends IListItem> extends IListWithItems<T> {
-	title: string;
+export interface IList<T extends IEntity> extends IEntity {
+	items: T[];
 }
 
-export interface ITodoList extends IDiaryList<ITodo> {}
-export interface IEventList extends IDiaryList<IEvent> {}
-export interface ICommonList extends IDiaryList<IListItem> {}
+export interface IDiaryList<T extends IEntity> extends IList<T> {
+	title: string;
+}
 
 export interface ITodo extends IListItem {
 	done: boolean;
@@ -30,4 +22,18 @@ export interface ITodo extends IListItem {
 export interface IEvent extends IListItem {
 	date: Date;
 	location: string;
+}
+
+export interface IHabitDay extends IEntity {
+	number: number;
+	note: string;
+	habitTrackerId: number;
+}
+
+export interface ITodoList extends IDiaryList<ITodo> {}
+export interface IEventList extends IDiaryList<IEvent> {}
+export interface ICommonList extends IDiaryList<IListItem> {}
+export interface IHabitTracker extends IList<IHabitDay> {
+	goalName: string;
+	goalsAreaId: number;
 }

@@ -1,6 +1,3 @@
-import { IHabitTracker } from "./Lists/habitTracker";
-import { ICommonList, ITodoList } from "./Lists/lists";
-
 export interface IEntity {
 	id: number;
 }
@@ -12,7 +9,7 @@ export interface IUser extends IEntity {
 	telegramId?: string;
 }
 
-export interface PageAreaTransferSettings {
+export interface IPageAreaTransferSettings {
 	id?: number;
 	transferGoalsArea?: boolean;
 	transferPurchasesArea?: boolean;
@@ -20,7 +17,7 @@ export interface PageAreaTransferSettings {
 	transferIdeasArea?: boolean;
 }
 
-export interface NotificationsSettings {
+export interface INotificationsSettings {
 	id: number;
 	isActivated: boolean;
 	notifyDayBefore: boolean;
@@ -30,19 +27,6 @@ export interface NotificationsSettings {
 export interface IUserSettings {
 	id: number;
 	userId: number;
-	pageAreaTransferSettings: PageAreaTransferSettings;
-	notificationSettings: NotificationsSettings;
+	pageAreaTransferSettings: IPageAreaTransferSettings;
+	notificationSettings: INotificationsSettings;
 }
-
-export interface IMonthAreaList<TList> extends IEntity {
-	areaOwnerId: number;
-	list: TList;
-}
-
-export interface IPurchaseList extends IMonthAreaList<ITodoList> {}
-
-export interface IDesireList extends IMonthAreaList<ICommonList> {}
-
-export interface IIdeasList extends IMonthAreaList<ICommonList> {}
-
-export interface IGoalList extends IMonthAreaList<IHabitTracker> {}

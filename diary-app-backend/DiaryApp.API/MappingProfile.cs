@@ -12,6 +12,7 @@ using DiaryApp.Core.Entities.Pages;
 using DiaryApp.Core.Entities.Users;
 using DiaryApp.Services.DTO.Users;
 using DiaryApp.Services.DTO.Lists;
+using DiaryApp.Services.DTO.PageAreas;
 
 namespace DiaryApp.API
 {
@@ -28,16 +29,23 @@ namespace DiaryApp.API
             CreateMap<ListItem, ListItemDto>().ReverseMap();           
             CreateMap<CommonList, CommonListDto>().ReverseMap();
 
-            CreateMap<PurchaseList, ListWrapperDto>();
-            CreateMap<PurchaseList, PurchasesListDto>().ReverseMap();
-            CreateMap<IdeasList, ListWrapperDto>();
-            CreateMap<IdeasList, IdeasListDto>().ReverseMap();
-            CreateMap<DesiresList, ListWrapperDto>();
-            CreateMap<DesiresList, DesiresListDto>().ReverseMap();
-            CreateMap<HabitTracker, GoalsListDto>()
-                .ForMember(gl => gl.List, htdto => htdto.MapFrom(src => src))
-                .ForMember(gl => gl.AreaOwnerId, htdto => htdto.MapFrom(src => src.GoalsAreaId))
-                .ReverseMap();
+            CreateMap<PurchaseList, TodoListDto>()
+                .ForMember(dto => dto.Id,
+                    dto => dto.MapFrom(src => src.ListID))
+                .ForMember(dto => dto.Title,
+                    dto => dto.MapFrom(src => src.List.Title));
+            CreateMap<IdeasList, CommonListDto>()
+                .ForMember(dto => dto.Id,
+                    dto => dto.MapFrom(src => src.ListID))
+                .ForMember(dto => dto.Title,
+                    dto => dto.MapFrom(src => src.List.Title));
+            CreateMap<DesiresList, CommonListDto>()
+                .ForMember(dto => dto.Id,
+                    dto => dto.MapFrom(src => src.ListID))
+                .ForMember(dto => dto.Title,
+                    dto => dto.MapFrom(src => src.List.Title));
+            
+            CreateMap<HabitTracker, HabitTrackerDto>().ReverseMap();
 
             CreateMap<MainPage, PageDto>().ReverseMap();
             CreateMap<MonthPage, PageDto>().ReverseMap();

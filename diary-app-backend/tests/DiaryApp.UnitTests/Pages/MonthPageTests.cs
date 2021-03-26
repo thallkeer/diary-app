@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using AutoFixture;
-using DiaryApp.Core.Entities;
 using DiaryApp.Core.Entities.PageAreas;
 using DiaryApp.Core.Entities.Pages;
 using DiaryApp.Core.Entities.Users;

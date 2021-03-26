@@ -1,2 +1,3 @@
 export * from "./Lists/lists";
-export * from "./Lists/habitTracker";
+export * from "./PageAreas/pageAreas";
+export * from "./Pages/pages";

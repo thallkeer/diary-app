@@ -6,12 +6,6 @@ import { routerMiddleware as createRouterMiddleware } from "connected-react-rout
 import { rootReducer } from "./reducer";
 import LogRocket from "logrocket";
 
-export type InferActionsTypes<T> = T extends {
-	[keys: string]: (...args: any[]) => infer U;
-}
-	? U
-	: never;
-
 // @ts-ignore
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
