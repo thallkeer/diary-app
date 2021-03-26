@@ -4,5 +4,60 @@
         <name>DiaryApp.API</name>
     </assembly>
     <members>
+        <member name="T:DiaryApp.API.Controllers.CrudController`2">
+            <summary>
+            Base controller for CRUD operations
+            </summary>
+            <typeparam name="TDto">Type of dto</typeparam>
+            <typeparam name="TEntity">Type of entity</typeparam>
+        </member>
+        <member name="M:DiaryApp.API.Controllers.CrudController`2.GetAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Returns resource with given id if exists.
+            </summary>
+            <param name="id">Identifier</param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DiaryApp.API.Controllers.CrudController`2.PostAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Creates resource from given model.
+            </summary>
+            <param name="createModel">Entity create model</param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DiaryApp.API.Controllers.CrudController`2.PutAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Updates resource from given model.
+            </summary>
+            <param name="updateModel">Entity update model</param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DiaryApp.API.Controllers.CrudController`2.DeleteAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deletes resource with given id.
+            </summary>
+            <param name="id">Id of the resource</param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DiaryApp.API.Controllers.ListItems.EventsController.PostAsync(DiaryApp.Services.DTO.EventItemDto,System.Threading.CancellationToken)">
+            <summary>
+            Creates new event at "Important Events" list. And schedules a notification 
+            about this event if it's possible.
+            </summary>
+            <param name="createModel">Event model</param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DiaryApp.API.Controllers.Lists.PurchaseListsController.CreateAsync(DiaryApp.API.Requests.CreatePurchaseListRequest,System.Threading.CancellationToken)">
+            <summary>
+            Creates new purchase list for given purchase area from todolist model.
+            </summary>
+            <param name="requestModel">Parameters to create purchase list</param>
+            <param name="cancellationToken"></param>
+        </member>
     </members>
 </doc>

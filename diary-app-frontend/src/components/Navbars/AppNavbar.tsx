@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../context/reducers/app-reducer";
+import { AppThunks } from "store/app/app.actions";
 import { getAppInfo } from "../../selectors/app-selectors";
-import { logoff } from "../../services/users";
+import { userService } from "../../services/users";
 import { TransferDataForm } from "../Dialogs/TransferDataForm";
 
 export const AppNavbar: React.FC<{ isOnMonthPage: boolean }> = ({
@@ -16,8 +16,8 @@ export const AppNavbar: React.FC<{ isOnMonthPage: boolean }> = ({
 	const handleShow = () => setShow(true);
 
 	const onLogoff = () => {
-		dispatch(setUser(null));
-		logoff();
+		dispatch(AppThunks.setUser(null));
+		userService.logoff();
 	};
 
 	return (
@@ -32,15 +32,17 @@ export const AppNavbar: React.FC<{ isOnMonthPage: boolean }> = ({
 								title={user.username}
 								id="collasible-nav-dropdown"
 								style={{ marginRight: "1rem", fontWeight: "bold" }}
+								alignRight={true}
 							>
 								{monthPage && (
-									<>
-										<NavDropdown.Item onClick={handleShow}>
-											Перенести списки на следующий месяц
-										</NavDropdown.Item>
-										<NavDropdown.Divider />
-									</>
+									<NavDropdown.Item onClick={handleShow}>
+										Перенести списки на следующий месяц
+									</NavDropdown.Item>
 								)}
+								<NavDropdown.Item href="/settings">
+									Настройки пользователя
+								</NavDropdown.Item>
+								<NavDropdown.Divider />
 								<NavDropdown.Item onClick={onLogoff}>Выйти</NavDropdown.Item>
 							</NavDropdown>
 						</Nav>

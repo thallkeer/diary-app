@@ -14,6 +14,7 @@
 # misc
 .DS_Store
 .env.local
+.env.development
 .env.development.local
 .env.test.local
 .env.production.local
@@ -61,5 +62,7 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 /diary-app-frontend/node_modules
+/diary-app-frontend/debug.log
 appsettings.json
 logger.txt
+/publish

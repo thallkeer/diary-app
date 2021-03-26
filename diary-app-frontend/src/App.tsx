@@ -1,39 +1,19 @@
-import React, { Suspense, lazy } from "react";
-import { /* BrowserRouter as*/ Router, Route, Switch } from "react-router-dom";
-//import Header from "../components/Header";
+import React, { Suspense } from "react";
+import { Router, Route, Switch } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import NotFound from "./components/NotFound";
 import history from "./components/history";
 import { PrivateRoute } from "./components/Router/PrivateRoute";
 import Loader from "./components/Loader";
 import { Provider } from "react-redux";
-import store from "./context/store";
-
-const MainPage = lazy(() => import("./components/MainPage/MainPage"));
-const MonthPage = lazy(() => import("./components/MonthPage/MonthPage"));
-const Login = lazy(() => import("./components/Users/Login"));
+import store from "./store/store";
+import { ToastContainer } from "react-toastify";
+import { UserSettings } from "components/Users/UserSettings";
+import { MainPage } from "components/MainPage/MainPage";
+import Login from "components/Users/Login";
+import { MonthPage } from "components/MonthPage/MonthPage";
 
 export default function App() {
-	// const curDate = new Date();
-	// const setAppState = useCallback((newState: IAppState): void => {
-	//   const { year, month, user } = newState;
-	//   localStorage.setItem("user", JSON.stringify(user));
-	//   _setAppState({ ...newState });
-	// }, []);
-
-	// const [appState, _setAppState] = useState<IAppState>({
-	//   month: curDate.getMonth() + 1,
-	//   year: curDate.getFullYear(),
-	//   user: JSON.parse(localStorage.getItem("user")),
-	//   setAppState: setAppState,
-	// });
-
-	// const getFromStorage = (key: string) => {
-	//   let item = localStorage.getItem(key);
-	//   if (item) return Number(item);
-	//   return null;
-	// };
-
 	return (
 		<Router history={history}>
 			<Provider store={store}>
@@ -44,9 +24,15 @@ export default function App() {
 							<Route path="/login" component={Login} />
 							<PrivateRoute path="/main" exact={true} component={MainPage} />
 							<PrivateRoute path="/month" exact={true} component={MonthPage} />
+							<PrivateRoute
+								path="/settings"
+								exact={true}
+								component={UserSettings}
+							/>
 							<Route component={NotFound} />
 						</Switch>
 					</Suspense>
+					<ToastContainer position="bottom-right" />
 				</Container>
 			</Provider>
 		</Router>

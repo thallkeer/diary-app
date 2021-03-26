@@ -1,39 +1,48 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col } from "react-bootstrap";
-// import { loadImportantEventsArea } from "../../context/reducers/pageArea/importantEventsArea-reducer";
 import {
-	// getImportantEventsArea,
-	getImportantThingsArea,
-	getLoading,
-	getMainPage,
-} from "../../selectors/page-selectors";
+	getImportantEventsArea,
+	getImportantEventsList,
+} from "../../store/pages/pages.selectors";
 import Loader from "../Loader";
+import { EventList } from "../Lists/EventList/EventList";
+import { IEventItemActions } from "../Lists/Controls/EventInput";
+import {
+	importantEventsAreaComponent,
+	importantEventsThunks,
+} from "store/pageAreas/importantEventsArea.reducer";
+import { useMainPageArea } from "hooks/usePageArea";
 
 const ImportantEventsArea: React.FC = () => {
 	const dispatch = useDispatch();
-	const mainPage = useSelector(getMainPage);
-	// const { area, isLoading } = useSelector(getImportantEventsArea);
+	const { isLoading } = useMainPageArea(
+		getImportantEventsArea,
+		importantEventsAreaComponent
+	);
 
-	useEffect(() => {
-		// if (mainPage !== null) dispatch(loadImportantEventsArea(mainPage.id));
-	}, [mainPage]);
+	const { list } = useSelector(getImportantEventsList);
 
-	// if (isLoading || !area) return <Loader />;
+	if (isLoading || !list) return <Loader />;
+
+	const eventItemActions: IEventItemActions = {
+		deleteEvent: (eventId) =>
+			dispatch(importantEventsThunks.deleteListItem(eventId)),
+		updateEvent: (event) =>
+			dispatch(importantEventsThunks.addOrUpdateListItem(event)),
+		getItemText: (event) => `${event.date} ${event.subject}`,
+	};
 
 	return (
-		<>
-			<h1 className="area-header">
-				{/* {area.header} */}
-				</h1>
-			<Row>
-				<Col md={12}>
-					{/* <TodoListState readonlyHeader={true} isDeletable={false}>
-							<TodoList className="mt-10 no-list-header" />
-						</TodoListState> */}
-				</Col>
-			</Row>
-		</>
+		<Row>
+			<Col md={12}>
+				<EventList
+					className="mt-10 no-list-header"
+					eventList={list}
+					eventItemActions={eventItemActions}
+				/>
+			</Col>
+		</Row>
 	);
 };
 

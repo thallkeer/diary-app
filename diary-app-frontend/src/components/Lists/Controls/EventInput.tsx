@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from "react";
 import { ListItemInput } from "./ListItemInput";
-import { IEvent } from "../../../models";
-import { withContextMenu } from "../CommonList/CommonListComponent";
+import { IEvent } from "models";
+import { withItemContextMenu } from "../CommonList/CommonListComponent";
 
 export interface IEventItemActions {
 	updateEvent: (event: IEvent) => void;
@@ -25,23 +25,17 @@ export const EventInput: FC<IEventInputProps> = ({
 		deleteEvent(event.id);
 	};
 
-	const updateEventItem = (eventItem: IEvent) => {
-		updateEvent(eventItem);
-	};
-
 	useEffect(() => {}, [event, updateEvent, deleteEvent, getItemText]);
 
 	const eventInput = (
 		<ListItemInput
 			className="no-left-padding"
 			item={event}
-			updateItem={updateEventItem}
+			updateItem={updateEvent}
 			readonly={readonly}
 			getItemText={getItemText}
 		/>
 	);
 
-	if (event.id === 0) return eventInput;
-
-	return withContextMenu(eventInput, event.id, handleDeleteClick);
+	return withItemContextMenu(eventInput, event.id, handleDeleteClick);
 };

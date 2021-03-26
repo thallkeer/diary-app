@@ -6,11 +6,11 @@ import {
 	IListActions,
 	IListOptions,
 } from "../CommonList/CommonListComponent";
-import { ITodo, ITodoList } from "../../../models";
+import { ITodo, ITodoList } from "models";
 
 export interface ITodoListProps extends IListActions, IListOptions {
 	todoList: ITodoList;
-	className: string;
+	className?: string;
 	todoItemActions: ITodoItemActions;
 }
 

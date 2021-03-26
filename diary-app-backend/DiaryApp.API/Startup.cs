@@ -1,6 +1,4 @@
-﻿using System;
-using AutoMapper;
-using DiaryApp.Core;
+﻿using DiaryApp.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,22 +6,32 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System.IO;
-using System.Text;
-using DiaryApp.API.Extensions;
-using System.Threading.Tasks;
-using DiaryApp.API.Extensions.ConfigureServices;
+using DiaryApp.Core.Bootstrap;
+using System;
+using Microsoft.AspNetCore.HttpOverrides;
+using DiaryApp.API.Filters;
+using DiaryApp.API.Settings;
+using DiaryApp.Services.Bootstrap;
+using DiaryApp.API.Middleware;
+using DiaryApp.Services.Security;
+using DiaryApp.Infrastructure.Security;
+using DiaryApp.Infrastructure.ServiceInterfaces;
+using DiaryApp.Infrastructure.DependencyInjection;
+using System.Reflection;
+using DiaryApp.Infrastructure.Services;
 
 namespace DiaryApp.API
 {
     public class Startup
     {
-        readonly IWebHostEnvironment env;
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        private readonly IWebHostEnvironment _env;
+        readonly string DiaryAppPolicy = nameof(DiaryAppPolicy);
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
-            this.env = env;
+            _env = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
@@ -31,6 +39,26 @@ namespace DiaryApp.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var appSettings = Configuration.GetSection("appSettings").Get<AppSettings>();
+            if (appSettings == null)
+                throw new ArgumentNullException(nameof(appSettings), "Application settings configuration is not provided!");
+            var jwtTokenConfig = Configuration.GetSection("jwtTokenConfig").Get<JwtTokenConfig>();
+            if (jwtTokenConfig == null)
+                throw new ArgumentNullException(nameof(jwtTokenConfig), "JWT token configuration is not provided!");
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(DiaryAppPolicy,
+                    builder =>
+                    {
+                        builder.WithOrigins(appSettings.Origins);
+                        builder.WithMethods("GET", "POST", "PUT", "DELETE");
+                        builder.WithExposedHeaders("www-authenticate", "Access-Token");
+                        builder.AllowAnyHeader();
+                        builder.SetPreflightMaxAge(TimeSpan.FromSeconds(2520));
+                    });
+            });
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -40,59 +68,35 @@ namespace DiaryApp.API
 
             services.AddControllers();
 
-            services.AddCors();
+            var connectionString = Configuration.GetConnectionString(_env.IsDevelopment() ? "DefaultConnection" : "ProdConnection");
 
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddSwaggerGen(c =>
+            {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            }).AddJwtAuthentication(jwtTokenConfig);
+
+            services.AddAutoMapper(typeof(Startup))
+                    .AddSingleton(appSettings)
+                    .AddSingleton(jwtTokenConfig)
+                    .AddScoped<IJwtAuthManager,JwtAuthManager>()
+                    .AddScoped<ModelValidationAttribute>()
+                    .AddQuartzScheduler()
+                    .AddPostgresContext(connectionString)
+                    .AddGithubService(appSettings.GithubToken)
+                    .AddDataServices()
+                    .AddTelegramClient(appSettings.TelegramBotToken)
+                    .AddTransient<ISchedulerService, SchedulerService>()        
+                    .AddScoped<INotificationService, TelegramNotificationService>()
+                    .AddMvc(opt => opt.EnableEndpointRouting = false);
 
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "client/build");
-
-            services.AddAutoMapper(typeof(Startup));
-
-            if (env.IsDevelopment())
-            {
-                services.AddDbContext<ApplicationContext>(options =>
-                    options.UseLazyLoadingProxies()
-                           .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            }
-            else
-            {
-                //.AddEntityFrameworkNpgsql()
-                services
-                        .AddDbContext<ApplicationContext>(options =>
-                            options.UseLazyLoadingProxies()
-                                   .UseNpgsql(Configuration.GetConnectionString("ProdConnection")));
-            }
-
-            // configure strongly typed settings objects
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-
-            // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            byte[] key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.ConfigureJwtAuthentication(key);
-
-            services.AddApplicationServices();
-
-            services.AddSwagger();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ApplicationContext appContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationContext appContext)
         {
             appContext.Database.Migrate();
-
-            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "logger.txt"));
-            var logger = loggerFactory.CreateLogger<FileLogger>();
-
-            //app.Use(async (ctx, next) =>
-            //{
-            //    await next();
-            //    if (ctx.Response.StatusCode == 204)
-            //    {
-            //        ctx.Response.ContentLength = 0;
-            //    }
-            //});
 
             if (env.IsDevelopment())
             {
@@ -100,38 +104,31 @@ namespace DiaryApp.API
             }
             else
             {
-                app.ConfigureExceptionHandler(logger);
                 app.UseHsts();
             }
 
-            app.UseCors(builder =>
-                                    builder.AllowAnyOrigin()
-                                           .AllowAnyHeader()
-                                           .AllowAnyMethod());
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
-           
-            app.UseHttpsRedirection();
+            if (!env.IsProduction())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "DiaryApp API v1");
+                    c.RoutePrefix = "swagger";
+                });
+            }
+
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
-                ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All
-            });
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                //на сервере писать через относительный путь
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DiaryApp API V1");
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
             app.UseRouting();
-
+            app.UseCors(DiaryAppPolicy);
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -146,20 +143,14 @@ namespace DiaryApp.API
                 {
                     var spaPathSection = Configuration.GetSection("SpaSourcePath");
                     spa.Options.SourcePath = spaPathSection.Value;
-                    //spa.UseReactDevelopmentServer(npmScript: "start");
                 }
                 else
                 {
                     spa.Options.SourcePath = Path.Join(env.ContentRootPath, "client");
-                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
                 }
             });
 
-            app.Run(async (context) =>
-            {
-                await Task.Run(() => logger.LogInformation($"{DateTime.Now} Processing request {context.Request.Path}"));
-                //await context.Response.WriteAsync("TEST");
-            });
+            app.UseQuartz();
         }
     }
 }

@@ -1,0 +1,15 @@
+[Unit]
+Description=diary website
+
+[Service]
+User=keer
+Restart=always
+RestartSec=5
+Nice=1
+SuccessExitStatus=0 1
+WorkingDirectory=/var/www/keer/diary/app
+ExecStart=dotnet DiaryApp.API.dll
+ExecStop=
+
+[Install]
+WantedBy=multi-user.target

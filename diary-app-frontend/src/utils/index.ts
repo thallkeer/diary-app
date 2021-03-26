@@ -1,47 +1,47 @@
-import { ITodo, IEvent, IListItem, IList } from "../models/index";
+import { INamedAction } from "../store/actions/action-helpers";
+import { IListState } from "../models/states";
+import { IEvent, IList, IListItem, ITodo } from "models";
+import { IEntity } from "models/entities";
 
-var _getRandomInt = (min: number, max: number) => {
+const _getRandomInt = (min: number, max: number) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 export const getRandomId = () => {
-	var ts = new Date().getTime().toString();
-	var parts = ts.split("").reverse();
-	var id = "";
+	const ts = new Date().getTime().toString();
+	const parts = ts.split("").reverse();
+	let id = "";
 
-	for (var i = 0; i < 8; ++i) {
-		var index = _getRandomInt(0, parts.length - 1);
+	for (let i = 0; i < 8; ++i) {
+		const index = _getRandomInt(0, parts.length - 1);
 		id += parts[index];
 	}
 	return Number(id);
 };
 
+/**
+ * returns empty list item
+ *
+ * @param ownerId id of list that empty item will belongs
+ */
 export const getEmptyItem = (ownerId: number) => {
-	const item: IListItem = { id: 0, subject: "", url: "", ownerID: ownerId};
+	const item: IListItem = { id: 0, subject: "", url: "", ownerId: ownerId };
 	return item;
 };
 
 export const getEmptyTodo = (ownerId: number) => {
-	const todo: ITodo = { ...getEmptyItem(ownerId),done: false };
-	console.log(todo);
-	
+	const todo: ITodo = { ...getEmptyItem(ownerId), done: false };
 	return todo;
 };
 
 export const getEmptyEvent = (ownerId: number) => {
-	const event: IEvent = { ...getEmptyItem(ownerId), date: new Date() };
+	const event: IEvent = {
+		...getEmptyItem(ownerId),
+		date: new Date(),
+		location: "",
+	};
 	return event;
 };
-
-export function updateListItems<
-	T extends IList<TItem>,
-	TItem extends IListItem
->(list: T, items: TItem[], updateFunction: (listItem: TItem) => TItem[]): T {
-	return {
-		...list,
-		items: items.map((item) => updateFunction(item)),
-	};
-}
 
 /**
  *
@@ -54,14 +54,56 @@ export function fillToNumber<T extends IListItem>(
 	fillTo: number,
 	getEmptyItem: () => T
 ): T[] {
-	let length = list.length;
+	const length = list.length;
 	fillTo = length >= fillTo ? length + 1 : fillTo;
 	for (let i = length; i < fillTo; i++) {
-		let emptyItem = getEmptyItem();
+		const emptyItem = getEmptyItem();
 		emptyItem.readonly = true;
 		list.push(emptyItem);
 	}
 
 	list[length].readonly = false;
+
 	return list;
+}
+
+export const updateListInState = <
+	TState extends IListState<TList, TListItem>,
+	TList extends IList<TListItem>,
+	TListItem extends IEntity
+>(
+	state: TState,
+	updateItemsFunc: (listItems: TListItem[]) => TListItem[]
+) => {
+	return {
+		...state,
+		list: {
+			...state.list,
+			items: updateItemsFunc(getListItems(state)),
+		},
+	};
+};
+
+const getListItems = <
+	TState extends IListState<TList, TListItem>,
+	TList extends IList<TListItem>,
+	TListItem extends IEntity
+>(
+	state: TState
+) => state.list?.items ?? [];
+
+export function createNamedReducer<TState, TAction extends INamedAction>(
+	reducer: (state: TState, action: TAction) => TState,
+	initialState: TState,
+	reducerName: string
+) {
+	return (state = initialState, action: TAction) => {
+		const isInitializationCall = state === undefined;
+
+		if (reducerName !== action.subjectName && !isInitializationCall) {
+			return state;
+		}
+
+		return reducer(state, action);
+	};
 }

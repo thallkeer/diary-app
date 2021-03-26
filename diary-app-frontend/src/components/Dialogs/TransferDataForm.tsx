@@ -1,41 +1,20 @@
-import React, { useState, useContext, useRef } from "react";
+import { prepareTransferData } from "components/Users/UserSettings";
+import { IPageAreaTransferSettings } from "models/entities";
+import React, { useState, useRef } from "react";
 import { Button, Modal, Row, Form, FormGroup, Overlay } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { getMonthPage } from "store/pages";
 import axios from "../../axios/axios";
-import { getAppInfo } from "../../selectors/app-selectors";
-
-class TransferDataModel {
-	transferGoalsArea: boolean;
-	transferPurchasesArea: boolean;
-	transferDesiresArea: boolean;
-	transferIdeasArea: boolean;
-
-	/**
-	 *
-	 */
-	constructor() {
-		this.transferDesiresArea = false;
-		this.transferGoalsArea = false;
-		this.transferIdeasArea = false;
-		this.transferPurchasesArea = false;
-	}
-}
 
 interface IState {
 	show: boolean;
-	transferDataModel: TransferDataModel;
+	transferDataModel: IPageAreaTransferSettings;
 	error: string;
 }
 
-type PageParams = {
-	userId: number;
-	year: number;
-	month: number;
-};
-
 type TransferDataRequestParams = {
-	pageParams: PageParams;
-	transferDataModel: TransferDataModel;
+	originalPageId: number;
+	transferDataModel: IPageAreaTransferSettings;
 };
 
 export const TransferDataForm: React.FC<{
@@ -44,30 +23,19 @@ export const TransferDataForm: React.FC<{
 }> = ({ show, onHide }) => {
 	const [state, setState] = useState<IState>({
 		show,
-		transferDataModel: new TransferDataModel(),
+		transferDataModel: {},
 		error: null,
 	});
 	const target = useRef(null);
 
-	const { year, month, user } = useSelector(getAppInfo);
+	const monthPage = useSelector(getMonthPage);
 
 	const { transferDataModel } = state;
 
-	const {
-		transferDesiresArea,
-		transferGoalsArea,
-		transferIdeasArea,
-		transferPurchasesArea,
-	} = transferDataModel;
-
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		let data: TransferDataRequestParams = {
-			pageParams: {
-				year,
-				month,
-				userId: user.id,
-			},
+		const data: TransferDataRequestParams = {
+			originalPageId: monthPage.id,
 			transferDataModel,
 		};
 
@@ -78,7 +46,6 @@ export const TransferDataForm: React.FC<{
 				onHide();
 			})
 			.catch((err) => {
-				console.log(err);
 				setState({ ...state, error: "Error!!!" });
 			});
 	};
@@ -95,28 +62,7 @@ export const TransferDataForm: React.FC<{
 		});
 	};
 
-	const checkBoxes = [
-		{
-			name: "transferPurchasesArea",
-			checkedState: transferPurchasesArea,
-			text: "Списки покупок",
-		},
-		{
-			name: "transferDesiresArea",
-			checkedState: transferDesiresArea,
-			text: "Списки желаний",
-		},
-		{
-			name: "transferIdeasArea",
-			checkedState: transferIdeasArea,
-			text: "Списки идеи",
-		},
-		{
-			name: "transferGoalsArea",
-			checkedState: transferGoalsArea,
-			text: "Трекеры привычек",
-		},
-	];
+	const checkBoxes = prepareTransferData(transferDataModel);
 
 	return (
 		<Modal

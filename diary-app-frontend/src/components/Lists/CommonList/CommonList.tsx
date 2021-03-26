@@ -1,51 +1,82 @@
-import React, { useContext } from "react";
-import Loader from "../../Loader";
-import { getEmptyItem, fillToNumber } from "../../../utils";
+import React from "react";
 import {
 	CommonListComponent,
-	withContextMenu,
+	IListOptions,
+	IListActions,
+	withItemContextMenu,
 } from "../CommonList/CommonListComponent";
 import { ListItemInput } from "../Controls/ListItemInput";
+import { ICommonList, IListItem } from "models";
+import { fillToNumber, getEmptyItem } from "../../../utils";
+import { useUrlInput } from "hooks/useInputs";
 
-interface ICommonListProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
-	readonlyTitle?: boolean;
+export interface IListItemActions {
+	updateItem: (item: IListItem) => void;
+	deleteItem: (itemId: number) => void;
 }
 
+interface ICommonListProps extends IListActions, IListOptions {
+	commonList: ICommonList;
+	className?: string;
+	listItemActions: IListItemActions;
+}
 
-// export const CommonList: React.FC<ICommonListProps> = ({
-// 	className,
-// 	readonlyTitle = false,
-// }) => {
-// 	const { listFunctions, commonListState } = useContext(CommonListContext);
+export const CommonList: React.FC<ICommonListProps> = ({
+	className,
+	commonList,
+	deleteList,
+	updateTitle,
+	listItemActions,
+	readonlyTitle = false,
+	isDeletable = false,
+}) => {
+	const listItems = fillToNumber([...commonList.items], 6, () =>
+		getEmptyItem(commonList.id)
+	);
 
-// 	const { updateListTitle, addOrUpdateItem, deleteListItem } = listFunctions;
+	return (
+		<CommonListComponent
+			className={`mt-52 ${className}`}
+			items={listItems}
+			listTitle={commonList.title}
+			readonlyTitle={readonlyTitle}
+			updateTitle={updateTitle}
+			isDeletable={isDeletable}
+			deleteList={deleteList}
+			renderItem={(item) => (
+				<ListItemInputWithUrlEdit
+					item={item}
+					listItemActions={listItemActions}
+				/>
+			)}
+		/>
+	);
+};
 
-// 	const { list, loading } = commonListState;
+const ListItemInputWithUrlEdit: React.FC<{
+	item: IListItem;
+	listItemActions: IListItemActions;
+}> = ({ item, listItemActions }) => {
+	const { editUrlMode, urlInput, menuItem } = useUrlInput({
+		item,
+		updateItem: listItemActions.updateItem,
+	});
 
-// 	if (loading || !list) return <Loader />;
+	const input = editUrlMode ? (
+		urlInput
+	) : (
+		<ListItemInput
+			item={item}
+			updateItem={listItemActions.updateItem}
+			readonly={item.readonly}
+			className="no-left-padding"
+		/>
+	);
 
-// 	const todos = fillToNumber([...list.items], 6, getEmptyItem);
-
-// 	return (
-// 		<CommonListComponent
-// 			className={`mt-52 ${className}`}
-// 			items={todos}
-// 			listTitle={list.title}
-// 			readonlyTitle={readonlyTitle}
-// 			updateListTitle={updateListTitle}
-// 			isDeletable={false}
-// 			renderItem={(item) =>
-// 				withContextMenu(
-// 					<ListItemInput
-// 						item={item}
-// 						updateItem={addOrUpdateItem}
-// 						readonly={item.readonly}
-// 						className="no-left-padding"
-// 					/>,
-// 					item.id,
-// 					() => deleteListItem(item.id)
-// 				)
-// 			}
-// 		/>
-// 	);
-// };
+	return withItemContextMenu(
+		input,
+		item.id,
+		() => listItemActions.deleteItem(item.id),
+		[menuItem]
+	);
+};

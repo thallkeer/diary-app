@@ -1,249 +1,291 @@
-import React, { useState, useContext, useEffect } from "react";
-// import { getEventsByDay } from "../../selectors";
-// import { AddEventForm } from "../Dialogs/AddEventForm";
-// import { IEvent } from "../../models";
-// import { Link } from "react-router-dom";
-// import strelka from "../../images/right-arrow.png";
-// import { useDispatch, useSelector } from "react-redux";
-// import { getAppInfo } from "../../selectors/app-selectors";
-// import {
-// 	getImportantEventsArea,
-// 	getMainPage,
-// } from "../../selectors/page-selectors";
-// import { setMonth } from "../../context/reducers/app-reducer";
+import React, { useState } from "react";
+import { getEventsByDay } from "../../selectors/lists-selectors";
+import { AddEventForm } from "../Dialogs/AddEventForm";
+import { Link } from "react-router-dom";
+import strelka from "../../images/right-arrow.png";
+import { useDispatch, useSelector } from "react-redux";
+import { getAppInfo } from "../../selectors/app-selectors";
+import { getImportantEventsList } from "../../store/pages/pages.selectors";
+import { IEvent } from "models";
+import { AppThunks } from "store/app/app.actions";
+import { importantEventsThunks } from "store/pageAreas";
 
-// interface ICalendarState {
-// 	showMonthPopup: boolean;
-// 	showYearPopup: boolean;
-// 	showYearNav: boolean;
-// 	showAddEventForm: boolean;
-// 	clickedDay?: number;
-// 	clickedEvent?: IEvent;
-// }
+interface ICalendarState {
+	showAddEventForm: boolean;
+	clickedDay?: number;
+	clickedEvent?: IEvent;
+}
 
-// export const Calendar: React.FC = () => {
-// 	const [state, setState] = useState<ICalendarState>({
-// 		showMonthPopup: false,
-// 		showYearPopup: false,
-// 		showYearNav: false,
-// 		showAddEventForm: false,
-// 	});
+const weekdaysShortRussian: string[] = [
+	"Пн",
+	"Вт",
+	"Ср",
+	"Чт",
+	"Пт",
+	"Сб",
+	"Вс",
+];
 
-// 	const dispatch = useDispatch();
-// 	const { year, month } = useSelector(getAppInfo);
-// 	const page = useSelector(getMainPage);
-// 	const events = useSelector(getImportantEventsArea).area;
+export const Calendar: React.FC = () => {
+	const [state, setState] = useState<ICalendarState>({
+		showAddEventForm: false,
+	});
 
-// 	const getDaysInMonth = (): number => {
-// 		let curDate = currentDate();
-// 		let newDate = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0);
-// 		return newDate.getDate();
-// 	};
+	const dispatch = useDispatch();
+	const { year, month } = useSelector(getAppInfo);
+	const { list } = useSelector(getImportantEventsList);
+	const eventsByDay: Map<number, IEvent[]> = useSelector(getEventsByDay);
 
-// 	const currentDate = () => {
-// 		const appDate = new Date(year, month - 1);
-// 		return appDate;
-// 	};
+	const getDaysInMonth = (): number => {
+		const curDate = getCurrentAppDate();
+		const newDate = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0);
+		return newDate.getDate();
+	};
 
-// 	const currentDay = (): number => new Date().getDate();
+	/**
+	 * Represents the date set in the app.
+	 */
+	const getCurrentAppDate = () => {
+		const appDate = new Date(year, month - 1);
+		return appDate;
+	};
 
-// 	const getFirstDayOfMonth = (): number => {
-// 		let curDate = currentDate();
+	/**
+	 * Represents a real time day
+	 */
+	const getPresentDay = (): number => getPresentDate().getDate();
 
-// 		let fDay = new Date(
-// 			curDate.getFullYear(),
-// 			curDate.getMonth() - 1,
-// 			1
-// 		).getDay();
-// 		return fDay === 0 ? 7 : fDay;
-// 	};
+	/**
+	 * Represents a real time date
+	 */
+	const getPresentDate = (): Date => new Date();
 
-// 	const addEvent = (newEvent: IEvent) => {
-// 		// const { events } = mainPageState;
-// 		// events.listFunctions.addOrUpdateItem({
-// 		// 	...newEvent,
-// 		// 	ownerID: events.eventListState.list.id,
-// 		// });
-// 	};
+	/**
+	 * Returns first day of week of app month
+	 */
+	const getFirstDayOfMonth = (): number => {
+		const curDate = getCurrentAppDate();
+		const fDay = curDate.getDay();
+		return fDay === 0 ? 7 : fDay;
+	};
 
-// 	let eventClicked = false;
+	const addEvent = (newEvent: IEvent) => {
+		dispatch(
+			importantEventsThunks.addOrUpdateListItem({
+				...newEvent,
+				ownerId: list.id,
+			})
+		);
+	};
 
-// 	const onDayClick = (e: React.MouseEvent<HTMLElement>, day: number) => {
-// 		if (eventClicked) return;
-// 		e.preventDefault();
-// 		showModal(day);
-// 	};
+	let eventClicked = false;
 
-// 	const onEventClick = (
-// 		e: React.MouseEvent<HTMLElement>,
-// 		day: number,
-// 		event: IEvent
-// 	) => {
-// 		eventClicked = true;
-// 		e.preventDefault();
-// 		showModal(day, event);
-// 	};
+	const onDayClick = (e: React.MouseEvent<HTMLElement>, day: number) => {
+		if (eventClicked) return;
+		e.preventDefault();
+		showModal(day);
+	};
 
-// 	const weekdaysShortRussian: string[] = [
-// 		"Пн",
-// 		"Вт",
-// 		"Ср",
-// 		"Чт",
-// 		"Пт",
-// 		"Сб",
-// 		"Вс",
-// 	];
+	const onEventClick = (
+		e: React.MouseEvent<HTMLElement>,
+		day: number,
+		event: IEvent
+	) => {
+		eventClicked = true;
+		e.preventDefault();
+		showModal(day, event);
+	};
 
-// 	const getWeekdays = () => {
-// 		return weekdaysShortRussian.map((day) => (
-// 			<td key={day} className="week-day">
-// 				{day}
-// 			</td>
-// 		));
-// 	};
+	const getWeekdays = () => {
+		return weekdaysShortRussian.map((day) => (
+			<td key={day} className="week-day">
+				{day}
+			</td>
+		));
+	};
 
-// 	const getEmptySlots = (): any[] => {
-// 		let blanks = [];
-// 		let firstDayOfMonth = getFirstDayOfMonth();
+	const getEmptySlots = (): JSX.Element[] => {
+		const blanks: JSX.Element[] = [];
+		const firstDayOfMonth = getFirstDayOfMonth();
 
-// 		for (let i = 0; i < firstDayOfMonth - 1; i++)
-// 			blanks.push(<td key={i * 80} className="empty-slot"></td>);
+		for (let i = 0; i < firstDayOfMonth - 1; i++)
+			blanks.push(<td key={i * 80} className="empty-slot"></td>);
 
-// 		return blanks;
-// 	};
+		return blanks;
+	};
 
-// 	const getDays = (): any[] => {
-// 		let daysInMonth = [];
-// 		// let eventsByDay: Map<number, IEvent[]> = getEventsByDay();
-// 		// let curDay = currentDay();
+	const getDays = (): JSX.Element[] => {
+		const daysInMonth: JSX.Element[] = [];
 
-// 		// let isRealCurrentMonth =
-// 		// 	currentDate().getMonth() === new Date().getMonth() + 1;
-// 		// const monthDays = getDaysInMonth();
-// 		// for (let d = 1; d <= monthDays; d++) {
-// 		// 	let className =
-// 		// 		isRealCurrentMonth && d === curDay ? "day current-day" : "day";
+		const presentDay = getPresentDay();
 
-// 		// 	let curEvents: IEvent[] = eventsByDay.get(d) || [];
+		const isRealCurrentMonth =
+			getPresentDate().getMonth() === getCurrentAppDate().getMonth();
 
-// 		// 	let curEventClass = curEvents.length ? "day-with-event" : "no-events-day";
+		const monthDays = getDaysInMonth();
 
-// 		// 	daysInMonth.push(
-// 		// 		<td key={d} className={className} onClick={(e) => onDayClick(e, d)}>
-// 		// 			<div className="day-span">{d}</div>
-// 		// 			{curEvents.map((event) => (
-// 		// 				<div
-// 		// 					key={event.id}
-// 		// 					className={curEventClass}
-// 		// 					style={{ marginTop: "5px" }}
-// 		// 					onClick={(e) => onEventClick(e, d, event)}
-// 		// 				>
-// 		// 					{event.subject}
-// 		// 				</div>
-// 		// 			))}
-// 		// 		</td>
-// 		// 	);
-// 		// }
-// 		return daysInMonth;
-// 	};
+		for (let d = 1; d <= monthDays; d++) {
+			const className =
+				isRealCurrentMonth && d === presentDay ? "day current-day" : "day";
 
-// 	const getCalendarRows = (): any[] => {
-// 		var totalSlots = [...getEmptySlots(), ...getDays()];
-// 		let rows = [];
-// 		let cells = [];
+			const curEvents: IEvent[] = eventsByDay.get(d) || [];
 
-// 		totalSlots.forEach((row, i) => {
-// 			if (i % 7 !== 0) {
-// 				cells.push(row);
-// 			} else {
-// 				let insertRow = cells.slice();
-// 				rows.push(insertRow);
-// 				cells = [];
-// 				cells.push(row);
-// 			}
-// 			if (i === totalSlots.length - 1) {
-// 				let insertRow = cells.slice();
-// 				rows.push(insertRow);
-// 			}
-// 		});
+			const curEventClass = curEvents.length
+				? "day-with-event"
+				: "no-events-day";
 
-// 		return rows.map((d, i) => {
-// 			return <tr key={d + i}>{d}</tr>;
-// 		});
-// 	};
+			daysInMonth.push(
+				<CalendarDay
+					key={d}
+					day={d}
+					className={className}
+					curEvents={curEvents}
+					curEventClass={curEventClass}
+					onDayClick={onDayClick}
+					onEventClick={onEventClick}
+				/>
+			);
+		}
+		return daysInMonth;
+	};
 
-// 	const showModal = (day: number, event?: IEvent) => {
-// 		setState({
-// 			...state,
-// 			showAddEventForm: true,
-// 			clickedDay: day,
-// 			clickedEvent: event,
-// 		});
-// 	};
+	const getCalendarRows = (): JSX.Element[] => {
+		var totalSlots = [...getEmptySlots(), ...getDays()];
+		const rows = [];
+		let cells = [];
 
-// 	const toggle = () => {
-// 		setState({ ...state, showAddEventForm: !state.showAddEventForm });
-// 	};
+		totalSlots.forEach((row, i) => {
+			if (i % 7 !== 0) {
+				cells.push(row);
+			} else {
+				const insertRow = cells.slice();
+				rows.push(insertRow);
+				cells = [];
+				cells.push(row);
+			}
+			if (i === totalSlots.length - 1) {
+				const insertRow = cells.slice();
+				rows.push(insertRow);
+			}
+		});
 
-// 	const getMonthName = (): string => {
-// 		let date = new Date(year, month - 1);
-// 		let stringMonth = date.toLocaleString("ru", { month: "long" });
-// 		return stringMonth[0].toUpperCase() + stringMonth.slice(1);
-// 	};
+		return rows.map((d, i) => {
+			return <tr key={d + i}>{d}</tr>;
+		});
+	};
 
-// 	const changeMonth = (increment: boolean) => {
-// 		let newMonth = increment ? Math.min(month + 1, 12) : Math.max(month - 1, 1);
+	const showModal = (day: number, event?: IEvent) => {
+		setState({
+			...state,
+			showAddEventForm: true,
+			clickedDay: day,
+			clickedEvent: event,
+		});
+	};
 
-// 		if (newMonth === month) return;
-// 		dispatch(setMonth(newMonth));
-// 	};
+	const onAddEventClosed = () => {
+		setState({ ...state, showAddEventForm: !state.showAddEventForm });
+	};
 
-// 	const setNextMonth = () => {
-// 		changeMonth(true);
-// 	};
+	const getCurrentMonthName = (): string => {
+		const date = new Date(year, month - 1);
+		const stringMonth = date.toLocaleString("ru", { month: "long" });
+		return stringMonth[0].toUpperCase() + stringMonth.slice(1);
+	};
 
-// 	const setPrevMonth = () => {
-// 		changeMonth(false);
-// 	};
+	const changeMonth = (increment: boolean) => {
+		const newMonth = increment
+			? Math.min(month + 1, 12)
+			: Math.max(month - 1, 1);
 
-// 	return (
-// 		<div className="calendar-wrapper">
-// 			<h1 className="text-center calendar-header">
-// 				<span className="month-nav" onClick={setPrevMonth}>
-// 					<img
-// 						src={strelka}
-// 						alt="previous month"
-// 						className="mirrored-arrow"
-// 						width="30"
-// 						height="30"
-// 					/>
-// 				</span>
-// 				<Link className="month-name" to="/month">
-// 					{getMonthName()}
-// 				</Link>
-// 				<span className="month-nav" onClick={setNextMonth}>
-// 					<img src={strelka} alt="next month" width="30" height="30" />
-// 				</span>
-// 			</h1>
-// 			<div className="calendar-container">
-// 				<table className="calendar">
-// 					<tbody>
-// 						<tr>{getWeekdays()}</tr>
-// 						{getCalendarRows()}
-// 					</tbody>
-// 				</table>
-// 			</div>
-// 			{state.showAddEventForm && (
-// 				<AddEventForm
-// 					day={state.clickedDay}
-// 					show={state.showAddEventForm}
-// 					handleClose={toggle}
-// 					addEvent={addEvent}
-// 					event={state.clickedEvent}
-// 				/>
-// 			)}
-// 		</div>
-// 	);
-// };
+		if (newMonth === month) return;
+		dispatch(AppThunks.setMonth(newMonth));
+	};
 
-// export default Calendar;
+	const setNextMonth = () => {
+		changeMonth(true);
+	};
+
+	const setPrevMonth = () => {
+		changeMonth(false);
+	};
+
+	return (
+		<div className="calendar-wrapper">
+			<h1 className="text-center calendar-header">
+				<span className="month-nav" onClick={setPrevMonth}>
+					<img
+						src={strelka}
+						alt="previous month"
+						className="month-arrow mirrored-arrow"
+					/>
+				</span>
+				<Link className="month-name" to="/month">
+					{getCurrentMonthName()}
+				</Link>
+				<span className="month-nav" onClick={setNextMonth}>
+					<img src={strelka} alt="next month" className="month-arrow" />
+				</span>
+			</h1>
+			<div className="calendar-container">
+				<table className="calendar">
+					<tbody>
+						<tr>{getWeekdays()}</tr>
+						{getCalendarRows()}
+					</tbody>
+				</table>
+			</div>
+			{state.showAddEventForm && (
+				<AddEventForm
+					day={state.clickedDay}
+					show={state.showAddEventForm}
+					handleClose={onAddEventClosed}
+					addEvent={addEvent}
+					event={state.clickedEvent}
+				/>
+			)}
+		</div>
+	);
+};
+export default Calendar;
+
+const CalendarDay: React.FC<{
+	day: number;
+	className: string;
+	onDayClick: (e: React.MouseEvent<HTMLElement>, day: number) => void;
+	curEvents: IEvent[];
+	curEventClass: string;
+	onEventClick: (
+		e: React.MouseEvent<HTMLElement>,
+		day: number,
+		event: IEvent
+	) => void;
+}> = ({
+	day,
+	className,
+	onDayClick,
+	curEvents,
+	curEventClass,
+	onEventClick,
+}) => {
+	return (
+		<td className={className} onClick={(e) => onDayClick(e, day)}>
+			<div className="day-span">{day}</div>
+			{[...curEvents]
+				.sort((e1, e2) => e1.date.getTime() - e2.date.getTime())
+				.map((event) => (
+					<div
+						key={event.id}
+						className={curEventClass}
+						onClick={(e) => onEventClick(e, day, event)}
+					>
+						{event.date.toLocaleTimeString("ru", {
+							hour: "2-digit",
+							minute: "2-digit",
+						})}{" "}
+						{event.subject}
+					</div>
+				))}
+		</td>
+	);
+};

@@ -6,75 +6,52 @@ import {
 	FormLabel,
 	Container,
 } from "react-bootstrap";
-import { login, register } from "../../services/users";
-import history from "../history";
-import { IUser } from "../../models";
-import axios from "../../axios/axios";
-import { AxiosError } from "axios";
-import { setUser } from "../../context/reducers/app-reducer";
 import { useDispatch } from "react-redux";
-
-type LoginError = {
-	isError: boolean;
-	errorMessage: string;
-};
+import { AppThunks } from "store/app/app.actions";
 
 const Login: React.FC = () => {
-	const [error, setError] = useState<LoginError>({
-		isError: false,
-		errorMessage: "",
-	});
 	const dispatch = useDispatch();
 	const [userName, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
-	function validateForm() {
-		return userName.length > 0 && password.length > 0;
-	}
-
-	const onSubmit = (signIn: boolean) => {
-		return signIn ? login : register;
-	};
-
-	const errMsg = () => {
-		if (error.isError)
-			return (
-				<div
-					className="alert alert-danger"
-					style={{ marginTop: "1em" }}
-					role="alert"
-				>
-					{error.errorMessage}
-				</div>
-			);
-		return <></>;
-	};
+	const validateForm = () => userName.length > 0 && password.length > 0;
 
 	async function handleSubmit(
 		e: React.MouseEvent<HTMLElement, MouseEvent>,
 		signIn: boolean
 	) {
 		e.preventDefault();
-		await onSubmit(signIn)({
-			id: 0,
-			username: userName,
-			password,
-		})
-			.then((res) => {
-				const user: IUser = res.data;
-				dispatch(setUser(user));
-				axios.defaults.headers.common["Authorization"] = "Bearer " + user.token;
-				history.push("/");
-			})
-			.catch((err: AxiosError) => {
-				setError({
-					isError: true,
-					errorMessage: err.response
-						? err.response.data
-						: "Unexpected error " + err.name,
-				});
-			});
+		dispatch(
+			AppThunks.authUser(
+				{
+					id: 0,
+					username: userName,
+					password,
+				},
+				signIn
+			)
+		);
 	}
+
+	const SignInBtn: React.FC<{ text: string; isSignIn: boolean }> = ({
+		text,
+		isSignIn,
+	}) => {
+		return (
+			<Button
+				className={`btn ${isSignIn ? "btn-primary" : "btn-success"}`}
+				block
+				size="lg"
+				disabled={!validateForm()}
+				type="submit"
+				onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) =>
+					handleSubmit(e, isSignIn)
+				}
+			>
+				{text}
+			</Button>
+		);
+	};
 
 	return (
 		<Container>
@@ -97,32 +74,9 @@ const Login: React.FC = () => {
 							type="password"
 						/>
 					</FormGroup>
-					<Button
-						onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) =>
-							handleSubmit(e, true)
-						}
-						className="btn btn-primary"
-						block
-						size="lg"
-						disabled={!validateForm()}
-						type="submit"
-					>
-						Войти
-					</Button>
-					<Button
-						onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) =>
-							handleSubmit(e, false)
-						}
-						className="btn btn-success"
-						block
-						size="lg"
-						disabled={!validateForm()}
-						type="submit"
-					>
-						Регистрация
-					</Button>
+					<SignInBtn text="Войти" isSignIn={true} />
+					<SignInBtn text="Регистрация" isSignIn={false} />
 				</form>
-				{errMsg()}
 			</div>
 		</Container>
 	);

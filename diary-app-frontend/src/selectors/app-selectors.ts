@@ -1,10 +1,16 @@
 import { createSelector } from "reselect";
-import { AppStateType } from "../context/store";
+import { AppStateType } from "store/reducer";
+import { IUser } from "../models/entities";
 
-const getAppSelector = (state: AppStateType) => {
-	return state.app;
+const getAppSelector = (state: AppStateType) => state.app;
+
+export type AppInfo = {
+	year: number;
+	month: number;
+	user: IUser;
 };
+
 export const getAppInfo = createSelector(getAppSelector, (app) => {
-	const { user, year, month } = app;
-	return { user, year, month };
+	const appInfo: AppInfo = app;
+	return appInfo;
 });

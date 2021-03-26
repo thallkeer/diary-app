@@ -9,12 +9,10 @@ import {
 	FormGroup,
 	Col,
 } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock } from "@fortawesome/free-regular-svg-icons";
-import { IEvent } from "../../models";
 import { getEmptyEvent } from "../../utils";
 import { useSelector } from "react-redux";
 import { getAppInfo } from "../../selectors/app-selectors";
+import { IEvent } from "models";
 
 interface IFormProps {
 	show: boolean;
@@ -37,15 +35,17 @@ export const AddEventForm: React.FC<IFormProps> = ({
 	event,
 }) => {
 	const { year, month } = useSelector(getAppInfo);
+	const minDate = new Date(year, month - 1, day);
+	const maxDate = new Date(year, month - 1, day, 23, 59);
 
 	const initialState: IFormState = {
 		item: event || {
 			...getEmptyEvent(0),
-			date: new Date(year, month - 1, day),
+			date: new Date(year, month - 1, day, 10),
 		},
 	};
 
-	const [formState, setFormState] = useState<IFormState | null>(initialState);
+	const [formState, setFormState] = useState<IFormState>(initialState);
 
 	const inputRef = useRef(null);
 
@@ -55,13 +55,13 @@ export const AddEventForm: React.FC<IFormProps> = ({
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		e.persist();
-		const { value } = e.target as HTMLInputElement;
+		const { value, name } = e.target as HTMLInputElement;
 
 		setFormState({
 			...formState,
 			item: {
 				...formState.item,
-				subject: value,
+				[name]: value,
 			},
 		});
 	};
@@ -77,13 +77,38 @@ export const AddEventForm: React.FC<IFormProps> = ({
 		}
 	};
 
-	const getDisplayDate = (): string => {
-		return formState.item.date.toLocaleString("ru", {
-			day: "numeric",
-			month: "long",
-			year: "numeric",
-		});
+	function pad(number: number): string {
+		if (number < 10) {
+			return "0" + number;
+		}
+		return number.toString();
+	}
+
+	const formatItemDate = (): string => {
+		return getDisplayDate(formState.item.date);
 	};
+
+	const getDisplayDate = (date: Date): string => {
+		return (
+			date.getFullYear() +
+			"-" +
+			pad(date.getMonth() + 1) +
+			"-" +
+			pad(date.getDate()) +
+			"T" +
+			pad(date.getHours()) +
+			":" +
+			pad(date.getMinutes()) +
+			":" +
+			pad(date.getSeconds())
+		);
+	};
+
+	//return formState.item.date.toLocaleString("ru", {
+	// 	day: "numeric",
+	// 	month: "long",
+	// 	year: "numeric",
+	// });
 
 	const submitForm = async (): Promise<boolean> => {
 		try {
@@ -103,7 +128,7 @@ export const AddEventForm: React.FC<IFormProps> = ({
 			onHide={handleClose}
 			aria-labelledby="contained-modal-title-vcenter"
 		>
-			<Form id="add-event-form" onSubmit={handleSubmit} noValidate={true}>
+			<Form id="add-event-form" onSubmit={handleSubmit}>
 				<Modal.Header closeButton translate={"yes"}>
 					<Modal.Title>
 						{formState.item.id === 0
@@ -120,24 +145,47 @@ export const AddEventForm: React.FC<IFormProps> = ({
 							<FormControl
 								autoFocus={true}
 								autoComplete={"off"}
-								aria-describedby="basic-addon1"
 								value={formState.item.subject}
+								name="subject"
 								onChange={onChange}
 								ref={inputRef}
 								required
 							/>
 						</Col>
 					</FormGroup>
-					<FormGroup as={Row} className="mb-0">
+					<FormGroup as={Row}>
 						<FormLabel column sm="2">
-							<FontAwesomeIcon icon={faClock} />
+							Время
 						</FormLabel>
 						<Col sm="10">
 							<FormControl
-								plaintext
-								disabled
-								readOnly
-								defaultValue={getDisplayDate()}
+								type="datetime-local"
+								min={getDisplayDate(minDate)}
+								max={getDisplayDate(maxDate)}
+								value={formatItemDate()}
+								name="date"
+								onChange={(e) => {
+									setFormState({
+										...formState,
+										item: {
+											...formState.item,
+											date: new Date(e.target.value),
+										},
+									});
+								}}
+							/>
+						</Col>
+					</FormGroup>
+					<FormGroup as={Row} className="mb-0">
+						<FormLabel column sm="2">
+							Место
+						</FormLabel>
+						<Col sm="10">
+							<FormControl
+								type="text"
+								name="location"
+								value={formState.item.location}
+								onChange={onChange}
 							/>
 						</Col>
 					</FormGroup>
