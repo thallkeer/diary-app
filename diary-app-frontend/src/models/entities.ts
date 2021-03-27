@@ -4,8 +4,6 @@ export interface IEntity {
 
 export interface IUser extends IEntity {
 	username: string;
-	password?: string;
-	token?: string;
 	telegramId?: string;
 }
 

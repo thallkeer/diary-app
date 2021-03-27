@@ -1,7 +1,7 @@
-import { IUser } from "../models/entities";
+import { IAuthenticatedUser } from "services/users";
 
 export const getHeaders = () => {
-	const user: IUser = JSON.parse(localStorage.getItem("user"));
+	const user: IAuthenticatedUser = JSON.parse(localStorage.getItem("user"));
 	return (
 		(user && {
 			"Access-Control-Allow-Origin": "*",

@@ -43,9 +43,8 @@ axiosInstance.interceptors.response.use(
 			if (status === 500) {
 				toast.error("Server error - check the terminal for more info!");
 			}
+			throw error.response;
 		}
-
-		throw error.response;
 	}
 );
 

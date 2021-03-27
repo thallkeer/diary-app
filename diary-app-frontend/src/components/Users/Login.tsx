@@ -24,7 +24,6 @@ const Login: React.FC = () => {
 		dispatch(
 			AppThunks.authUser(
 				{
-					id: 0,
 					username: userName,
 					password,
 				},

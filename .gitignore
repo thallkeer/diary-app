@@ -66,3 +66,4 @@ msbuild.wrn
 appsettings.json
 logger.txt
 /publish
+/diary-app-backend/DiaryApp.API/logs
