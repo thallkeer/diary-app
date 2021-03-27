@@ -33,32 +33,25 @@ namespace DiaryApp.API.Middleware
 
         private async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
-            ErrorDetails errors = null;
+            object errors = null;
 
             switch (ex)
             {
                 case HttpException re:
-                    _logger.Error(ex, "REST ERROR");
-                    errors = new ErrorDetails()
-                    {
-                        StatusCode = (int)re.StatusCode,
-                        Message = re.Message
-                    };
+                    _logger.Error(re, "REST ERROR");
+                    errors = re.Errors;
+                    context.Response.StatusCode = (int) re.StatusCode;
                     break;
                 case Exception e:
-                    _logger.Error(ex, "SERVER ERROR");
-                    errors = new ErrorDetails()
-                    {
-                        StatusCode = (int)HttpStatusCode.InternalServerError,
-                        Message = string.IsNullOrWhiteSpace(e.Message) ? "Error" : e.Message
-                    };
+                    _logger.Error(e, "SERVER ERROR");
+                    errors = string.IsNullOrWhiteSpace(e.Message) ? "Error" : e.Message;
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     break;
             }
 
             context.Response.ContentType = "application/json";            
             if (errors != null)
             {
-                context.Response.StatusCode = errors.StatusCode;
                 var result = JsonConvert.SerializeObject(new
                 {
                     errors
