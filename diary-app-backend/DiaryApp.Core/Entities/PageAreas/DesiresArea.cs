@@ -8,7 +8,7 @@ namespace DiaryApp.Core.Entities.PageAreas
 {
     public class DesiresArea : MonthPageArea, IMonthPageArea<DesiresArea>
     {
-        private const string HeaderStr = "В этом месяце я хочу";
+        private const string HeaderStr = "Я хочу";
         public const string ToVisitStr = "Посетить";
         public const string ToWatchStr = "Посмотреть";
         public const string ToReadStr = "Прочитать";
