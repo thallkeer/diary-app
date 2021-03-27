@@ -6,7 +6,7 @@ namespace DiaryApp.Core.Entities.PageAreas
 {
     public class IdeasArea : MonthPageArea, IMonthPageArea<IdeasArea>
     {
-        private const string HeaderStr = "Идеи этого месяца";
+        private const string HeaderStr = "Идеи";
 
         public IdeasArea()
         {}

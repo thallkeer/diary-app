@@ -3,7 +3,7 @@ import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import history from "../../components/history";
 import { IUser } from "../../models/entities";
-import { userService } from "../../services/users";
+import { UserAuthModel, userService } from "../../services/users";
 import { ActionsUnion, createAction } from "../actions/action-helpers";
 
 const SET_APP_INFO = "APP/SET_APP_INFO";
@@ -22,9 +22,10 @@ export const AppThunks = {
 		dispatch(actions.setMonth(month));
 	},
 
-	authUser: (userAuthModel: IUser, signIn: boolean): AppThunkType => async (
-		dispatch
-	) => {
+	authUser: (
+		userAuthModel: UserAuthModel,
+		signIn: boolean
+	): AppThunkType => async (dispatch) => {
 		const authFunc = signIn ? userService.login : userService.register;
 		await authFunc(userAuthModel)
 			.then((user) => {
@@ -32,7 +33,10 @@ export const AppThunks = {
 				history.push("/");
 			})
 			.catch((err: AxiosResponse) => {
-				toast.error(err.data);
+				if (err && err.data) {
+					const errors = err.data.errors;
+					toast.error(Object.values(errors).toString());
+				}
 			});
 	},
 
