@@ -23,13 +23,11 @@ namespace DiaryApp.Services.DataServices.Pages
             if (settings?.PageAreaTransferSettings == null)
                 return await base.CreateAsync(userId, year, month);
 
-            var prevMonth = month - 1;
-            var prevPage = await GetPageAsync(userId, year, prevMonth);
+            MonthPage prevPage = await GetPageForPreviousMonth(userId, year, month);
             if (prevPage == null)
                 return await base.CreateAsync(userId, year, month);
 
             await TransferPageDataToNextMonthAsync(prevPage.Id, settings.PageAreaTransferSettings);
-            //TODO catch and handle PageDataTransferException
             return await GetPageAsync(userId, year, month);
         }
 
@@ -41,8 +39,7 @@ namespace DiaryApp.Services.DataServices.Pages
             if (monthPage == null)
                 throw new EntityNotFoundException<MonthPage>();
 
-            var nextMonth = monthPage.Month + 1;
-            var nextPage = await GetPageEntityAsync(monthPage.UserId, monthPage.Year, nextMonth);
+            var nextPage = await GetPageForNextMonth(monthPage);
 
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try

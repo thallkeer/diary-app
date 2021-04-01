@@ -42,8 +42,9 @@ namespace DiaryApp.Core.Entities.Pages
         public MonthPage TransferDataToNextMonth(PageAreaTransferSettings transferDataModel)
         {
             Guard.Against.Null(transferDataModel, nameof(transferDataModel));
-            
-            var nextPage = new MonthPage(Year, Month + 1, User);
+
+            var (year, month) = GetNextPageDate();
+            var nextPage = new MonthPage(year, month, User);
 
             //initialize only non transferring areas
             nextPage.DesiresArea = new DesiresArea(nextPage, !transferDataModel.TransferDesiresArea);

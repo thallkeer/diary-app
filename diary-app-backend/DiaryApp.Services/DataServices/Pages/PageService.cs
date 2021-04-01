@@ -62,6 +62,18 @@ namespace DiaryApp.Services.DataServices.Pages
             return _mapper.Map<TPageAreaDto>(entity);
         }
 
+        protected async Task<TPageEntity> GetPageForNextMonth(TPageEntity currentPage)
+        {
+            var (year, month) = currentPage.GetNextPageDate();
+            return await GetPageEntityAsync(currentPage.UserId, year, month);
+        }
+
+        protected async Task<TPageEntity> GetPageForPreviousMonth(int userId, int year, int month)
+        {
+            var (prevPageYear, prevPageMonth) = new PageDate(year, month).GetPreviousPageDate();
+            return await GetPageEntityAsync(userId, prevPageYear, prevPageMonth);
+        }
+
         protected Expression<Func<TPageEntity, bool>> BuildGetPageExpression(int userId, int year, int month)
         {
             return mp => mp.UserId == userId && mp.Month == month && mp.Year == year;

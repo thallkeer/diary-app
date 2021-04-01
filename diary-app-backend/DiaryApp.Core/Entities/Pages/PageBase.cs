@@ -13,24 +13,11 @@ namespace DiaryApp.Core.Entities.Pages
         private const int MaximumYear = 9999;
         private const int MinimumMonth = 1;
         private const int MaximumMonth = 12;
-        
-        public PageBase()
-        {}
-
-        public PageBase(int year, int month, AppUser user)
-        {
-            Guard.Against.OutOfRange(year, nameof(year), MinimumYear, MaximumYear);
-            Guard.Against.OutOfRange(month, nameof(month), MinimumMonth ,MaximumMonth);
-            Year = year;
-            Month = month;
-            User = user;
-            UserId = user?.Id ?? 0;
-        }
 
         private int year;
         [Required]
         [Range(MinimumYear, MaximumYear)]
-        public int Year 
+        public int Year
         {
             get
             {
@@ -40,7 +27,7 @@ namespace DiaryApp.Core.Entities.Pages
             {
                 Guard.Against.OutOfRange(value, nameof(value), MinimumYear, MaximumYear);
                 year = value;
-            } 
+            }
         }
 
         private int month;
@@ -54,7 +41,7 @@ namespace DiaryApp.Core.Entities.Pages
             }
             set
             {
-                Guard.Against.OutOfRange(month, nameof(month), MinimumMonth ,MaximumMonth);
+                Guard.Against.OutOfRange(month, nameof(month), MinimumMonth, MaximumMonth);
                 month = value;
             }
         }
@@ -62,7 +49,35 @@ namespace DiaryApp.Core.Entities.Pages
         [Required]
         public int UserId { get; set; }
 
-        public virtual AppUser User { get; set; }        
+        public virtual AppUser User { get; set; }
+
+        public PageBase()
+        {}
+
+        public PageBase(int year, int month, AppUser user)
+        {
+            Guard.Against.OutOfRange(year, nameof(year), MinimumYear, MaximumYear);
+            Guard.Against.OutOfRange(month, nameof(month), MinimumMonth ,MaximumMonth);
+            Year = year;
+            Month = month;
+            User = user;
+        }
+
+        /// <summary>
+        /// Returns the year and month for the next page
+        /// </summary>
+        public PageDate GetNextPageDate()
+        {
+            return new PageDate(Year, Month).GetNextPageDate();
+        }
+
+        /// <summary>
+        /// Returns the year and month for the previous page
+        /// </summary>
+        public PageDate GetPreviousPageDate()
+        {
+            return new PageDate(Year, Month).GetPreviousPageDate();
+        }
 
         /// <summary>
         /// Method for descendants to implement custom creation of page areas
@@ -72,6 +87,25 @@ namespace DiaryApp.Core.Entities.Pages
         public override string ToString()
         {
             return $"{Id} {Year} {Month} | {UserId}";
+        }
+    }
+
+    public record PageDate(int Year, int Month)
+    {
+        public PageDate GetPreviousPageDate()
+        {
+            bool isPageForJanuary = Month == 1;
+            int year = isPageForJanuary ? Year - 1 : Year;
+            int month = isPageForJanuary ? 12 : Month - 1;
+            return new PageDate(year, month);
+        }
+
+        public PageDate GetNextPageDate()
+        {
+            bool isPageForDecember = Month == 12;
+            int year = isPageForDecember ? Year + 1 : Year;
+            int month = isPageForDecember ? 1 : Month + 1;
+            return new PageDate(year, month);
         }
     }
 }
