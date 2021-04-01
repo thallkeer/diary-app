@@ -5,10 +5,17 @@ import { Link } from "react-router-dom";
 import strelka from "../../images/right-arrow.png";
 import { useDispatch, useSelector } from "react-redux";
 import { getAppInfo } from "../../selectors/app-selectors";
-import { getImportantEventsList } from "../../store/pages/pages.selectors";
-import { IEvent } from "models";
+import { getImportantEventsList } from "store/pages/pages.selectors";
 import { AppThunks } from "store/app/app.actions";
 import { importantEventsThunks } from "store/pageAreas";
+import {
+	DragDropContext,
+	DropResult,
+	ResponderProvided,
+	Draggable,
+	Droppable,
+} from "react-beautiful-dnd";
+import { IEvent } from "models/index";
 
 interface ICalendarState {
 	showAddEventForm: boolean;
@@ -33,7 +40,7 @@ export const Calendar: React.FC = () => {
 
 	const dispatch = useDispatch();
 	const { year, month } = useSelector(getAppInfo);
-	const { list } = useSelector(getImportantEventsList);
+	const importantEventsList = useSelector(getImportantEventsList).list;
 	const eventsByDay: Map<number, IEvent[]> = useSelector(getEventsByDay);
 
 	const getDaysInMonth = (): number => {
@@ -73,7 +80,7 @@ export const Calendar: React.FC = () => {
 		dispatch(
 			importantEventsThunks.addOrUpdateListItem({
 				...newEvent,
-				ownerId: list.id,
+				ownerId: importantEventsList.id,
 			})
 		);
 	};
@@ -135,21 +142,33 @@ export const Calendar: React.FC = () => {
 				: "no-events-day";
 
 			daysInMonth.push(
-				<CalendarDay
-					key={d}
-					day={d}
-					className={className}
-					curEvents={curEvents}
-					curEventClass={curEventClass}
-					onDayClick={onDayClick}
-					onEventClick={onEventClick}
-				/>
+				<Droppable droppableId={d.toString()}>
+					{(provided) => (
+						<div {...provided.droppableProps} ref={provided.innerRef}>
+							<CalendarDay
+								key={d}
+								day={d}
+								className={className}
+								curEvents={curEvents}
+								curEventClass={curEventClass}
+								onDayClick={onDayClick}
+								onEventClick={onEventClick}
+							></CalendarDay>
+							{provided.placeholder}
+						</div>
+					)}
+				</Droppable>
 			);
 		}
 		return daysInMonth;
 	};
 
-	const getCalendarRows = (): JSX.Element[] => {
+	const onDragEnd = (
+		result: DropResult,
+		provided: ResponderProvided
+	): void => {};
+
+	const getCalendarRows = () => {
 		var totalSlots = [...getEmptySlots(), ...getDays()];
 		const rows = [];
 		let cells = [];
@@ -169,9 +188,13 @@ export const Calendar: React.FC = () => {
 			}
 		});
 
-		return rows.map((d, i) => {
-			return <tr key={d + i}>{d}</tr>;
-		});
+		return (
+			<DragDropContext onDragEnd={onDragEnd}>
+				{rows.map((d, i) => (
+					<tr key={d + i}>{d}</tr>
+				))}
+			</DragDropContext>
+		);
 	};
 
 	const showModal = (day: number, event?: IEvent) => {
@@ -268,24 +291,33 @@ const CalendarDay: React.FC<{
 	curEventClass,
 	onEventClick,
 }) => {
+	const events = [...curEvents].sort(
+		(e1, e2) => e1.date.getTime() - e2.date.getTime()
+	);
+
 	return (
 		<td className={className} onClick={(e) => onDayClick(e, day)}>
 			<div className="day-span">{day}</div>
-			{[...curEvents]
-				.sort((e1, e2) => e1.date.getTime() - e2.date.getTime())
-				.map((event) => (
-					<div
-						key={event.id}
-						className={curEventClass}
-						onClick={(e) => onEventClick(e, day, event)}
-					>
-						{event.date.toLocaleTimeString("ru", {
-							hour: "2-digit",
-							minute: "2-digit",
-						})}{" "}
-						{event.subject}
-					</div>
-				))}
+			{events.map((event) => (
+				<Draggable draggableId={event.id.toString()} index={day}>
+					{(provided) => (
+						<div
+							key={event.id}
+							className={curEventClass}
+							onClick={(e) => onEventClick(e, day, event)}
+							{...provided.draggableProps}
+							{...provided.dragHandleProps}
+							ref={provided.innerRef}
+						>
+							{event.date.toLocaleTimeString("ru", {
+								hour: "2-digit",
+								minute: "2-digit",
+							})}{" "}
+							{event.subject}
+						</div>
+					)}
+				</Draggable>
+			))}
 		</td>
 	);
 };

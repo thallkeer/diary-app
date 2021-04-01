@@ -15,9 +15,9 @@ namespace DiaryApp.Services.DataServices
 
         public async Task ToggleAsync(int todoId)
         {
-            var todo = await GetByIdAsync(todoId);
+            TodoItemDto todo = await GetByIdAsync(todoId);
             todo.Done = !todo.Done;
-            await _context.SaveChangesAsync();
+            await base.UpdateAsync(todo);
         }
     }
 }
