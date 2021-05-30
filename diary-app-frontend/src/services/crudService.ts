@@ -21,7 +21,7 @@ export class CrudService<T> {
 		return this.axios.put(this.apiUrl, entity).then((res) => res.data);
 	}
 
-	delete(entityId: number) {
+	deleteById(entityId: number) {
 		return this.axios
 			.delete(`${this.apiUrl}/${entityId}`)
 			.then((res) => res.data);

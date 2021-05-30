@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { AppThunks } from "store/app/app.actions";
+import { setUser } from "store/app/appSlice";
 import { getAppInfo } from "../../selectors/app-selectors";
 import { userService } from "../../services/users";
 import { TransferDataForm } from "../Dialogs/TransferDataForm";
@@ -16,7 +16,7 @@ export const AppNavbar: React.FC<{ isOnMonthPage: boolean }> = ({
 	const handleShow = () => setShow(true);
 
 	const onLogoff = () => {
-		dispatch(AppThunks.setUser(null));
+		dispatch(setUser(null));
 		userService.logoff();
 	};
 

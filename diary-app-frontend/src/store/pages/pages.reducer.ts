@@ -1,76 +1,68 @@
+import {
+	createSlice,
+	createAsyncThunk,
+	AsyncThunk,
+	Slice,
+} from "@reduxjs/toolkit";
 import { IUser } from "models/entities";
 import { IPage } from "models/Pages/pages";
 import { IPageState } from "models/states";
 import { PageUrls } from "models/types";
 import { PageService } from "services/pageService";
-import { ActionsUnion, createNamedAction } from "store/actions/action-helpers";
-import { BaseThunkType } from "store/state.types";
-import withLoadingStates from "store/utilities/loading-reducer";
-import { createNamedReducer } from "utils";
 
-export const LOAD_PAGE_START = "LOAD_PAGE_START";
-export const LOAD_PAGE_SUCCESS = "LOAD_PAGE_SUCCESS";
-export const LOAD_PAGE_ERROR = "LOAD_PAGE_ERROR";
+interface IPageInfo {
+	user: IUser;
+	year: number;
+	month: number;
+}
 
-export abstract class PageComponent<TPage extends IPage> {
-	pageUrl: PageUrls;
+const createPageAsyncThunk = <TPage extends IPage>(
+	pageName: string,
+	pageService: PageService<TPage>
+) =>
+	createAsyncThunk(`${pageName}/loadPage`, async (pageInfo: IPageInfo) => {
+		const { user, year, month } = pageInfo;
+		const response = await pageService.getOrCreatePage(user.id, year, month);
+		return response;
+	});
+
+export class PageComponent<
+	TPage extends IPage,
+	TState extends IPageState<TPage>
+> {
+	private pageUrl: PageUrls;
 	pageService: PageService<TPage>;
+	private loadPageThunk: AsyncThunk<TPage, IPageInfo, {}>;
+	private pageSlice: Slice<TState, {}, PageUrls>;
 
-	constructor(pageUrl: PageUrls) {
+	constructor(pageUrl: PageUrls, initialState: TState) {
 		this.pageUrl = pageUrl;
 		this.pageService = new PageService<TPage>(pageUrl);
-	}
-
-	private actions = {
-		loadPageStart: () =>
-			createNamedAction(LOAD_PAGE_START, this.pageUrl, undefined),
-		loadPageSuccess: (page: TPage) =>
-			createNamedAction(LOAD_PAGE_SUCCESS, this.pageUrl, page),
-		loadPageError: <TPage extends IPage>(page: TPage) =>
-			createNamedAction(LOAD_PAGE_ERROR, this.pageUrl, page),
-	};
-
-	public getActions() {
-		return this.actions;
-	}
-
-	public loadPage(user: IUser, year: number, month: number) {
-		const actions = this.getActions();
-		type PageActions = ActionsUnion<typeof actions>;
-		type PageThunkType = BaseThunkType<PageActions>;
-
-		const _loadPage = (): PageThunkType => async (dispatch) => {
-			dispatch(actions.loadPageStart());
-			const pageService = this.pageService;
-			const response = await pageService.getOrCreatePage(user.id, year, month);
-			dispatch(actions.loadPageSuccess(response));
-		};
-
-		return _loadPage();
-	}
-
-	public getReducer<TState extends IPageState<TPage>>(initialState: TState) {
-		const actions = this.getActions();
-		type TPageActions = ActionsUnion<typeof actions>;
-		const pageReducer = (state: TState, action: TPageActions): TState => {
-			switch (action.type) {
-				case "LOAD_PAGE_SUCCESS":
-					return { ...state, page: action.payload };
-
-				default:
-					return state;
-			}
-		};
-		const wrappedReducer = withLoadingStates({
-			START: LOAD_PAGE_START,
-			SUCCESS: LOAD_PAGE_SUCCESS,
-			ERROR: LOAD_PAGE_ERROR,
-		})(pageReducer);
-
-		return createNamedReducer(
-			wrappedReducer,
+		this.loadPageThunk = createPageAsyncThunk(this.pageUrl, this.pageService);
+		this.pageSlice = createSlice({
+			name: this.pageUrl,
 			initialState,
-			initialState.pageName
-		);
+			reducers: {},
+			extraReducers: (builder) => {
+				builder.addCase(this.loadPageThunk.pending, (state, action) => {
+					state.status = "loading";
+				});
+				builder.addCase(this.loadPageThunk.fulfilled, (state, { payload }) => {
+					return { ...state, page: payload, status: "succeeded" };
+				});
+				builder.addCase(this.loadPageThunk.rejected, (state, action) => {
+					state.status = "failed";
+					state.error = action.error.message;
+				});
+			},
+		});
+	}
+
+	public get loadPage() {
+		return this.loadPageThunk;
+	}
+
+	public get slice() {
+		return this.pageSlice;
 	}
 }

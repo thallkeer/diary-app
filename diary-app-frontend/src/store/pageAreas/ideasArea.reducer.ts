@@ -1,36 +1,26 @@
 import { IIdeasArea } from "models/PageAreas/pageAreas";
 import { ListWrapperUrls } from "models/types";
+import { createPageAreaSlice } from "./pageAreas.reducer";
+import { combineReducers } from "@reduxjs/toolkit";
+import {
+	createCommonListThunks,
+	createCommonListSlice,
+} from "store/diaryLists";
 import { IMonthPage } from "models";
-import { PageAreaComponent } from "./pageAreas.reducer";
-import { combineReducers } from "redux";
-import { INITIAL_LOADABLE_STATE } from "store/utilities/loading-reducer";
-import { IPageAreaState } from "models/states";
-import { commonListComponent, createCommonListReducer } from "store/diaryLists";
 
 export const IDEAS_LIST: ListWrapperUrls = "ideasLists";
 
-class IdeasAreaComponent extends PageAreaComponent<IMonthPage, IIdeasArea> {
-	onAreaLoaded(pageArea: IIdeasArea, dispatch): void {
-		dispatch(ideasListThunks.setList(pageArea.ideasList));
-	}
-}
-
-export const ideasAreaComponent = new IdeasAreaComponent(
-	"monthPage",
-	"ideasArea"
+const ideasAreaSlice = createPageAreaSlice<IMonthPage, IIdeasArea>(
+	"ideasArea",
+	"monthPage"
 );
 
-export interface IIdeasAreaState extends IPageAreaState<IIdeasArea> {}
-
-const initialState: IIdeasAreaState = {
-	area: null,
-	pageAreaName: "ideasArea",
-	...INITIAL_LOADABLE_STATE,
-};
-
-export const ideasListThunks = commonListComponent.getThunks(IDEAS_LIST);
+const ideasListSlice = createCommonListSlice(IDEAS_LIST);
+export const ideasListThunks = createCommonListThunks(ideasListSlice);
 
 export const ideasAreaReducer = combineReducers({
-	area: ideasAreaComponent.getReducer(initialState),
-	ideasList: createCommonListReducer(IDEAS_LIST),
+	area: ideasAreaSlice.slice.reducer,
+	ideasList: ideasListSlice.reducer,
 });
+
+export const loadIdeasArea = ideasAreaSlice.loadPageArea;

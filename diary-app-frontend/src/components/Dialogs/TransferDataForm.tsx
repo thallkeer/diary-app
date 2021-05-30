@@ -28,14 +28,14 @@ export const TransferDataForm: React.FC<{
 	});
 	const target = useRef(null);
 
-	const monthPage = useSelector(getMonthPage);
+	const { page } = useSelector(getMonthPage);
 
 	const { transferDataModel } = state;
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const data: TransferDataRequestParams = {
-			originalPageId: monthPage.id,
+			originalPageId: page.id,
 			transferDataModel,
 		};
 

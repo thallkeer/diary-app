@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { IStateWithLoading } from "../../models/states";
+import { ILoadingState, IStateWithLoading } from "../../models/states";
 
 export const isLoadingReducer = <S extends IStateWithLoading>(state: S): S => ({
 	...state,
@@ -30,6 +30,11 @@ export const INITIAL_LOADABLE_STATE: IStateWithLoading = {
 	success: false,
 };
 
+export const INITIAL_LOADABLESTATE: ILoadingState = {
+	status: "idle",
+	error: null,
+};
+
 type LoadingActionTypes = Record<"START" | "SUCCESS" | "ERROR", string>;
 
 /*
@@ -54,8 +59,8 @@ export const withLoadingStates = ({
 
 	// Returns a higher order reducer that takes a baseReducer
 	return <S extends IStateWithLoading, A extends Action>(
-		baseReducer: (state: S | undefined, action: A) => S
-	) =>
+			baseReducer: (state: S | undefined, action: A) => S
+		) =>
 		// Returns a new reducer
 		(state: S | undefined, action: A): S => {
 			// Is the action type a loadable action specified above?

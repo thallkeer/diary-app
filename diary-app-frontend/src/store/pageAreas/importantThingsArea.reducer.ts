@@ -1,41 +1,22 @@
-import { IMainPage } from "models";
 import { IImportantThingsArea } from "models/PageAreas/pageAreas";
-import { IPageAreaState } from "models/states";
-import { combineReducers } from "redux";
-import { createTodoListReducer, todoListComponent } from "store/diaryLists";
-import { INITIAL_LOADABLE_STATE } from "store/utilities/loading-reducer";
-import { PageAreaComponent } from "./pageAreas.reducer";
+import { combineReducers } from "@reduxjs/toolkit";
+import { createTodoSlice, createTodoListThunks } from "store/diaryLists";
+import { createPageAreaSlice } from "./pageAreas.reducer";
+import { IMainPage } from "models";
 
 export const IMPORTANT_THINGS_LIST = "importantThingsList";
 
-class ImportantThingsAreaComponent extends PageAreaComponent<
+const importantThingsSlice = createTodoSlice(IMPORTANT_THINGS_LIST);
+export const importantThingsThunks = createTodoListThunks(importantThingsSlice);
+
+export const importantThingsAreaSlice = createPageAreaSlice<
 	IMainPage,
 	IImportantThingsArea
-> {
-	onAreaLoaded(pageArea: IImportantThingsArea, dispatch): void {
-		dispatch(importantThingsThunks.setList(pageArea.importantThings));
-	}
-}
-
-export const importantThingsThunks = todoListComponent.getThunks(
-	IMPORTANT_THINGS_LIST
-);
-
-export const importantThingsAreaComponent = new ImportantThingsAreaComponent(
-	"mainPage",
-	"importantThingsArea"
-);
-
-export interface IImportantThingsAreaState
-	extends IPageAreaState<IImportantThingsArea> {}
-
-const initialState: IImportantThingsAreaState = {
-	area: null,
-	pageAreaName: "importantThingsArea",
-	...INITIAL_LOADABLE_STATE,
-};
+>("importantThingsArea", "mainPage");
 
 export const importantThingsAreaReducer = combineReducers({
-	area: importantThingsAreaComponent.getReducer(initialState),
-	importantThingsList: createTodoListReducer(IMPORTANT_THINGS_LIST),
+	area: importantThingsAreaSlice.slice.reducer,
+	importantThingsList: importantThingsSlice.reducer,
 });
+
+export const loadImportantThingsArea = importantThingsAreaSlice.loadPageArea;

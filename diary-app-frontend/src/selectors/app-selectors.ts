@@ -1,8 +1,8 @@
 import { createSelector } from "reselect";
-import { AppStateType } from "store/reducer";
+import { RootState } from "store/store";
 import { IUser } from "../models/entities";
 
-const getAppSelector = (state: AppStateType) => state.app;
+const getAppSelector = (state: RootState) => state.app;
 
 export type AppInfo = {
 	year: number;

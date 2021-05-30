@@ -12,9 +12,7 @@ namespace DiaryApp.API.Controllers.Users
     {
         private readonly ICrudService<UserSettingsDto, UserSettings> _settingsService;
 
-        public UserSettingsController(
-            ICrudService<UserSettingsDto, UserSettings> settingsService,
-            IMapper mapper) 
+        public UserSettingsController(ICrudService<UserSettingsDto, UserSettings> settingsService) 
         {
             _settingsService = settingsService;
         }

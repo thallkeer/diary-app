@@ -1,3 +1,4 @@
+import { useAppDispatch } from "hooks/hooks";
 import React, { useState } from "react";
 import {
 	Button,
@@ -6,11 +7,10 @@ import {
 	FormLabel,
 	Container,
 } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { AppThunks } from "store/app/app.actions";
+import { authUser } from "store/app/appSlice";
 
 const Login: React.FC = () => {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const [userName, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
@@ -22,7 +22,7 @@ const Login: React.FC = () => {
 	) {
 		e.preventDefault();
 		dispatch(
-			AppThunks.authUser(
+			authUser(
 				{
 					username: userName,
 					password,

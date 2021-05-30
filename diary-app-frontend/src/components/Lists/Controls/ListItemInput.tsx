@@ -25,28 +25,31 @@ const ListItemInput: FC<ListItemInputProps> = (props: ListItemInputProps) => {
 
 	const validateAndUpdate = (value: string) => {
 		if (value !== item.subject) {
-			item.subject = value;
-			updateItem(item);
+			updateItem({
+				...item,
+				subject: value,
+			});
 		}
 	};
-
-	const { inputRef, handleBlur, handleKeyPress } = useListItemInput({
-		validateAndUpdate,
-	});
-
 	const inputValue = getItemText ? getItemText(item) : item.subject;
+
+	const { inputText, setInputText, handleBlur, handleKeyPress } =
+		useListItemInput({
+			validateAndUpdate,
+			defaultValue: inputValue,
+		});
 
 	const inputControl = (
 		<input
 			type="text"
 			maxLength={200}
-			defaultValue={inputValue}
+			value={inputText}
 			readOnly={readonly || (getItemText ? true : false)}
 			onBlur={readonly ? null : handleBlur}
 			onKeyPress={handleKeyPress}
 			className={`${className || ""} list-item-input`}
 			autoComplete={"off"}
-			ref={inputRef}
+			onChange={(e) => setInputText(e.target.value)}
 		/>
 	);
 
@@ -72,6 +75,7 @@ const withAnchorLink = (component: JSX.Element, item: IListItem) => {
 
 const withOverlay = (component: JSX.Element, item: IListItem) => {
 	if (item.id === 0 || !item.subject) return component;
+
 	return (
 		<OverlayTrigger
 			key={item.id}

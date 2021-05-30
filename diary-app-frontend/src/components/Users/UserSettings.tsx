@@ -96,7 +96,9 @@ const useUserSettings = (userId: number) => {
 				setSettings(userSettings);
 			}
 		});
-		return () => (mounted = false);
+		return () => {
+			mounted = false;
+		};
 	}, [userId]);
 
 	return {
@@ -108,7 +110,7 @@ const useUserSettings = (userId: number) => {
 	};
 };
 
-export const UserSettings = () => {
+const UserSettings = () => {
 	const { user } = useSelector(getAppInfo);
 	const {
 		settings,
@@ -120,11 +122,8 @@ export const UserSettings = () => {
 
 	if (!settings) return <Loader />;
 
-	const {
-		isActivated,
-		notifyAt,
-		notifyDayBefore,
-	} = settings.notificationSettings;
+	const { isActivated, notifyAt, notifyDayBefore } =
+		settings.notificationSettings;
 
 	const transferSettings = settings.pageAreaTransferSettings;
 	const checkBoxes = prepareTransferData(transferSettings);
@@ -258,3 +257,5 @@ export const UserSettings = () => {
 		</Container>
 	);
 };
+
+export default UserSettings;

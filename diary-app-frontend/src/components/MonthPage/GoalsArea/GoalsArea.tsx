@@ -1,27 +1,26 @@
 import React from "react";
 import { Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { goalsListsThunks } from "../../../store/pageAreaLists/goalsLists/goalsLists.actions";
-import { useMonthPageArea } from "../../../hooks/usePageArea";
-import {
-	getGoalsArea,
-	getGoalsLists,
-} from "../../../store/pages/pages.selectors";
-import { AddListBtn } from "../../AddListBtn";
-import Loader from "../../Loader";
-import { GoalList } from "./GoalList";
-import { goalsAreaComponent } from "store/pageAreas/goalsArea.reducer";
+import { loadGoalsArea } from "store/pageAreas/goalsArea.reducer";
 import { IHabitTracker } from "models";
+import { useMonthPageArea } from "hooks/usePageArea";
+import { setGoalLists, addGoalList } from "store/pageAreaLists/goalLists.slice";
+import Loader from "components/Loader";
+import { getGoalsArea, getGoalsLists } from "selectors/pages.selectors";
+import { GoalList } from "./GoalList";
+import { AddListBtn } from "components/AddListBtn";
 
 const GoalsArea: React.FC = () => {
 	const dispatch = useDispatch();
-	const { area, isLoading } = useMonthPageArea(
+	const { area, status } = useMonthPageArea(
 		getGoalsArea,
-		goalsAreaComponent
+		loadGoalsArea,
+		(area) => setGoalLists(area.goalLists)
 	);
 	const goalsLists = useSelector(getGoalsLists);
 
-	if (isLoading || !goalsLists) return <Loader />;
+	if (status === "idle" || status === "loading" || !goalsLists)
+		return <Loader />;
 
 	const addGoalsList = () => {
 		const tracker: IHabitTracker = {
@@ -30,7 +29,7 @@ const GoalsArea: React.FC = () => {
 			goalsAreaId: area.id,
 			items: [],
 		};
-		dispatch(goalsListsThunks.addGoalsList(tracker));
+		dispatch(addGoalList(tracker));
 	};
 
 	return (

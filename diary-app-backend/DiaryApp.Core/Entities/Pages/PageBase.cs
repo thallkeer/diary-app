@@ -41,7 +41,7 @@ namespace DiaryApp.Core.Entities.Pages
             }
             set
             {
-                Guard.Against.OutOfRange(month, nameof(month), MinimumMonth, MaximumMonth);
+                Guard.Against.OutOfRange(value, nameof(value), MinimumMonth, MaximumMonth);
                 month = value;
             }
         }

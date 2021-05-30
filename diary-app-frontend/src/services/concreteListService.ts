@@ -1,6 +1,6 @@
 import { AxiosInstance } from "axios";
-import { IHabitTracker, ITodoList } from "models";
-import { ListUrls, ListWrapperUrls } from "models/types";
+import { IHabitDay, IHabitTracker, ITodoList } from "models";
+import { ListItemUrls, ListUrls, ListWrapperUrls } from "models/types";
 import { CrudService } from "./crudService";
 import axios from "../axios/axios";
 
@@ -8,6 +8,9 @@ const habitTrackerApi: ListUrls = "habitTrackers";
 export const habitTrackerService = new CrudService<IHabitTracker>(
 	habitTrackerApi
 );
+
+const habitDayApi: ListItemUrls = "habitDays";
+export const habitDayService = new CrudService<IHabitDay>(habitDayApi);
 
 const purchaseListsApi: ListWrapperUrls = "purchaseLists";
 

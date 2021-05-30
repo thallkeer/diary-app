@@ -1,76 +1,91 @@
-import { IMainPage, IMonthPage, IPage } from "models";
+import { AsyncThunk } from "@reduxjs/toolkit";
+import { IPage } from "models";
 import { IPageArea } from "models/PageAreas/pageAreas";
-import { IPageAreaState } from "models/states";
-import { useEffect } from "react";
+import { IPageState, PageAreaState } from "models/states";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { PageAreaComponent } from "store/pageAreas";
-import { AppStateType } from "store/reducer";
+import { AppThunk, RootState } from "store/store";
 
 import { getAppInfo } from "../selectors/app-selectors";
-import { getMainPage, getMonthPage } from "../store/pages/pages.selectors";
+import { getMainPage, getMonthPage } from "../selectors/pages.selectors";
 
 export const useMonthPageArea = <
-	TAreaState extends IPageAreaState<TArea>,
+	TAreaState extends PageAreaState<TArea>,
 	TArea extends IPageArea
 >(
-	areaSelector: (state: AppStateType) => TAreaState,
-	pageAreaComponent: PageAreaComponent<IMonthPage, TArea>
+	areaSelector: (state: RootState) => TAreaState,
+	loadPageArea: AsyncThunk<TArea, number, {}>,
+	pageAreaLoaded: (area: TArea) => AppThunk
 ) => {
-	const { page, area, isLoading } = usePageArea(
+	const { page, area, status } = usePageArea(
 		getMonthPage,
 		areaSelector,
-		pageAreaComponent
+		loadPageArea,
+		pageAreaLoaded
 	);
 	return {
 		monthPage: page,
 		area,
-		isLoading,
+		status,
 	};
 };
 
 export const useMainPageArea = <
-	TAreaState extends IPageAreaState<TArea>,
+	TAreaState extends PageAreaState<TArea>,
 	TArea extends IPageArea
 >(
-	areaSelector: (state: AppStateType) => TAreaState,
-	pageAreaComponent: PageAreaComponent<IMainPage, TArea>
+	areaSelector: (state: RootState) => TAreaState,
+	loadPageArea: AsyncThunk<TArea, number, {}>,
+	pageAreaLoaded: (area: TArea) => AppThunk
 ) => {
-	const { page, area, isLoading } = usePageArea(
+	const { page, area, status } = usePageArea(
 		getMainPage,
 		areaSelector,
-		pageAreaComponent
+		loadPageArea,
+		pageAreaLoaded
 	);
 	return {
 		mainPage: page,
 		area,
-		isLoading,
+		status,
 	};
 };
 
 export const usePageArea = <
+	TPageState extends IPageState<TPage>,
 	TPage extends IPage,
-	TAreaState extends IPageAreaState<TArea>,
+	TAreaState extends PageAreaState<TArea>,
 	TArea extends IPageArea
 >(
-	pageSelector: (state: AppStateType) => TPage,
-	areaSelector: (state: AppStateType) => TAreaState,
-	pageAreaComponent: PageAreaComponent<TPage, TArea>
+	pageSelector: (state: RootState) => TPageState,
+	areaSelector: (state: RootState) => TAreaState,
+	loadPageArea: AsyncThunk<TArea, number, {}>,
+	pageAreaLoaded: (area: TArea) => AppThunk
 ) => {
 	const dispatch = useDispatch();
-	const page = useSelector(pageSelector);
-	const app = useSelector(getAppInfo);
-	const { user, year, month } = app;
-	const { area, isLoading } = useSelector(areaSelector) as TAreaState;
+	const pageState = useSelector(pageSelector);
+	const page = pageState.page;
+	const pageStatus = pageState.status;
+	const { area, status } = useSelector(areaSelector);
+	const [loadedCalled, setLoadedCalled] = useState(false);
 
 	useEffect(() => {
-		if (page) {
-			dispatch(pageAreaComponent.loadPageArea(page.id));
+		if (pageStatus === "succeeded" && page) {
+			dispatch(loadPageArea(page.id));
+			setLoadedCalled(false);
 		}
-	}, [pageAreaComponent, page, user, year, month]);
+	}, [loadPageArea, pageStatus, page, dispatch]);
+
+	useEffect(() => {
+		if (!loadedCalled && area && status === "succeeded") {
+			dispatch(pageAreaLoaded(area));
+			setLoadedCalled(true);
+		}
+	}, [dispatch, pageStatus, area, status, pageAreaLoaded, loadedCalled]);
 
 	return {
-		page,
 		area,
-		isLoading: !page || isLoading || !area,
+		status,
+		page,
 	};
 };
