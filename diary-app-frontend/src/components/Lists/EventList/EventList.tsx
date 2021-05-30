@@ -28,14 +28,10 @@ export const EventList: FC<IEventListProps> = ({
 	const getItemText = (event: IEvent): string => {
 		if (event.id === 0) return event.subject;
 
-		return (
-			event.date.toLocaleString("ru", {
-				day: "numeric",
-				month: "numeric",
-			}) +
-			" " +
-			event.subject
-		);
+		return `${event.date.toLocaleString("ru", {
+			day: "numeric",
+			month: "numeric",
+		})} ${event.subject}`;
 	};
 
 	return (

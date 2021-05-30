@@ -1,37 +1,36 @@
+import { HabitTracker } from "components/HabitsTracker/HabitTracker";
+import { DeleteBtn } from "components/Lists/Controls/DeleteBtn";
+import ListHeaderInput from "components/Lists/Controls/ListHeaderInput";
+import { useAppDispatch } from "hooks/hooks";
 import { IHabitDay, IHabitTracker } from "models";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { IHabitTrackerState } from "store/diaryLists/habitTrackers.reducer";
 import {
-	habitTrackerComponent,
-	IHabitTrackerState,
-} from "store/diaryLists/habitTrackers.reducer";
-import { goalsListsHandler } from "store/pageAreaLists/goalsLists/goalsLists.reducer";
-import { goalsListsThunks } from "../../../store/pageAreaLists/goalsLists/goalsLists.actions";
-import { HabitTracker } from "../../HabitsTracker/HabitTracker";
-import { DeleteBtn } from "../../Lists/Controls/DeleteBtn";
-import ListHeaderInput from "../../Lists/Controls/ListHeaderInput";
+	addOrUpdateHabitDay,
+	deleteGoalList,
+	deleteHabitDay,
+	updateGoalList,
+} from "store/pageAreaLists/goalLists.slice";
 
 const useGoalList = (goalList: IHabitTrackerState) => {
-	const dispatch = useDispatch();
 	const { list: tracker } = goalList;
-	const listName = goalsListsHandler.getListName(tracker.id);
-	const listThunks = habitTrackerComponent.getThunks(listName);
+	const dispatch = useAppDispatch();
 
 	const updateHabitTracker = (tracker: IHabitTracker) => {
-		dispatch(listThunks.updateList(tracker));
+		dispatch(updateGoalList(tracker));
 	};
 
 	const deleteHabitTracker = () => {
-		dispatch(goalsListsThunks.deleteGoalsList(tracker.id));
+		dispatch(deleteGoalList(tracker.id));
 	};
 
 	const markDay = (day: IHabitDay) => {
-		dispatch(listThunks.addOrUpdateListItem(day));
+		dispatch(addOrUpdateHabitDay(tracker.id, day));
 	};
 
 	const unmarkDay = (day: IHabitDay) => {
-		dispatch(listThunks.deleteListItem(day.id));
+		dispatch(deleteHabitDay(tracker.id, day.id));
 	};
 
 	return {

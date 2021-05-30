@@ -3,7 +3,7 @@ import { IListItem } from "models";
 import ListHeaderInput from "../Controls/ListHeaderInput";
 import { DeleteBtn } from "../Controls/DeleteBtn";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
-import { getRandomId } from "../../../utils";
+import { nanoid } from "@reduxjs/toolkit";
 
 export interface IListActions {
 	updateTitle?: (title: string) => void;
@@ -64,7 +64,7 @@ export const withItemContextMenu = (
 	menuItems?: JSX.Element[]
 ) => {
 	if (itemId === 0) return component;
-	const uniqueId = getRandomId(); //items can have equal ids
+	const uniqueId = nanoid(); //items can have equal ids
 	return (
 		<>
 			<ContextMenuTrigger id={`context-menu-${uniqueId}`}>

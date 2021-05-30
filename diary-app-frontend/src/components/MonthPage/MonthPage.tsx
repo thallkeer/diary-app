@@ -11,9 +11,9 @@ import { IdeasArea } from "./IdeasArea/IdeasArea";
 import { GoalsArea } from "./GoalsArea/GoalsArea";
 
 const MonthPage: React.FC = () => {
-	const monthPage = usePage(getMonthPage, monthPageComponent);
+	const { page, status } = usePage(getMonthPage, monthPageComponent);
 
-	if (!monthPage) return <Loader />;
+	if (status !== "succeeded" || !page) return <Loader />;
 
 	return (
 		<Container fluid className="mt-20 second-page-container text-center">
@@ -57,4 +57,4 @@ const ReturnToCalendarLink = () => (
 	</Link>
 );
 
-export { MonthPage };
+export default MonthPage;

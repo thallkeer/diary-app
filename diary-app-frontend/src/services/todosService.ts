@@ -1,4 +1,11 @@
-import { ITodo, ITodoList } from "models";
+import {
+	ICommonList,
+	IEvent,
+	IEventList,
+	IListItem,
+	ITodo,
+	ITodoList,
+} from "models";
 import { ListItemUrls, ListUrls } from "../models/types";
 import { CrudService } from "./crudService";
 
@@ -16,9 +23,19 @@ class TodoItemService extends CrudService<ITodo> {
 	}
 }
 
-const listUrl: ListUrls = "todoLists";
+const todoListUrl: ListUrls = "todoLists";
 const todoService = new TodoItemService();
-const todoListService = new CrudService<ITodoList>(listUrl);
+const todoListService = new CrudService<ITodoList>(todoListUrl);
+
+const eventListUrl: ListUrls = "eventLists";
+const eventItemUrl: ListItemUrls = "events";
+export const eventListService = new CrudService<IEventList>(eventListUrl);
+export const eventItemService = new CrudService<IEvent>(eventItemUrl);
+
+const commonListUrl: ListUrls = "commonLists";
+const listItemUrl: ListItemUrls = "listItems";
+export const commonListService = new CrudService<ICommonList>(commonListUrl);
+export const listItemService = new CrudService<IListItem>(listItemUrl);
 
 export const todosService = {
 	list: todoListService,

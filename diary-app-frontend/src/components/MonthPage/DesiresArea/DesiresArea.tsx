@@ -1,24 +1,30 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import Loader from "../../Loader";
-import { useDispatch, useSelector } from "react-redux";
-import {
-	getDesireLists,
-	getDesiresArea,
-} from "../../../store/pages/pages.selectors";
-import { CommonList } from "../../Lists/CommonList/CommonList";
-import { desiresAreaComponent } from "store/pageAreas/desiresArea.reducer";
+import { useSelector } from "react-redux";
+import { loadDesiresArea } from "store/pageAreas/desiresArea.reducer";
 import { useMonthPageArea } from "hooks/usePageArea";
-import { desireListsHandler } from "store/pageAreaLists/desiresLists/desireLists.reducer";
-import { commonListComponent, ICommonListState } from "store/diaryLists";
+import {
+	setDesiresLists,
+	addOrUpdateItem,
+	deleteItem,
+} from "store/pageAreaLists/desireLists.slice";
+import { ICommonListState } from "store/diaryLists";
+import { useAppDispatch } from "hooks/hooks";
+import { getDesireLists, getDesiresArea } from "selectors/pages.selectors";
+import Loader from "components/Loader";
+import { CommonList } from "components/Lists/CommonList/CommonList";
 
 const DesiresArea: React.FC = () => {
-	const { area, isLoading } = useMonthPageArea(
+	const { area, status } = useMonthPageArea(
 		getDesiresArea,
-		desiresAreaComponent
+		loadDesiresArea,
+		(area) => {
+			return setDesiresLists(area.desiresLists);
+		}
 	);
 	const desireLists = useSelector(getDesireLists);
-	if (isLoading) return <Loader />;
+
+	if (status === "idle" || status === "loading") return <Loader />;
 
 	return (
 		<>
@@ -35,9 +41,7 @@ const DesiresArea: React.FC = () => {
 const DesireList: React.FC<{ desireListState: ICommonListState }> = ({
 	desireListState,
 }) => {
-	const listName = desireListsHandler.getListName(desireListState.list.id);
-	const commonListThunks = commonListComponent.getThunks(listName);
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	return (
 		<Col md={4}>
@@ -46,10 +50,10 @@ const DesireList: React.FC<{ desireListState: ICommonListState }> = ({
 				isDeletable={false}
 				listItemActions={{
 					deleteItem: (itemId) => {
-						dispatch(commonListThunks.deleteListItem(itemId));
+						dispatch(deleteItem(desireListState.list.id, itemId));
 					},
 					updateItem: (item) => {
-						dispatch(commonListThunks.addOrUpdateListItem(item));
+						dispatch(addOrUpdateItem(desireListState.list.id, item));
 					},
 				}}
 				readonlyTitle={true}

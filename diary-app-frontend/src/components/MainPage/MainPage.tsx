@@ -11,9 +11,9 @@ const ImportantEvents = lazy(() => import("./ImportantEvents"));
 const Calendar = lazy(() => import("../Calendar/Calendar"));
 
 const MainPage: FC = () => {
-	const mainPage = usePage(getMainPage, mainPageComponent);
+	const { page, status } = usePage(getMainPage, mainPageComponent);
 
-	if (!mainPage) return <Loader />;
+	if (status !== "succeeded" || !page) return <Loader />;
 
 	return (
 		<Container fluid className="mt-20">
@@ -32,4 +32,4 @@ const MainPage: FC = () => {
 	);
 };
 
-export { MainPage };
+export default MainPage;

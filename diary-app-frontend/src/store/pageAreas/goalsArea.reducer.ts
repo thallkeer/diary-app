@@ -1,31 +1,17 @@
-import { IMonthPage } from "models";
-import { IGoalsArea } from "models/PageAreas/pageAreas";
-import { IPageAreaState } from "models/states";
-import { combineReducers } from "redux";
-import { goalsListsReducer, goalsListsThunks } from "store/pageAreaLists";
-import { INITIAL_LOADABLE_STATE } from "store/utilities/loading-reducer";
-import { PageAreaComponent } from "./pageAreas.reducer";
+import { combineReducers } from "@reduxjs/toolkit";
+import { IGoalsArea, IMonthPage } from "models";
+import { goalListsReducer } from "store/pageAreaLists/goalLists.slice";
 
-class GoalsAreaComponent extends PageAreaComponent<IMonthPage, IGoalsArea> {
-	onAreaLoaded(pageArea: IGoalsArea, dispatch): void {
-		dispatch(goalsListsThunks.setGoalsLists(pageArea.goalLists));
-	}
-}
+import { createPageAreaSlice } from "./pageAreas.reducer";
 
-export const goalsAreaComponent = new GoalsAreaComponent(
-	"monthPage",
-	"goalsArea"
+const goalsAreaSlice = createPageAreaSlice<IMonthPage, IGoalsArea>(
+	"goalsArea",
+	"monthPage"
 );
 
-export interface IGoalsAreaState extends IPageAreaState<IGoalsArea> {}
-
-const initialState: IGoalsAreaState = {
-	area: null,
-	pageAreaName: "goalsArea",
-	...INITIAL_LOADABLE_STATE,
-};
-
 export const goalsAreaReducer = combineReducers({
-	area: goalsAreaComponent.getReducer(initialState),
-	goalsLists: goalsListsReducer,
+	area: goalsAreaSlice.slice.reducer,
+	goalsLists: goalListsReducer,
 });
+
+export const loadGoalsArea = goalsAreaSlice.loadPageArea;

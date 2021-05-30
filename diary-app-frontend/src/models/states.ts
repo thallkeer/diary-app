@@ -10,20 +10,23 @@ export interface IStateWithLoading {
 	success: false;
 }
 
+export type LoadingStatus = "idle" | "loading" | "succeeded" | "failed";
+
+export interface ILoadingState {
+	status: LoadingStatus;
+	error: string | null;
+}
+
 export interface IListState<TList extends IList<TItem>, TItem extends IEntity> {
 	list: TList;
 }
 
-export interface IPageState<T extends IPage> extends IStateWithLoading {
+export interface IPageState<T extends IPage> extends ILoadingState {
 	page: T;
-	pageName: PageUrls;
+	readonly pageName: PageUrls;
 }
 
-export interface IPageAreaState<T extends IPageArea> extends IStateWithLoading {
-	area: T;
-	pageAreaName: PageAreaUrls;
-}
-
-export interface ListsStateByName<T> {
-	[listName: string]: T;
-}
+export type PageAreaState<TArea extends IPageArea> = ILoadingState & {
+	area: TArea | null;
+	readonly pageAreaName: PageAreaUrls;
+};

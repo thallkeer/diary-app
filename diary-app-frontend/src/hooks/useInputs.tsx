@@ -1,24 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ListItemInputPropsBase } from "components/Lists/Controls/ListItemInput";
 import { UrlInput } from "components/Lists/Controls/UrlInput";
-import { useEffect, useRef, useState } from "react";
 import { MenuItem } from "react-contextmenu";
 
 const useListItemInput = (props: {
+	defaultValue: string;
 	validateAndUpdate: (text: string) => void;
 	onEmptyValue?: () => void;
 }) => {
-	const { validateAndUpdate, onEmptyValue } = props;
-	const inputRef = useRef<HTMLInputElement>(null);
+	const { validateAndUpdate, onEmptyValue, defaultValue } = props;
+	const [inputText, setInputText] = useState(defaultValue);
 
-	useEffect(() => {}, [validateAndUpdate, inputRef]);
+	useEffect(() => {
+		setInputText(defaultValue);
+	}, [defaultValue]);
 
 	const handleBlur = () => {
-		const { value } = inputRef.current as HTMLInputElement;
+		const value = inputText;
 		if (!value || !value.length) {
 			if (onEmptyValue) onEmptyValue();
 			return;
 		}
+
 		validateAndUpdate(value);
 	};
 
@@ -26,7 +29,7 @@ const useListItemInput = (props: {
 		if (event.key === "Enter") handleBlur();
 	};
 
-	return { inputRef, handleBlur, handleKeyPress };
+	return { inputText, setInputText, handleBlur, handleKeyPress };
 };
 
 const useUrlInput = (urlInputProps: ListItemInputPropsBase) => {

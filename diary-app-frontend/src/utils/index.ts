@@ -1,23 +1,4 @@
-import { INamedAction } from "../store/actions/action-helpers";
-import { IListState } from "../models/states";
-import { IEvent, IList, IListItem, ITodo } from "models";
-import { IEntity } from "models/entities";
-
-const _getRandomInt = (min: number, max: number) => {
-	return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-export const getRandomId = () => {
-	const ts = new Date().getTime().toString();
-	const parts = ts.split("").reverse();
-	let id = "";
-
-	for (let i = 0; i < 8; ++i) {
-		const index = _getRandomInt(0, parts.length - 1);
-		id += parts[index];
-	}
-	return Number(id);
-};
+import { IEvent, IListItem, ITodo } from "models";
 
 /**
  * returns empty list item
@@ -65,45 +46,4 @@ export function fillToNumber<T extends IListItem>(
 	list[length].readonly = false;
 
 	return list;
-}
-
-export const updateListInState = <
-	TState extends IListState<TList, TListItem>,
-	TList extends IList<TListItem>,
-	TListItem extends IEntity
->(
-	state: TState,
-	updateItemsFunc: (listItems: TListItem[]) => TListItem[]
-) => {
-	return {
-		...state,
-		list: {
-			...state.list,
-			items: updateItemsFunc(getListItems(state)),
-		},
-	};
-};
-
-const getListItems = <
-	TState extends IListState<TList, TListItem>,
-	TList extends IList<TListItem>,
-	TListItem extends IEntity
->(
-	state: TState
-) => state.list?.items ?? [];
-
-export function createNamedReducer<TState, TAction extends INamedAction>(
-	reducer: (state: TState, action: TAction) => TState,
-	initialState: TState,
-	reducerName: string
-) {
-	return (state = initialState, action: TAction) => {
-		const isInitializationCall = state === undefined;
-
-		if (reducerName !== action.subjectName && !isInitializationCall) {
-			return state;
-		}
-
-		return reducer(state, action);
-	};
 }

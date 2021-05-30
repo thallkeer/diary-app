@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import { Router, Route, Switch } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import NotFound from "./components/NotFound";
@@ -8,10 +8,11 @@ import Loader from "./components/Loader";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import { ToastContainer } from "react-toastify";
-import { UserSettings } from "components/Users/UserSettings";
-import { MainPage } from "components/MainPage/MainPage";
-import Login from "components/Users/Login";
-import { MonthPage } from "components/MonthPage/MonthPage";
+
+const Login = lazy(() => import("./components/Users/Login"));
+const UserSettings = lazy(() => import("./components/Users/UserSettings"));
+const MainPage = lazy(() => import("./components/MainPage/MainPage"));
+const MonthPage = lazy(() => import("./components/MonthPage/MonthPage"));
 
 export default function App() {
 	return (

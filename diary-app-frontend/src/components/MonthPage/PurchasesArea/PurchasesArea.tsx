@@ -1,20 +1,23 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import { AddListBtn } from "../../AddListBtn";
-import Loader from "../../Loader";
-import { useDispatch, useSelector } from "react-redux";
-import {
-	getPurchaseLists,
-	getPurchasesArea,
-} from "../../../store/pages/pages.selectors";
-
-import { TodoList } from "../../Lists/TodoList/TodoList";
-import { useMonthPageArea } from "../../../hooks/usePageArea";
-import { purchaseListsHandler } from "store/pageAreaLists/purchasesLists/purchaseLists.reducer";
-import { purchasesAreaComponent } from "store/pageAreas/purchasesArea.reducer";
+import { loadPurchasesArea } from "store/pageAreas/purchasesArea.reducer";
 import { ITodo, ITodoList } from "models";
-import { purchaseListsThunks } from "store/pageAreaLists/purchasesLists/purchaseLists.actions";
-import { todoListComponent } from "store/diaryLists";
+import { useAppDispatch } from "hooks/hooks";
+import { useMonthPageArea } from "hooks/usePageArea";
+import { useSelector } from "react-redux";
+import Loader from "components/Loader";
+import { getPurchaseLists, getPurchasesArea } from "selectors/pages.selectors";
+import {
+	addPurchaseList,
+	setPurchaseLists,
+	updatePurchaseList,
+	deletePurchaseItem,
+	addOrUpdatePurchaseItem,
+	deletePurchaseList,
+	togglePurchaseItem,
+} from "store/pageAreaLists/purchaseLists.slice";
+import { AddListBtn } from "components/AddListBtn";
+import { TodoList } from "components/Lists/TodoList/TodoList";
 
 type ListPair = {
 	list1: ITodoList;
@@ -22,14 +25,15 @@ type ListPair = {
 };
 
 const PurchasesArea = () => {
-	const dispatch = useDispatch();
-	const { area, isLoading } = useMonthPageArea(
+	const dispatch = useAppDispatch();
+	const { area, status } = useMonthPageArea(
 		getPurchasesArea,
-		purchasesAreaComponent
+		loadPurchasesArea,
+		(area) => setPurchaseLists(area.purchasesLists)
 	);
 	const purchaseLists = useSelector(getPurchaseLists);
 
-	if (isLoading) return <Loader />;
+	if (status === "idle" || status === "loading") return <Loader />;
 
 	const getRow = (pair: ListPair) => {
 		return (
@@ -70,7 +74,7 @@ const PurchasesArea = () => {
 			items: [],
 			title: "Список покупок",
 		};
-		dispatch(purchaseListsThunks.addPurchaseList(todoList, area.id));
+		dispatch(addPurchaseList(todoList, area.id));
 	};
 
 	return (
@@ -87,9 +91,8 @@ const PurchasesArea = () => {
 const PurchaseList: React.FC<{ purchaseList: ITodoList }> = ({
 	purchaseList,
 }) => {
-	const { updateTitle, deleteList, todoItemActions } = usePurchaseList(
-		purchaseList
-	);
+	const { updateTitle, deleteList, todoItemActions } =
+		usePurchaseList(purchaseList);
 
 	return (
 		<Col md={6}>
@@ -107,17 +110,16 @@ const PurchaseList: React.FC<{ purchaseList: ITodoList }> = ({
 };
 
 const usePurchaseList = (purchaseList: ITodoList) => {
-	const dispatch = useDispatch();
-	const listName = purchaseListsHandler.getListName(purchaseList.id);
-	const todoThunks = todoListComponent.getThunks(listName);
+	const dispatch = useAppDispatch();
+	const listId = purchaseList.id;
 
 	const deleteList = () => {
-		dispatch(purchaseListsThunks.deletePurchaseList(purchaseList.id));
+		dispatch(deletePurchaseList(purchaseList.id));
 	};
 
 	const updateTitle = (title: string) => {
 		dispatch(
-			todoThunks.updateList({
+			updatePurchaseList({
 				...purchaseList,
 				title,
 			})
@@ -125,9 +127,12 @@ const usePurchaseList = (purchaseList: ITodoList) => {
 	};
 
 	const todoItemActions = {
-		deleteTodo: (todoId: number) => dispatch(todoThunks.deleteListItem(todoId)),
-		toggleTodo: (todoId: number) => dispatch(todoThunks.toggleTodo(todoId)),
-		updateTodo: (todo: ITodo) => dispatch(todoThunks.addOrUpdateListItem(todo)),
+		deleteTodo: (todoId: number) =>
+			dispatch(deletePurchaseItem(listId, todoId)),
+		toggleTodo: (todoId: number) =>
+			dispatch(togglePurchaseItem(listId, todoId)),
+		updateTodo: (todo: ITodo) =>
+			dispatch(addOrUpdatePurchaseItem(listId, todo)),
 	};
 
 	return {

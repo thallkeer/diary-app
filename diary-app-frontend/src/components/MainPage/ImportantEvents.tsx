@@ -1,36 +1,36 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col } from "react-bootstrap";
 import {
 	getImportantEventsArea,
 	getImportantEventsList,
-} from "../../store/pages/pages.selectors";
+} from "../../selectors/pages.selectors";
 import Loader from "../Loader";
 import { EventList } from "../Lists/EventList/EventList";
 import { IEventItemActions } from "../Lists/Controls/EventInput";
 import {
-	importantEventsAreaComponent,
+	loadImportantEventsArea,
 	importantEventsThunks,
 } from "store/pageAreas/importantEventsArea.reducer";
 import { useMainPageArea } from "hooks/usePageArea";
 
 const ImportantEventsArea: React.FC = () => {
 	const dispatch = useDispatch();
-	const { isLoading } = useMainPageArea(
+	const { status } = useMainPageArea(
 		getImportantEventsArea,
-		importantEventsAreaComponent
+		loadImportantEventsArea,
+		(area) => importantEventsThunks.setList(area.importantEvents)
 	);
 
 	const { list } = useSelector(getImportantEventsList);
 
-	if (isLoading || !list) return <Loader />;
+	if (status === "idle" || status === "loading" || !list) return <Loader />;
 
 	const eventItemActions: IEventItemActions = {
 		deleteEvent: (eventId) =>
-			dispatch(importantEventsThunks.deleteListItem(eventId)),
+			dispatch(importantEventsThunks.deleteItemById(eventId)),
 		updateEvent: (event) =>
-			dispatch(importantEventsThunks.addOrUpdateListItem(event)),
-		getItemText: (event) => `${event.date} ${event.subject}`,
+			dispatch(importantEventsThunks.addOrUpdateItem(event)),
 	};
 
 	return (

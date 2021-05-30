@@ -1,27 +1,27 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
 import Loader from "../../Loader";
-import { useDispatch, useSelector } from "react-redux";
-import {
-	getIdeasArea,
-	getIdeasList,
-} from "../../../store/pages/pages.selectors";
+import { useSelector } from "react-redux";
+import { getIdeasArea, getIdeasList } from "../../../selectors/pages.selectors";
 import { CommonList } from "../../Lists/CommonList/CommonList";
 import { useMonthPageArea } from "../../../hooks/usePageArea";
 import {
-	ideasAreaComponent,
 	ideasListThunks,
+	loadIdeasArea,
 } from "store/pageAreas/ideasArea.reducer";
+import { useAppDispatch } from "hooks/hooks";
 
 const IdeasArea: React.FC = () => {
-	const dispatch = useDispatch();
-	const { area, isLoading } = useMonthPageArea(
+	const dispatch = useAppDispatch();
+	const { area, status } = useMonthPageArea(
 		getIdeasArea,
-		ideasAreaComponent
+		loadIdeasArea,
+		(area) => ideasListThunks.setList(area.ideasList)
 	);
 	const ideasList = useSelector(getIdeasList);
 
-	if (isLoading || !ideasList.list) return <Loader />;
+	if (status === "idle" || status === "loading" || !ideasList.list)
+		return <Loader />;
 
 	return (
 		<>
@@ -34,10 +34,10 @@ const IdeasArea: React.FC = () => {
 						readonlyTitle={true}
 						listItemActions={{
 							deleteItem: (itemId) => {
-								dispatch(ideasListThunks.deleteListItem(itemId));
+								dispatch(ideasListThunks.deleteItemById(itemId));
 							},
 							updateItem: (item) => {
-								dispatch(ideasListThunks.addOrUpdateListItem(item));
+								dispatch(ideasListThunks.addOrUpdateItem(item));
 							},
 						}}
 						className="mt-20 month-lists-header no-list-header"

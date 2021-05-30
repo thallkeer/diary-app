@@ -1,35 +1,16 @@
-import { IMonthPage } from "models";
-import { IPurchasesArea } from "models/PageAreas/pageAreas";
-import { purchaseListsThunks } from "store/pageAreaLists/purchasesLists/purchaseLists.actions";
-import { IPageAreaState } from "models/states";
-import { combineReducers } from "redux";
-import { purchaseListsReducer } from "store/pageAreaLists/purchasesLists/purchaseLists.reducer";
-import { INITIAL_LOADABLE_STATE } from "store/utilities/loading-reducer";
-import { PageAreaComponent } from "./pageAreas.reducer";
+import { combineReducers } from "@reduxjs/toolkit";
+import { IMonthPage, IPurchasesArea } from "models";
+import { purchaseListsReducer } from "store/pageAreaLists/purchaseLists.slice";
+import { createPageAreaSlice } from "./pageAreas.reducer";
 
-class PurchasesAreaComponent extends PageAreaComponent<
-	IMonthPage,
-	IPurchasesArea
-> {
-	onAreaLoaded(pageArea: IPurchasesArea, dispatch): void {
-		dispatch(purchaseListsThunks.setPurchaseLists(pageArea.purchasesLists));
-	}
-}
-
-export const purchasesAreaComponent = new PurchasesAreaComponent(
-	"monthPage",
-	"purchasesArea"
+const { slice, loadPageArea } = createPageAreaSlice<IMonthPage, IPurchasesArea>(
+	"purchasesArea",
+	"monthPage"
 );
 
-export interface IPurchasesAreaState extends IPageAreaState<IPurchasesArea> {}
-
-const initialState: IPurchasesAreaState = {
-	area: null,
-	pageAreaName: "purchasesArea",
-	...INITIAL_LOADABLE_STATE,
-};
+export const loadPurchasesArea = loadPageArea;
 
 export const purchasesAreaReducer = combineReducers({
-	area: purchasesAreaComponent.getReducer(initialState),
+	area: slice.reducer,
 	purchaseLists: purchaseListsReducer,
 });

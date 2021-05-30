@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { ListItemInput } from "./ListItemInput";
 import { IEvent } from "models";
 import { withItemContextMenu } from "../CommonList/CommonListComponent";
@@ -24,8 +24,6 @@ export const EventInput: FC<IEventInputProps> = ({
 	const handleDeleteClick = () => {
 		deleteEvent(event.id);
 	};
-
-	useEffect(() => {}, [event, updateEvent, deleteEvent, getItemText]);
 
 	const eventInput = (
 		<ListItemInput

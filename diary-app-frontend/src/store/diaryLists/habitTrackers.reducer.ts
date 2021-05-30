@@ -1,20 +1,14 @@
 import { IHabitDay, IHabitTracker } from "models";
 import { IListState } from "models/states";
-import { ActionsUnion } from "store/actions/action-helpers";
-import { DiaryListComponent } from "./lists.reducer";
-
-class HabitTrackerComponent extends DiaryListComponent<
-	IHabitTracker,
-	IHabitDay
-> {}
-
-export const habitTrackerComponent = new HabitTrackerComponent(
-	"habitTrackers",
-	"habitDays"
-);
-
-const habitTrackerActions = habitTrackerComponent.getActions("habitTracker");
-export type HabitTrackerActions = ActionsUnion<typeof habitTrackerActions>;
+import {
+	habitDayService,
+	habitTrackerService,
+} from "services/concreteListService";
+import {
+	createGenericListThunks,
+	createGenericSlice,
+	generateListSliceReducers,
+} from "./lists.reducer";
 
 export interface IHabitTrackerState
 	extends IListState<IHabitTracker, IHabitDay> {}
@@ -23,16 +17,33 @@ export const habitTrackerInitialState: IHabitTrackerState = {
 	list: null,
 };
 
-export const habitTrackerReducer = habitTrackerComponent.getReducer(
-	habitTrackerInitialState,
-	"habitTrackers"
-);
+const baseReducers =
+	generateListSliceReducers<IHabitTrackerState, IHabitTracker, IHabitDay>();
 
-export type HabitTrackerReducerType = typeof habitTrackerReducer;
+type HabitTrackerReducersType = typeof baseReducers;
 
-export const createHabitTrackerReducer = (reducerName: string) => {
-	return habitTrackerComponent.getReducer(
-		habitTrackerInitialState,
-		reducerName
-	);
+export const createHabitTrackerSlice = (listName: string) =>
+	createGenericSlice<
+		IHabitTrackerState,
+		IHabitTracker,
+		IHabitDay,
+		HabitTrackerReducersType
+	>({
+		name: listName,
+		initialState: habitTrackerInitialState,
+		reducers: {},
+	});
+
+export type HabitTrackerSlice = ReturnType<typeof createHabitTrackerSlice>;
+
+export const createHabitTrackerThunks = (slice: HabitTrackerSlice) => {
+	const baseThunks = createGenericListThunks<
+		IHabitTrackerState,
+		IHabitTracker,
+		IHabitDay
+	>(slice.name, habitTrackerService, habitDayService);
+
+	return {
+		...baseThunks,
+	};
 };

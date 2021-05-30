@@ -1,36 +1,37 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Row, Col } from "react-bootstrap";
 import {
 	getImportantThingsArea,
 	getImportantThingsList,
-} from "../../store/pages/pages.selectors";
+} from "../../selectors/pages.selectors";
 import Loader from "../Loader";
 import { TodoList } from "../Lists/TodoList/TodoList";
 import { ITodoItemActions } from "../Lists/Controls/TodoInput";
 import {
-	importantThingsAreaComponent,
 	importantThingsThunks,
+	loadImportantThingsArea,
 } from "store/pageAreas/importantThingsArea.reducer";
 import { useMainPageArea } from "hooks/usePageArea";
+import { useAppDispatch } from "hooks/hooks";
 
 const ImportantThingsArea: React.FC = () => {
-	const dispatch = useDispatch();
-	const { isLoading } = useMainPageArea(
+	const dispatch = useAppDispatch();
+	const { status } = useMainPageArea(
 		getImportantThingsArea,
-		importantThingsAreaComponent
+		loadImportantThingsArea,
+		(area) => importantThingsThunks.setList(area.importantThings)
 	);
 
 	const { list } = useSelector(getImportantThingsList);
 
-	if (isLoading || !list) return <Loader />;
+	if (status !== "succeeded" || !list) return <Loader />;
 
 	const todoItemActions: ITodoItemActions = {
 		deleteTodo: (todoId) =>
-			dispatch(importantThingsThunks.deleteListItem(todoId)),
+			dispatch(importantThingsThunks.deleteItemById(todoId)),
 		toggleTodo: (todoId) => dispatch(importantThingsThunks.toggleTodo(todoId)),
-		updateTodo: (todo) =>
-			dispatch(importantThingsThunks.addOrUpdateListItem(todo)),
+		updateTodo: (todo) => dispatch(importantThingsThunks.addOrUpdateItem(todo)),
 	};
 
 	return (
