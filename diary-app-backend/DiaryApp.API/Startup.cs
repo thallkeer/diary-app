@@ -40,11 +40,9 @@ namespace DiaryApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             var appSettings = Configuration.GetSection("appSettings").Get<AppSettings>();
-            if (appSettings == null)
-                throw new ArgumentNullException(nameof(appSettings), "Application settings configuration is not provided!");
+            ArgumentNullException.ThrowIfNull(appSettings);
             var jwtTokenConfig = Configuration.GetSection("jwtTokenConfig").Get<JwtTokenConfig>();
-            if (jwtTokenConfig == null)
-                throw new ArgumentNullException(nameof(jwtTokenConfig), "JWT token configuration is not provided!");
+            ArgumentNullException.ThrowIfNull(jwtTokenConfig);
 
             services.AddCors(options =>
             {
@@ -80,15 +78,16 @@ namespace DiaryApp.API
             services.AddAutoMapper(typeof(Startup))
                     .AddSingleton(appSettings)
                     .AddSingleton(jwtTokenConfig)
-                    .AddScoped<IJwtAuthManager,JwtAuthManager>()
+                    .AddScoped<IJwtAuthManager, JwtAuthManager>()
                     .AddScoped<ModelValidationAttribute>()
                     .AddQuartzScheduler()
                     .AddPostgresContext(connectionString)
                     .AddGithubService(appSettings.GithubToken)
                     .AddDataServices()
                     .AddTelegramClient(appSettings.TelegramBotToken)
-                    .AddTransient<ISchedulerService, SchedulerService>()        
+                    .AddTransient<ISchedulerService, SchedulerService>()
                     .AddScoped<INotificationService, TelegramNotificationService>()
+                    .AddScoped<UserAccessor>()
                     .AddMvc(opt => opt.EnableEndpointRouting = false);
 
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "client/build");
