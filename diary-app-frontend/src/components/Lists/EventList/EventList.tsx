@@ -1,11 +1,7 @@
 import React, { FC } from "react";
 import { IEvent, IEventList } from "models";
-import { getEmptyEvent, fillToNumber } from "../../../utils";
 import { EventInput, IEventItemActions } from "../Controls/EventInput";
-import {
-	CommonListComponent,
-	IListActions,
-} from "../CommonList/CommonListComponent";
+import { ListWithItems, IListActions } from "../CommonList/CommonListComponent";
 
 export interface IEventListProps extends IListActions {
 	eventList: IEventList;
@@ -19,11 +15,9 @@ export const EventList: FC<IEventListProps> = ({
 }) => {
 	const { updateEvent, deleteEvent } = eventItemActions;
 
-	const items = [...eventList.items].sort(
+	const events = [...eventList.items].sort(
 		(e1, e2) => e1.date.getTime() - e2.date.getTime()
 	);
-
-	const events = fillToNumber(items, 6, () => getEmptyEvent(eventList.id));
 
 	const getItemText = (event: IEvent): string => {
 		if (event.id === 0) return event.subject;
@@ -35,7 +29,7 @@ export const EventList: FC<IEventListProps> = ({
 	};
 
 	return (
-		<CommonListComponent
+		<ListWithItems
 			className={"mt-40"}
 			items={events}
 			listTitle={eventList.title}

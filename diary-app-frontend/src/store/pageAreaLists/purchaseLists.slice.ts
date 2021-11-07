@@ -8,7 +8,7 @@ import { ITodoList, ITodo } from "models";
 import { purchaseListsService } from "services/concreteListService";
 import { todosService } from "services/todosService";
 import { createTodoSlice, ITodoListState, TodoSlice } from "store/diaryLists";
-import { AppThunk, RootState } from "store/store";
+import { RootState } from "store/store";
 
 const purchaseListsAdapter = createEntityAdapter<ITodoListState>({
 	selectId: (listState) => listState.list.id,
@@ -17,6 +17,7 @@ const purchaseListsAdapter = createEntityAdapter<ITodoListState>({
 export const purchaseListsSlices = new Map<number, TodoSlice>();
 const getListActions = (listId: number) =>
 	purchaseListsSlices.get(listId).actions;
+
 const getListReducer = (listId: number) =>
 	purchaseListsSlices.get(listId).reducer;
 
@@ -40,6 +41,11 @@ const purchaseListsSlice = createSlice({
 		},
 		listAdded(state, action: PayloadAction<ITodoListState>) {
 			purchaseListsAdapter.addOne(state, action.payload);
+			const todoList = action.payload.list;
+			purchaseListsSlices.set(
+				todoList.id,
+				createTodoSlice("purchaseList-" + todoList)
+			);
 		},
 		listChanged(state, action: PayloadAction<ITodoListState>) {
 			const { list } = action.payload;
@@ -62,20 +68,19 @@ const purchaseListsSelectors = purchaseListsAdapter.getSelectors<RootState>(
 	(state) => state.monthPage.purchasesArea.purchaseLists
 );
 
-export const setPurchaseLists =
-	(lists: ITodoList[]): AppThunk =>
-	(dispatch) => {
-		dispatch(purchaseListsActions.setLists(lists));
-	};
+export const setPurchaseLists = (lists: ITodoList[]) => (dispatch) => {
+	dispatch(purchaseListsActions.setLists(lists));
+};
 
 export const addPurchaseList =
-	(purchaseList: ITodoList, purchaseAreaId: number): AppThunk =>
-	async (dispatch) => {
+	(purchaseList: ITodoList, purchaseAreaId: number) => async (dispatch) => {
 		const listId = await purchaseListsService.create(
 			purchaseList,
 			purchaseAreaId
 		);
+
 		const todoListId = await purchaseListsService.getTodoListId(listId);
+
 		dispatch(
 			purchaseListsActions.listAdded({
 				list: {
@@ -87,8 +92,7 @@ export const addPurchaseList =
 	};
 
 export const updatePurchaseList =
-	(purchaseList: ITodoList): AppThunk =>
-	async (dispatch, getState) => {
+	(purchaseList: ITodoList) => async (dispatch, getState) => {
 		await todosService.list.update(purchaseList);
 		const listState = purchaseListsSelectors.selectById(
 			getState(),
@@ -103,15 +107,13 @@ export const updatePurchaseList =
 	};
 
 export const deletePurchaseList =
-	(purchaseListId: number): AppThunk =>
-	async (dispatch) => {
+	(purchaseListId: number) => async (dispatch) => {
 		await todosService.list.deleteById(purchaseListId);
 		dispatch(purchaseListsActions.listDeleted(purchaseListId));
 	};
 
 export const addOrUpdatePurchaseItem =
-	(listId: number, item: ITodo): AppThunk =>
-	async (dispatch, getState) => {
+	(listId: number, item: ITodo) => async (dispatch, getState) => {
 		if (!item) return;
 
 		const actions = getListActions(listId);
@@ -133,8 +135,7 @@ export const addOrUpdatePurchaseItem =
 	};
 
 export const togglePurchaseItem =
-	(listId: number, itemId: number): AppThunk =>
-	async (dispatch, getState) => {
+	(listId: number, itemId: number) => async (dispatch, getState) => {
 		await todosService.items.toggleTodo(itemId);
 		const newState = reduceListAction(getState(), listId, () =>
 			getListActions(listId).toggleTodo(itemId)
@@ -143,8 +144,7 @@ export const togglePurchaseItem =
 	};
 
 export const deletePurchaseItem =
-	(listId: number, itemId: number): AppThunk =>
-	async (dispatch, getState) => {
+	(listId: number, itemId: number) => async (dispatch, getState) => {
 		await todosService.items.deleteById(itemId);
 		const newState = reduceListAction(getState(), listId, () =>
 			getListActions(listId).deleteItem(itemId)

@@ -18,13 +18,12 @@ const ImportantEventsArea: React.FC = () => {
 	const dispatch = useDispatch();
 	const { status } = useMainPageArea(
 		getImportantEventsArea,
-		loadImportantEventsArea,
-		(area) => importantEventsThunks.setList(area.importantEvents)
+		loadImportantEventsArea
 	);
 
 	const { list } = useSelector(getImportantEventsList);
 
-	if (status === "idle" || status === "loading" || !list) return <Loader />;
+	if (status !== "succeeded" || !list) return <Loader />;
 
 	const eventItemActions: IEventItemActions = {
 		deleteEvent: (eventId) =>

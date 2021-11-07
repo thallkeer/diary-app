@@ -10,13 +10,16 @@ import { IMonthPage } from "models";
 
 export const IDEAS_LIST: ListWrapperUrls = "ideasLists";
 
-const ideasAreaSlice = createPageAreaSlice<IMonthPage, IIdeasArea>(
-	"ideasArea",
-	"monthPage"
-);
-
 const ideasListSlice = createCommonListSlice(IDEAS_LIST);
 export const ideasListThunks = createCommonListThunks(ideasListSlice);
+
+const setList = (area: IIdeasArea) => ideasListThunks.setList(area.ideasList);
+
+const ideasAreaSlice = createPageAreaSlice<IMonthPage, IIdeasArea>(
+	"ideasArea",
+	"monthPage",
+	setList
+);
 
 export const ideasAreaReducer = combineReducers({
 	area: ideasAreaSlice.slice.reducer,

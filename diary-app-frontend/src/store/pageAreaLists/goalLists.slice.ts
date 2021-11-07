@@ -10,8 +10,7 @@ import {
 	IHabitTrackerState,
 } from "store/diaryLists/habitTrackers.reducer";
 import { IHabitTracker, IHabitDay } from "models";
-import { todosService } from "services/todosService";
-import { AppThunk, RootState } from "store/store";
+import { RootState } from "store/store";
 import {
 	habitDayService,
 	habitTrackerService,
@@ -67,28 +66,23 @@ const goalListsSelectors = goalListsAdapter.getSelectors<RootState>(
 	(state) => state.monthPage.goalsArea.goalsLists
 );
 
-export const setGoalLists =
-	(lists: IHabitTracker[]): AppThunk =>
-	(dispatch) => {
-		dispatch(goalListsActions.setLists(lists));
-	};
+export const setGoalLists = (lists: IHabitTracker[]) => (dispatch) => {
+	dispatch(goalListsActions.setLists(lists));
+};
 
-export const addGoalList =
-	(goalList: IHabitTracker): AppThunk =>
-	async (dispatch) => {
-		if (!goalList) return;
+export const addGoalList = (goalList: IHabitTracker) => async (dispatch) => {
+	if (!goalList) return;
 
-		const id = await habitTrackerService.create(goalList);
-		const newGoalList: IHabitTracker = {
-			...goalList,
-			id,
-		};
-		dispatch(actions.listAdded({ list: newGoalList }));
+	const id = await habitTrackerService.create(goalList);
+	const newGoalList: IHabitTracker = {
+		...goalList,
+		id,
 	};
+	dispatch(actions.listAdded({ list: newGoalList }));
+};
 
 export const updateGoalList =
-	(goalList: IHabitTracker): AppThunk =>
-	async (dispatch, getState) => {
+	(goalList: IHabitTracker) => async (dispatch, getState) => {
 		await habitTrackerService.update(goalList);
 		const listState = goalListsSelectors.selectById(getState(), goalList.id);
 		dispatch(
@@ -99,16 +93,13 @@ export const updateGoalList =
 		);
 	};
 
-export const deleteGoalList =
-	(goalListId: number): AppThunk =>
-	async (dispatch) => {
-		await habitTrackerService.deleteById(goalListId);
-		dispatch(goalListsActions.listDeleted(goalListId));
-	};
+export const deleteGoalList = (goalListId: number) => async (dispatch) => {
+	await habitTrackerService.deleteById(goalListId);
+	dispatch(goalListsActions.listDeleted(goalListId));
+};
 
 export const addOrUpdateHabitDay =
-	(listId: number, item: IHabitDay): AppThunk =>
-	async (dispatch, getState) => {
+	(listId: number, item: IHabitDay) => async (dispatch, getState) => {
 		if (!item) return;
 
 		const actions = getListActions(listId);
@@ -130,8 +121,7 @@ export const addOrUpdateHabitDay =
 	};
 
 export const deleteHabitDay =
-	(listId: number, itemId: number): AppThunk =>
-	async (dispatch, getState) => {
+	(listId: number, itemId: number) => async (dispatch, getState) => {
 		await habitDayService.deleteById(itemId);
 		const newState = reduceListAction(getState(), listId, () =>
 			getListActions(listId).deleteItem(itemId)

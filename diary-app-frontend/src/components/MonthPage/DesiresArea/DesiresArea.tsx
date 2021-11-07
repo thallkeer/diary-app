@@ -1,10 +1,9 @@
 import React from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Accordion } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { loadDesiresArea } from "store/pageAreas/desiresArea.reducer";
 import { useMonthPageArea } from "hooks/usePageArea";
 import {
-	setDesiresLists,
 	addOrUpdateItem,
 	deleteItem,
 } from "store/pageAreaLists/desireLists.slice";
@@ -15,13 +14,7 @@ import Loader from "components/Loader";
 import { CommonList } from "components/Lists/CommonList/CommonList";
 
 const DesiresArea: React.FC = () => {
-	const { area, status } = useMonthPageArea(
-		getDesiresArea,
-		loadDesiresArea,
-		(area) => {
-			return setDesiresLists(area.desiresLists);
-		}
-	);
+	const { area, status } = useMonthPageArea(getDesiresArea, loadDesiresArea);
 	const desireLists = useSelector(getDesireLists);
 
 	if (status === "idle" || status === "loading") return <Loader />;
@@ -42,23 +35,32 @@ const DesireList: React.FC<{ desireListState: ICommonListState }> = ({
 	desireListState,
 }) => {
 	const dispatch = useAppDispatch();
+	const desireList = desireListState.list;
 
 	return (
-		<Col md={4}>
-			<CommonList
-				commonList={desireListState.list}
-				isDeletable={false}
-				listItemActions={{
-					deleteItem: (itemId) => {
-						dispatch(deleteItem(desireListState.list.id, itemId));
-					},
-					updateItem: (item) => {
-						dispatch(addOrUpdateItem(desireListState.list.id, item));
-					},
-				}}
-				readonlyTitle={true}
-				className="mt-10 month-lists-header no-list-header-border"
-			/>
+		<Col md={12} className="mt-20">
+			<Accordion defaultActiveKey="0">
+				<Accordion.Item eventKey={desireList.id.toString()}>
+					<Accordion.Header>{desireList.title}</Accordion.Header>
+					<Accordion.Body>
+						<CommonList
+							commonList={desireList}
+							renderTitle={false}
+							isDeletable={false}
+							listItemActions={{
+								deleteItem: (itemId) => {
+									dispatch(deleteItem(desireList.id, itemId));
+								},
+								updateItem: (item) => {
+									dispatch(addOrUpdateItem(desireList.id, item));
+								},
+							}}
+							readonlyTitle={true}
+							className="mt-1 month-lists-header no-list-header-border"
+						/>
+					</Accordion.Body>
+				</Accordion.Item>
+			</Accordion>
 		</Col>
 	);
 };

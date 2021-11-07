@@ -134,13 +134,11 @@ export const Calendar: React.FC = () => {
 
 		for (let d = 1; d <= monthDays; d++) {
 			const className =
-				isRealCurrentMonth && d === presentDay ? "day current-day" : "day";
+				isRealCurrentMonth && d === presentDay
+					? "day real-time-current-day"
+					: "day";
 
 			const curEvents: IEvent[] = eventsByDay.get(d) || [];
-
-			const curEventClass = curEvents.length
-				? "day-with-event"
-				: "no-events-day";
 
 			daysInMonth.push(
 				<CalendarDay
@@ -148,7 +146,6 @@ export const Calendar: React.FC = () => {
 					day={d}
 					className={className}
 					curEvents={curEvents}
-					curEventClass={curEventClass}
 					onDayClick={onDayClick}
 					onEventClick={onEventClick}
 				/>
@@ -248,7 +245,7 @@ export const Calendar: React.FC = () => {
 	};
 
 	return (
-		<div className="calendar-wrapper">
+		<div>
 			<h1 className="text-center calendar-header">
 				<span className="month-nav" onClick={setPrevMonth}>
 					<img
@@ -291,20 +288,12 @@ const CalendarDay: React.FC<{
 	className: string;
 	onDayClick: (e: React.MouseEvent<HTMLElement>, day: number) => void;
 	curEvents: IEvent[];
-	curEventClass: string;
 	onEventClick: (
 		e: React.MouseEvent<HTMLElement>,
 		day: number,
 		event: IEvent
 	) => void;
-}> = ({
-	day,
-	className,
-	onDayClick,
-	curEvents,
-	curEventClass,
-	onEventClick,
-}) => {
+}> = ({ day, className, onDayClick, curEvents, onEventClick }) => {
 	const events = [...curEvents].sort(
 		(e1, e2) => e1.date.getTime() - e2.date.getTime()
 	);
@@ -318,17 +307,22 @@ const CalendarDay: React.FC<{
 					ref={provided.innerRef}
 					{...provided.droppableProps}
 				>
-					<div className="day-span">{day}</div>
-					{events.map((event) => (
-						<DayEvent
-							key={event.id}
-							event={event}
-							day={day}
-							className={curEventClass}
-							onEventClick={onEventClick}
-						/>
-					))}
-					{provided.placeholder}
+					<div className="day-container">
+						<div className="day-span">{day}</div>
+						{events.length !== 0 && (
+							<div style={{ marginBottom: "0.2rem" }}>
+								{events.map((event) => (
+									<DayEvent
+										key={event.id}
+										event={event}
+										day={day}
+										onEventClick={onEventClick}
+									/>
+								))}
+							</div>
+						)}
+						{provided.placeholder}
+					</div>
 				</td>
 			)}
 		</Droppable>
@@ -338,13 +332,12 @@ const CalendarDay: React.FC<{
 const DayEvent: React.FC<{
 	event: IEvent;
 	day: number;
-	className: string;
 	onEventClick: (
 		e: React.MouseEvent<HTMLElement>,
 		day: number,
 		event: IEvent
 	) => void;
-}> = ({ event, day, className, onEventClick }) => {
+}> = ({ event, day, onEventClick }) => {
 	const formatOptions: Intl.DateTimeFormatOptions = {
 		hour: "2-digit",
 		minute: "2-digit",
@@ -362,7 +355,7 @@ const DayEvent: React.FC<{
 			{(provided) => (
 				<div
 					key={event.id}
-					className={className}
+					className={"day-event"}
 					onClick={(e) => onEventClick(e, day, event)}
 					ref={provided.innerRef}
 					{...provided.draggableProps}

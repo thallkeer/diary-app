@@ -1,11 +1,15 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { IMonthPage, IPurchasesArea } from "models";
-import { purchaseListsReducer } from "store/pageAreaLists/purchaseLists.slice";
+import {
+	purchaseListsReducer,
+	setPurchaseLists,
+} from "store/pageAreaLists/purchaseLists.slice";
 import { createPageAreaSlice } from "./pageAreas.reducer";
 
 const { slice, loadPageArea } = createPageAreaSlice<IMonthPage, IPurchasesArea>(
 	"purchasesArea",
-	"monthPage"
+	"monthPage",
+	(area) => setPurchaseLists(area.purchasesLists)
 );
 
 export const loadPurchasesArea = loadPageArea;

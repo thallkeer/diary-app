@@ -4,19 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadGoalsArea } from "store/pageAreas/goalsArea.reducer";
 import { IHabitTracker } from "models";
 import { useMonthPageArea } from "hooks/usePageArea";
-import { setGoalLists, addGoalList } from "store/pageAreaLists/goalLists.slice";
+import { addGoalList } from "store/pageAreaLists/goalLists.slice";
 import Loader from "components/Loader";
 import { getGoalsArea, getGoalsLists } from "selectors/pages.selectors";
-import { GoalList } from "./GoalList";
 import { AddListBtn } from "components/AddListBtn";
+import { GoalList } from "./GoalList";
 
 const GoalsArea: React.FC = () => {
 	const dispatch = useDispatch();
-	const { area, status } = useMonthPageArea(
-		getGoalsArea,
-		loadGoalsArea,
-		(area) => setGoalLists(area.goalLists)
-	);
+	const { area, status } = useMonthPageArea(getGoalsArea, loadGoalsArea);
 	const goalsLists = useSelector(getGoalsLists);
 
 	if (status === "idle" || status === "loading" || !goalsLists)

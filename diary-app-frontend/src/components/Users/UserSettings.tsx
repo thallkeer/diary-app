@@ -155,7 +155,7 @@ const UserSettings = () => {
 					<FormGroup as={Row} key={cb.name}>
 						<Col sm={5}>
 							<Form.Check
-								custom
+								// custom
 								type="checkbox"
 								name={cb.name}
 								id={cb.name}
@@ -180,7 +180,7 @@ const UserSettings = () => {
 			<FormGroup as={Row}>
 				<Col sm={5}>
 					<Form.Check
-						custom
+						// custom
 						type="checkbox"
 						name={propName}
 						id={propName}

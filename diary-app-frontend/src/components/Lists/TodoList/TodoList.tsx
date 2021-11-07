@@ -2,7 +2,7 @@ import React from "react";
 import { ITodoItemActions, TodoInput } from "../Controls/TodoInput";
 import { getEmptyTodo, fillToNumber } from "../../../utils";
 import {
-	CommonListComponent,
+	ListWithItems,
 	IListActions,
 	IListOptions,
 } from "../CommonList/CommonListComponent";
@@ -24,12 +24,12 @@ export const TodoList: React.FC<ITodoListProps> = ({
 	className,
 }) => {
 	const { updateTodo, deleteTodo, toggleTodo } = todoItemActions;
-	const todos = fillToNumber([...todoList.items], 6, () =>
+	const todos = fillToNumber(todoList.items, todoList.items.length + 1, () =>
 		getEmptyTodo(todoList.id)
 	);
 
 	return (
-		<CommonListComponent
+		<ListWithItems
 			className={`mt-52 ${className}`}
 			items={todos}
 			listTitle={todoList.title}

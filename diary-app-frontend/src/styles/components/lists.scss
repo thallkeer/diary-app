@@ -3,10 +3,13 @@
 // $main-lightblue-color: lightblue;
 @import "../variables";
 
-.todo-list-header {
+.list-with-items-header {
 	font-size: 24px !important;
 	font-family: $list-header-font;
 	border-bottom: 1px solid black;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
 
 	&:hover {
 		span {
@@ -31,11 +34,9 @@
 	margin: 0;
 	text-align: left;
 	li {
-		margin-top: 10px;
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		//padding: 0.5rem 0rem;
 		margin-bottom: 0.5rem;
 	}
 }
@@ -48,6 +49,23 @@
 	padding-left: 0.6rem;
 	// border-bottom: 1px solid black;
 	width: 100%;
+}
+
+.textarea {
+	box-sizing: border-box;
+	border: none;
+	border-radius: 3px;
+	resize: none;
+	font-size: 20px;
+	line-height: 24px;
+	overflow: auto;
+	height: auto;
+	padding: 8px;
+	width: 100%;
+
+	&:focus {
+		outline: none;
+	}
 }
 
 .item-url {
@@ -76,7 +94,7 @@
 .list-item {
 	flex: 1;
 	display: "flex";
-	border-bottom: 1px solid black;
+	border-bottom: 1px solid black !important;
 	justify-content: "flex-start";
 	&:hover {
 		span,
@@ -90,11 +108,7 @@
 .todo-input {
 	display: flex;
 	justify-content: flex-start;
-}
-
-.list-item-link {
-	@extend %hidden-btn;
-	left: 88%;
+	width: 100%;
 }
 
 .todo-link {
@@ -105,7 +119,7 @@
 
 .delete-list-item-btn {
 	@extend %hidden-btn;
-	left: 93%;
+	// left: 93%;
 	color: $main-lightblue-color !important;
 }
 
@@ -113,6 +127,11 @@
 	h1 {
 		border: none;
 	}
+}
+
+.full-border {
+	outline: 1px solid rgba(0, 0, 0, 0.125);
+	padding: 1rem 1.25rem;
 }
 
 .month-lists-header {
@@ -127,7 +146,13 @@
 	background-color: rgba(135, 206, 235, 0.3) !important;
 	font-size: 24px !important;
 	padding: 0 20px !important;
+	margin: 0px auto;
+	max-height: 40px;
 	&:hover {
 		background-color: $skyblue-color !important;
 	}
+}
+
+.ideas-list {
+	margin-top: 1.25rem !important;
 }

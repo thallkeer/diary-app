@@ -39,7 +39,6 @@ const Login: React.FC = () => {
 		return (
 			<Button
 				className={`btn ${isSignIn ? "btn-primary" : "btn-success"}`}
-				block
 				size="lg"
 				disabled={!validateForm()}
 				type="submit"
@@ -59,6 +58,7 @@ const Login: React.FC = () => {
 					<FormGroup controlId="userName">
 						<FormLabel>Логин</FormLabel>
 						<FormControl
+							className="login-control"
 							autoFocus={true}
 							type="text"
 							value={userName}
@@ -66,15 +66,18 @@ const Login: React.FC = () => {
 						/>
 					</FormGroup>
 					<FormGroup controlId="password">
-						<FormLabel>Пароль</FormLabel>
+						<FormLabel style={{ marginTop: "0.5rem" }}>Пароль</FormLabel>
 						<FormControl
+							className="login-control"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							type="password"
 						/>
 					</FormGroup>
-					<SignInBtn text="Войти" isSignIn={true} />
-					<SignInBtn text="Регистрация" isSignIn={false} />
+					<div className="d-grid gap-2 mt-3">
+						<SignInBtn text="Войти" isSignIn={true} />
+						<SignInBtn text="Регистрация" isSignIn={false} />
+					</div>
 				</form>
 			</div>
 		</Container>

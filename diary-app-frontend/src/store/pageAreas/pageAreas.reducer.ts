@@ -12,7 +12,8 @@ export const createPageAreaSlice = <
 	TArea extends IPageArea
 >(
 	pageAreaUrl: PageAreaUrls,
-	pageUrl: PageUrls
+	pageUrl: PageUrls,
+	onAreaLoaded: (area: TArea) => any
 ) => {
 	const initialState: PageAreaState<TArea> = {
 		area: null,
@@ -22,11 +23,12 @@ export const createPageAreaSlice = <
 
 	const loadPageAreaThunk = createAsyncThunk(
 		`${pageAreaUrl}/loadPageArea`,
-		async (pageId: number) => {
+		async (pageId: number, thunkApi) => {
 			const response = await new PageService<TPage>(pageUrl).getPageArea<TArea>(
 				pageAreaUrl,
 				pageId
 			);
+			if (onAreaLoaded) thunkApi.dispatch(onAreaLoaded(response));
 			return response;
 		}
 	);

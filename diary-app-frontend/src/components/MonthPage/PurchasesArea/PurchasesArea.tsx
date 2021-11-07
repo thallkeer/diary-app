@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Accordion } from "react-bootstrap";
 import { loadPurchasesArea } from "store/pageAreas/purchasesArea.reducer";
 import { ITodo, ITodoList } from "models";
 import { useAppDispatch } from "hooks/hooks";
@@ -18,6 +18,7 @@ import {
 } from "store/pageAreaLists/purchaseLists.slice";
 import { AddListBtn } from "components/AddListBtn";
 import { TodoList } from "components/Lists/TodoList/TodoList";
+import { useState } from "react";
 
 type ListPair = {
 	list1: ITodoList;
@@ -28,8 +29,7 @@ const PurchasesArea = () => {
 	const dispatch = useAppDispatch();
 	const { area, status } = useMonthPageArea(
 		getPurchasesArea,
-		loadPurchasesArea,
-		(area) => setPurchaseLists(area.purchasesLists)
+		loadPurchasesArea
 	);
 	const purchaseLists = useSelector(getPurchaseLists);
 
@@ -81,9 +81,7 @@ const PurchasesArea = () => {
 		<>
 			<h1 className="area-header">{area.header}</h1>
 			{renderLists(purchaseLists.map((pl) => pl.list))}
-			<Row>
-				<AddListBtn onClick={addList} />
-			</Row>
+			<AddListBtn onClick={addList} />
 		</>
 	);
 };
@@ -95,16 +93,23 @@ const PurchaseList: React.FC<{ purchaseList: ITodoList }> = ({
 		usePurchaseList(purchaseList);
 
 	return (
-		<Col md={6}>
-			<TodoList
-				className="mt-20 month-lists-header"
-				isDeletable={true}
-				readonlyTitle={false}
-				deleteList={deleteList}
-				updateTitle={updateTitle}
-				todoItemActions={todoItemActions}
-				todoList={purchaseList}
-			/>
+		<Col md={12} className="mt-20">
+			<Accordion defaultActiveKey="0">
+				<Accordion.Item eventKey={purchaseList.id.toString()}>
+					<Accordion.Header>{purchaseList.title}</Accordion.Header>
+					<Accordion.Body>
+						<TodoList
+							className="mt-1 month-lists-header"
+							isDeletable={true}
+							readonlyTitle={false}
+							deleteList={deleteList}
+							updateTitle={updateTitle}
+							todoItemActions={todoItemActions}
+							todoList={purchaseList}
+						/>
+					</Accordion.Body>
+				</Accordion.Item>
+			</Accordion>
 		</Col>
 	);
 };

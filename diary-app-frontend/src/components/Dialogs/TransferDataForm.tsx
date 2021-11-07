@@ -79,14 +79,14 @@ export const TransferDataForm: React.FC<{
 				<Modal.Body>
 					{checkBoxes.map((cb) => (
 						<FormGroup key={cb.name} as={Row} className="ml-2">
-							<Form.Check
+							{/* <Form.Check
 								custom
 								type="checkbox"
 								name={cb.name}
 								id={cb.name}
 								label={cb.text}
 								onChange={handleChange}
-							/>
+							/> */}
 						</FormGroup>
 					))}
 					{state.error && (

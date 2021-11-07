@@ -2,7 +2,6 @@ import { IListState } from "models/states";
 import { IEntity } from "../../models/entities";
 import { CrudService } from "../../services/crudService";
 import { IList } from "models";
-import { AppThunk } from "store/store";
 import {
 	createSlice,
 	PayloadAction,
@@ -37,6 +36,57 @@ export const generateListSliceReducers = <
 		},
 	};
 	return reducers as SliceCaseReducers<TState>;
+};
+
+export const createGenericListThunks = <
+	TState extends IListState<TList, TListItem>,
+	TList extends IList<TListItem>,
+	TListItem extends IEntity
+>(
+	listName: string,
+	listService: CrudService<TList>,
+	listItemService: CrudService<TListItem>
+) => {
+	const slice = createGenericSlice<TState, TList, TListItem, {}>({
+		name: listName,
+		initialState: null,
+		reducers: {},
+	});
+
+	const actions = slice.actions;
+	const thunks = {
+		setList: (list: TList) => async (dispatch) => {
+			dispatch(actions.setList<TList>(list));
+		},
+		updateList: (list: TList) => async (dispatch) => {
+			await listService.update(list);
+			dispatch(actions.updateList<TList>(list));
+		},
+
+		addOrUpdateItem: (listItem: TListItem) => async (dispatch) => {
+			if (!listItem) return;
+
+			if (listItem.id === 0) {
+				await listItemService
+					.create(listItem)
+					.then((listItemId) =>
+						dispatch(actions.addItem({ ...listItem, id: listItemId }))
+					);
+			} else {
+				await listItemService
+					.update(listItem)
+					.then((_) => dispatch(actions.updateItem(listItem)));
+			}
+		},
+
+		deleteItemById: (listItemId: number) => async (dispatch) => {
+			if (listItemId === 0) return;
+			await listItemService.deleteById(listItemId);
+			dispatch(actions.deleteItem(listItemId));
+		},
+	};
+
+	return thunks;
 };
 
 export const createGenericSlice = <
@@ -83,63 +133,4 @@ export const createGenericSlice = <
 			...reducers,
 		},
 	});
-};
-
-export const createGenericListThunks = <
-	TState extends IListState<TList, TListItem>,
-	TList extends IList<TListItem>,
-	TListItem extends IEntity
->(
-	listName: string,
-	listService: CrudService<TList>,
-	listItemService: CrudService<TListItem>
-) => {
-	const slice = createGenericSlice<TState, TList, TListItem, {}>({
-		name: listName,
-		initialState: null,
-		reducers: {},
-	});
-
-	const actions = slice.actions;
-	const thunks = {
-		setList:
-			(list: TList): AppThunk =>
-			async (dispatch) => {
-				dispatch(actions.setList<TList>(list));
-			},
-		updateList:
-			(list: TList): AppThunk =>
-			async (dispatch) => {
-				await listService.update(list);
-				dispatch(actions.updateList<TList>(list));
-			},
-
-		addOrUpdateItem:
-			(listItem: TListItem): AppThunk =>
-			async (dispatch) => {
-				if (!listItem) return;
-
-				if (listItem.id === 0) {
-					await listItemService
-						.create(listItem)
-						.then((listItemId) =>
-							dispatch(actions.addItem({ ...listItem, id: listItemId }))
-						);
-				} else {
-					await listItemService
-						.update(listItem)
-						.then((_) => dispatch(actions.updateItem(listItem)));
-				}
-			},
-
-		deleteItemById:
-			(listItemId: number): AppThunk =>
-			async (dispatch) => {
-				if (listItemId === 0) return;
-				await listItemService.deleteById(listItemId);
-				dispatch(actions.deleteItem(listItemId));
-			},
-	};
-
-	return thunks;
 };

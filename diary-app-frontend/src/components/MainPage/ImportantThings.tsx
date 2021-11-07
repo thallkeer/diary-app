@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { Row, Col } from "react-bootstrap";
 import {
@@ -19,8 +19,7 @@ const ImportantThingsArea: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const { status } = useMainPageArea(
 		getImportantThingsArea,
-		loadImportantThingsArea,
-		(area) => importantThingsThunks.setList(area.importantThings)
+		loadImportantThingsArea
 	);
 
 	const { list } = useSelector(getImportantThingsList);

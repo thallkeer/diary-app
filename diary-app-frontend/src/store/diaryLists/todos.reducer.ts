@@ -7,7 +7,6 @@ import {
 import { ITodo, ITodoList } from "models";
 import { IListState } from "models/states";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk } from "store/store";
 
 export const TOGGLE_TODO = "TODOS/TOGGLE_TODO";
 
@@ -46,13 +45,11 @@ export const createTodoListThunks = (slice: TodoSlice) => {
 		todosService.items
 	);
 	const { actions } = slice;
-	const toggleTodo =
-		(todoId: number): AppThunk =>
-		async (dispatch) => {
-			if (todoId === 0) return;
-			await todosService.items.toggleTodo(todoId);
-			dispatch(actions.toggleTodo(todoId));
-		};
+	const toggleTodo = (todoId: number) => async (dispatch) => {
+		if (todoId === 0) return;
+		await todosService.items.toggleTodo(todoId);
+		dispatch(actions.toggleTodo(todoId));
+	};
 	return {
 		...baseThunks,
 		toggleTodo,

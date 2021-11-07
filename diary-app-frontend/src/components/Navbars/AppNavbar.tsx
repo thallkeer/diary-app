@@ -32,7 +32,7 @@ export const AppNavbar: React.FC<{ isOnMonthPage: boolean }> = ({
 								title={user.username}
 								id="collasible-nav-dropdown"
 								style={{ marginRight: "1rem", fontWeight: "bold" }}
-								alignRight={true}
+								// alignRight={true}
 							>
 								{monthPage && (
 									<NavDropdown.Item onClick={handleShow}>
