@@ -32,7 +32,7 @@ namespace DiaryApp.Infrastructure.Services
             var notification = await _eventNotificationService.GetByIdAsync(notificationId);
             if (notification == null)
             {
-                _logger.LogError($"Scheduled notification with Id {notificationId} is not found in database");
+                _logger.LogError($"Scheduled notification with Id {notificationId} is not found in the database");
                 return;
             }
 
