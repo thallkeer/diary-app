@@ -4,18 +4,17 @@ import ListHeaderInput from "../Controls/ListHeaderInput";
 import { DeleteBtn } from "../Controls/DeleteBtn";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import { nanoid } from "@reduxjs/toolkit";
-import { Col, Row } from "react-bootstrap";
 
-export interface IListActions {
+export type IListActions = {
 	updateTitle?: (title: string) => void;
 	deleteList?: () => void;
-}
+};
 
-export interface IListOptions {
+export type IListOptions = {
 	readonlyTitle: boolean;
 	renderTitle?: boolean;
 	isDeletable: boolean;
-}
+};
 
 export type ListComponentProps<T extends IListItem> = {
 	items: T[];
@@ -66,19 +65,22 @@ export const ListWithItems = <T extends IListItem>(
 };
 
 export const WithItemContextMenu: React.FC<{
-	component: JSX.Element;
 	itemId: number;
 	onDelete: () => void;
 	menuItems?: JSX.Element[];
-}> = ({ component, itemId, onDelete, menuItems }) => {
-	if (itemId === 0) return component;
+}> = ({ itemId, onDelete, menuItems, children }) => {
+	if (itemId === 0) return <>{children}</>;
 	const uniqueId = nanoid(); //items can have equal ids
 	return (
 		<>
 			<ContextMenuTrigger id={`context-menu-${uniqueId}`}>
-				{component}
+				{children}
 			</ContextMenuTrigger>
-			<ContextMenu className="menu" id={`context-menu-${uniqueId}`}>
+			<ContextMenu
+				className="menu"
+				id={`context-menu-${uniqueId}`}
+				style={{ zIndex: 10 }}
+			>
 				{menuItems}
 				<MenuItem onClick={onDelete} className="menuItem">
 					Удалить запись

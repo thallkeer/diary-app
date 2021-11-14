@@ -4,12 +4,10 @@
 @import "../variables";
 
 .list-with-items-header {
-	font-size: 24px !important;
+	@extend %centered-flex;
+	font-size: 1.5rem !important;
 	font-family: $list-header-font;
 	border-bottom: 1px solid black;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
 
 	&:hover {
 		span {
@@ -23,8 +21,7 @@
 	@extend %amatic-bold;
 	outline: none;
 	text-align: center;
-	width: 100%;
-	overflow: hidden;
+	width: 70%;
 	border: none;
 }
 
@@ -45,22 +42,22 @@
 	@extend %amatic-bold;
 	outline: none;
 	border: none;
-	font-size: 24px;
+	font-size: 1.5rem;
 	padding-left: 0.6rem;
-	// border-bottom: 1px solid black;
 	width: 100%;
 }
 
 .textarea {
+	@extend %amatic-bold;
 	box-sizing: border-box;
 	border: none;
 	border-radius: 3px;
 	resize: none;
-	font-size: 20px;
-	line-height: 24px;
+	font-size: 1.25rem;
+	line-height: 1.5rem;
 	overflow: auto;
 	height: auto;
-	padding: 8px;
+	padding: 0.3rem;
 	width: 100%;
 
 	&:focus {
@@ -119,7 +116,6 @@
 
 .delete-list-item-btn {
 	@extend %hidden-btn;
-	// left: 93%;
 	color: $main-lightblue-color !important;
 }
 
@@ -144,15 +140,19 @@
 .more-btn {
 	@extend %amatic-bold;
 	background-color: rgba(135, 206, 235, 0.3) !important;
-	font-size: 24px !important;
-	padding: 0 20px !important;
+	font-size: 1.5rem !important;
+	padding: 0 1.25rem !important;
 	margin: 0px auto;
-	max-height: 40px;
+	max-height: 2.5rem;
 	&:hover {
 		background-color: $skyblue-color !important;
 	}
 }
 
 .ideas-list {
-	margin-top: 1.25rem !important;
+	margin-top: 1.3rem !important;
+}
+
+.important-things {
+	margin-top: 1rem !important;
 }

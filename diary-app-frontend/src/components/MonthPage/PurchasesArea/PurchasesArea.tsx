@@ -19,6 +19,7 @@ import {
 import { AddListBtn } from "components/AddListBtn";
 import { TodoList } from "components/Lists/TodoList/TodoList";
 import { useState } from "react";
+import { WithItemContextMenu } from "components/Lists/CommonList/CommonListComponent";
 
 type ListPair = {
 	list1: ITodoList;
@@ -96,7 +97,9 @@ const PurchaseList: React.FC<{ purchaseList: ITodoList }> = ({
 		<Col md={12} className="mt-20">
 			<Accordion defaultActiveKey="0">
 				<Accordion.Item eventKey={purchaseList.id.toString()}>
-					<Accordion.Header>{purchaseList.title}</Accordion.Header>
+					<WithItemContextMenu itemId={purchaseList.id} onDelete={deleteList}>
+						<Accordion.Header>{purchaseList.title}</Accordion.Header>
+					</WithItemContextMenu>
 					<Accordion.Body>
 						<TodoList
 							className="mt-1 month-lists-header"

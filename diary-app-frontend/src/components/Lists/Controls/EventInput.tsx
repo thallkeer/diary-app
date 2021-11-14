@@ -36,10 +36,8 @@ export const EventInput: FC<IEventInputProps> = ({
 	);
 
 	return (
-		<WithItemContextMenu
-			component={eventInput}
-			itemId={event.id}
-			onDelete={handleDeleteClick}
-		/>
+		<WithItemContextMenu itemId={event.id} onDelete={handleDeleteClick}>
+			{eventInput}
+		</WithItemContextMenu>
 	);
 };

@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Row, Col } from "react-bootstrap";
 import {
 	getImportantThingsArea,
 	getImportantThingsList,
@@ -34,17 +33,13 @@ const ImportantThingsArea: React.FC = () => {
 	};
 
 	return (
-		<Row>
-			<Col md={12}>
-				<TodoList
-					className="mt-10 no-list-header"
-					isDeletable={false}
-					readonlyTitle={true}
-					todoList={list}
-					todoItemActions={todoItemActions}
-				/>
-			</Col>
-		</Row>
+		<TodoList
+			className="important-things no-list-header"
+			isDeletable={false}
+			readonlyTitle={true}
+			todoList={list}
+			todoItemActions={todoItemActions}
+		/>
 	);
 };
 

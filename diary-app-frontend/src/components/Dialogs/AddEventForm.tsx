@@ -13,18 +13,18 @@ import { getEmptyEvent } from "../../utils";
 import { useSelector } from "react-redux";
 import { getAppInfo } from "../../selectors/app-selectors";
 import { IEvent } from "models";
+import { toast } from "react-toastify";
 
-interface IFormProps {
+type IFormProps = {
 	show: boolean;
 	handleClose: () => void;
 	day: number;
 	event?: IEvent;
 	addEvent: (newEvent: IEvent) => void;
-}
+};
 
 interface IFormState {
 	item: IEvent;
-	submitSuccess?: boolean;
 }
 
 export const AddEventForm: React.FC<IFormProps> = ({
@@ -71,7 +71,7 @@ export const AddEventForm: React.FC<IFormProps> = ({
 	): Promise<void> => {
 		e.preventDefault();
 		const submitSuccess: boolean = await submitForm();
-		setFormState({ ...formState, submitSuccess });
+		setFormState({ ...formState });
 		if (submitSuccess) {
 			handleClose();
 		}
@@ -104,18 +104,12 @@ export const AddEventForm: React.FC<IFormProps> = ({
 		);
 	};
 
-	//return formState.item.date.toLocaleString("ru", {
-	// 	day: "numeric",
-	// 	month: "long",
-	// 	year: "numeric",
-	// });
-
 	const submitForm = async (): Promise<boolean> => {
 		try {
 			addEvent(formState.item);
 			return true;
 		} catch (ex) {
-			console.log(ex);
+			toast.error(`Произошла ошибка: ${ex}`);
 			return false;
 		}
 	};
@@ -123,7 +117,6 @@ export const AddEventForm: React.FC<IFormProps> = ({
 	return (
 		<Modal
 			size="lg"
-			className="add-event-form-dialog"
 			show={show}
 			onHide={handleClose}
 			aria-labelledby="contained-modal-title-vcenter"
@@ -138,15 +131,16 @@ export const AddEventForm: React.FC<IFormProps> = ({
 				</Modal.Header>
 				<Modal.Body>
 					<FormGroup as={Row}>
-						<FormLabel column sm="2">
+						<FormLabel column md="2">
 							Событие
 						</FormLabel>
-						<Col sm="10">
+						<Col md="10">
 							<FormControl
 								autoFocus={true}
 								autoComplete={"off"}
 								value={formState.item.subject}
 								name="subject"
+								className="add-event-control"
 								onChange={onChange}
 								ref={inputRef}
 								required
@@ -154,15 +148,16 @@ export const AddEventForm: React.FC<IFormProps> = ({
 						</Col>
 					</FormGroup>
 					<FormGroup as={Row}>
-						<FormLabel column sm="2">
+						<FormLabel column md="2">
 							Время
 						</FormLabel>
-						<Col sm="10">
+						<Col md="10">
 							<FormControl
 								type="datetime-local"
 								min={getDisplayDate(minDate)}
 								max={getDisplayDate(maxDate)}
 								value={formatItemDate()}
+								className="add-event-control"
 								name="date"
 								onChange={(e) => {
 									setFormState({
@@ -177,13 +172,14 @@ export const AddEventForm: React.FC<IFormProps> = ({
 						</Col>
 					</FormGroup>
 					<FormGroup as={Row} className="mb-0">
-						<FormLabel column sm="2">
+						<FormLabel column md="2">
 							Место
 						</FormLabel>
-						<Col sm="10">
+						<Col md="10">
 							<FormControl
 								type="text"
 								name="location"
+								className="add-event-control"
 								value={formState.item.location}
 								onChange={onChange}
 							/>
@@ -199,21 +195,6 @@ export const AddEventForm: React.FC<IFormProps> = ({
 					</Button>
 				</Modal.Footer>
 			</Form>
-			{formState.submitSuccess && (
-				<div className="alert alert-info" role="alert">
-					The form was successfully submitted!
-				</div>
-			)}
-			{formState.submitSuccess === false && (
-				<div className="alert alert-danger" role="alert">
-					Sorry, an unexpected error has occurred
-				</div>
-			)}
-			{formState.submitSuccess === false && (
-				<div className="alert alert-danger" role="alert">
-					Sorry, the form is invalid. Please review, adjust and try again
-				</div>
-			)}
 		</Modal>
 	);
 };

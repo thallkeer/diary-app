@@ -23,7 +23,9 @@ export const AppNavbar: React.FC<{ isOnMonthPage: boolean }> = ({
 	return (
 		<>
 			<Navbar bg="light" collapseOnSelect>
-				<Navbar.Brand href="/main">Diary App</Navbar.Brand>
+				<Navbar.Brand href="/main" style={{ marginLeft: "1rem" }}>
+					Diary App
+				</Navbar.Brand>
 				<Navbar.Toggle />
 				<Navbar.Collapse className="justify-content-end">
 					{user && (
@@ -32,7 +34,7 @@ export const AppNavbar: React.FC<{ isOnMonthPage: boolean }> = ({
 								title={user.username}
 								id="collasible-nav-dropdown"
 								style={{ marginRight: "1rem", fontWeight: "bold" }}
-								// alignRight={true}
+								align={"end"}
 							>
 								{monthPage && (
 									<NavDropdown.Item onClick={handleShow}>

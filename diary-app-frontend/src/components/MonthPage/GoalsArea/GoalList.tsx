@@ -60,7 +60,7 @@ export const GoalList: React.FC<{
 	};
 
 	const components = [
-		<Col key={"header_" + tracker.id} md={4}>
+		<Col key={"header_" + tracker.id} md={4} className="tracker-header-column">
 			<h3 className="tracker-header">
 				<ListHeaderInput value={tracker.goalName} handleBlur={handleBlur} />
 				<DeleteBtn onDelete={deleteHabitTracker} />

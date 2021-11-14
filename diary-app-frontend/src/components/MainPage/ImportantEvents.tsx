@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col } from "react-bootstrap";
 import {
 	getImportantEventsArea,
 	getImportantEventsList,
@@ -33,15 +32,11 @@ const ImportantEventsArea: React.FC = () => {
 	};
 
 	return (
-		<Row>
-			<Col md={12}>
-				<EventList
-					className="mt-10 no-list-header"
-					eventList={list}
-					eventItemActions={eventItemActions}
-				/>
-			</Col>
-		</Row>
+		<EventList
+			className="mt-10 no-list-header"
+			eventList={list}
+			eventItemActions={eventItemActions}
+		/>
 	);
 };
 

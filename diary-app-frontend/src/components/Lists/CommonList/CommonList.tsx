@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FocusEvent, useCallback, useEffect } from "react";
+import React, { ChangeEvent, FocusEvent, useEffect } from "react";
 import {
 	ListWithItems,
 	IListOptions,
@@ -132,11 +132,12 @@ export const WithUrlEdit: React.FC<{
 	const input = editUrlMode ? urlInput : inputElement;
 	return (
 		<WithItemContextMenu
-			component={input}
 			itemId={item.id}
 			onDelete={() => listItemActions.deleteItem(item.id)}
 			menuItems={[menuItem]}
-		/>
+		>
+			{input}
+		</WithItemContextMenu>
 	);
 };
 

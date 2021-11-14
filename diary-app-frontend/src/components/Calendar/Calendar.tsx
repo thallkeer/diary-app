@@ -309,18 +309,15 @@ const CalendarDay: React.FC<{
 				>
 					<div className="day-container">
 						<div className="day-span">{day}</div>
-						{events.length !== 0 && (
-							<div style={{ marginBottom: "0.2rem" }}>
-								{events.map((event) => (
-									<DayEvent
-										key={event.id}
-										event={event}
-										day={day}
-										onEventClick={onEventClick}
-									/>
-								))}
-							</div>
-						)}
+						{events.length !== 0 &&
+							events.map((event) => (
+								<DayEvent
+									key={event.id}
+									event={event}
+									day={day}
+									onEventClick={onEventClick}
+								/>
+							))}
 						{provided.placeholder}
 					</div>
 				</td>

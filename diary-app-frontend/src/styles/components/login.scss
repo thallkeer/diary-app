@@ -18,4 +18,9 @@
 	border: none !important;
 	border-radius: 0 !important;
 	border-bottom: 1px solid #dee2e6 !important;
+	font-size: 1.375rem !important;
+	&:focus {
+		border-bottom: 2px solid #2c7eea !important;
+		box-shadow: none !important;
+	}
 }
