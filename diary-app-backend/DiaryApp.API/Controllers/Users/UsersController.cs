@@ -16,8 +16,8 @@ namespace DiaryApp.API.Controllers
         private readonly IUserService _userService;
         private readonly IJwtAuthManager _jwtAuthManager;
 
-        public UsersController(IUserService userService, IJwtAuthManager jwtAuthManager)
-
+        public UsersController(IUserService userService, IJwtAuthManager jwtAuthManager) 
+            
         {
             _userService = userService;
             _jwtAuthManager = jwtAuthManager;
@@ -27,7 +27,7 @@ namespace DiaryApp.API.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> AuthenticateAsync([FromBody] UserAuthRequest userDto, CancellationToken cancellationToken = default)
         {
-            UserDto user = await _userService.AuthenticateAsync(userDto.Username, userDto.Password);
+            UserDto user = await _userService.AuthenticateAsync(userDto.Username, userDto.Password);            
             return SendToken(user);
         }
 
@@ -47,7 +47,7 @@ namespace DiaryApp.API.Controllers
             var user = await _userService.GetByIdAsync(userId);
             if (user == null)
                 return NotFound("User with such id is not exists!");
-            var settings = await _userService.GetSettingsAsync(userId);
+            var settings = await _userService.GetSettingsAsync(userId);    
             //settings can be null if the user has not configured them yet
             var response = new UserWithSettingsResponse(user, settings);
             return Ok(response);

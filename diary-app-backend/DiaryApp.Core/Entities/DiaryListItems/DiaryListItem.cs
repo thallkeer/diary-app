@@ -13,7 +13,7 @@ namespace DiaryApp.Core.Entities
 
         protected DiaryListItem(DiaryListItem original)
         {
-            ArgumentNullException.ThrowIfNull(original);
+            if (original is null) throw new ArgumentNullException(nameof(original));
             Subject = original.Subject;
             Url = original.Url;
         }

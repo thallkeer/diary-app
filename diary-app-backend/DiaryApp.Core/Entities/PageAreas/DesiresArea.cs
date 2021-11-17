@@ -23,7 +23,8 @@ namespace DiaryApp.Core.Entities.PageAreas
 
         public void AddDataFromOtherArea(DesiresArea other)
         {
-            ArgumentNullException.ThrowIfNull(other);
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
             if (DesiresLists.Count == 0)
                 Initialize();
             for (var i = 0; i < other.DesiresLists.Count; i++)

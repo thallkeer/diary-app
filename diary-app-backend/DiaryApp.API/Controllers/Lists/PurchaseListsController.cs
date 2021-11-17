@@ -1,7 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using DiaryApp.API.Requests;
+using DiaryApp.Core.Entities.ListWrappers;
+using DiaryApp.Services.DataInterfaces;
 using DiaryApp.Services.DataInterfaces.Lists;
+using DiaryApp.Services.DTO.Lists;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +30,7 @@ namespace DiaryApp.API.Controllers.Lists
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<int>> CreateAsync([FromBody] CreatePurchaseListRequest requestModel, CancellationToken cancellationToken = default)
         {
-            var purchaseListId = await _purchaseListService.CreateAsync(requestModel.TodoList, requestModel.PurchasesAreaId);
+            var purchaseListId = await _purchaseListService.CreateAsync(requestModel.TodoList, requestModel.PurchasesAreaId);            
             return Ok(purchaseListId);
         }
 
