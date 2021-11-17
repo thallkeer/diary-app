@@ -1,5 +1,4 @@
-﻿using DiaryApp.API.Models;
-using DiaryApp.Services.Exceptions;
+﻿using DiaryApp.Services.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
@@ -38,9 +37,9 @@ namespace DiaryApp.API.Middleware
             switch (ex)
             {
                 case HttpException re:
-                    _logger.Error(re, "REST ERROR");
+                    _logger.Error(re, "API ERROR");
                     errors = re.Errors;
-                    context.Response.StatusCode = (int) re.StatusCode;
+                    context.Response.StatusCode = (int)re.StatusCode;
                     break;
                 case Exception e:
                     _logger.Error(e, "SERVER ERROR");
@@ -49,7 +48,7 @@ namespace DiaryApp.API.Middleware
                     break;
             }
 
-            context.Response.ContentType = "application/json";            
+            context.Response.ContentType = "application/json";
             if (errors != null)
             {
                 var result = JsonConvert.SerializeObject(new
