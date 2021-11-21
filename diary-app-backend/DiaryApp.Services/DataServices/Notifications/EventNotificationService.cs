@@ -74,7 +74,7 @@ namespace DiaryApp.Services.DataServices.Notifications
                 Subject = subject,
                 NotificationDate = dateToNotify,
                 UserId = user.Id,
-                EventId = eventItem.Id             
+                EventId = eventItem.Id
             };
 
             await _dbSet.AddAsync(notification);
@@ -92,5 +92,5 @@ namespace DiaryApp.Services.DataServices.Notifications
 
         private static DateTime CombineDateAndTimeToNotify(DateTime dateToNotify, TimeSpan timeToNotify) =>
             new(dateToNotify.Year, dateToNotify.Month, dateToNotify.Day, timeToNotify.Hours, timeToNotify.Minutes, timeToNotify.Seconds);
-    }    
+    }
 }

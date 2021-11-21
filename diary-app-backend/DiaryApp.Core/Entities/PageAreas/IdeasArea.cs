@@ -21,7 +21,7 @@ namespace DiaryApp.Core.Entities.PageAreas
             if (IdeasList == null)
                 Initialize();
             var otherListItemsCopy = other.IdeasList.CopyItems();
-            IdeasList.Items.AddRange(otherListItemsCopy);
+            IdeasList.AddRange(otherListItemsCopy);
         }
 
         protected override void Initialize()

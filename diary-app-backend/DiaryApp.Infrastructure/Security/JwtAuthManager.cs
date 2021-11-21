@@ -15,10 +15,12 @@ namespace DiaryApp.Infrastructure.Security
 
         public JwtAuthManager(JwtTokenConfig jwtTokenConfig)
         {
+            ArgumentNullException.ThrowIfNull(jwtTokenConfig);
+
             _jwtTokenConfig = jwtTokenConfig;
             _secret = Encoding.ASCII.GetBytes(jwtTokenConfig.Secret);
         }
-        
+
         public string GenerateAccessToken(IEnumerable<Claim> claims)
         {
             var jwtToken = new JwtSecurityToken(
@@ -28,7 +30,6 @@ namespace DiaryApp.Infrastructure.Security
                 expires: DateTime.UtcNow.AddMinutes(_jwtTokenConfig.AccessTokenExpiration),
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(_secret), SecurityAlgorithms.HmacSha256Signature));
             var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-
 
             return accessToken;
         }

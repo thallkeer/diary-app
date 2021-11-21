@@ -36,7 +36,7 @@ namespace DiaryApp.API.Middleware
 
             switch (ex)
             {
-                case HttpException re:
+                case ApiException re:
                     _logger.Error(re, "API ERROR");
                     errors = re.Errors;
                     context.Response.StatusCode = (int)re.StatusCode;

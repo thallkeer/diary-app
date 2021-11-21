@@ -140,7 +140,7 @@ namespace DiaryApp.UnitTests
         public static TheoryData<IdeasArea> TheoryIdeasAreas()
         {
             var paWithInitializeAndItems = new IdeasArea(null, true);
-            paWithInitializeAndItems.IdeasList.Items.Add(new ListItem());
+            paWithInitializeAndItems.IdeasList.Add(new ListItem());
 
             return new TheoryData<IdeasArea>
             {

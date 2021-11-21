@@ -29,7 +29,7 @@ namespace DiaryApp.Core.Entities.PageAreas
             for (var i = 0; i < other.DesiresLists.Count; i++)
             {
                 var otherItemsCopy = other.DesiresLists[i].CopyItems();
-                DesiresLists[i].Items.AddRange(otherItemsCopy);
+                DesiresLists[i].AddRange(otherItemsCopy);
             }
         }
 

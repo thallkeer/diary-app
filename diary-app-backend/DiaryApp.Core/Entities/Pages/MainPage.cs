@@ -18,7 +18,7 @@ namespace DiaryApp.Core.Entities.Pages
         [Required]
         public virtual ImportantEventsArea ImportantEventsArea { get; set; }
         [Required]
-        public virtual ImportantThingsArea ImportantThingsArea { get; set; }       
+        public virtual ImportantThingsArea ImportantThingsArea { get; set; }
 
         public override void CreateAreas()
         {

@@ -5,7 +5,7 @@ using DiaryApp.Core.Entities.Users;
 namespace DiaryApp.Core.Entities.Pages
 {
     /// <summary>
-    /// Represents base page class for diary
+    /// Represents base page class for a diary.
     /// </summary>
     public abstract class PageBase : BaseEntity
     {
@@ -15,6 +15,21 @@ namespace DiaryApp.Core.Entities.Pages
         private const int MaximumMonth = 12;
 
         private int year;
+        private int month;
+
+        public PageBase()
+        { }
+
+        public PageBase(int year, int month, AppUser user)
+        {
+            Guard.Against.OutOfRange(year, nameof(year), MinimumYear, MaximumYear);
+            Guard.Against.OutOfRange(month, nameof(month), MinimumMonth, MaximumMonth);
+            Guard.Against.Null(user, nameof(user));
+            Year = year;
+            Month = month;
+            User = user;
+        }
+
         [Required]
         [Range(MinimumYear, MaximumYear)]
         public int Year
@@ -30,7 +45,6 @@ namespace DiaryApp.Core.Entities.Pages
             }
         }
 
-        private int month;
         [Required]
         [Range(MinimumMonth, MaximumMonth)]
         public int Month
@@ -50,18 +64,6 @@ namespace DiaryApp.Core.Entities.Pages
         public int UserId { get; set; }
 
         public virtual AppUser User { get; set; }
-
-        public PageBase()
-        {}
-
-        public PageBase(int year, int month, AppUser user)
-        {
-            Guard.Against.OutOfRange(year, nameof(year), MinimumYear, MaximumYear);
-            Guard.Against.OutOfRange(month, nameof(month), MinimumMonth ,MaximumMonth);
-            Year = year;
-            Month = month;
-            User = user;
-        }
 
         /// <summary>
         /// Returns the year and month for the next page
@@ -94,17 +96,17 @@ namespace DiaryApp.Core.Entities.Pages
     {
         public PageDate GetPreviousPageDate()
         {
-            bool isPageForJanuary = Month == 1;
-            int year = isPageForJanuary ? Year - 1 : Year;
-            int month = isPageForJanuary ? 12 : Month - 1;
+            bool isJanuary = Month == 1;
+            int year = isJanuary ? Year - 1 : Year;
+            int month = isJanuary ? 12 : Month - 1;
             return new PageDate(year, month);
         }
 
         public PageDate GetNextPageDate()
         {
-            bool isPageForDecember = Month == 12;
-            int year = isPageForDecember ? Year + 1 : Year;
-            int month = isPageForDecember ? 1 : Month + 1;
+            bool isDecember = Month == 12;
+            int year = isDecember ? Year + 1 : Year;
+            int month = isDecember ? 1 : Month + 1;
             return new PageDate(year, month);
         }
     }

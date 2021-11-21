@@ -29,7 +29,7 @@ namespace DiaryApp.Core.Entities.DiaryLists
         [Required]
         public int GoalsAreaId { get; set; }
 
-        public virtual GoalsArea GoalsArea { get; set; }        
+        public virtual GoalsArea GoalsArea { get; set; }
 
         public HabitTracker GetCopy()
         {

@@ -7,7 +7,6 @@ using DiaryApp.Core.Entities.Users;
 
 namespace DiaryApp.Core.Entities.Pages
 {
-    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class MonthPage : PageBase
     {
         public MonthPage()
@@ -25,7 +24,7 @@ namespace DiaryApp.Core.Entities.Pages
         [Required]
         public virtual IdeasArea IdeasArea { get; set; }
         [Required]
-        public virtual GoalsArea GoalsArea { get; set; }        
+        public virtual GoalsArea GoalsArea { get; set; }
 
         public override void CreateAreas()
         {
@@ -66,7 +65,7 @@ namespace DiaryApp.Core.Entities.Pages
         {
             Guard.Against.Null(transferDataModel, nameof(transferDataModel));
             Guard.Against.Null(monthPage, nameof(monthPage));
-            
+
             monthPage.TransferAreasIfNecessary(transferDataModel, this);
         }
 

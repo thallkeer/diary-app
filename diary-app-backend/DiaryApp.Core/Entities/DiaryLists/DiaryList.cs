@@ -18,26 +18,5 @@ namespace DiaryApp.Core.Entities.DiaryLists
         {
             Title = title;
         }
-
-        public TList GetListCopy<TList>()
-            where TList : DiaryList<T>, new()
-        {
-            var list = new TList()
-            {
-                Title = Title,
-                Items = new List<T>(Items.Count)
-            };
-
-            Items.ForEach(item =>
-            {
-                list.Items.Add((T)item.GetCopy());
-            });
-            return list;
-        }
-
-        public override string ToString()
-        {
-            return Title;
-        }
     }
 }
