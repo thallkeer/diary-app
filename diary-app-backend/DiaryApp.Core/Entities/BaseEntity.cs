@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿
 
 namespace DiaryApp.Core.Entities
 {
@@ -29,7 +29,6 @@ namespace DiaryApp.Core.Entities
 		public override string ToString()
         {
             return base.ToString();
-            return JsonConvert.SerializeObject(this);
         }
     }
 }

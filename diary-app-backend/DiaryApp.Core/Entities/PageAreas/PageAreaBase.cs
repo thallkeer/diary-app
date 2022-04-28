@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Ardalis.GuardClauses;
 using DiaryApp.Core.Entities.Pages;
-using DiaryApp.Core.Interfaces;
 
 namespace DiaryApp.Core.Entities.PageAreas
 {
@@ -9,7 +8,7 @@ namespace DiaryApp.Core.Entities.PageAreas
     /// Represents base class for an area of a certain diary page.
     /// </summary>
     /// <typeparam name="TPage"></typeparam>
-    public abstract class PageAreaBase<TPage> : BaseEntity, IPageArea
+    public abstract class PageAreaBase<TPage> : BaseEntity
         where TPage : PageBase
     {
         public PageAreaBase()

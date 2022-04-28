@@ -17,9 +17,8 @@ namespace DiaryApp.Infrastructure.Quartz.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var cancellationToken = context.CancellationToken;
             var notificationId = GetNotificationId(context);
-            await _notificationService.NotifyAsync(notificationId, cancellationToken);
+            await _notificationService.NotifyAsync(notificationId, context.CancellationToken);
         }
 
         private static int GetNotificationId(IJobExecutionContext context)

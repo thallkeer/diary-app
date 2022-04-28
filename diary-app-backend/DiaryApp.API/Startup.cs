@@ -18,8 +18,8 @@ using DiaryApp.Services.Security;
 using DiaryApp.Infrastructure.Security;
 using DiaryApp.Infrastructure.ServiceInterfaces;
 using DiaryApp.Infrastructure.DependencyInjection;
-using System.Reflection;
 using DiaryApp.Infrastructure.Services;
+using DiaryApp.API.Extensions;
 
 namespace DiaryApp.API
 {
@@ -66,14 +66,11 @@ namespace DiaryApp.API
 
             services.AddControllers();
 
-            var connectionString = Configuration.GetConnectionString(_env.IsDevelopment() ? "DefaultConnection" : "ProdConnection");
+            var connectionString = Configuration.GetValue<string>("DatabaseSettings:ConnectionString");
 
-            services.AddSwaggerGen(c =>
-            {
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-            }).AddJwtAuthentication(jwtTokenConfig);
+            services.AddSwagger();
+
+            services.AddJwtAuthentication(jwtTokenConfig);
 
             services.AddAutoMapper(typeof(Startup))
                     .AddSingleton(appSettings)
@@ -89,6 +86,12 @@ namespace DiaryApp.API
                     .AddScoped<INotificationService, TelegramNotificationService>()
                     .AddScoped<UserAccessor>()
                     .AddMvc(opt => opt.EnableEndpointRouting = false);
+
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString");
+                options.InstanceName = "DiaryApp_";
+            });
 
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "client/build");
         }

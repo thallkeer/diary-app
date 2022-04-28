@@ -2,11 +2,6 @@
 
 namespace DiaryApp.Core.Interfaces
 {
-    public interface IPageArea
-    {
-        int PageId { get; set; }
-    }
-
     public interface IMonthPageArea<in T> where T : MonthPageArea
     {
         /// <summary>
