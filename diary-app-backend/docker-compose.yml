@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+    cachedb:
+        image: redis:alpine
+
+    diarydb:
+        image: postgres:latest
+
+    diarypgadmin:
+        image: dpage/pgadmin4
+
+    diaryapp.api:
+      image: ${DOCKER_REGISTRY-}diaryappapi
+      build:
+        context: .
+        dockerfile: DiaryApp.API/Dockerfile
+
+volumes:
+    postgres_data:
+    pgadmin_data:

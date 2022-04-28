@@ -1,0 +1,45 @@
+version: '3.4'
+
+services:
+    cachedb:
+        container_name: cachedb
+        restart: always
+        ports:
+         -  "6379:6379"
+
+    diarydb:
+        container_name: diarydb
+        environment:
+          - POSTGRES_USER=keer
+          - POSTGRES_PASSWORD=keer2281337
+          - POSTGRES_DB=diaryapp
+        restart: always
+        ports:
+            - "5051:5432"
+        volumes:
+          - postgres_data:/var/lib/postgresql/data/
+
+    diarypgadmin:
+        container_name: diarypgadmin
+        environment:
+          - PGADMIN_DEFAULT_EMAIL=kir730@yandex.ru
+          - PGADMIN_DEFAULT_PASSWORD=keer2281337
+        restart: always
+        ports:
+            - "5050:80"
+        volumes:
+          - pgadmin_data:/root/.pgadmin
+
+    diaryapp.api:
+        container_name: diaryapp.api
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - "CacheSettings:ConnectionString=cachedb:6379"
+          - "DatabaseSettings:ConnectionString=Host=host.docker.internal;Port=5051;Database=diaryapp;Username=keer;Password=keer2281337;Integrated Security=true;Pooling=true"
+        depends_on:
+            - cachedb
+            - diarydb
+        ports:
+          - "8001:80"
+        volumes:
+          - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro

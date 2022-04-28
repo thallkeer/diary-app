@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29209.62
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32317.152
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{73072311-2DD2-4C48-A65F-5EC08E0FB6F7}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Infrastructure", "DiaryApp.Infrastructure\DiaryApp.Infrastructure.csproj", "{CD30A0AA-FD76-467D-8773-EC9FFFC0441D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiaryApp.Services", "DiaryApp.Services\DiaryApp.Services.csproj", "{AB438C31-17CC-4F2C-91B4-B688F22EEE15}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A464B07C-BF83-4A98-82D9-959191348BCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{AB438C31-17CC-4F2C-91B4-B688F22EEE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB438C31-17CC-4F2C-91B4-B688F22EEE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB438C31-17CC-4F2C-91B4-B688F22EEE15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A464B07C-BF83-4A98-82D9-959191348BCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A464B07C-BF83-4A98-82D9-959191348BCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A464B07C-BF83-4A98-82D9-959191348BCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A464B07C-BF83-4A98-82D9-959191348BCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
