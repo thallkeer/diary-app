@@ -36,7 +36,7 @@ namespace DiaryApp.API.Controllers.ListItems
 
             Response.OnCompleted(async () =>
             {
-                var userId = int.Parse(User.Identity?.Name ?? string.Empty);
+                var userId = UserId;
                 //TODO: execute as JOB
                 var createdNotifications = await _notificationService.CreateNotificationsIfNecessary(userId, eventId);
                 createdNotifications.ForEach(async (notification) =>
