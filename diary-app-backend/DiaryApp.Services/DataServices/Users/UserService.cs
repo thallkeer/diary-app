@@ -8,6 +8,7 @@ using DiaryApp.Services.DTO;
 using DiaryApp.Services.Exceptions;
 using DiaryApp.Services.DataInterfaces.Users;
 using Microsoft.EntityFrameworkCore;
+using Ardalis.GuardClauses;
 
 namespace DiaryApp.Services.DataServices
 {
@@ -20,19 +21,16 @@ namespace DiaryApp.Services.DataServices
 
         public async Task<UserDto> AuthenticateAsync(string username, string password)
         {
-            if (string.IsNullOrEmpty(username))
-                throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(username));
-
-            if (string.IsNullOrEmpty(password))
-                throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
+            Guard.Against.NullOrEmpty(username, nameof(username));
+            Guard.Against.NullOrEmpty(password, nameof(password));
 
             var user = await _dbSet.SingleOrDefaultAsync(x => x.Username == username);
 
             if (user == null)
-                throw new HttpException(System.Net.HttpStatusCode.BadRequest, new { UserName = "Username is incorrect!" });
+                throw new ApiException(System.Net.HttpStatusCode.BadRequest, new { UserName = "Username is incorrect!" });
 
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
-                throw new HttpException(System.Net.HttpStatusCode.BadRequest, new { Password = "Password is incorrect!" });
+                throw new ApiException(System.Net.HttpStatusCode.BadRequest, new { Password = "Password is incorrect!" });
 
             return _mapper.Map<UserDto>(user);
         }
@@ -43,7 +41,7 @@ namespace DiaryApp.Services.DataServices
                 throw new ArgumentException("Value cannot be empty or whitespace only string.", nameof(password));
 
             if (await _dbSet.AnyAsync(x => x.Username == username))
-                throw new HttpException(System.Net.HttpStatusCode.BadRequest, new { UserName = $"Username '{username}' is already taken!" });
+                throw new ApiException(System.Net.HttpStatusCode.BadRequest, new { UserName = $"Username '{username}' is already taken!" });
 
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 

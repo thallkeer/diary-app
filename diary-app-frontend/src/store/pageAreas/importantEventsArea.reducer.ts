@@ -5,15 +5,18 @@ import { createPageAreaSlice } from "./pageAreas.reducer";
 
 export const IMPORTANT_EVENTS_LIST = "importantEventsList";
 
-export const { slice, loadPageArea } = createPageAreaSlice<
-	IMainPage,
-	IImportantEventsArea
->("importantEventsArea", "mainPage");
-
 const importantEventsSlice = createEventListSlice(IMPORTANT_EVENTS_LIST);
 
 export const importantEventsThunks =
 	createEventListThunks(importantEventsSlice);
+
+const setList = (area: IImportantEventsArea) =>
+	importantEventsThunks.setList(area.importantEvents);
+
+export const { slice, loadPageArea } = createPageAreaSlice<
+	IMainPage,
+	IImportantEventsArea
+>("importantEventsArea", "mainPage", setList);
 
 export const importantEventsAreaReducer = combineReducers({
 	area: slice.reducer,

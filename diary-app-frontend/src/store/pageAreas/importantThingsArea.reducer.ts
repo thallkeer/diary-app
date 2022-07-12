@@ -9,10 +9,13 @@ export const IMPORTANT_THINGS_LIST = "importantThingsList";
 const importantThingsSlice = createTodoSlice(IMPORTANT_THINGS_LIST);
 export const importantThingsThunks = createTodoListThunks(importantThingsSlice);
 
+const setList = (area: IImportantThingsArea) =>
+	importantThingsThunks.setList(area.importantThings);
+
 export const importantThingsAreaSlice = createPageAreaSlice<
 	IMainPage,
 	IImportantThingsArea
->("importantThingsArea", "mainPage");
+>("importantThingsArea", "mainPage", setList);
 
 export const importantThingsAreaReducer = combineReducers({
 	area: importantThingsAreaSlice.slice.reducer,

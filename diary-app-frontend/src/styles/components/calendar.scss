@@ -9,19 +9,6 @@ tr {
 	margin: 0;
 }
 
-.calendar-wrapper {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	border: none;
-}
-
-.add-event-form-dialog {
-	font-family: "Roboto", "Open Sans", "Google Sans", "Roboto", Arial, sans-serif;
-}
-
 .calendar {
 	background-color: white;
 	border-spacing: 0;
@@ -32,13 +19,10 @@ tr {
 .calendar-header {
 	font-family: $list-header-font;
 	font-size: 40px;
-	// border-bottom: 1px dashed skyblue;
-	// font-size: 1.6em;
 }
 
 .calendar-header td {
 	border-spacing: 0;
-	padding-left: 5px;
 }
 
 .day,
@@ -49,80 +33,61 @@ tr {
 
 .empty-slot {
 	border: 1px solid black;
-	width: 100px;
-	height: 135px;
+	width: 5rem;
+	height: 8rem;
 }
 
 .week-day {
-	font-size: 24px;
+	font-size: 1.7rem;
 	font-family: $list-header-font;
-}
-
-.day-with-event {
-	background-color: #e2eeff;
-	outline: 1px solid black;
-	margin-top: 5px;
-	margin-left: 3px;
-	margin-right: 3px;
-	font-size: 18px;
-	line-height: 18px;
-	font-family: $list-input-font;
-	font-weight: bold;
-}
-
-.no-events-day {
-	font-size: 18px;
-	line-height: 18px;
 }
 
 .day {
 	cursor: pointer;
-	font-size: 0.8em;
-	// width: 24px;
-	// height: 24px;
-	line-height: 18px;
+	font-size: 0.8rem;
+	line-height: 1rem;
 	border: 1px solid black;
-	width: 100px;
-	height: 135px;
-	position: relative;
+	width: 5rem;
+	height: 8rem;
 }
 
-.current-day {
-	background-color: #e2eeff; //#4285f4;
-	width: 28px;
-	height: 28px;
-	line-height: 28px;
-	// border-radius: 2%;
-	color: black;
-}
-.selected-day {
-	background-color: yellow;
-	width: 28px;
-	height: 28px;
-	line-height: 28px;
-	border-radius: 2%;
-	color: black;
+.day-container {
+	height: 100%;
+	width: 100%;
 }
 
 .day-span {
-	border-right: 1px solid black;
-	border-bottom: 1px solid black;
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 35px;
-	height: 30px;
+	outline: 1px solid black;
+	width: 1.8rem;
+	height: 1.8rem;
 	font-family: $list-header-font;
-	font-size: 24px;
+	font-size: 1.7rem;
 	text-align: center;
-	padding-top: 5px;
+	padding-top: 0.5rem;
+}
+
+.day-event {
+	background-color: #e2eeff;
+	outline: 1px solid black;
+	margin-top: 0.3rem;
+	margin-left: 0.3rem;
+	margin-right: 0.3rem;
+	font-size: 1.3rem;
+	line-height: 1.3rem;
+	font-family: $list-input-font;
+	font-weight: bold;
+}
+
+.real-time-current-day {
+	background-color: #e2eeff; //#4285f4;
+	color: black;
 }
 
 .month-name {
 	color: black;
-	margin: 0 12px;
+	margin: 0 1rem;
+	text-decoration: none;
 	&:hover {
-		text-decoration: none;
 		color: black;
 	}
 }

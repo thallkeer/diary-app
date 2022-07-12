@@ -40,6 +40,7 @@ namespace DiaryApp.Core.Entities.Users.Settings
         {
             var transferDataType = GetType();
             var pageAreaType = area?.GetType() ?? typeof(T);
+            //TODO: move to a static constructor
             foreach (var property in transferDataType.GetProperties())
             {
                 var areaAttribute = property.GetCustomAttribute<PageAreaAttribute>();

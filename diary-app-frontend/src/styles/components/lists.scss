@@ -3,8 +3,9 @@
 // $main-lightblue-color: lightblue;
 @import "../variables";
 
-.todo-list-header {
-	font-size: 24px !important;
+.list-with-items-header {
+	@extend %centered-flex;
+	font-size: 1.5rem !important;
 	font-family: $list-header-font;
 	border-bottom: 1px solid black;
 
@@ -20,8 +21,7 @@
 	@extend %amatic-bold;
 	outline: none;
 	text-align: center;
-	width: 100%;
-	overflow: hidden;
+	width: 70%;
 	border: none;
 }
 
@@ -31,11 +31,9 @@
 	margin: 0;
 	text-align: left;
 	li {
-		margin-top: 10px;
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		//padding: 0.5rem 0rem;
 		margin-bottom: 0.5rem;
 	}
 }
@@ -44,10 +42,27 @@
 	@extend %amatic-bold;
 	outline: none;
 	border: none;
-	font-size: 24px;
+	font-size: 1.5rem;
 	padding-left: 0.6rem;
-	// border-bottom: 1px solid black;
 	width: 100%;
+}
+
+.textarea {
+	@extend %amatic-bold;
+	box-sizing: border-box;
+	border: none;
+	border-radius: 3px;
+	resize: none;
+	font-size: 1.25rem;
+	line-height: 1.5rem;
+	overflow: auto;
+	height: auto;
+	padding: 0.3rem;
+	width: 100%;
+
+	&:focus {
+		outline: none;
+	}
 }
 
 .item-url {
@@ -76,7 +91,7 @@
 .list-item {
 	flex: 1;
 	display: "flex";
-	border-bottom: 1px solid black;
+	border-bottom: 1px solid black !important;
 	justify-content: "flex-start";
 	&:hover {
 		span,
@@ -90,11 +105,7 @@
 .todo-input {
 	display: flex;
 	justify-content: flex-start;
-}
-
-.list-item-link {
-	@extend %hidden-btn;
-	left: 88%;
+	width: 100%;
 }
 
 .todo-link {
@@ -105,7 +116,6 @@
 
 .delete-list-item-btn {
 	@extend %hidden-btn;
-	left: 93%;
 	color: $main-lightblue-color !important;
 }
 
@@ -113,6 +123,11 @@
 	h1 {
 		border: none;
 	}
+}
+
+.full-border {
+	outline: 1px solid rgba(0, 0, 0, 0.125);
+	padding: 1rem 1.25rem;
 }
 
 .month-lists-header {
@@ -125,9 +140,19 @@
 .more-btn {
 	@extend %amatic-bold;
 	background-color: rgba(135, 206, 235, 0.3) !important;
-	font-size: 24px !important;
-	padding: 0 20px !important;
+	font-size: 1.5rem !important;
+	padding: 0 1.25rem !important;
+	margin: 0px auto;
+	max-height: 2.5rem;
 	&:hover {
 		background-color: $skyblue-color !important;
 	}
+}
+
+.ideas-list {
+	margin-top: 1.3rem !important;
+}
+
+.important-things {
+	margin-top: 1rem !important;
 }

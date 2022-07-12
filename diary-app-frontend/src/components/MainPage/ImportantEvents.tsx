@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col } from "react-bootstrap";
 import {
 	getImportantEventsArea,
 	getImportantEventsList,
@@ -18,13 +17,12 @@ const ImportantEventsArea: React.FC = () => {
 	const dispatch = useDispatch();
 	const { status } = useMainPageArea(
 		getImportantEventsArea,
-		loadImportantEventsArea,
-		(area) => importantEventsThunks.setList(area.importantEvents)
+		loadImportantEventsArea
 	);
 
 	const { list } = useSelector(getImportantEventsList);
 
-	if (status === "idle" || status === "loading" || !list) return <Loader />;
+	if (status !== "succeeded" || !list) return <Loader />;
 
 	const eventItemActions: IEventItemActions = {
 		deleteEvent: (eventId) =>
@@ -34,15 +32,11 @@ const ImportantEventsArea: React.FC = () => {
 	};
 
 	return (
-		<Row>
-			<Col md={12}>
-				<EventList
-					className="mt-10 no-list-header"
-					eventList={list}
-					eventItemActions={eventItemActions}
-				/>
-			</Col>
-		</Row>
+		<EventList
+			className="mt-10 no-list-header"
+			eventList={list}
+			eventItemActions={eventItemActions}
+		/>
 	);
 };
 

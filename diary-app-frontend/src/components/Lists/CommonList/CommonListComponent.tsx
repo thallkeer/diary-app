@@ -5,15 +5,16 @@ import { DeleteBtn } from "../Controls/DeleteBtn";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import { nanoid } from "@reduxjs/toolkit";
 
-export interface IListActions {
+export type IListActions = {
 	updateTitle?: (title: string) => void;
 	deleteList?: () => void;
-}
+};
 
-export interface IListOptions {
+export type IListOptions = {
 	readonlyTitle: boolean;
+	renderTitle?: boolean;
 	isDeletable: boolean;
-}
+};
 
 export type ListComponentProps<T extends IListItem> = {
 	items: T[];
@@ -22,7 +23,7 @@ export type ListComponentProps<T extends IListItem> = {
 	renderItem: (item: T) => JSX.Element;
 };
 
-export const CommonListComponent = <T extends IListItem>(
+export const ListWithItems = <T extends IListItem>(
 	props: IListActions & IListOptions & ListComponentProps<T>
 ) => {
 	const {
@@ -34,21 +35,27 @@ export const CommonListComponent = <T extends IListItem>(
 		renderItem,
 		className,
 		isDeletable,
+		renderTitle = true,
 	} = props;
 
 	return (
 		<div className={className}>
-			<h1 className="todo-list-header">
-				<ListHeaderInput
-					value={listTitle}
-					handleBlur={updateTitle}
-					readonly={readonlyTitle}
-				/>
-				{isDeletable && <DeleteBtn onDelete={deleteList} />}
-			</h1>
+			{renderTitle && (
+				<h1 className="list-with-items-header">
+					<ListHeaderInput
+						value={listTitle}
+						handleBlur={updateTitle}
+						readonly={readonlyTitle}
+					/>
+					{isDeletable && <DeleteBtn onDelete={deleteList} />}
+				</h1>
+			)}
 			<ul className="todos">
 				{items.map((item: T, i) => (
-					<li key={item.id !== 0 ? item.id : `item-${i}`} className="list-item">
+					<li
+						key={item.id === 0 ? `item-${i}` : item.id}
+						className={`list-item`}
+					>
 						{renderItem(item)}
 					</li>
 				))}
@@ -57,20 +64,23 @@ export const CommonListComponent = <T extends IListItem>(
 	);
 };
 
-export const withItemContextMenu = (
-	component: JSX.Element,
-	itemId: number,
-	onDelete: () => void,
-	menuItems?: JSX.Element[]
-) => {
-	if (itemId === 0) return component;
+export const WithItemContextMenu: React.FC<{
+	itemId: number;
+	onDelete: () => void;
+	menuItems?: JSX.Element[];
+}> = ({ itemId, onDelete, menuItems, children }) => {
+	if (itemId === 0) return <>{children}</>;
 	const uniqueId = nanoid(); //items can have equal ids
 	return (
 		<>
 			<ContextMenuTrigger id={`context-menu-${uniqueId}`}>
-				{component}
+				{children}
 			</ContextMenuTrigger>
-			<ContextMenu className="menu" id={`context-menu-${uniqueId}`}>
+			<ContextMenu
+				className="menu"
+				id={`context-menu-${uniqueId}`}
+				style={{ zIndex: 10 }}
+			>
 				{menuItems}
 				<MenuItem onClick={onDelete} className="menuItem">
 					Удалить запись

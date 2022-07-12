@@ -40,8 +40,8 @@ export const HabitDayCell: React.FC<IHabitDayProps> = ({
 
 	const overlayComponent = (
 		<Popover id="popover-basic">
-			<Popover.Title as="h3">Заметка</Popover.Title>
-			<Popover.Content>{day.note}</Popover.Content>
+			{/* <Popover.Title as="h3">Заметка</Popover.Title>
+			<Popover.Content>{day.note}</Popover.Content> */}
 		</Popover>
 	);
 

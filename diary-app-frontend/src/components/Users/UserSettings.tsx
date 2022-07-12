@@ -145,6 +145,10 @@ const UserSettings = () => {
 		history.push("/main");
 	};
 
+	const handleGoBackward = () => {
+		history.push("/main");
+	};
+
 	const TransferSettingsCard = (
 		<Card style={{ marginTop: "2em", marginBottom: "2em" }}>
 			<Card.Header as="h6">
@@ -155,7 +159,7 @@ const UserSettings = () => {
 					<FormGroup as={Row} key={cb.name}>
 						<Col sm={5}>
 							<Form.Check
-								custom
+								// custom
 								type="checkbox"
 								name={cb.name}
 								id={cb.name}
@@ -180,7 +184,7 @@ const UserSettings = () => {
 			<FormGroup as={Row}>
 				<Col sm={5}>
 					<Form.Check
-						custom
+						// custom
 						type="checkbox"
 						name={propName}
 						id={propName}
@@ -250,7 +254,14 @@ const UserSettings = () => {
 					</Card.Body>
 				</Card>
 				{TransferSettingsCard}
-				<Button variant="primary" type="submit">
+				<Button variant="secondary" onClick={handleGoBackward}>
+					Назад
+				</Button>
+				<Button
+					variant="primary"
+					type="submit"
+					style={{ marginLeft: "0.5rem" }}
+				>
 					Сохранить
 				</Button>
 			</Form>

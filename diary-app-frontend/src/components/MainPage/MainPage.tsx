@@ -1,14 +1,12 @@
+import Calendar from "components/Calendar/Calendar";
+import Loader from "components/Loader";
 import { usePage } from "hooks/usePage";
-import React, { Suspense, lazy, FC } from "react";
+import React, { FC } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
 import { getMainPage, mainPageComponent } from "store/pages";
-
-import Loader from "../Loader";
-
-const ImportantThings = lazy(() => import("./ImportantThings"));
-const ImportantEvents = lazy(() => import("./ImportantEvents"));
-const Calendar = lazy(() => import("../Calendar/Calendar"));
+import ImportantEventsArea from "./ImportantEvents";
+import ImportantThingsArea from "./ImportantThings";
 
 const MainPage: FC = () => {
 	const { page, status } = usePage(getMainPage, mainPageComponent);
@@ -18,15 +16,13 @@ const MainPage: FC = () => {
 	return (
 		<Container fluid className="mt-20">
 			<Row>
-				<Suspense fallback={<Loader />}>
-					<Col md="3" className="text-center">
-						<ImportantThings />
-						<ImportantEvents />
-					</Col>
-					<Col md="9">
-						<Calendar />
-					</Col>
-				</Suspense>
+				<Col md="3" className="text-center">
+					<ImportantThingsArea />
+					<ImportantEventsArea />
+				</Col>
+				<Col md="9">
+					<Calendar />
+				</Col>
 			</Row>
 		</Container>
 	);

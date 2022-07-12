@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace DiaryApp.Core.Entities
 {
     /// <summary>
-    /// Represents base class for diary list item.
+    /// Represents base class for a diary list item.
     /// </summary>
     public abstract class DiaryListItem : BaseEntity
     {
@@ -13,19 +13,19 @@ namespace DiaryApp.Core.Entities
 
         protected DiaryListItem(DiaryListItem original)
         {
-            if (original is null) throw new ArgumentNullException(nameof(original));
+            ArgumentNullException.ThrowIfNull(original);
             Subject = original.Subject;
             Url = original.Url;
         }
 
         /// <summary>
-        /// Outer link for list item
+        /// Outer link for a list item
         /// </summary>
         [DataType(DataType.Url)]
         public string Url { get; set; } = string.Empty;
 
         /// <summary>
-        /// Text content of item
+        /// Text content of an item
         /// </summary>
         [MaxLength(200)]
         public string Subject { get; set; } = string.Empty;
@@ -37,7 +37,7 @@ namespace DiaryApp.Core.Entities
         public int OwnerID { get; set; }
 
         /// <summary>
-        /// Creates new item as copy of this, but without owner
+        /// Creates new item as copy of this, but without an owner
         /// </summary>
         /// <returns></returns>
         public abstract DiaryListItem GetCopy();
@@ -46,5 +46,5 @@ namespace DiaryApp.Core.Entities
         {
             return $"{Id} {Subject}";
         }
-    }    
+    }
 }

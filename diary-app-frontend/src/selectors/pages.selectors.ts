@@ -38,10 +38,7 @@ export const getPurchasesAreaState = createSelector(
 	(mp) => mp.purchasesArea
 );
 
-export const getDesiresArea = createSelector(
-	[selectMonthPage],
-	(mp) => mp.desiresArea.area
-);
+export const getDesiresArea = (s: RootState) => s.monthPage.desiresArea.area;
 
 export const getDesiresAreaState = createSelector(
 	[selectMonthPage],

@@ -14,8 +14,11 @@ const initialState: IEventListState = {
 	list: null,
 };
 
-const baseReducers =
-	generateListSliceReducers<IEventListState, IEventList, IEvent>();
+const baseReducers = generateListSliceReducers<
+	IEventListState,
+	IEventList,
+	IEvent
+>();
 type EventReducersType = typeof baseReducers;
 
 export const createEventListSlice = (listName: string) =>

@@ -79,12 +79,21 @@ code {
 	font-size: 36px;
 }
 
-input:focus,
-select:focus,
+textarea:hover,
+input:hover,
+textarea:active,
+input:active,
 textarea:focus,
-button:focus {
-	outline: none !important;
-	outline-width: 0 !important;
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active {
+	outline: 0px !important;
+	-webkit-appearance: none;
+	box-shadow: none !important;
 }
 
 .font-bold {

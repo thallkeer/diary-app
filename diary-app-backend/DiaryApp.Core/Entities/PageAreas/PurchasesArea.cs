@@ -34,7 +34,7 @@ namespace DiaryApp.Core.Entities.PageAreas
                     AreaOwnerId = Id
                 };
 
-                listCopy.List.Items.AddRange(pl.CopyItems());
+                listCopy.AddRange(pl.CopyItems());
 
                 return listCopy;
             });

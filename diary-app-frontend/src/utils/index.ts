@@ -35,15 +35,16 @@ export function fillToNumber<T extends IListItem>(
 	fillTo: number,
 	getEmptyItem: () => T
 ): T[] {
-	const length = list.length;
+	let filledList = [...list];
+	const length = filledList.length;
 	fillTo = length >= fillTo ? length + 1 : fillTo;
 	for (let i = length; i < fillTo; i++) {
 		const emptyItem = getEmptyItem();
 		emptyItem.readonly = true;
-		list.push(emptyItem);
+		filledList.push(emptyItem);
 	}
 
-	list[length].readonly = false;
+	filledList[length].readonly = false;
 
-	return list;
+	return filledList;
 }

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using DiaryApp.API.Filters;
 using DiaryApp.API.Requests;
 using DiaryApp.Core.Entities.Pages;
 using DiaryApp.Services.DataInterfaces.Pages;
@@ -22,9 +23,10 @@ namespace DiaryApp.API.Controllers.Pages
         [HttpGet("{userId}/{year}/{month}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TPageDto>> GetPageAsync(int userId, int year, int month)
+        [Cached(600)]
+        public async Task<ActionResult<TPageDto>> GetPageAsync(int year, int month)
         {
-            var page = await PageService.GetPageAsync(userId, year, month);
+            var page = await PageService.GetPageAsync(UserId, year, month);
             if (page == null)
                 return NotFound();
 

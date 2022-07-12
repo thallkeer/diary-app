@@ -22,7 +22,7 @@ axiosInstance.interceptors.response.use(
 	(response) => response,
 	(error: AxiosError) => {
 		if (error.message === "Network Error" && !error.response) {
-			toast.error("Network error - make sure API is running!");
+			toast.error("Сетевая ошибка, сервер недоступен!");
 		} else if (error.response) {
 			const { status, data, config, headers } = error.response;
 			// if (status === 404) {
@@ -41,7 +41,7 @@ axiosInstance.interceptors.response.use(
 				history.push("/notfound");
 			}
 			if (status === 500) {
-				toast.error("Server error - check the terminal for more info!");
+				toast.error("Произошла ошибка на сервере!");
 			}
 			throw error.response;
 		}

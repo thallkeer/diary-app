@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { ListItemInput } from "./ListItemInput";
 import { IEvent } from "models";
-import { withItemContextMenu } from "../CommonList/CommonListComponent";
+import { WithItemContextMenu } from "../CommonList/CommonListComponent";
 
 export interface IEventItemActions {
 	updateEvent: (event: IEvent) => void;
@@ -35,5 +35,9 @@ export const EventInput: FC<IEventInputProps> = ({
 		/>
 	);
 
-	return withItemContextMenu(eventInput, event.id, handleDeleteClick);
+	return (
+		<WithItemContextMenu itemId={event.id} onDelete={handleDeleteClick}>
+			{eventInput}
+		</WithItemContextMenu>
+	);
 };

@@ -1,2 +1,2 @@
-@media all and (min-width: 480px){.login{padding:60px 0;margin-top:25vh}.login form{margin:0 auto;max-width:320px}.login form label{font-weight:bold}}
+@media all and (min-width: 480px){.login{padding:60px 0;margin-top:25vh}.login form{margin:0 auto;max-width:320px}.login form label{font-weight:bold}}.login-control{border:none !important;border-radius:0 !important;border-bottom:1px solid #dee2e6 !important;font-size:1.375rem !important}.login-control:focus{border-bottom:2px solid #2c7eea !important;-webkit-box-shadow:none !important;box-shadow:none !important}
 /*# sourceMappingURL=login.min.css.map */

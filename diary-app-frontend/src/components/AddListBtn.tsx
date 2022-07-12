@@ -1,13 +1,14 @@
 import React from "react";
+import { Col, Row } from "react-bootstrap";
 
 export const AddListBtn: React.FC<{ onClick: () => void }> = ({ onClick }) => {
-  return (
-    <div
-      className="btn mt-10 more-btn"
-      style={{ margin: "0px auto", maxHeight: "40px" }}
-      onClick={onClick}
-    >
-      Ещё
-    </div>
-  );
+	return (
+		<Row className="justify-content-center">
+			<Col md={3}>
+				<div className="btn mt-10 more-btn" onClick={onClick}>
+					Ещё
+				</div>
+			</Col>
+		</Row>
+	);
 };

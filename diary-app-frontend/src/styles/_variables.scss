@@ -4,11 +4,19 @@ $main-lightblue-color: lightblue;
 $skyblue-color: skyblue;
 %hidden-btn {
 	visibility: hidden;
-	position: absolute;
+	// position: absolute;
 	font-size: 14px;
 }
 
 %amatic-bold {
 	font-family: $list-input-font !important;
 	font-weight: bold !important;
+}
+
+%centered-flex {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
 }

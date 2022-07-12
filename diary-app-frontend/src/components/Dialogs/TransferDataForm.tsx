@@ -72,21 +72,21 @@ export const TransferDataForm: React.FC<{
 			onHide={onHide}
 			aria-labelledby="contained-modal-title-vcenter"
 		>
-			<Form id="add-event-form" onSubmit={handleSubmit} noValidate={true}>
+			<Form id="transfer-data-form" onSubmit={handleSubmit} noValidate={true}>
 				<Modal.Header closeButton translate={"yes"}>
 					<Modal.Title>Перенести на следующий месяц</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					{checkBoxes.map((cb) => (
 						<FormGroup key={cb.name} as={Row} className="ml-2">
-							<Form.Check
+							{/* <Form.Check
 								custom
 								type="checkbox"
 								name={cb.name}
 								id={cb.name}
 								label={cb.text}
 								onChange={handleChange}
-							/>
+							/> */}
 						</FormGroup>
 					))}
 					{state.error && (
@@ -110,7 +110,7 @@ export const TransferDataForm: React.FC<{
 					<Button variant="secondary" onClick={onHide}>
 						Закрыть
 					</Button>
-					<Button variant="primary" type="submit" form="add-event-form">
+					<Button variant="primary" type="submit" form="transfer-data-form">
 						Перенести
 					</Button>
 				</Modal.Footer>

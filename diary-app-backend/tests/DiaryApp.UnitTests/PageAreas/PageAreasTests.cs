@@ -88,7 +88,7 @@ namespace DiaryApp.UnitTests
 
             originalArea.AddDataFromOtherArea(otherArea);
 
-            originalArea.GoalLists.Count(gl => gl.SelectedDays.Count != 0).IsSameOrEqualTo(selectedDaysOtherAreaCount + selectedDaysInputAreaCount);
+            originalArea.GoalLists.Count(gl => gl.SelectedDays.Count != 0).Should().Be(selectedDaysOtherAreaCount + selectedDaysInputAreaCount);
 
             if (listsCountInputArea == emptyListsCountInputArea && nonEmptyListsCountOtherArea == 0)
             {
@@ -140,7 +140,7 @@ namespace DiaryApp.UnitTests
         public static TheoryData<IdeasArea> TheoryIdeasAreas()
         {
             var paWithInitializeAndItems = new IdeasArea(null, true);
-            paWithInitializeAndItems.IdeasList.Items.Add(new ListItem());
+            paWithInitializeAndItems.IdeasList.Add(new ListItem());
 
             return new TheoryData<IdeasArea>
             {

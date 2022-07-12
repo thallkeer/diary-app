@@ -40,7 +40,11 @@ namespace DiaryApp.Core.Entities.ListWrappers
         public virtual TArea AreaOwner { get; set; }
 
         [NotMapped]
-        public List<TListItem> Items => List?.Items ?? new List<TListItem>();
+        public IReadOnlyList<TListItem> Items => List.Items;
+
+        public void Add(TListItem item) => List.Items.Add(item);
+
+        public void AddRange(IEnumerable<TListItem> items) => List.Items.AddRange(items);
 
         /// <summary>
         /// Creates deep copy of wrapped list items.
@@ -48,7 +52,7 @@ namespace DiaryApp.Core.Entities.ListWrappers
         /// <returns></returns>
         public IEnumerable<TListItem> CopyItems()
         {
-            return Items.Select(i => (TListItem) i.GetCopy());
+            return Items.Select(i => (TListItem)i.GetCopy());
         }
     }
 }

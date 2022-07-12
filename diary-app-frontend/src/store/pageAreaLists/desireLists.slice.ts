@@ -11,7 +11,7 @@ import {
 	ICommonListState,
 	CommonListSlice,
 } from "store/diaryLists/commonLists.reducer";
-import { AppThunk, RootState } from "store/store";
+import { RootState } from "store/store";
 
 const desiresListsAdapter = createEntityAdapter<ICommonListState>({
 	selectId: (listState) => listState.list.id,
@@ -57,19 +57,16 @@ const { reducer, actions } = desiresListsSlice;
 export const desiresListsReducer = reducer;
 export const desiresListsActions = actions;
 
-export const setDesiresLists =
-	(lists: ICommonList[]): AppThunk =>
-	(dispatch) => {
-		dispatch(desiresListsActions.setLists(lists));
-	};
+export const setDesiresLists = (lists: ICommonList[]) => (dispatch) => {
+	dispatch(desiresListsActions.setLists(lists));
+};
 
 const desireListsSelectors = desiresListsAdapter.getSelectors<RootState>(
 	(state) => state.monthPage.desiresArea.desireLists
 );
 
 export const addOrUpdateItem =
-	(listId: number, item: IListItem): AppThunk =>
-	async (dispatch, getState) => {
+	(listId: number, item: IListItem) => async (dispatch, getState) => {
 		if (!item) return;
 
 		const actions = getListActions(listId);
@@ -91,8 +88,7 @@ export const addOrUpdateItem =
 	};
 
 export const deleteItem =
-	(listId: number, itemId: number): AppThunk =>
-	async (dispatch, getState) => {
+	(listId: number, itemId: number) => async (dispatch, getState) => {
 		await listItemService.deleteById(itemId);
 		const newState = reduceListAction(getState(), listId, () =>
 			getListActions(listId).deleteItem(itemId)

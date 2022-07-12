@@ -26,6 +26,7 @@ namespace DiaryApp.Infrastructure.Services
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(Guid.NewGuid().ToString(), "telegramNotifications")
                 .StartAt(notification.NotificationDate)
+                .WithSimpleSchedule((builder) => builder.WithRepeatCount(0))
                 .Build();
 
             await _scheduler.ScheduleJob(job, trigger, cancellationToken);

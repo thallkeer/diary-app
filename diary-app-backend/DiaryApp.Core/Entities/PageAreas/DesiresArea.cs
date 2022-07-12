@@ -23,14 +23,13 @@ namespace DiaryApp.Core.Entities.PageAreas
 
         public void AddDataFromOtherArea(DesiresArea other)
         {
-            if (other == null)
-                throw new ArgumentNullException(nameof(other));
+            ArgumentNullException.ThrowIfNull(other);
             if (DesiresLists.Count == 0)
                 Initialize();
             for (var i = 0; i < other.DesiresLists.Count; i++)
             {
                 var otherItemsCopy = other.DesiresLists[i].CopyItems();
-                DesiresLists[i].Items.AddRange(otherItemsCopy);
+                DesiresLists[i].AddRange(otherItemsCopy);
             }
         }
 

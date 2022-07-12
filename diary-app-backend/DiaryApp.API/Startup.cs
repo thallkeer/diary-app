@@ -18,8 +18,8 @@ using DiaryApp.Services.Security;
 using DiaryApp.Infrastructure.Security;
 using DiaryApp.Infrastructure.ServiceInterfaces;
 using DiaryApp.Infrastructure.DependencyInjection;
-using System.Reflection;
 using DiaryApp.Infrastructure.Services;
+using DiaryApp.API.Extensions;
 
 namespace DiaryApp.API
 {
@@ -40,11 +40,9 @@ namespace DiaryApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             var appSettings = Configuration.GetSection("appSettings").Get<AppSettings>();
-            if (appSettings == null)
-                throw new ArgumentNullException(nameof(appSettings), "Application settings configuration is not provided!");
+            ArgumentNullException.ThrowIfNull(appSettings);
             var jwtTokenConfig = Configuration.GetSection("jwtTokenConfig").Get<JwtTokenConfig>();
-            if (jwtTokenConfig == null)
-                throw new ArgumentNullException(nameof(jwtTokenConfig), "JWT token configuration is not provided!");
+            ArgumentNullException.ThrowIfNull(jwtTokenConfig);
 
             services.AddCors(options =>
             {
@@ -68,28 +66,32 @@ namespace DiaryApp.API
 
             services.AddControllers();
 
-            var connectionString = Configuration.GetConnectionString(_env.IsDevelopment() ? "DefaultConnection" : "ProdConnection");
+            var connectionString = Configuration.GetValue<string>("DatabaseSettings:ConnectionString");
 
-            services.AddSwaggerGen(c =>
-            {
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-            }).AddJwtAuthentication(jwtTokenConfig);
+            services.AddSwagger();
+
+            services.AddJwtAuthentication(jwtTokenConfig);
 
             services.AddAutoMapper(typeof(Startup))
                     .AddSingleton(appSettings)
                     .AddSingleton(jwtTokenConfig)
-                    .AddScoped<IJwtAuthManager,JwtAuthManager>()
+                    .AddScoped<IJwtAuthManager, JwtAuthManager>()
                     .AddScoped<ModelValidationAttribute>()
                     .AddQuartzScheduler()
                     .AddPostgresContext(connectionString)
                     .AddGithubService(appSettings.GithubToken)
                     .AddDataServices()
                     .AddTelegramClient(appSettings.TelegramBotToken)
-                    .AddTransient<ISchedulerService, SchedulerService>()        
+                    .AddTransient<ISchedulerService, SchedulerService>()
                     .AddScoped<INotificationService, TelegramNotificationService>()
+                    .AddScoped<UserAccessor>()
                     .AddMvc(opt => opt.EnableEndpointRouting = false);
+
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString");
+                options.InstanceName = "DiaryApp_";
+            });
 
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "client/build");
         }

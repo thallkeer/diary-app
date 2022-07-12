@@ -13,11 +13,7 @@ import { useAppDispatch } from "hooks/hooks";
 
 const IdeasArea: React.FC = () => {
 	const dispatch = useAppDispatch();
-	const { area, status } = useMonthPageArea(
-		getIdeasArea,
-		loadIdeasArea,
-		(area) => ideasListThunks.setList(area.ideasList)
-	);
+	const { area, status } = useMonthPageArea(getIdeasArea, loadIdeasArea);
 	const ideasList = useSelector(getIdeasList);
 
 	if (status === "idle" || status === "loading" || !ideasList.list)
@@ -32,6 +28,7 @@ const IdeasArea: React.FC = () => {
 						commonList={ideasList.list}
 						isDeletable={false}
 						readonlyTitle={true}
+						renderTitle={false}
 						listItemActions={{
 							deleteItem: (itemId) => {
 								dispatch(ideasListThunks.deleteItemById(itemId));
@@ -40,7 +37,7 @@ const IdeasArea: React.FC = () => {
 								dispatch(ideasListThunks.addOrUpdateItem(item));
 							},
 						}}
-						className="mt-20 month-lists-header no-list-header"
+						className="ideas-list month-lists-header no-list-header full-border"
 					/>
 				</Col>
 			</Row>

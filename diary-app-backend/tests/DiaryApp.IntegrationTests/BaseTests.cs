@@ -16,7 +16,7 @@ namespace DiaryApp.IntegrationTests
             _dbContext = Configurations.GetServiceProvider();
         }
 
-        protected T GetService<T>()
+        protected T GetService<T>() where T : class
         {
             T service = _dbContext.GetService<T>();
             return service;
