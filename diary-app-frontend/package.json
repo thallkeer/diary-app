@@ -19,7 +19,7 @@
 		"@types/react-time-picker": "^4.0.1",
 		"@types/react-toastify": "^4.1.0",
 		"@types/redux-form": "^8.3.1",
-		"axios": "^0.21.1",
+		"axios": "^0.21.2",
 		"bootstrap": "^5.1.0",
 		"classnames": "^2.2.6",
 		"connected-react-router": "^6.8.0",
